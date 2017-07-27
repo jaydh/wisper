@@ -1,0 +1,96 @@
+import { AddArticleFulfilled } from '../actions/addArticle';
+import { DeleteArticleFulfilled } from '../actions/deleteArticle';
+import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
+import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
+import { SyncArticlesFulfilled } from '../actions/syncArticles';
+import { article as articleType } from '../constants/StoreState';
+import createReducer from './createReducer';
+
+const now = new Date();
+
+function addArticle(articleState: articleType[], action: AddArticleFulfilled) {
+    let check = articleState.filter(article => {
+        return action.articleHash === article.id;
+    });
+    if (check.length > 0) {
+        console.log('article in store already');
+        return articleState;
+    }
+
+    return articleState.concat({
+        id: action.articleHash,
+        link: action.articleLink,
+        title: action.articleLink,
+        author: '',
+        domain: '',
+        dateAdded: now.toLocaleDateString(),
+        completed: false
+    });
+}
+
+function deleteArticle(articleState: articleType[], action: DeleteArticleFulfilled) {
+    return articleState.filter(article => article.id !== action.articleHash);
+}
+
+function addArticleToProject(articleState: articleType[], action: AddArticleToProjectFulfilled) {
+
+    return articleState.map(article => {
+        return article.id === action.articleHash
+            ? {
+                ...article,
+                project: action.project
+            }
+            : article;
+    });
+}
+
+function toggleArticleRead(articleState: articleType[], action: ToggleArticleReadFulfilled) {
+    return articleState.map(article => {
+        // Only update dateRead if hasn't been read before
+        const newDateRead = !article.completed
+            ? now.toLocaleDateString()
+            : article.dateRead;
+        return article.id === action.articleHash
+            ? {
+                ...article,
+                completed: !article.completed,
+                dateRead: newDateRead,
+                lastViewed: now
+            }
+            : article;
+    });
+}
+
+function syncArticles(articleState: articleType[], action: SyncArticlesFulfilled) {
+    if (action.articles !== null) {
+        const fetchedArticles = action.articles;
+        const fetchedArticleIDs = Object.keys(fetchedArticles);
+        const localIDs = articleState.map(article => article.id);
+
+        const newArticles: articleType[] = [];
+        fetchedArticleIDs.forEach(id => {
+            if (localIDs.indexOf(id) < 0) {
+                newArticles.push(fetchedArticles[id]);
+            }
+        });
+
+        // Add way to mutate articles based on time stamps
+        
+        // Filters articles that were deleted from firebase and then concatenates new ones
+        return (articleState.filter(article =>
+            fetchedArticleIDs.indexOf(article.id) > 0).
+            concat(newArticles)
+        );
+    }
+    return [];
+}
+
+const articles = createReducer([], {
+    'ADD_ARTICLE_FULFILLED': addArticle,
+    'DELETE_ARTICLE_FULFILLED': deleteArticle,
+    'TOGGLE_ARTICLE_READ': toggleArticleRead,
+    'ADD_ARTICLE_TO_PROJECT': addArticleToProject,
+    'SYNC_ARTICLES_FULFILLED': syncArticles
+});
+
+export default articles;
