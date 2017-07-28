@@ -8,7 +8,7 @@ var config = {
     messagingSenderId: '844031835377'
 };
 
-var provider = new firebase.auth.GoogleAuthProvider();
+export const provider = new firebase.auth.GoogleAuthProvider();
 
 interface result {
     user: string
@@ -23,7 +23,7 @@ interface error {
 firebase.initializeApp(config);
 firebase.auth().onAuthStateChanged(function (user: any) {
     if (user) {
-        console.log('current', firebase.auth().currentUser)
+
     } else {
         firebase.auth().signInWithPopup(provider).then(function (result: result) {
 

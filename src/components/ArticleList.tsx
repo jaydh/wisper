@@ -4,11 +4,17 @@ import { article as articleType } from '../constants/StoreState';
 
 interface Props {
     articles: articleType[];
+    syncArticles: any;
     onArticleClick: any;
 }
 
 class ArticleList extends React.Component<Props, {}> {
+    componentDidMount() {
+        const { syncArticles } = this.props;
+        syncArticles();
+    }
     render() {
+        
         const { articles, onArticleClick } = this.props;
         return (
             <div className="Col-lg-3 Col-md-3">

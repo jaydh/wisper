@@ -4,15 +4,19 @@ import VisibleArticleList from '../containers/VisibleArticleList';
 import Footer from './Footer';
 
 class App extends React.Component {
-    render() {
+
+    public render() {
+       
         return (
-            <div className="container-fluid">
+            <div className="container-fluid" >
                 <AddArticle />
                 <VisibleArticleList />
                 <Footer />
-            </div>
+            </div >
         );
     }
 }
 
 export default App;
+
+

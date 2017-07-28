@@ -18,23 +18,24 @@ class Article extends React.Component<props, {}> {
         const { onClick, id, completed, link, dateAdded, title } = this.props;
         return (
             <div>
-                <li
-                    onClick={onClick}
-                    style={{
-                        textDecoration: completed ? 'underline' : 'none'
-                    }}
-                >
-                    toggleRead
-            </li>
-                <p>
-                    <a href={link}> {title}</a> <br />
-                    date added:{
+                <li>
+                    <p>
+                        <a href={link}> {title}</a> <br />
+                        date added:{
 
-                        dateAdded} <br />
-                </p>
-                <AddArticleToProject articleHash={id} />
-                <DeleteArticle articleHash={id} />
-            </div>
+                            dateAdded} <br />
+                    </p>
+                    <button onClick={onClick}
+                        style={{
+                            textDecoration: completed ? 'underline' : 'none'
+                        }}
+                    >
+                        toggleRead
+                    </button>
+                    <AddArticleToProject articleHash={id} />
+                    <DeleteArticle articleHash={id} />
+                </li >
+            </div >
         );
     }
 

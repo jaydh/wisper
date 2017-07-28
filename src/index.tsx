@@ -8,7 +8,7 @@ import appReducer from './reducers/index';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
-//import syncArticles from './actions/syncArticles';
+import { auth, provider } from './firebase'
 
 let store = createStore(
     appReducer,
@@ -18,11 +18,29 @@ let store = createStore(
     )
 );
 persistStore(store);
-//store.dispatch(syncArticles());
-ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById('root'));
+
+auth().onAuthStateChanged(function (user: any) {
+    if (user) {
+        ReactDOM.render(
+            <Provider store={store}>
+                <App />
+            </Provider>,
+            document.getElementById('root'));
+
+    } else {
+        ReactDOM.render(
+            <p>
+                loading
+            </p>,
+            document.getElementById('root'));
+        auth().signInWithPopup(provider).then(function (result: any) {
+
+        }).catch(function (error: any) {
+            console.log(error)
+
+        });
+    }
+});
+
 
 registerServiceWorker();
