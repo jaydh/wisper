@@ -1,8 +1,6 @@
 import * as constants from '../constants/actionTypes';
-import database from '../database';
+import {auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
-
-const user = 'jay';
 
 export interface AddArticleToProjectRequested {
     type: constants.ADD_ARTICLE_TO_PROJECT_REQUESTED;
@@ -38,11 +36,13 @@ function AddArticleToProjectFulfilled(articleHash: string, project: string): Add
 }
 
 export function addArticleToProject(articleHash: string, project: string) {
+    const user = auth().currentUser.uid;
+
     return (dispatch: Dispatch<any>) => {
         dispatch(AddArticleToProjectRequested());
 
         console.log('container', articleHash);
-        const articleRef = database.ref('/' + user + '/' + 'articles/' + articleHash + '/projects');
+        const articleRef = database.ref('/userData/' + user + '/' + 'articles/' + articleHash + '/projects');
         const projectRef = articleRef.push();
 
         articleRef.once('value', function (snapshot: any) {

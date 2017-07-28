@@ -1,8 +1,6 @@
 import * as constants from '../constants/actionTypes';
-import database from '../database';
+import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
-
-const user = 'jay';
 const now = new Date();
 
 export interface ToggleArticleReadRequested {
@@ -36,10 +34,12 @@ function ToggleArticleReadFulfilled(articleHash: string): ToggleArticleReadFulfi
 }
 
 export function toggleArticleRead(articleHash: string) {
+    const user = auth().currentUser.uid;
+
     return (dispatch: Dispatch<any>) => {
         dispatch(ToggleArticleReadRequested());
 
-        const articleRef = database.ref('/' + user + '/' + 'articles/' + articleHash);
+        const articleRef = database.ref('/userData/' + user + '/' + 'articles/' + articleHash);
         // Check if article in database
         articleRef.once('value', function (snapshot: any) {
             if (!snapshot.exists()) {

@@ -8,7 +8,7 @@ import appReducer from './reducers/index';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
-import syncArticles from './actions/syncArticles';
+//import syncArticles from './actions/syncArticles';
 
 let store = createStore(
     appReducer,
@@ -18,7 +18,7 @@ let store = createStore(
     )
 );
 persistStore(store);
-store.dispatch(syncArticles());
+//store.dispatch(syncArticles());
 ReactDOM.render(
     <Provider store={store}>
         <App />

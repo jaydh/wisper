@@ -1,5 +1,5 @@
 import * as constants from '../constants/actionTypes';
-import database from '../database';
+import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
 let Hashes = require('jshashes');
 var SHA1 = new Hashes.SHA1();
@@ -17,13 +17,12 @@ export interface DeleteArticleRejected {
 }
 export type DeleteArticleActions = DeleteArticleFulfilled | DeleteArticleRejected | DeleteArticleRequested;
 
-const user = 'jay';
-
 export function deleteArticle(articleHash: string) {
-
+    const user = auth().currentUser.uid;
+    
     return (dispatch: Dispatch<any>) => {
         dispatch(deleteArticleRequested());
-        const articleRef = database.ref('/' + user + '/' + 'articles/' + articleHash);
+        const articleRef = database.ref('/userData/' + user + '/' + 'articles/' + articleHash);
 
         // Check if article in database
         articleRef

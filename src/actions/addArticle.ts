@@ -1,10 +1,9 @@
 import * as constants from '../constants/actionTypes';
-import database from '../database';
+import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
 let Hashes = require('jshashes');
 
 var SHA1 = new Hashes.SHA1();
-const user = 'jay';
 const now = new Date();
 
 export interface AddArticleRequested {
@@ -41,14 +40,17 @@ function AddArticleFulfilled(articleLink: string): AddArticleFulfilled {
 }
 
 export function addArticle(articleLink: string) {
+    const user = auth().currentUser.uid;
+
     return (dispatch: Dispatch<any>) => {
         dispatch(AddArticleRequested());
+        console.log('d', user);
 
         // Check if valid URL    
         const regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
         if (regexp.test(articleLink)) {
             const hash = SHA1.hex(articleLink);
-            const articleRef = database.ref('/' + user + '/' + 'articles/' + hash);
+            const articleRef = database.ref('/userData/' + user + '/' + 'articles/' + hash);
             articleRef.once('value').then(function (snapshot: any) {
                 // Check if article in database
                 console.log('d')

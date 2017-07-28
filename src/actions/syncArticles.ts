@@ -1,10 +1,7 @@
-import database from '../database';
+import { auth, database } from '../firebase';
 import * as constants from '../constants/actionTypes';
 import { Dispatch } from 'react-redux';
 import { article as articleType } from '../constants/StoreState';
-
-const user = 'jay';
-
 export interface SyncArticlesRequested {
     type: constants.SYNC_ARTICLES_REQUESTED;
 }
@@ -37,8 +34,10 @@ function SyncArticlesFulfilled(articles: articleType[]): SyncArticlesFulfilled {
 }
 
 export default function SyncArticles() {
+    const user = auth().currentUser.uid;
+
     return (dispatch: Dispatch<any>) => {
-        const ref = database.ref('/' + user + '/articles/');
+        const ref = database.ref('/userData/' + user + '/articles/');
         ref.on('value', function (snap: any) {
             const articles = snap.val();
             dispatch(SyncArticlesFulfilled(articles));
