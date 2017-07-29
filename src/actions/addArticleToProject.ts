@@ -1,5 +1,5 @@
 import * as constants from '../constants/actionTypes';
-import {auth, database } from '../firebase';
+import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
 
 export interface AddArticleToProjectRequested {
@@ -13,7 +13,6 @@ export interface AddArticleToProjectFulfilled {
 export interface AddArticleToProjectRejected {
     type: constants.ADD_ARTICLE_TO_PROJECT_REJECTED;
 }
-export type AddArticleToProjectActions = AddArticleToProjectFulfilled | AddArticleToProjectRejected | AddArticleToProjectRequested;
 
 function AddArticleToProjectRequested(): AddArticleToProjectRequested {
     return {
@@ -41,7 +40,6 @@ export function addArticleToProject(articleHash: string, project: string) {
     return (dispatch: Dispatch<any>) => {
         dispatch(AddArticleToProjectRequested());
 
-        console.log('container', articleHash);
         const articleRef = database.ref('/userData/' + user + '/' + 'articles/' + articleHash + '/projects');
         const projectRef = articleRef.push();
 
@@ -59,5 +57,5 @@ export function addArticleToProject(articleHash: string, project: string) {
                 });
 
         });
-    }
+    };
 }

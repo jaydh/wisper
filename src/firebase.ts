@@ -13,11 +13,8 @@ provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 firebase.initializeApp(config);
 
 export const initFirebase = () => {
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-        .then(function () {
-        });
-
-}
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+};
 
 export const auth = firebase.auth;
 export const database = firebase.database();

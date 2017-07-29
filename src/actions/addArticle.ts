@@ -44,7 +44,6 @@ export function addArticle(articleLink: string) {
 
     return (dispatch: Dispatch<any>) => {
         dispatch(AddArticleRequested());
-        console.log('d', user);
 
         // Check if valid URL    
         const regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
@@ -53,7 +52,6 @@ export function addArticle(articleLink: string) {
             const articleRef = database.ref('/userData/' + user + '/' + 'articles/' + hash);
             articleRef.once('value').then(function (snapshot: any) {
                 // Check if article in database
-                console.log('d')
                 if (snapshot.exists()) {
                     alert('exists');
                 } else {

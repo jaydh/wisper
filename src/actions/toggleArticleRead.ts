@@ -63,5 +63,5 @@ export function toggleArticleRead(articleHash: string) {
                     });
             }
         });
-    }
+    };
 }

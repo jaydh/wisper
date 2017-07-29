@@ -1,19 +1,19 @@
-import * as React from "react";
-import AddArticleToProject from '../containers/AddArticleToProject'
-import DeleteArticle from '../containers/DeleteArticle'
+import * as React from 'react';
+import AddArticleToProject from '../containers/AddArticleToProject';
+import DeleteArticle from '../containers/DeleteArticle';
 
-export interface props {
-    onClick(): any,
-    id: string,
-    completed: boolean,
-    link: string,
-    author?: string,
-    title?: string,
-    domain?: string,
-    dateAdded: string
+interface Props {
+    id: string;
+    completed: boolean;
+    link: string;
+    author?: string;
+    title?: string;
+    domain?: string;
+    dateAdded: string;
+    onClick(): any;
 }
 
-class Article extends React.Component<props, {}> {
+class Article extends React.Component<Props> {
     render() {
         const { onClick, id, completed, link, dateAdded, title } = this.props;
         return (
@@ -25,10 +25,10 @@ class Article extends React.Component<props, {}> {
 
                             dateAdded} <br />
                     </p>
-                    <button onClick={onClick}
-                        style={{
-                            textDecoration: completed ? 'underline' : 'none'
-                        }}
+                    <button
+                        className="btn"
+                        onClick={onClick}
+                        style={{ textDecoration: completed ? 'underline' : 'none' }}
                     >
                         toggleRead
                     </button>
@@ -38,7 +38,6 @@ class Article extends React.Component<props, {}> {
             </div >
         );
     }
-
 }
 
 export default Article;

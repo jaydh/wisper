@@ -8,7 +8,7 @@ import appReducer from './reducers/index';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
-import { initFirebase, auth, provider } from './firebase'
+import { initFirebase, auth, provider } from './firebase';
 let store = createStore(
     appReducer,
     compose(
@@ -24,7 +24,7 @@ auth().onAuthStateChanged(function (user: any) {
             <Provider store={store}>
                 <App />
             </Provider>,
-            document.getElementById('root'))
+            document.getElementById('root'));
     } else {
         ReactDOM.render(
             <p>
@@ -34,6 +34,5 @@ auth().onAuthStateChanged(function (user: any) {
         auth().signInWithRedirect(provider);
     }
 });
-
 
 registerServiceWorker();
