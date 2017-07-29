@@ -21,17 +21,16 @@ class Article extends React.Component<Props> {
                 <li>
                     <p>
                         <a href={link}> {title}</a> <br />
-                        date added:{
-
-                            dateAdded} <br />
+                        <button
+                            className="btn"
+                            onClick={onClick}
+                            style={{ textDecoration: completed ? 'underline' : 'none' }}
+                        >
+                            toggleRead
+                        </button>
+                        date added:{dateAdded} <br />
                     </p>
-                    <button
-                        className="btn"
-                        onClick={onClick}
-                        style={{ textDecoration: completed ? 'underline' : 'none' }}
-                    >
-                        toggleRead
-                    </button>
+
                     <AddArticleToProject articleHash={id} />
                     <DeleteArticle articleHash={id} />
                 </li >

@@ -9,6 +9,8 @@ import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import { initFirebase, auth, provider } from './firebase';
+import LoginLoading from './components/LoginLoading';
+
 let store = createStore(
     appReducer,
     compose(
@@ -16,8 +18,8 @@ let store = createStore(
         autoRehydrate()
     )
 );
-persistStore(store);
 initFirebase();
+let persistor = persistStore(store);
 auth().onAuthStateChanged(function (user: any) {
     if (user) {
         ReactDOM.render(
@@ -26,11 +28,12 @@ auth().onAuthStateChanged(function (user: any) {
             </Provider>,
             document.getElementById('root'));
     } else {
+        persistor.purge();
         ReactDOM.render(
-            <p>
-                Please login
-            </p>,
-            document.getElementById('root'));
+            <LoginLoading />,
+            document.getElementById('root')
+        );
+
         auth().signInWithRedirect(provider);
     }
 });
