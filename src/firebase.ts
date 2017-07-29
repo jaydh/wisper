@@ -9,30 +9,15 @@ var config = {
 };
 
 export const provider = new firebase.auth.GoogleAuthProvider();
-
-interface result {
-    user: string
-}
-interface error {
-    code: string;
-    message: string;
-    email: string;
-    credential: string;
-}
-
+provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 firebase.initializeApp(config);
-firebase.auth().onAuthStateChanged(function (user: any) {
-    if (user) {
 
-    } else {
-        firebase.auth().signInWithPopup(provider).then(function (result: result) {
-
-        }).catch(function (error: error) {
-            console.log(error)
-
+export const initFirebase = () => {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+        .then(function () {
         });
-    }
-});
+
+}
 
 export const auth = firebase.auth;
 export const database = firebase.database();

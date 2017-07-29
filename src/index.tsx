@@ -8,8 +8,7 @@ import appReducer from './reducers/index';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
-import { auth, provider } from './firebase'
-
+import { initFirebase, auth, provider } from './firebase'
 let store = createStore(
     appReducer,
     compose(
@@ -18,27 +17,21 @@ let store = createStore(
     )
 );
 persistStore(store);
-
+initFirebase();
 auth().onAuthStateChanged(function (user: any) {
     if (user) {
         ReactDOM.render(
             <Provider store={store}>
                 <App />
             </Provider>,
-            document.getElementById('root'));
-
+            document.getElementById('root'))
     } else {
         ReactDOM.render(
             <p>
-                loading
+                Please login
             </p>,
             document.getElementById('root'));
-        auth().signInWithPopup(provider).then(function (result: any) {
-
-        }).catch(function (error: any) {
-            console.log(error)
-
-        });
+        auth().signInWithRedirect(provider);
     }
 });
 
