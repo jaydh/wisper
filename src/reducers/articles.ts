@@ -73,12 +73,12 @@ function syncArticles(articleState: articleType[], action: SyncArticlesFulfilled
                 newArticles.push(fetchedArticles[id]);
             }
         });
-
+        
         // Add way to mutate articles based on time stamps
         
         // Filters articles that were deleted from firebase and then concatenates new ones
         return (articleState.filter(article =>
-            fetchedArticleIDs.indexOf(article.id) > 0).
+            fetchedArticleIDs.indexOf(article.id) > -1).
             concat(newArticles)
         );
     }
