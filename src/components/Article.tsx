@@ -43,7 +43,7 @@ class Article extends React.Component<Props, State> {
             isOpen: this.state.isMenuOpen,
             close: this.close.bind(this),
             size: 'sm',
-            toggle: <button className="btn" type="button" onClick={this.toggle.bind(this)}>more</button>,
+            toggle: <button className="btn-info btn-sm" type="button" onClick={this.toggle.bind(this)}>more</button>,
             align: 'right',
         };
 

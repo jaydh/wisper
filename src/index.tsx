@@ -8,7 +8,7 @@ import appReducer from './reducers/index';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
-import { initFirebase, auth, provider } from './firebase';
+import { initFirebase, auth } from './firebase';
 import LoginLoading from './components/LoginLoading';
 
 let store = createStore(
@@ -34,7 +34,6 @@ auth().onAuthStateChanged(function (user: any) {
             document.getElementById('root')
         );
 
-        auth().signInWithRedirect(provider);
     }
 });
 
