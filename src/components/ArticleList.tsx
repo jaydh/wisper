@@ -9,7 +9,7 @@ interface Props {
 }
 
 class ArticleList extends React.Component<Props, {}> {
-    componentDidMount() {
+    componentWillMount() {
         const { syncArticles } = this.props;
         syncArticles();
     }
