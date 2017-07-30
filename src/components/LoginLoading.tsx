@@ -7,7 +7,7 @@ export default class LoginLoading extends React.Component {
                 <h2> Please login </h2>
                 <button
                     className="btn btn-primary btn-lg"
-                    onClick={() => auth().signInWithPopup(provider)}
+                    onClick={() => auth().signInWithRedirect(provider)}
                 >
                     Continue with Google authentication
                 </button>
