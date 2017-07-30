@@ -9,7 +9,6 @@ var config = {
 };
 
 export const provider = new firebase.auth.GoogleAuthProvider();
-provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 firebase.initializeApp(config);
 
 export const initFirebase = () => {

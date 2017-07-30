@@ -9,7 +9,7 @@ export default class LoginLoading extends React.Component {
                     className="btn btn-primary btn-lg"
                     onClick={() => auth().signInWithRedirect(provider)}
                 >
-                    Login through google
+                    Continue with Google authentication
                 </button>
             </div>
         );

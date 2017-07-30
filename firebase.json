@@ -6,6 +6,17 @@
         "source": "**",
         "destination": "/index.html"
       }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|ts|tsx|html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "private, max-age=0, no-cache"
+          }
+        ]
+      }
     ]
   }
 }
