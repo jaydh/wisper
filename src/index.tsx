@@ -14,7 +14,7 @@ import LoginLoading from './components/LoginLoading';
 let store = createStore(
     appReducer,
     compose(
-        applyMiddleware(logger, thunk),
+        applyMiddleware(thunk, logger),
         autoRehydrate()
     )
 );

@@ -39,6 +39,7 @@ export default function SyncArticles() {
     return (dispatch: Dispatch<any>) => {
         const ref = database.ref('/userData/' + user + '/articles/');
         ref.on('value', function (snap: any) {
+            dispatch(SyncArticlesRequested);
             const articles = snap.val();
             dispatch(SyncArticlesFulfilled(articles));
         });
