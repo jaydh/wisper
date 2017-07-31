@@ -9,6 +9,6 @@ exports.getMetadata = functions.database.ref('/userData/{uId}/articles/{articleI
         const article = event.data.val();
         return scrape(article
             , (err, meta) => {
-                event.data.ref.parent.update(meta)
+                event.data.ref.parent.child('metadata').update(meta)
             })
     });
