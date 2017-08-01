@@ -56,7 +56,11 @@ class Article extends React.Component<Props, State> {
     return (
       <div>
         <li>
-          <a href={link}> {metadata.title || metadata.ogTitle || link} </a>{' '}
+          <a href={link}> {
+            metadata ?
+            (metadata.title || metadata.ogTitle)
+            : link
+            } </a>
           <br />
           <DropdownMenu {...menuOptions}>
             date added:{dateAdded} <br />

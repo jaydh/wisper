@@ -60,6 +60,8 @@ export function ListenToFirebase() {
     ref.on('child_added', function(snap: any) {
       dispatch(AddArticleFromServer(snap.val()));
     });
+
+    //child deleted
   };
 }
 
