@@ -58,12 +58,8 @@ export function addArticle(articleLink: string) {
                     articleRef
                         .set({
                             link: articleLink,
-                            title: articleLink,
                             id: hash,
-                            author: null,
-                            domain: null,
                             dateAdded: now.toLocaleDateString(),
-                            dateRead: null,
                             lastViewed: null,
                             completed: false
                         })

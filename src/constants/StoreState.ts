@@ -1,20 +1,17 @@
-export interface article {
-    id: string
-    link: string
+export interface Article {
+    id: string;
+    link: string;
 
-    title?: string
-    author?: string
-    domain?: string
+    metadata?: Object;
+    dateAdded: string;
+    dateRead?: string;
+    lastViewed?: string;
 
-    dateAdded: string
-    dateRead?: string
-    lastViewed?: string
-
-    completed: boolean
+    completed: boolean;
 }
 
 export interface StoreState {
-    hash?: string
-    visibilityFilter: string
-    articles: article[]
+    hash?: string;
+    visibilityFilter: string;
+    articles: Article[];
 }
