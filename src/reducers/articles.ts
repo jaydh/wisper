@@ -38,7 +38,18 @@ function updateArticle(articleState: articleType[], action: any) {
 }
 
 function addArticleFromServer(articleState: articleType[], action: any) {
-    return articleState.concat(action.article);
+    let check = articleState.filter(article => {
+        return action.article.id === article.id;
+    });
+    if (check.length > 0) {
+        console.log('article in store already');
+        return articleState;
+    }
+    return check ? articleState.concat(action.article) : articleState;
+}
+
+function deleteArticleFromServer(articleState: articleType[], action: any) {
+        return articleState.filter(article => article.id !== action.article.id);
 }
 
 function addArticleToProject(articleState: articleType[], action: AddArticleToProjectFulfilled) {
@@ -103,7 +114,8 @@ const articles = createReducer([], {
     'ADD_ARTICLE_TO_PROJECT': addArticleToProject,
     'SYNC_ARTICLES_FULFILLED': syncArticles,
     'UPDATE_ARTICLE': updateArticle,
-    'ADD_ARTICLE_FROM_SERVER': addArticleFromServer
+    'ADD_ARTICLE_FROM_SERVER': addArticleFromServer,
+    'DELETE_ARTICLE_FROM_SERVER': deleteArticleFromServer
 });
 
 export default articles;
