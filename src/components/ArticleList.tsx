@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Article from './Article';
+import Footer  from './Footer';
 import { Article as articleType } from '../constants/StoreState';
 
 interface Props {
@@ -28,6 +29,7 @@ class ArticleList extends React.Component<Props, {}> {
             />
           )}
         </ul>
+        <Footer />
       </div>
     );
   }
