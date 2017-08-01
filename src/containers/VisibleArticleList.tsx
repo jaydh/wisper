@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import ArticleList from '../components/ArticleList';
 import { StoreState } from '../constants/StoreState';
 import { toggleArticleRead } from '../actions/toggleArticleRead';
-import syncArticles from '../actions/syncArticles';
+import { SyncArticles, ListenToFirebase } from '../actions/syncArticles';
 const getVisibleArticles = (state: StoreState) => {
     const { articles, visibilityFilter } = state;
     switch (visibilityFilter) {
@@ -22,7 +22,8 @@ function mapStateToProps(state: StoreState) {
 }
 
 const mapDispatchToProps = {
-    syncArticles,
+    SyncArticles,
+    ListenToFirebase,
     onArticleClick: toggleArticleRead
 };
 
