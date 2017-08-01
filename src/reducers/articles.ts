@@ -2,7 +2,6 @@ import { AddArticleFulfilled } from '../actions/addArticle';
 import { DeleteArticleFulfilled } from '../actions/deleteArticle';
 import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
 import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
-import { SyncArticlesFulfilled } from '../actions/syncArticles';
 import { Article as articleType } from '../constants/StoreState';
 import createReducer from './createReducer';
 
@@ -81,38 +80,11 @@ function toggleArticleRead(articleState: articleType[], action: ToggleArticleRea
     });
 }
 
-function syncArticles(articleState: articleType[], action: SyncArticlesFulfilled) {
-    if (action.articles !== null) {
-        const fetchedArticles = action.articles;
-        const fetchedArticleIDs = Object.keys(fetchedArticles);
-        const localIDs = articleState.map(article => article.id);
-
-        const newArticles: articleType[] = [];
-        fetchedArticleIDs.forEach(id => {
-            // check article hashes to see if different
-            if (localIDs.indexOf(id) < 0) {
-                newArticles.push(fetchedArticles[id]);
-            }
-        });
-        console.log('new', newArticles);
-
-        // Add way to mutate articles based on time stamps
-
-        // Filters articles that were deleted from firebase and then concatenates new ones
-        return (articleState.filter(article =>
-            fetchedArticleIDs.indexOf(article.id) > -1).
-            concat(newArticles)
-        );
-    }
-    return [];
-}
-
 const articles = createReducer([], {
     'ADD_ARTICLE_FULFILLED': addArticle,
     'DELETE_ARTICLE_FULFILLED': deleteArticle,
     'TOGGLE_ARTICLE_READ': toggleArticleRead,
     'ADD_ARTICLE_TO_PROJECT': addArticleToProject,
-    'SYNC_ARTICLES_FULFILLED': syncArticles,
     'UPDATE_ARTICLE': updateArticle,
     'ADD_ARTICLE_FROM_SERVER': addArticleFromServer,
     'DELETE_ARTICLE_FROM_SERVER': deleteArticleFromServer

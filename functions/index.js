@@ -9,6 +9,7 @@ exports.getMetadata = functions.database
   .onCreate(event => {
     const article = event.data.val();
     return scrape(article, (err, meta) => {
+      console.log(meta);
       event.data.ref.parent.child('metadata').update(meta);
     });
   });

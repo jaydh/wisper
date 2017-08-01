@@ -73,16 +73,3 @@ export function ListenToFirebase() {
     });
   };
 }
-
-export function SyncArticles() {
-  const user = auth().currentUser.uid;
-
-  return (dispatch: Dispatch<any>) => {
-    const ref = database.ref('/userData/' + user + '/articles/');
-    ref.once('value', function(snap: any) {
-      dispatch(SyncArticlesRequested());
-      const article = snap.val();
-      dispatch(SyncArticlesFulfilled(article));
-    });
-  };
-}
