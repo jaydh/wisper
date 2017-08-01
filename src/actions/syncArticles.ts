@@ -47,6 +47,13 @@ function AddArticleFromServer(article: articleType) {
   };
 }
 
+function DeleteArticleFromServer(article: articleType) {
+  return {
+    type: 'DELETE_ARTICLE_FROM_SERVER',
+    article
+  };
+}
+
 export function ListenToFirebase() {
   const user = auth().currentUser.uid;
   const ref = database.ref('/userData/' + user + '/articles/');
@@ -61,7 +68,9 @@ export function ListenToFirebase() {
       dispatch(AddArticleFromServer(snap.val()));
     });
 
-    //child deleted
+    ref.on('child_removed', function(snap: any) {
+      dispatch(DeleteArticleFromServer(snap.val()));
+    });
   };
 }
 
