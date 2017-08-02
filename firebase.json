@@ -9,11 +9,11 @@
     ],
     "headers": [
       {
-        "source": "**/*.@(js|ts|tsx|html)",
+        "source": "**",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "private, max-age=0, no-cache"
+            "value": "max-age=0"
           }
         ]
       }
