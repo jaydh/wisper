@@ -25,7 +25,8 @@ function addArticle(articleState: articleType[], action: AddArticleFulfilled) {
 }
 
 function deleteArticle(articleState: articleType[], action: DeleteArticleFulfilled) {
-    return articleState.filter(article => article.id !== action.articleHash);
+    console.log(action);
+    return articleState.filter(article => article.id !== action.id);
 }
 
 function updateArticle(articleState: articleType[], action: any) {

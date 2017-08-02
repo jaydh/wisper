@@ -33,7 +33,6 @@ export function ListenToFirebase() {
   return (dispatch: Dispatch<any>) => {
     ref.on('child_changed', function(snapshot: any) {
       dispatch(UpdateArticle(snapshot.val()));
-      console.log(snapshot.val());
     });
 
     ref.on('child_added', function(snap: any) {
