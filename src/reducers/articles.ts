@@ -42,7 +42,6 @@ function addArticleFromServer(articleState: articleType[], action: any) {
         return action.article.id === article.id;
     });
     if (check.length > 0) {
-        console.log('article in store already');
         return articleState;
     }
     return check ? articleState.concat(action.article) : articleState;

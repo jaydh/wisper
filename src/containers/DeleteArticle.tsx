@@ -17,7 +17,6 @@ class DeleteArticle extends React.Component<Props, {}> {
           className="btn btn-danger"
           onClick={() => dispatch(deleteArticle(articleHash))}
         >
-          {articleHash} <br />
           delete
         </button>
       </div>

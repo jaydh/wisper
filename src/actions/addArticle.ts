@@ -1,7 +1,6 @@
 import * as constants from '../constants/actionTypes';
 import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
-import { ListenToFirebase } from './syncArticles';
 let Hashes = require('jshashes');
 
 var SHA1 = new Hashes.SHA1();
@@ -56,8 +55,6 @@ export function addArticle(articleLink: string) {
       const articleRef = database.ref(
         '/userData/' + user + '/' + 'articles/' + hash
       );
-      // detach listener so current action doesn't trigger server syncing
-      articleRef.off();
       articleRef.once('value').then(function(snapshot: any) {
         // Check if article in database
         if (snapshot.exists()) {
@@ -73,7 +70,6 @@ export function addArticle(articleLink: string) {
             })
             .then(() => {
               dispatch(AddArticleFulfilled(articleLink));
-              dispatch(ListenToFirebase());
             })
             .catch((error: string) => {
               console.log(error);

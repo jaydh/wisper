@@ -21,13 +21,15 @@ export type DeleteArticleActions =
   | DeleteArticleRequested;
 
 export function deleteArticle(id: string) {
-  const user = auth().currentUser.uid;
-  const articleRef = database.ref('/userData/' + user + '/' + 'articles/' + id);
-  // detach listener so current action doesn't trigger server syncing
-  articleRef.off();
-
   return (dispatch: Dispatch<any>) => {
     dispatch(deleteArticleRequested());
+
+    const user = auth().currentUser.uid;
+    const articleRef = database.ref(
+      '/userData/' + user + '/' + 'articles/' + id
+    );
+    // detach listener so current action doesn't trigger server syncing
+    articleRef.parent.off();
 
     // Check if article in database
     articleRef
