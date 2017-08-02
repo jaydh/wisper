@@ -13,9 +13,11 @@
     "babel-jest": "^20.0.3",
     "firebase": "^4.2.0",
     "firebase-functions": "^0.6.1",
+    "git-last-commit": "^0.3.0",
     "jest": "^20.0.4",
     "jshashes": "^1.0.7",
     "react": "^15.6.1",
+    "react-bootstrap": "^0.31.2",
     "react-dd-menu": "^2.0.1",
     "react-dom": "^15.6.1",
     "react-loading": "^0.1.4",
@@ -25,13 +27,16 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^4.8.2",
     "redux-thunk": "^2.2.0",
-    "ts-jest": "^20.0.7"
+    "source-map-explorer": "^1.4.0",
+    "ts-jest": "^20.0.7",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {},
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build && firebase deploy",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "analyze": "source-map-explorer build/static/js/main.*"
   }
 }
