@@ -5,7 +5,7 @@ function setVisibilityFilter(visibilityState: string, action: SetVisbilityFilter
     return action.filter;
 }
 
-const visibilityReducer = createReducer('SHOW_ALL', {
+const visibilityReducer = createReducer('ACTIVE', {
     'SET_VISIBILITY_FILTER': setVisibilityFilter
 });
 

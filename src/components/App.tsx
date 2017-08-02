@@ -22,7 +22,6 @@ class App extends React.Component<{}, State> {
         return response.json();
       })
       .then(function(json: any) {
-        console.log(json);
         that.setState({ gitCommit: json.updated_at });
       })
       .catch(function(ex: any) {
@@ -44,7 +43,8 @@ class App extends React.Component<{}, State> {
         <Logout />
         <p>
           Under active development <br />
-          Last commit: {gitDate.toLocaleString()}
+          Last updated: {gitDate.toLocaleString()} <br />
+          Github Repo: <a>https://github.com/jaydh/wisper</a>
         </p>
       </div>
     );
