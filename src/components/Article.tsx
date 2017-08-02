@@ -25,15 +25,15 @@ class Article extends React.Component<Props, State> {
 
   toggle = () => {
     this.setState({ isMenuOpen: !this.state.isMenuOpen });
-  };
+  }
 
   close = () => {
     this.setState({ isMenuOpen: false });
-  };
+  }
 
   click = () => {
     console.log('You clicked an item');
-  };
+  }
 
   render() {
     const { onClick, id, completed, link, dateAdded, metadata } = this.props;

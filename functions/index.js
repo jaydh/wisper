@@ -9,7 +9,15 @@ exports.getMetadata = functions.database
   .onCreate(event => {
     const article = event.data.val();
     return scrape(article, (err, meta) => {
-      console.log(meta);
-      event.data.ref.parent.child('metadata').update(meta);
+      truthyMetadata = {}
+      Object.keys(meta).forEach(function(key) {
+        if (meta[key]) {
+          truthyMetadata[key] = meta[key];
+        }
+      });
+          event.data.ref.parent
+            .child('metadata')
+            .update(truthyMetadata);
     });
+
   });
