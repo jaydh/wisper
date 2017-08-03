@@ -31,7 +31,6 @@
     "src/setupTests.ts"
   ],
   "types": [
-    "typePatches",
-    "src/constants/immutableTyping.d.ts"
+    "typePatches"
   ]
 }

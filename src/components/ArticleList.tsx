@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Article from './Article';
-import Footer  from './Footer';
+import Footer from './Footer';
+import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 
 interface Props {
-  articles: articleType[];
+  articles: List<articleType>;
   ListenToFirebase: any;
   onArticleClick: any;
 }
@@ -19,13 +20,15 @@ class ArticleList extends React.Component<Props, {}> {
     return (
       <div className="Col-lg-3 Col-md-3">
         <ul>
-          {articles.map(article =>
-            <Article
-              key={article.id}
-              {...article}
-              onClick={() => onArticleClick(article.id)}
-            />
-          )}
+          {articles.map(article => {
+            return article
+              ? <Article
+                  key={article.id}
+                  {...article}
+                  onClick={() => onArticleClick(article.id)}
+              />
+              : <br />;
+          })}
         </ul>
         <Footer />
       </div>

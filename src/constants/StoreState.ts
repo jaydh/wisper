@@ -1,17 +1,18 @@
+import { List } from 'immutable';
 export interface Article {
-    id: string;
-    link: string;
+  id: string;
+  link: string;
 
-    metadata?: Object;
-    dateAdded: string;
-    dateRead?: string;
-    lastViewed?: string;
+  metadata?: Object;
+  dateAdded: string;
+  dateRead?: string;
+  lastViewed?: string;
 
-    completed: boolean;
+  completed: boolean;
 }
 
 export interface StoreState {
-    hash?: string;
-    visibilityFilter: string;
-    articles: Article[];
+  hash?: string;
+  visibilityFilter: string;
+  articles: List<Article>;
 }
