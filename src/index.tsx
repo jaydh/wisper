@@ -7,19 +7,18 @@ import App from './components/App';
 import appReducer from './reducers/index';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
-import { persistStore, autoRehydrate } from 'redux-persist';
+// let { persistStore, autoRehydrate } = require('redux-persist-immutable');
 import { initFirebase, auth } from './firebase';
 import LoginLoading from './components/LoginLoading';
 
 let store = createStore(
     appReducer,
     compose(
-        applyMiddleware(thunk, logger),
-        autoRehydrate()
+        applyMiddleware(thunk, logger)
     )
 );
 initFirebase();
-let persistor = persistStore(store);
+// let persistor = persistStore(store);
 auth().onAuthStateChanged(function (user: any) {
     if (user) {
         ReactDOM.render(
@@ -28,7 +27,7 @@ auth().onAuthStateChanged(function (user: any) {
             </Provider>,
             document.getElementById('root'));
     } else {
-        persistor.purge();
+        // persistor.purge();
         ReactDOM.render(
             <LoginLoading />,
             document.getElementById('root')

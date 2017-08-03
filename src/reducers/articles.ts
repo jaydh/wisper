@@ -51,8 +51,6 @@ function addArticleFromServer(articleState: List<articleType>, action: any) {
     articleState.filter(article => {
       return article ? action.article.id === article.id : false;
     }).size < 1;
-  console.log(check);
-  console.log(articleState.push(action.article));
   return check ? articleState.push(action.article) : articleState;
 }
 
