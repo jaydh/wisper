@@ -10,7 +10,7 @@ interface Props {
 }
 
 class ArticleList extends React.Component<Props, {}> {
-  componentWillMount() {
+  componentDidMount() {
     const { ListenToFirebase } = this.props;
     ListenToFirebase();
   }

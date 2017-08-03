@@ -17,7 +17,7 @@ class App extends React.Component<{}, State> {
   // Gets repository information
   componentWillMount() {
     let that = this;
-    fetch('https://api.github.com/repos/jaydh/wisper')
+    fetch('https://api.github.com/repos/jaydh/wispy')
       .then(function(response: any) {
         return response.json();
       })
@@ -44,7 +44,7 @@ class App extends React.Component<{}, State> {
         <p>
           Under active development <br />
           Last updated: {gitDate.toLocaleString()} <br />
-          Github Repo: <a>https://github.com/jaydh/wisper</a>
+          Github Repo: <a>https://github.com/jaydh/wispy</a>
         </p>
       </div>
     );
