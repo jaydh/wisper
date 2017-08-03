@@ -3,15 +3,19 @@ import { DeleteArticleFulfilled } from '../actions/deleteArticle';
 import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
 import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
 import { Article as articleType } from '../constants/StoreState';
+import { List } from 'immutable';
 import createReducer from './createReducer';
 
 const now = new Date();
 
-function addArticle(articleState: articleType[], action: AddArticleFulfilled) {
+function addArticle(
+  articleState: List<articleType>,
+  action: AddArticleFulfilled
+) {
   let check = articleState.filter(article => {
     return action.articleHash === article.id;
   });
-  if (check.length > 0) {
+  if (check.size > 0) {
     console.log('article in store already');
     return articleState;
   }
@@ -25,35 +29,31 @@ function addArticle(articleState: articleType[], action: AddArticleFulfilled) {
 }
 
 function deleteArticle(
-  articleState: articleType[],
+  articleState: List<articleType>,
   action: DeleteArticleFulfilled
 ) {
-  console.log(action);
   return articleState.filter(article => article.id !== action.id);
 }
 
-function updateArticle(articleState: articleType[], action: any) {
+function updateArticle(articleState: List<articleType>, action: any) {
   return articleState.map(article => {
     return article.id === action.article.id ? action.article : article;
   });
 }
 
-function addArticleFromServer(articleState: articleType[], action: any) {
+function addArticleFromServer(articleState: List<articleType>, action: any) {
   let check = articleState.filter(article => {
     return action.article.id === article.id;
   });
-  if (check.length > 0) {
-    return articleState;
-  }
-  return check ? articleState.concat(action.article) : articleState;
+  return (check.size > 0) ? articleState.push(action.article) : articleState;
 }
 
-function deleteArticleFromServer(articleState: articleType[], action: any) {
+function deleteArticleFromServer(articleState: List<articleType>, action: any) {
   return articleState.filter(article => article.id !== action.article.id);
 }
 
 function addArticleToProject(
-  articleState: articleType[],
+  articleState: List<articleType>,
   action: AddArticleToProjectFulfilled
 ) {
   return articleState.map(article => {
@@ -75,8 +75,6 @@ function toggleArticleRead(
     const newDateRead = !article.completed
       ? now.toLocaleDateString()
       : article.dateRead;
-    console.log(article.id);
-    console.log(action.articleHash);
     return article.id === action.articleHash
       ? {
           ...article,
@@ -88,7 +86,7 @@ function toggleArticleRead(
   });
 }
 
-const articles = createReducer([], {
+const articles = createReducer(List(), {
   ADD_ARTICLE_FULFILLED: addArticle,
   DELETE_ARTICLE_FULFILLED: deleteArticle,
   TOGGLE_ARTICLE_READ: toggleArticleRead,
