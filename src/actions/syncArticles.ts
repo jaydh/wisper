@@ -5,6 +5,11 @@ import { Article as articleType } from '../constants/StoreState';
 
 // todo: add types
 
+export interface AddArticleFromServer {
+  type: 'ADD_ARTICLE_FROM_SERVER';
+  article: articleType;
+}
+
 function UpdateArticle(article: articleType) {
   return {
     type: 'UPDATE_ARTICLE',
@@ -12,7 +17,7 @@ function UpdateArticle(article: articleType) {
   };
 }
 
-function AddArticleFromServer(article: articleType) {
+export function AddArticleFromServer(article: articleType) {
   return {
     type: 'ADD_ARTICLE_FROM_SERVER',
     article
