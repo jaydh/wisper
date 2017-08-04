@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Article from './Article';
 import Footer from './Footer';
+import ProjectsFooter from '../containers/ProjectsFooter';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 
@@ -31,6 +32,7 @@ class ArticleList extends React.Component<Props, {}> {
           })}
         </ul>
         <Footer />
+        <ProjectsFooter />
       </div>
     );
   }

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import AddArticleToProject from '../containers/AddArticleToProject';
 import DeleteArticle from '../containers/DeleteArticle';
-var { DropdownMenu } = require('react-dd-menu');
 
 interface Props {
   id: string;
@@ -23,36 +22,9 @@ class Article extends React.Component<Props, State> {
     };
   }
 
-  toggle = () => {
-    this.setState({ isMenuOpen: !this.state.isMenuOpen });
-  }
-
-  close = () => {
-    this.setState({ isMenuOpen: false });
-  }
-
-  click = () => {
-    console.log('You clicked an item');
-  }
-
   render() {
     const { onClick, id, completed, link, dateAdded, metadata } = this.props;
-    let menuOptions = {
-      isOpen: this.state.isMenuOpen,
-      close: this.close.bind(this),
-      size: 'sm',
-      toggle: (
-        <button
-          className="btn-info btn-sm"
-          type="button"
-          onClick={this.toggle.bind(this)}
-        >
-          more
-        </button>
-      ),
-      align: 'right'
-    };
-
+   
     return (
       <div>
         <li>
@@ -62,7 +34,6 @@ class Article extends React.Component<Props, State> {
             : link
             } </a>
           <br />
-          <DropdownMenu {...menuOptions}>
             date added:{dateAdded} <br />
             status: {completed.toString()} <br />
             <button
@@ -74,7 +45,6 @@ class Article extends React.Component<Props, State> {
             </button>
             <AddArticleToProject articleHash={id} />
             <DeleteArticle articleHash={id} />
-          </DropdownMenu>
         </li>
       </div>
     );

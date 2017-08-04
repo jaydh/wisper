@@ -7,12 +7,14 @@ export interface Article {
   dateAdded: string;
   dateRead?: string;
   lastViewed?: string;
-
+  projects?: Object;
   completed: boolean;
 }
 
 export interface StoreState {
   hash?: string;
   visibilityFilter: string;
+  projectFilter: string;
   articles: List<Article>;
+  projects?: List<String>;
 }
