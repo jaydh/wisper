@@ -9,7 +9,7 @@ function addArticleToProject(
 ) {
   return projectState.includes(action.project)
     ? projectState
-    : projectState.push(action.project);
+    : projectState.push(action.project.toLocaleLowerCase());
 }
 
 function addArticleFromServer(
@@ -19,7 +19,7 @@ function addArticleFromServer(
   if (action.article) {
     const projects = action.article.projects;
     if (projects) {
-      const projectIDs = Object.keys(projects).map(key => projects[key]);
+      const projectIDs = Object.keys(projects).map(key => projects[key].toLocaleLowerCase());
       const newProjectIDs = projectIDs.filter(key => !projectState.contains(key));
       return projectState.concat(newProjectIDs);
     }
