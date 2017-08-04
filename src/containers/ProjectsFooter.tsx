@@ -11,22 +11,24 @@ interface Props {
 class ProjectsFooter extends React.Component<Props> {
   render() {
     const { projects } = this.props;
-    console.log(projects);
     return (
       <div>
-        <ProjectsFilterLink filter="NONE">
-          NoFilter {', '}
-        </ProjectsFilterLink>
-        {projects
-          ? projects.map(project => {
-              console.log(project);
-              return (
-                <ProjectsFilterLink key={project} filter={project}>
-                  {project}
-                </ProjectsFilterLink>
-              );
-            })
-          : <p>No project Filters</p>}
+        <span>
+          Show project: {' '}
+          <ProjectsFilterLink filter="NONE">None</ProjectsFilterLink>
+          {projects
+            ? projects.map(project => {
+                return (
+                  <span key={String(project)}>
+                    {', '}
+                    <ProjectsFilterLink filter={project}>
+                      {project}
+                    </ProjectsFilterLink>
+                  </span>
+                );
+              })
+            : <p>No project Filters</p>}
+        </span>
       </div>
     );
   }

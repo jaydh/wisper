@@ -20,6 +20,7 @@ class ArticleList extends React.Component<Props, {}> {
     const { articles, onArticleClick } = this.props;
     return (
       <div className="Col-lg-3 Col-md-3">
+        <ProjectsFooter />
         <ul>
           {articles.map(article => {
             return article
@@ -32,7 +33,7 @@ class ArticleList extends React.Component<Props, {}> {
           })}
         </ul>
         <Footer />
-        <ProjectsFooter />
+        
       </div>
     );
   }
