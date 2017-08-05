@@ -25,17 +25,18 @@ class Article extends React.Component<Props, State> {
 
   render() {
     const { onClick, id, completed, link, dateAdded, metadata } = this.props;
-
     return (
       <div>
-        <Button onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}>
+        <Button
+          onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
+        >
           More
-          </Button>
-        <a href={link}> {
-          metadata ?
-            (metadata.title || metadata.ogTitle)
-            : link
-        } </a>
+        </Button>
+        <a href={link}>
+          {' '}{(metadata.title || metadata.ogTitle)
+            ? metadata.title || metadata.ogTitle
+            : link}
+        </a>
         <Collapse in={this.state.isMenuOpen}>
           <div>
             date added:{dateAdded} <br />
@@ -46,7 +47,7 @@ class Article extends React.Component<Props, State> {
               style={{ textDecoration: completed ? 'underline' : 'none' }}
             >
               toggleRead
-              </button>
+            </button>
             <AddArticleToProject articleHash={id} />
             <DeleteArticle articleHash={id} />
           </div>
