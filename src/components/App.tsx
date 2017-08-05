@@ -1,19 +1,29 @@
 import * as React from 'react';
-import AddArticle from '../containers/AddArticle';
 import VisibleArticleList from '../containers/VisibleArticleList';
 import Logout from './Logout';
-import { PageHeader, Jumbotron } from 'react-bootstrap';
+import { Button, PageHeader, Jumbotron } from 'react-bootstrap';
 import '!!style-loader!css-loader!../css/creative.min.css';
 import 'whatwg-fetch';
+import { List } from 'immutable';
 
 interface State {
   gitCommit: string;
+  articleListIDs: List<number>;
 }
 
 class App extends React.Component<{}, State> {
   constructor() {
     super();
-    this.state = { gitCommit: 'not available' };
+    this.state = { 
+      gitCommit: 'not available',
+      articleListIDs: List([0])
+   };
+  }
+
+  addListClick() {
+    this.setState({
+      articleListIDs: this.state.articleListIDs.push(this.state.articleListIDs.size)
+    });
   }
 
   // Gets repository information
@@ -38,9 +48,13 @@ class App extends React.Component<{}, State> {
         <PageHeader>
           wispy
         </PageHeader>
+        <Button onClick={() => this.addListClick()}>
+          Add List
+        </Button>
         <Jumbotron>
-          <AddArticle />
-          <VisibleArticleList />
+          {this.state.articleListIDs.map((id) => {
+            return <VisibleArticleList key={id} />;
+          })}
         </Jumbotron>
         <Logout />
         <p>
