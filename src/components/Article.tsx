@@ -33,7 +33,7 @@ class Article extends React.Component<Props, State> {
           More
         </Button>
         <a href={link}>
-          {' '}{(metadata.title || metadata.ogTitle)
+          {' '}{(metadata && (metadata.title || metadata.ogTitle))
             ? metadata.title || metadata.ogTitle
             : link}
         </a>
