@@ -2,8 +2,6 @@ import * as constants from '../constants/actionTypes';
 import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
 import { ListenToFirebase } from './syncArticles';
-let Hashes = require('jshashes');
-var SHA1 = new Hashes.SHA1();
 
 export interface DeleteArticleRequested {
   type: constants.DELETE_ARTICLE_REQUESTED;
@@ -57,9 +55,9 @@ function deleteArticleRejected() {
   };
 }
 
-function deleteArticleFulfilled(articleLink: string) {
+function deleteArticleFulfilled(id: string) {
   return {
     type: constants.DELETE_ARTICLE_FULFILLED,
-    articleHash: SHA1.hex(articleLink)
+    id: id
   };
 }
