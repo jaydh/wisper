@@ -39,8 +39,10 @@ class Article extends React.Component<Props, State> {
         </a>
         <Collapse in={this.state.isMenuOpen}>
           <div>
-            date added:{dateAdded} <br />
-            status: {completed.toString()} <br />
+            {metadata && (metadata.Description || metadata.ogDescription) ?
+              ('Description :' + metadata.ogDescription) : ''}
+            Date added:{dateAdded} <br />
+            Status: {completed.toString()} <br />
             <button
               className="btn"
               onClick={onClick}
