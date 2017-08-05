@@ -25,7 +25,8 @@ function addArticle(
     id: action.articleHash,
     link: action.articleLink,
     dateAdded: now.toLocaleDateString(),
-    completed: false
+    completed: false,
+    projects: action.projectWithKey
   });
 }
 
@@ -67,9 +68,9 @@ function addArticleToProject(
   return articleState.map(article => {
     return article && article.id === action.articleHash
       ? {
-          ...article,
-          project: action.project
-        }
+        ...article,
+        project: action.project
+      }
       : article;
   });
 }
@@ -86,11 +87,11 @@ function toggleArticleRead(
         : article.dateRead;
       return article.id === action.articleHash
         ? {
-            ...article,
-            completed: !article.completed,
-            dateRead: newDateRead,
-            lastViewed: now
-          }
+          ...article,
+          completed: !article.completed,
+          dateRead: newDateRead,
+          lastViewed: now
+        }
         : article;
     }
     return article;
