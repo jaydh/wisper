@@ -1,6 +1,7 @@
 import * as React from 'react';
 import AddArticleToProject from '../containers/AddArticleToProject';
 import DeleteArticle from '../containers/DeleteArticle';
+import { Button, Collapse } from 'react-bootstrap';
 
 interface Props {
   id: string;
@@ -24,16 +25,19 @@ class Article extends React.Component<Props, State> {
 
   render() {
     const { onClick, id, completed, link, dateAdded, metadata } = this.props;
-   
+
     return (
       <div>
-        <li>
-          <a href={link}> {
-            metadata ?
+        <Button onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}>
+          More
+          </Button>
+        <a href={link}> {
+          metadata ?
             (metadata.title || metadata.ogTitle)
             : link
-            } </a>
-          <br />
+        } </a>
+        <Collapse in={this.state.isMenuOpen}>
+          <div>
             date added:{dateAdded} <br />
             status: {completed.toString()} <br />
             <button
@@ -42,10 +46,11 @@ class Article extends React.Component<Props, State> {
               style={{ textDecoration: completed ? 'underline' : 'none' }}
             >
               toggleRead
-            </button>
+              </button>
             <AddArticleToProject articleHash={id} />
             <DeleteArticle articleHash={id} />
-        </li>
+          </div>
+        </Collapse>
       </div>
     );
   }

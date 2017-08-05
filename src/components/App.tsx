@@ -2,6 +2,8 @@ import * as React from 'react';
 import AddArticle from '../containers/AddArticle';
 import VisibleArticleList from '../containers/VisibleArticleList';
 import Logout from './Logout';
+import { PageHeader, Jumbotron } from 'react-bootstrap';
+import '!!style-loader!css-loader!../css/creative.min.css';
 import 'whatwg-fetch';
 
 interface State {
@@ -18,13 +20,13 @@ class App extends React.Component<{}, State> {
   componentWillMount() {
     let that = this;
     fetch('https://api.github.com/repos/jaydh/wispy')
-      .then(function(response: any) {
+      .then(function (response: any) {
         return response.json();
       })
-      .then(function(json: any) {
+      .then(function (json: any) {
         that.setState({ gitCommit: json.updated_at });
       })
-      .catch(function(ex: any) {
+      .catch(function (ex: any) {
         console.log('parsing failed', ex);
       });
   }
@@ -33,13 +35,13 @@ class App extends React.Component<{}, State> {
     const gitDate = new Date(this.state.gitCommit);
     return (
       <div className="container">
-        <div className="page-header">
-          <h1>wispy</h1>
-        </div>
-        <div className="jumbotron">
+        <PageHeader>
+          wispy
+        </PageHeader>
+        <Jumbotron>
           <AddArticle />
           <VisibleArticleList />
-        </div>
+        </Jumbotron>
         <Logout />
         <p>
           Under active development <br />

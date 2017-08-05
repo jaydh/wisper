@@ -11,9 +11,6 @@ const getVisibleArticles = (state: StoreState) => {
     articlesInProject = articles;
   } else {
     articlesInProject = articles.filter(article => {
-      /*return (article && article.projects)
-        ? (Object.keys(article.projects).map(key => article.projects[key]).indexOf(projectFilter) > -1)
-        : false;*/
       if (article) {
         const projects = article.projects;
         if (projects) {

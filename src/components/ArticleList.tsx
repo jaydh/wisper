@@ -1,9 +1,10 @@
 import * as React from 'react';
 import Article from './Article';
 import Footer from './Footer';
-import ProjectsFooter from '../containers/ProjectsFooter';
+import ProjectsFooter from '../containers/ProjectSelector';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
+import { ListGroup, ListGroupItem, Jumbotron } from 'react-bootstrap';
 
 interface Props {
   articles: List<articleType>;
@@ -16,25 +17,29 @@ class ArticleList extends React.Component<Props, {}> {
     const { ListenToFirebase } = this.props;
     ListenToFirebase();
   }
+
   render() {
     const { articles, onArticleClick } = this.props;
     return (
-      <div className="Col-lg-3 Col-md-3">
+      <Jumbotron>
         <ProjectsFooter />
-        <ul>
+        <ListGroup>
           {articles.map(article => {
             return article
-              ? <Article
-                  key={article.id}
-                  {...article}
-                  onClick={() => onArticleClick(article.id)}
-              />
+              ? (
+                <ListGroupItem key={article.id} bsStyle={article.completed ? 'success' : 'info'}>
+                  <Article
+                    key={article.id}
+                    {...article}
+                    onClick={() => onArticleClick(article.id)}
+
+                  />
+                </ListGroupItem>)
               : <br />;
           })}
-        </ul>
+        </ListGroup>
         <Footer />
-        
-      </div>
+      </Jumbotron>
     );
   }
 }

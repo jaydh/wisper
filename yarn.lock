@@ -71,6 +71,12 @@
   version "8.0.19"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.19.tgz#e46e2b0243de7d03f15b26b45c59ebb84f657a4e"
 
+"@types/react-bootstrap@^0.0.52":
+  version "0.0.52"
+  resolved "https://registry.yarnpkg.com/@types/react-bootstrap/-/react-bootstrap-0.0.52.tgz#f1a02d8de70f8e6eba840a8c2ecbfbad81fa42ba"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@^15.5.2":
   version "15.5.2"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.2.tgz#f7203c75a1728812355f037ea112611d082555e6"
@@ -627,6 +633,10 @@ boom@2.x.x:
   resolved "https://registry.yarnpkg.com/boom/-/boom-2.10.1.tgz#39c8918ceff5799f83f9492a848f625add0c766f"
   dependencies:
     hoek "2.x.x"
+
+bootstrap@^3.3.7:
+  version "3.3.7"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
 boxen@^0.6.0:
   version "0.6.0"
@@ -4370,6 +4380,12 @@ react-dom@^15.6.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "^15.5.10"
+
+react-draggable@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-2.2.6.tgz#3a806e10f2da6babfea4136be6510e89b0d76901"
+  dependencies:
+    classnames "^2.2.5"
 
 react-error-overlay@^1.0.6:
   version "1.0.9"

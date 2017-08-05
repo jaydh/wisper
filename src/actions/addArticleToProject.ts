@@ -47,11 +47,11 @@ export function addArticleToProject(articleHash: string, project: string) {
       '/userData/' + user + '/' + 'articles/' + articleHash + '/projects'
     );
 
-    projectRef.once('value', function(snapshot: any) {
+    projectRef.once('value', function (snapshot: any) {
       projectRef
         .push(project)
         .then(() => {
-          dispatch(AddArticleToProjectFulfilled(articleHash, project));
+          dispatch(AddArticleToProjectFulfilled(articleHash, project.toLocaleLowerCase()));
         })
         .catch((error: string) => {
           console.log(error);
