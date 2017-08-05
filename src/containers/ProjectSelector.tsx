@@ -15,7 +15,7 @@ class ProjectsFooter extends React.Component<Props> {
       <div>
         <span>
           Show project: {' '}
-          <ProjectsFilterLink filter="NONE">All</ProjectsFilterLink>
+          <ProjectsFilterLink filter="ALL">All</ProjectsFilterLink>
           {projects
             ? projects.map(project => {
               return (
@@ -28,6 +28,8 @@ class ProjectsFooter extends React.Component<Props> {
               );
             })
             : <p>No project Filters</p>}
+          {', '}
+          <ProjectsFilterLink filter="NONE">None</ProjectsFilterLink>
         </span>
       </div>
     );

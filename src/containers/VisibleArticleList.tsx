@@ -7,20 +7,33 @@ import { ListenToFirebase } from '../actions/syncArticles';
 const getVisibleArticles = (state: StoreState) => {
   const { articles, visibilityFilter, projectFilter } = state;
   let articlesInProject;
-  if (projectFilter === 'NONE') {
-    articlesInProject = articles;
-  } else {
-    articlesInProject = articles.filter(article => {
-      if (article) {
-        const projects = article.projects;
-        if (projects) {
-          return Object.keys(article.projects)
-            .map(key => projects[key])
-            .indexOf(projectFilter) > -1;
+  switch (projectFilter) {
+    case 'ALL':
+      articlesInProject = articles;
+      break;
+    case 'NONE':
+      articlesInProject = articles.filter(article => {
+        if (article) {
+          const projects = article.projects;
+          if (projects) {
+            return false;
+          }
         }
-      }
-      return false;
-    });
+        return false;
+      });
+      break;
+    default:
+      articlesInProject = articles.filter(article => {
+        if (article) {
+          const projects = article.projects;
+          if (projects) {
+            return Object.keys(article.projects)
+              .map(key => projects[key])
+              .indexOf(projectFilter) > -1;
+          }
+        }
+        return false;
+      });
   }
 
   switch (visibilityFilter) {

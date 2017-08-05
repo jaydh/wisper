@@ -5,7 +5,7 @@ function setProjectFilter(projectState: string, action: SetProjectFilter) {
     return action.filter;
 }
 
-const visibilityReducer = createReducer('NONE', {
+const visibilityReducer = createReducer('ALL', {
     'SET_PROJECT_FILTER': setProjectFilter
 });
 
