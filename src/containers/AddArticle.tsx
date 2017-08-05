@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { addArticle } from '../actions/addArticle';
+import { StoreState } from '../constants/StoreState';
 import { Button, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 interface State {
@@ -8,6 +9,7 @@ interface State {
 }
 interface Props {
   dispatch: any;
+  currentlySelectedProject: string;
 }
 
 class AddArticle extends React.Component<Props, State> {
@@ -37,7 +39,10 @@ class AddArticle extends React.Component<Props, State> {
   }
 
   render() {
-    const { dispatch } = this.props;
+    const { dispatch, currentlySelectedProject } = this.props;
+    const project = (currentlySelectedProject !== 'NONE' && currentlySelectedProject !== 'ALL')
+      ? currentlySelectedProject : undefined;
+
     return (
       <form onSubmit={() => onclick}>
         <FormGroup
@@ -59,15 +64,15 @@ class AddArticle extends React.Component<Props, State> {
           onClick={
 
             () => {
-              console.log(this.state.value);
-              return dispatch(addArticle(this.state.value));
-
+              return (
+                dispatch(addArticle(this.state.value, project))
+              );
             }
           }
         >
           Submit
         </Button>
-      </form>
+      </form >
     );
   }
 }
@@ -78,4 +83,10 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(AddArticle);
+const mapStateToProps = (state: StoreState) => {
+  return {
+    currentlySelectedProject: state.projectFilter
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddArticle);
