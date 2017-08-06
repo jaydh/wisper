@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Article from './Article';
 import AddArticle from '../containers/AddArticle';
-import Footer from './Footer';
-import ProjectsFooter from '../containers/ProjectSelector';
+import Footer from './ArticleListFooter';
+import ProjectSelector from '../containers/ProjectSelector';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 import { ListGroup, ListGroupItem, Jumbotron } from 'react-bootstrap';
@@ -25,7 +25,7 @@ class ArticleList extends React.Component<Props, {}> {
     return (
       <Jumbotron>
         <AddArticle id={id} />
-        <ProjectsFooter id={id} />
+        <ProjectSelector id={id} />
         <ListGroup>
           {articles.map(article => {
             return article

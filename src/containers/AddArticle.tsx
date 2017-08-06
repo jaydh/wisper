@@ -24,6 +24,7 @@ class AddArticle extends React.Component<Props, State> {
   }
 
   getValidationState() {
+    // Checks if valid hyperlink
     const regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
     if (regexp.test(this.state.value)) {
       return 'success';

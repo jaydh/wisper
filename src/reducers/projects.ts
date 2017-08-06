@@ -7,9 +7,9 @@ function addArticleToProject(
   projectState: List<String>,
   action: AddArticleToProjectFulfilled
 ) {
-  return projectState.includes(action.project)
+  return projectState.includes(action.project.toLocaleLowerCase())
     ? projectState
-    : projectState.push(action.project.toLocaleLowerCase());
+    : projectState.push(action.project);
 }
 
 function addArticleFromServer(

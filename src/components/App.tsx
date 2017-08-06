@@ -19,14 +19,7 @@ class App extends React.Component<{}, State> {
       articleListIDs: List([0])
     };
   }
-
-  addListClick() {
-    this.setState({
-      articleListIDs: this.state.articleListIDs.push(this.state.articleListIDs.size)
-    });
-  }
-
-  // Gets repository information
+    // Gets repository information
   componentWillMount() {
     let that = this;
     fetch('https://api.github.com/repos/jaydh/wispy')
@@ -41,7 +34,13 @@ class App extends React.Component<{}, State> {
       });
   }
 
-  public render() {
+  addListClick() {
+    this.setState({
+      articleListIDs: this.state.articleListIDs.push(this.state.articleListIDs.size)
+    });
+  }
+
+ render() {
     const gitDate = new Date(this.state.gitCommit);
     return (
       <div className="container">

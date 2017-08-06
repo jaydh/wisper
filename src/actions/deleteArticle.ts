@@ -13,10 +13,25 @@ export interface DeleteArticleFulfilled {
 export interface DeleteArticleRejected {
   type: constants.DELETE_ARTICLE_REJECTED;
 }
-export type DeleteArticleActions =
-  | DeleteArticleFulfilled
-  | DeleteArticleRejected
-  | DeleteArticleRequested;
+
+function deleteArticleRequested(): DeleteArticleRequested {
+  return {
+    type: constants.DELETE_ARTICLE_REQUESTED
+  };
+}
+
+function deleteArticleRejected(): DeleteArticleRejected {
+  return {
+    type: constants.DELETE_ARTICLE_REJECTED
+  };
+}
+
+function deleteArticleFulfilled(id: string): DeleteArticleFulfilled {
+  return {
+    type: constants.DELETE_ARTICLE_FULFILLED,
+    id: id
+  };
+}
 
 export function deleteArticle(id: string) {
   return (dispatch: Dispatch<any>) => {
@@ -40,24 +55,5 @@ export function deleteArticle(id: string) {
         dispatch(deleteArticleRejected());
       });
     dispatch(ListenToFirebase);
-  };
-}
-
-function deleteArticleRequested(): DeleteArticleRequested {
-  return {
-    type: constants.DELETE_ARTICLE_REQUESTED
-  };
-}
-
-function deleteArticleRejected() {
-  return {
-    type: constants.DELETE_ARTICLE_REJECTED
-  };
-}
-
-function deleteArticleFulfilled(id: string) {
-  return {
-    type: constants.DELETE_ARTICLE_FULFILLED,
-    id: id
   };
 }

@@ -16,18 +16,16 @@ function addArticle(
     articleState.filter(article => {
       return article ? action.articleHash === article.id : false;
     }).size === 0;
-  if (!check) {
-    console.log('article in store already');
-    return articleState;
-  }
 
-  return articleState.concat({
-    id: action.articleHash,
-    link: action.articleLink,
-    dateAdded: now.toLocaleDateString(),
-    completed: false,
-    projects: action.projectWithKey
-  });
+  return check
+    ? articleState.push({
+        id: action.articleHash,
+        link: action.articleLink,
+        dateAdded: now.toLocaleDateString(),
+        completed: false,
+        projects: action.projectWithKey
+      })
+    : articleState;
 }
 
 function deleteArticle(
@@ -50,8 +48,8 @@ function updateArticle(articleState: List<articleType>, action: any) {
 function addArticleFromServer(articleState: List<articleType>, action: any) {
   let check =
     articleState.filter(article => {
-      return article ? action.article.id === article.id : false;
-    }).size < 1;
+      return article ? action.articleHash === article.id : false;
+    }).size === 0;
   return check ? articleState.push(action.article) : articleState;
 }
 
@@ -68,9 +66,9 @@ function addArticleToProject(
   return articleState.map(article => {
     return article && article.id === action.articleHash
       ? {
-        ...article,
-        project: action.project
-      }
+          ...article,
+          project: action.project
+        }
       : article;
   });
 }
@@ -81,17 +79,13 @@ function toggleArticleRead(
 ) {
   return articleState.map(article => {
     if (article) {
-      // Only update dateRead if hasn't been read before
-      const newDateRead = !article.completed
-        ? now.toLocaleDateString()
-        : article.dateRead;
       return article.id === action.articleHash
         ? {
-          ...article,
-          completed: !article.completed,
-          dateRead: newDateRead,
-          lastViewed: now
-        }
+            ...article,
+            completed: action.update.completed,
+            dateRead: action.update.dateRead,
+            lastViewed: now
+          }
         : article;
     }
     return article;

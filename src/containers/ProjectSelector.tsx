@@ -16,21 +16,25 @@ class ProjectsFooter extends React.Component<Props> {
       <div>
         <span>
           Show project: {' '}
-          <ProjectsFilterLink filter="ALL" id={id}>All</ProjectsFilterLink>
+          <ProjectsFilterLink filter="ALL" id={id}>
+            All
+          </ProjectsFilterLink>
           {projects
             ? projects.map(project => {
-              return (
-                <span key={String(project)}>
-                  {', '}
-                  <ProjectsFilterLink filter={project} id={id}>
-                    {project}
-                  </ProjectsFilterLink>
-                </span>
-              );
-            })
-            : <p>No project Filters</p>}
-          {', '}
-          <ProjectsFilterLink filter="NONE" id={id}>None</ProjectsFilterLink>
+                return (
+                  <span key={String(project)}>
+                    {', '}
+                    <ProjectsFilterLink filter={project} id={id}>
+                      {project}
+                    </ProjectsFilterLink>
+                  </span>
+                );
+              })
+            : <p>No Projects</p>}
+          {' , '}
+          <ProjectsFilterLink filter="NONE" id={id}>
+            None
+          </ProjectsFilterLink>
         </span>
       </div>
     );
