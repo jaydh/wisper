@@ -61,14 +61,7 @@ class AddArticle extends React.Component<Props, State> {
         </FormGroup>
         <Button
           type="button"
-          onClick={
-
-            () => {
-              return (
-                dispatch(addArticle(this.state.value, project))
-              );
-            }
-          }
+          onClick={() => dispatch(addArticle(this.state.value, project))}
         >
           Submit
         </Button>

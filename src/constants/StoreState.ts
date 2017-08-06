@@ -14,7 +14,7 @@ export interface Article {
 export interface StoreState {
   hash?: string;
   visibilityFilter: string;
-  projectFilter: string;
+  projectFilter: List<String>;
   articles: List<Article>;
   projects?: List<String>;
 }

@@ -11,6 +11,7 @@ interface Props {
   articles: List<articleType>;
   ListenToFirebase: any;
   onArticleClick: any;
+  id: number;
 }
 
 class ArticleList extends React.Component<Props, {}> {
@@ -20,23 +21,24 @@ class ArticleList extends React.Component<Props, {}> {
   }
 
   render() {
-    const { articles, onArticleClick } = this.props;
+    const { articles, onArticleClick, id } = this.props;
+    console.log('id', id);
     return (
       <Jumbotron>
         <AddArticle />
-        <ProjectsFooter />
+        <ProjectsFooter id={id} />
         <ListGroup>
           {articles.map(article => {
             return article
               ? <ListGroupItem
-                  key={article.id}
-                  bsStyle={article.completed ? 'success' : 'info'}
+                key={article.id}
+                bsStyle={article.completed ? 'success' : 'info'}
               >
-                  <Article
-                    key={article.id}
-                    {...article}
-                    onClick={() => onArticleClick(article.id)}
-                  />
+                <Article
+                  key={article.id}
+                  {...article}
+                  onClick={() => onArticleClick(article.id)}
+                />
               </ListGroupItem>
               : <br />;
           })}

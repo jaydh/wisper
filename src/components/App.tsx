@@ -14,10 +14,10 @@ interface State {
 class App extends React.Component<{}, State> {
   constructor() {
     super();
-    this.state = { 
+    this.state = {
       gitCommit: 'not available',
       articleListIDs: List([0])
-   };
+    };
   }
 
   addListClick() {
@@ -53,7 +53,7 @@ class App extends React.Component<{}, State> {
         </Button>
         <Jumbotron>
           {this.state.articleListIDs.map((id) => {
-            return <VisibleArticleList key={id} />;
+            return <VisibleArticleList key={id} id={id} />;
           })}
         </Jumbotron>
         <Logout />

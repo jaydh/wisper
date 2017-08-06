@@ -6,22 +6,23 @@ import { StoreState } from '../constants/StoreState';
 
 interface Props {
   projects: List<String>;
+  id: Number;
 }
 
 class ProjectsFooter extends React.Component<Props> {
   render() {
-    const { projects } = this.props;
+    const { projects, id } = this.props;
     return (
       <div>
         <span>
           Show project: {' '}
-          <ProjectsFilterLink filter="ALL">All</ProjectsFilterLink>
+          <ProjectsFilterLink filter="ALL" id={id}>All</ProjectsFilterLink>
           {projects
             ? projects.map(project => {
               return (
                 <span key={String(project)}>
                   {', '}
-                  <ProjectsFilterLink filter={project}>
+                  <ProjectsFilterLink filter={project} id={id}>
                     {project}
                   </ProjectsFilterLink>
                 </span>
@@ -29,7 +30,7 @@ class ProjectsFooter extends React.Component<Props> {
             })
             : <p>No project Filters</p>}
           {', '}
-          <ProjectsFilterLink filter="NONE">None</ProjectsFilterLink>
+          <ProjectsFilterLink filter="NONE" id={id}>None</ProjectsFilterLink>
         </span>
       </div>
     );

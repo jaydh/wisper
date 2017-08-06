@@ -3,11 +3,14 @@ import ArticleList from '../components/ArticleList';
 import { StoreState } from '../constants/StoreState';
 import { toggleArticleRead } from '../actions/toggleArticleRead';
 import { ListenToFirebase } from '../actions/syncArticles';
+// import { List } from 'immutable';
+// import { Article as articleType } from '../constants/StoreState';
 
-const getVisibleArticles = (state: StoreState) => {
+const getVisibleArticles = (state: StoreState, listId: number) => {
   const { articles, visibilityFilter, projectFilter } = state;
   let articlesInProject;
-  switch (projectFilter) {
+  const currentFilter = projectFilter.get(listId);
+  switch (currentFilter) {
     case 'ALL':
       articlesInProject = articles;
       break;
@@ -52,8 +55,10 @@ const getVisibleArticles = (state: StoreState) => {
   }
 };
 
-function mapStateToProps(state: StoreState) {
-  return { articles: getVisibleArticles(state) };
+function mapStateToProps(state: StoreState, ownProps: any) {
+  return {
+    articles: getVisibleArticles(state, ownProps.id),
+  };
 }
 
 const mapDispatchToProps = {

@@ -1,11 +1,21 @@
 import createReducer from './createReducer';
 import { SetProjectFilter } from '../actions/projectFilter';
+import { List } from 'immutable';
 
-function setProjectFilter(projectState: string, action: SetProjectFilter) {
-    return action.filter;
+interface ProjectFilter {
+    projectFilter: string;
+    id: number;
 }
 
-const visibilityReducer = createReducer('ALL', {
+function setProjectFilter(projectState: List<String>, action: SetProjectFilter) {
+    const newFilter: ProjectFilter = {
+        projectFilter: action.filter,
+        id: action.id
+    };
+    return projectState.set(newFilter.id, newFilter.projectFilter);
+}
+
+const visibilityReducer = createReducer(List(['ALL']), {
     'SET_PROJECT_FILTER': setProjectFilter
 });
 

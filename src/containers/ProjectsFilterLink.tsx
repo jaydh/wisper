@@ -9,9 +9,10 @@ const mapStateToProps = (state: any, ownProps: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+
     return {
         onClick: () => {
-            dispatch(setProjectFilter(ownProps.filter));
+            dispatch(setProjectFilter(ownProps.filter, ownProps.id));
         }
     };
 };
