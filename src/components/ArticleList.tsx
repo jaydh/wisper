@@ -22,10 +22,9 @@ class ArticleList extends React.Component<Props, {}> {
 
   render() {
     const { articles, onArticleClick, id } = this.props;
-    console.log('id', id);
     return (
       <Jumbotron>
-        <AddArticle />
+        <AddArticle id={id} />
         <ProjectsFooter id={id} />
         <ListGroup>
           {articles.map(article => {

@@ -32,7 +32,7 @@ const getVisibleArticles = (state: StoreState, listId: number) => {
           if (projects) {
             return Object.keys(article.projects)
               .map(key => projects[key])
-              .indexOf(projectFilter) > -1;
+              .indexOf(currentFilter) > -1;
           }
         }
         return false;

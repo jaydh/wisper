@@ -8,6 +8,7 @@ interface State {
   value: string;
 }
 interface Props {
+  id: number;
   dispatch: any;
   currentlySelectedProject: string;
 }
@@ -76,9 +77,9 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-const mapStateToProps = (state: StoreState) => {
+const mapStateToProps = (state: StoreState, ownProps: any) => {
   return {
-    currentlySelectedProject: state.projectFilter
+    currentlySelectedProject: state.projectFilter.get(ownProps.id)
   };
 };
 
