@@ -4,7 +4,10 @@ import ArticleList from '../components/ArticleList';
 import { toggleArticleRead } from '../actions/toggleArticleRead';
 import { ListenToFirebase } from '../actions/syncArticles';
 import { List } from 'immutable';
-import { Article as articleType, ArticleList as ArticleListType } from '../constants/StoreState';
+import {
+  Article as articleType,
+  ArticleList as ArticleListType
+} from '../constants/StoreState';
 // error when typing articleInProj with List<articleType>;
 
 const getVisibleArticles = (
@@ -61,11 +64,12 @@ const getVisibleArticles = (
 };
 
 function mapStateToProps(state: any, ownProps: any) {
-  console.log('1')
   return {
     articles: getVisibleArticles(
       state.get('articles'),
-      state.get('articleLists').get(ownProps.id)
+      state
+        .get('articleLists')
+        .find((list: ArticleListType) => list.id === ownProps.id)
     )
   };
 }

@@ -8,7 +8,7 @@ export interface SetProjectFilter {
 export function setProjectFilter(filter: string, id: string): SetProjectFilter {
   return {
     type: constants.SET_PROJECT_FILTER,
-    filter,
-    id
+    filter: filter,
+    id: id
   };
 }

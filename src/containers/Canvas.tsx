@@ -22,8 +22,8 @@ class Canvas extends React.Component<Props> {
           {articleLists.map((articleList: ArticleList) => {
             return (
               <VisibleArticleList
-                key={articleLists.keyOf(articleList)}
-                id={articleLists.keyOf(articleList)}
+                key={articleList.id}
+                id={articleList.id}
               />
             );
           })}

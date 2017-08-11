@@ -1,4 +1,4 @@
-import { List, OrderedMap } from 'immutable';
+import { List, OrderedSet } from 'immutable';
 export interface Article {
   id: string;
   link: string;
@@ -12,13 +12,14 @@ export interface Article {
 }
 
 export interface ArticleList {
+  id: string;
   visibilityFilter: string;
   projectFilter: string;
 }
 
 export interface StoreState {
   hash?: string;
-  articleLists: OrderedMap<string, ArticleList>;
+  articleLists: OrderedSet<ArticleList>;
   articles: List<Article>;
   projects?: List<String>;
 }

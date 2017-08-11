@@ -6,7 +6,7 @@ import { List } from 'immutable';
 
 interface Props {
   projects: List<String>;
-  id: Number;
+  id: string;
 }
 
 class ProjectsFooter extends React.Component<Props> {
@@ -16,28 +16,32 @@ class ProjectsFooter extends React.Component<Props> {
       <div>
         <span>
           Show project: {' '}
-          <ProjectsFilterLink filter="ALL" id={id}>All</ProjectsFilterLink>
+          <ProjectsFilterLink filter="ALL" id={id}>
+            All
+          </ProjectsFilterLink>
           {projects
             ? projects.map(project => {
-              return (
-                <span key={String(project)}>
-                  {', '}
-                  <ProjectsFilterLink filter={project} id={id}>
-                    {project}
-                  </ProjectsFilterLink>
-                </span>
-              );
-            })
+                return (
+                  <span key={String(project)}>
+                    {', '}
+                    <ProjectsFilterLink filter={project} id={id}>
+                      {project}
+                    </ProjectsFilterLink>
+                  </span>
+                );
+              })
             : <p>No project Filters</p>}
           {', '}
-          <ProjectsFilterLink filter="NONE" id={id}>None</ProjectsFilterLink>
+          <ProjectsFilterLink filter="NONE" id={id}>
+            None
+          </ProjectsFilterLink>
         </span>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => {  
+const mapStateToProps = (state: any, ownProps: any) => {
   return {
     projects: state.get('projects')
   };

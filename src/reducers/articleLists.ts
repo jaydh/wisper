@@ -1,52 +1,52 @@
-import { fromJS, OrderedMap } from 'immutable';
+import { OrderedSet } from 'immutable';
 import createReducer from './createReducer';
 import { SetVisbilityFilter } from '../actions/visibilityFilter';
 import { SetProjectFilter } from '../actions/projectFilter';
 import { ArticleList } from '../constants/StoreState';
 
 function addArticleList(
-  articleListState: OrderedMap<string, ArticleList>,
+  articleListState: OrderedSet<ArticleList>,
   action: any
-): OrderedMap<string, ArticleList> {
+): OrderedSet<ArticleList> {
   const id =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
 
-  return articleListState.set(id, {
-    visibilityFilter: 'SHOW_ALL',
+  return articleListState.add({
+    id: id,
+    visibilityFilter: 'SHOW_ACTIVE',
     projectFilter: 'ALL'
   });
 }
 
 function setVisibilityFilter(
-  articleListsState: OrderedMap<string, ArticleList>,
+  articleListState: OrderedSet<ArticleList>,
   action: SetVisbilityFilter
 ) {
-
-  return articleListsState
-    ? fromJS(articleListsState.update(action.id, (list: ArticleList) => {
-      list.visibilityFilter = action.filter;
-      return list;
-    }))
-    : articleListsState;
+  return articleListState
+    ? articleListState.map((list: ArticleList) => {
+        return list.id === action.id
+          ? { ...list, visibilityFilter: action.filter }
+          : list;
+      })
+    : articleListState;
 }
 
 function setProjectFilter(
-  articleListsState: OrderedMap<string, ArticleList>,
+  articleListState: OrderedSet<ArticleList>,
   action: SetProjectFilter
 ) {
-  return articleListsState
-    ? articleListsState.update(action.id, (list: ArticleList) => {
-      list.projectFilter = action.filter;
-      return list;
-    })
-    : articleListsState;
+  return articleListState
+    ? articleListState.map((list: ArticleList) => {
+        return list.id === action.id
+          ? { ...list, projectFilter: action.filter }
+          : list;
+      })
+    : articleListState;
 }
 
 const articleLists = createReducer(
-  OrderedMap<string, ArticleList>({
-    '0': { visibilityFilter: 'SHOW_ACTIVE', projectFilter: 'ALL' }
-  }),
+  OrderedSet<ArticleList>(),
   {
     ADD_ARTICLE_LIST: addArticleList,
     SET_VISIBILITY_FILTER: setVisibilityFilter,
