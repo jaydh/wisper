@@ -27,9 +27,9 @@ function addArticleFromServer(
   return projectState;
 }
 
-const visibilityReducer = createReducer(List([]), {
+const projectReducer = createReducer(List([]), {
   ADD_ARTICLE_TO_PROJECT_FULFILLED: addArticleToProject,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer
 });
 
-export default visibilityReducer;
+export default projectReducer;

@@ -1,7 +1,7 @@
 import articles from './articles';
 import projects from './projects';
 import articleLists from './articleLists';
-import { combineReducers } from 'redux';
+let { combineReducers } = require('redux-immutable');
 
 const appReducer = combineReducers({
     articles,

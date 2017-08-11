@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
-import { applyMiddleware, compose, createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './components/App';
 import appReducer from './reducers/index';
@@ -10,10 +10,14 @@ import thunk from 'redux-thunk';
 // let { persistStore, autoRehydrate } = require('redux-persist-immutable');
 import { initFirebase, auth } from './firebase';
 import LoginLoading from './components/LoginLoading';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+//import * as Immutable from 'immutable';
+//import { ArticleList } from './constants/StoreState';
 
 let store = createStore(
     appReducer,
-    compose(
+    composeWithDevTools(
         applyMiddleware(thunk, logger)
     )
 );

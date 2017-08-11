@@ -3,7 +3,7 @@ import VisibleArticleList from '../containers/VisibleArticleList';
 import addArticleList from '../actions/addArticleList';
 import { Button, Jumbotron } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { StoreState } from '../constants/StoreState';
+//import { StoreState } from '../constants/StoreState';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
 
@@ -15,7 +15,6 @@ interface Props {
 class Canvas extends React.Component<Props> {
   render() {
     const { dispatch, articleLists } = this.props;
-
     return (
       <div className="container">
         <Button onClick={() => dispatch(addArticleList())}>Add List</Button>
@@ -40,9 +39,9 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-const mapStateToProps = (state: StoreState, ownProps: any) => {
+const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    articleLists: state.articleLists
+    articleLists: state.get('articleLists')
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Canvas);

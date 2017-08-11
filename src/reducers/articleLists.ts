@@ -1,4 +1,4 @@
-import { OrderedMap } from 'immutable';
+import { fromJS, OrderedMap } from 'immutable';
 import createReducer from './createReducer';
 import { SetVisbilityFilter } from '../actions/visibilityFilter';
 import { SetProjectFilter } from '../actions/projectFilter';
@@ -22,11 +22,12 @@ function setVisibilityFilter(
   articleListsState: OrderedMap<string, ArticleList>,
   action: SetVisbilityFilter
 ) {
+
   return articleListsState
-    ? articleListsState.update(action.id, (list: ArticleList) => {
-        list.visibilityFilter = action.filter;
-        return list;
-      })
+    ? fromJS(articleListsState.update(action.id, (list: ArticleList) => {
+      list.visibilityFilter = action.filter;
+      return list;
+    }))
     : articleListsState;
 }
 
@@ -36,9 +37,9 @@ function setProjectFilter(
 ) {
   return articleListsState
     ? articleListsState.update(action.id, (list: ArticleList) => {
-        list.projectFilter = action.filter;
-        return list;
-      })
+      list.projectFilter = action.filter;
+      return list;
+    })
     : articleListsState;
 }
 

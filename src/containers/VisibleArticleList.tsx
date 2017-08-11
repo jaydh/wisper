@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ArticleList from '../components/ArticleList';
-import { StoreState } from '../constants/StoreState';
+// import { StoreState } from '../constants/StoreState';
 import { toggleArticleRead } from '../actions/toggleArticleRead';
 import { ListenToFirebase } from '../actions/syncArticles';
 import { List } from 'immutable';
@@ -12,8 +12,6 @@ const getVisibleArticles = (
   articleList: ArticleListType
 ) => {
   const { projectFilter, visibilityFilter } = articleList;
-  console.log(projectFilter);
-  console.log(articles);
   let articlesInProject;
   switch (projectFilter) {
     case 'ALL':
@@ -45,7 +43,6 @@ const getVisibleArticles = (
         return false;
       });
   }
-  console.log(articlesInProject);
 
   switch (visibilityFilter) {
     case 'SHOW_ALL':
@@ -63,11 +60,12 @@ const getVisibleArticles = (
   }
 };
 
-function mapStateToProps(state: StoreState, ownProps: any) {
+function mapStateToProps(state: any, ownProps: any) {
+  console.log('1')
   return {
     articles: getVisibleArticles(
-      state.articles,
-      state.articleLists.get(ownProps.id)
+      state.get('articles'),
+      state.get('articleLists').get(ownProps.id)
     )
   };
 }
