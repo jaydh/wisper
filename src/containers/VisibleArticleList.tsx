@@ -3,14 +3,19 @@ import ArticleList from '../components/ArticleList';
 import { StoreState } from '../constants/StoreState';
 import { toggleArticleRead } from '../actions/toggleArticleRead';
 import { ListenToFirebase } from '../actions/syncArticles';
-// import { List } from 'immutable';
-// import { Article as articleType } from '../constants/StoreState';
+import { List } from 'immutable';
+import { Article as articleType, ArticleList as ArticleListType } from '../constants/StoreState';
+// error when typing articleInProj with List<articleType>;
 
-const getVisibleArticles = (state: StoreState, listId: number) => {
-  const { articles, visibilityFilter, projectFilter } = state;
+const getVisibleArticles = (
+  articles: List<articleType>,
+  articleList: ArticleListType
+) => {
+  const { projectFilter, visibilityFilter } = articleList;
+  console.log(projectFilter);
+  console.log(articles);
   let articlesInProject;
-  const currentFilter = projectFilter.get(listId);
-  switch (currentFilter) {
+  switch (projectFilter) {
     case 'ALL':
       articlesInProject = articles;
       break;
@@ -18,8 +23,8 @@ const getVisibleArticles = (state: StoreState, listId: number) => {
       articlesInProject = articles.filter(article => {
         if (article) {
           const projects = article.projects;
-          if (projects) {
-            return false;
+          if (!projects) {
+            return true;
           }
         }
         return false;
@@ -30,14 +35,17 @@ const getVisibleArticles = (state: StoreState, listId: number) => {
         if (article) {
           const projects = article.projects;
           if (projects) {
-            return Object.keys(article.projects)
-              .map(key => projects[key])
-              .indexOf(currentFilter) > -1;
+            return (
+              Object.keys(article.projects)
+                .map(key => projects[key])
+                .indexOf(projectFilter) > -1
+            );
           }
         }
         return false;
       });
   }
+  console.log(articlesInProject);
 
   switch (visibilityFilter) {
     case 'SHOW_ALL':
@@ -57,7 +65,10 @@ const getVisibleArticles = (state: StoreState, listId: number) => {
 
 function mapStateToProps(state: StoreState, ownProps: any) {
   return {
-    articles: getVisibleArticles(state, ownProps.id),
+    articles: getVisibleArticles(
+      state.articles,
+      state.articleLists.get(ownProps.id)
+    )
   };
 }
 

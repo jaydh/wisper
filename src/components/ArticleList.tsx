@@ -11,7 +11,7 @@ interface Props {
   articles: List<articleType>;
   ListenToFirebase: any;
   onArticleClick: any;
-  id: number;
+  id: string;
 }
 
 class ArticleList extends React.Component<Props, {}> {
@@ -42,7 +42,7 @@ class ArticleList extends React.Component<Props, {}> {
               : <br />;
           })}
         </ListGroup>
-        <Footer />
+        <Footer id={id} />
       </Jumbotron>
     );
   }
