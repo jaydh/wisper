@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import ArticleList from '../components/ArticleList';
-import { toggleArticleRead } from '../actions/toggleArticleRead';
 import { List } from 'immutable';
 import {
   Article as articleType,
@@ -10,8 +9,8 @@ import {
 
 const getArticlesWithProject = (
   articles: List<articleType>,
-  projectFilter: string) => {
-
+  projectFilter: string
+) => {
   let articlesInProject;
   switch (projectFilter) {
     case 'ALL':
@@ -52,10 +51,7 @@ const getVisibleArticles = (
 ): List<articleType> => {
   const { visibilityFilter, projectFilter } = articleList;
 
-  const articlesInProject = getArticlesWithProject(
-    articles,
-    projectFilter
-  );
+  const articlesInProject = getArticlesWithProject(articles, projectFilter);
   switch (visibilityFilter) {
     case 'SHOW_ALL':
       return articlesInProject;
@@ -83,12 +79,6 @@ function mapStateToProps(state: any, ownProps: any) {
   };
 }
 
-const mapDispatchToProps = {
-  onArticleClick: toggleArticleRead
-};
-
-const VisibleArticleList = connect(mapStateToProps, mapDispatchToProps)(
-  ArticleList
-);
+const VisibleArticleList = connect(mapStateToProps, {})(ArticleList);
 
 export default VisibleArticleList;

@@ -40,7 +40,7 @@ function ToggleArticleReadFulfilled(
 
 export function toggleArticleRead(articleHash: string) {
   const user = auth().currentUser.uid;
-
+  console.log(articleHash);
   return (dispatch: Dispatch<any>) => {
     dispatch(ToggleArticleReadRequested());
 

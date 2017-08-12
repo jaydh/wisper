@@ -1,6 +1,7 @@
 import * as React from 'react';
 import AddArticleToProject from '../containers/AddArticleToProject';
 import DeleteArticle from '../containers/DeleteArticle';
+import ToggleArticle from '../containers/ToggleArticle';
 import { Button, Collapse } from 'react-bootstrap';
 
 interface Props {
@@ -9,7 +10,6 @@ interface Props {
   link: string;
   metadata?: any;
   dateAdded: string;
-  onClick(): any;
 }
 interface State {
   isMenuOpen: boolean;
@@ -24,7 +24,7 @@ class Article extends React.Component<Props, State> {
   }
 
   render() {
-    const { onClick, id, completed, link, dateAdded, metadata } = this.props;
+    const { id, completed, link, dateAdded, metadata } = this.props;
     return (
       <div>
         <Button
@@ -33,25 +33,20 @@ class Article extends React.Component<Props, State> {
           More
         </Button>
         <a href={link}>
-          {' '}{(metadata && (metadata.title || metadata.ogTitle))
+          {' '}{metadata && (metadata.title || metadata.ogTitle)
             ? metadata.title || metadata.ogTitle
             : link}
         </a>
         <Collapse in={this.state.isMenuOpen}>
           <div>
-            {metadata && (metadata.Description || metadata.ogDescription) ?
-              ('Description :' + metadata.ogDescription) : ''}
+            {metadata && (metadata.Description || metadata.ogDescription)
+              ? 'Description :' + metadata.ogDescription
+              : ''}
             Date added:{dateAdded} <br />
             Status: {completed.toString()} <br />
-            <button
-              className="btn"
-              onClick={onClick}
-              style={{ textDecoration: completed ? 'underline' : 'none' }}
-            >
-              toggleRead
-            </button>
-            <AddArticleToProject articleHash={id} />
-            <DeleteArticle articleHash={id} />
+            <ToggleArticle id={id} />
+            <AddArticleToProject id={id} />
+            <DeleteArticle id={id} />
           </div>
         </Collapse>
       </div>

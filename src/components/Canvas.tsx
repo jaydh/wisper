@@ -7,21 +7,22 @@ import { ArticleList } from '../constants/StoreState';
 
 interface Props {
   ListenToFirebase: any;
-  onAddArticleList: any;
+  AddArticleList: any;
   articleLists: OrderedMap<string, ArticleList>;
 }
 
 export default class Canvas extends React.Component<Props> {
   componentWillMount() {
-    const { ListenToFirebase } = this.props;
+    const { ListenToFirebase, AddArticleList } = this.props;
     ListenToFirebase();
+    AddArticleList();
   }
 
   render() {
-    const { articleLists, onAddArticleList } = this.props;
+    const { articleLists, AddArticleList } = this.props;
     return (
       <div className="container">
-        <Button onClick={() => onAddArticleList()}>Add List</Button>
+        <Button onClick={() => AddArticleList()}>Add List</Button>
         <Jumbotron>
           {articleLists.map((articleList: ArticleList) => {
             return (

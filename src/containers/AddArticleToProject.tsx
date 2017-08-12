@@ -5,13 +5,13 @@ import { Form } from 'react-bootstrap';
 
 export interface Props {
   dispatch: any;
-  articleHash: string;
+  id: string;
 }
 
 class AddArticleToProject extends React.Component<Props, {}> {
   render() {
     let input: any;
-    const { dispatch, articleHash } = this.props;
+    const { dispatch, id } = this.props;
 
     return (
       <Form
@@ -20,7 +20,7 @@ class AddArticleToProject extends React.Component<Props, {}> {
           if (!input.value.trim()) {
             return;
           }
-          dispatch(addArticleToProject(articleHash, input.value));
+          dispatch(addArticleToProject(id, input.value));
           input.value = '';
         }}
       >
@@ -39,7 +39,7 @@ class AddArticleToProject extends React.Component<Props, {}> {
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    articleHash: ownProps.articleHash
+    id: ownProps.id
   };
 };
 

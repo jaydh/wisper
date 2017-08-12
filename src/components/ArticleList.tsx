@@ -9,14 +9,12 @@ import { ListGroup, ListGroupItem, Jumbotron } from 'react-bootstrap';
 
 interface Props {
   articles: List<articleType>;
-  onArticleClick: any;
   id: string;
 }
 
 class ArticleList extends React.Component<Props, {}> {
-
   render() {
-    const { articles, onArticleClick, id } = this.props;
+    const { articles, id } = this.props;
     return (
       <Jumbotron>
         <AddArticle id={id} />
@@ -25,15 +23,11 @@ class ArticleList extends React.Component<Props, {}> {
           {articles.map(article => {
             return article
               ? <ListGroupItem
-                key={article.id}
-                bsStyle={article.completed ? 'success' : 'info'}
-              >
-                <Article
                   key={article.id}
-                  {...article}
-                  onClick={() => onArticleClick(article.id)}
-                />
-              </ListGroupItem>
+                  bsStyle={article.completed ? 'success' : 'info'}
+                >
+                  <Article key={article.id} {...article} />
+                </ListGroupItem>
               : <br />;
           })}
         </ListGroup>

@@ -4,18 +4,18 @@ import { deleteArticle } from '../actions/deleteArticle';
 
 export interface Props {
   dispatch: any;
-  articleHash: string;
+  id: string;
 }
 
 class DeleteArticle extends React.Component<Props, {}> {
   render() {
-    const { dispatch, articleHash } = this.props;
+    const { dispatch, id } = this.props;
     return (
       <div>
         <button
           type="button"
           className="btn btn-danger"
-          onClick={() => dispatch(deleteArticle(articleHash))}
+          onClick={() => dispatch(deleteArticle(id))}
         >
           delete
         </button>
@@ -26,7 +26,7 @@ class DeleteArticle extends React.Component<Props, {}> {
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    articleHash: ownProps.articleHash
+    id: ownProps.id
   };
 };
 

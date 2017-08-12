@@ -1,15 +1,15 @@
 import Canvas from '../components/Canvas';
 import { connect } from 'react-redux';
 import { ListenToFirebase } from '../actions/syncArticles';
-import addArticleList from '../actions/addArticleList';
+import { AddArticleList } from '../actions/articleList';
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onAddArticleList: () => {
-      dispatch(addArticleList());
+    AddArticleList: () => {
+      dispatch(AddArticleList());
     },
     ListenToFirebase: () => {
-        dispatch(ListenToFirebase());
+      dispatch(ListenToFirebase());
     }
   };
 };
