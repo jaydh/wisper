@@ -4,7 +4,7 @@ import {  PageHeader } from 'react-bootstrap';
 import '!!style-loader!css-loader!../css/creative.min.css';
 import 'whatwg-fetch';
 import { List } from 'immutable';
-import Canvas from '../containers/Canvas';
+import Canvas from '../containers/CanvasContainer';
 
 interface State {
   gitCommit: string;

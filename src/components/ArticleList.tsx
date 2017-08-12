@@ -9,16 +9,11 @@ import { ListGroup, ListGroupItem, Jumbotron } from 'react-bootstrap';
 
 interface Props {
   articles: List<articleType>;
-  ListenToFirebase: any;
   onArticleClick: any;
   id: string;
 }
 
 class ArticleList extends React.Component<Props, {}> {
-  componentDidMount() {
-    const { ListenToFirebase } = this.props;
-    ListenToFirebase();
-  }
 
   render() {
     const { articles, onArticleClick, id } = this.props;

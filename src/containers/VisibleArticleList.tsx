@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import ArticleList from '../components/ArticleList';
 import { toggleArticleRead } from '../actions/toggleArticleRead';
-import { ListenToFirebase } from '../actions/syncArticles';
 import { List } from 'immutable';
 import {
   Article as articleType,
@@ -85,7 +84,6 @@ function mapStateToProps(state: any, ownProps: any) {
 }
 
 const mapDispatchToProps = {
-  ListenToFirebase,
   onArticleClick: toggleArticleRead
 };
 

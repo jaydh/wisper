@@ -12,9 +12,6 @@ import { initFirebase, auth } from './firebase';
 import LoginLoading from './components/LoginLoading';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-//import * as Immutable from 'immutable';
-//import { ArticleList } from './constants/StoreState';
-
 let store = createStore(
     appReducer,
     composeWithDevTools(
