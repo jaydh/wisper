@@ -1,10 +1,10 @@
 import * as React from 'react';
-import VisibleArticleList from '../containers/VisibleArticleList';
 import Logout from './Logout';
-import { Button, PageHeader, Jumbotron } from 'react-bootstrap';
+import {  PageHeader } from 'react-bootstrap';
 import '!!style-loader!css-loader!../css/creative.min.css';
 import 'whatwg-fetch';
 import { List } from 'immutable';
+import Canvas from '../containers/Canvas';
 
 interface State {
   gitCommit: string;
@@ -47,14 +47,7 @@ class App extends React.Component<{}, State> {
         <PageHeader>
           wispy
         </PageHeader>
-        <Button onClick={() => this.addListClick()}>
-          Add List
-        </Button>
-        <Jumbotron>
-          {this.state.articleListIDs.map((id) => {
-            return <VisibleArticleList key={id} id={id} />;
-          })}
-        </Jumbotron>
+        <Canvas/>
         <Logout />
         <p>
           Under active development <br />

@@ -1,4 +1,4 @@
-import { List } from 'immutable';
+import { List, OrderedSet } from 'immutable';
 export interface Article {
   id: string;
   link: string;
@@ -11,10 +11,15 @@ export interface Article {
   completed: boolean;
 }
 
+export interface ArticleList {
+  id: string;
+  visibilityFilter: string;
+  projectFilter: string;
+}
+
 export interface StoreState {
   hash?: string;
-  visibilityFilter: string;
-  projectFilter: List<String>;
+  articleLists: OrderedSet<ArticleList>;
   articles: List<Article>;
   projects?: List<String>;
 }

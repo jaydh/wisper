@@ -11,7 +11,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onClick: () => {
-      dispatch(setVisibilityFilter(ownProps.filter));
+      dispatch(setVisibilityFilter(ownProps.filter, ownProps.id));
     }
   };
 };

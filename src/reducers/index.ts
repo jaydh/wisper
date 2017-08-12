@@ -1,14 +1,12 @@
 import articles from './articles';
-import visibilityFilter from './visibilityFilter';
 import projects from './projects';
-import projectFilter from './projectFilter';
-import { combineReducers } from 'redux';
+import articleLists from './articleLists';
+let { combineReducers } = require('redux-immutable');
 
 const appReducer = combineReducers({
     articles,
-    visibilityFilter,
     projects,
-    projectFilter
+    articleLists
 });
 
 export default appReducer;

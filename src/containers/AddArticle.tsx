@@ -80,7 +80,7 @@ const mapDispatchToProps = (dispatch: any) => {
 
 const mapStateToProps = (state: StoreState, ownProps: any) => {
   return {
-    currentlySelectedProject: state.projectFilter.get(ownProps.id)
+    // currentlySelectedProject: state.projectFilter.get(ownProps.id)
   };
 };
 

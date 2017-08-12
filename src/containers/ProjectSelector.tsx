@@ -2,11 +2,11 @@ import * as React from 'react';
 import ProjectsFilterLink from '../containers/ProjectsFilterLink';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import { StoreState } from '../constants/StoreState';
+// import { StoreState } from '../constants/StoreState';
 
 interface Props {
   projects: List<String>;
-  id: Number;
+  id: string;
 }
 
 class ProjectsFooter extends React.Component<Props> {
@@ -30,8 +30,8 @@ class ProjectsFooter extends React.Component<Props> {
                   </span>
                 );
               })
-            : <p>No Projects</p>}
-          {' , '}
+            : <p>No project Filters</p>}
+          {', '}
           <ProjectsFilterLink filter="NONE" id={id}>
             None
           </ProjectsFilterLink>
@@ -41,9 +41,9 @@ class ProjectsFooter extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: StoreState, ownProps: any) => {
+const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    projects: state.projects
+    projects: state.get('projects')
   };
 };
 
