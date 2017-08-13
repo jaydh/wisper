@@ -7,12 +7,18 @@ export interface Props {
   id: string;
 }
 
-class DeleteArticle extends React.Component<Props> {
+class ToggleArticleRead extends React.Component<Props> {
   render() {
     const { onToggleClick } = this.props;
     return (
       <div>
-        <button type="button" className="btn" onClick={() => onToggleClick()}>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            onToggleClick();
+          }}
+        >
           Toggle
         </button>
       </div>
@@ -28,4 +34,4 @@ const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(DeleteArticle);
+export default connect(null, mapDispatchToProps)(ToggleArticleRead);
