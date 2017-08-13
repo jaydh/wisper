@@ -69,13 +69,12 @@ const getVisibleArticles = (
 };
 
 function mapStateToProps(state: any, ownProps: any) {
+  const filters = state
+    .get('articleLists')
+    .find((list: ArticleListType) => list.id === ownProps.id);
   return {
-    articles: getVisibleArticles(
-      state.get('articles'),
-      state
-        .get('articleLists')
-        .find((list: ArticleListType) => list.id === ownProps.id)
-    )
+    articles: getVisibleArticles(state.get('articles'), filters),
+    filters
   };
 }
 
