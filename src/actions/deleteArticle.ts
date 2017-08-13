@@ -1,7 +1,6 @@
 import * as constants from '../constants/actionTypes';
 import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
-import { ListenToFirebase } from './syncArticles';
 
 export interface DeleteArticleRequested {
   type: constants.DELETE_ARTICLE_REQUESTED;
@@ -41,8 +40,6 @@ export function deleteArticle(id: string) {
     const articleRef = database.ref(
       '/userData/' + user + '/' + 'articles/' + id
     );
-    // detach listener so current action doesn't trigger server syncing
-    articleRef.parent.off();
 
     // Check if article in database
     articleRef
@@ -54,6 +51,5 @@ export function deleteArticle(id: string) {
         console.log(error);
         dispatch(deleteArticleRejected());
       });
-    dispatch(ListenToFirebase);
   };
 }
