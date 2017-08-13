@@ -1,16 +1,21 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { addArticle } from '../actions/addArticle';
-import { StoreState } from '../constants/StoreState';
-import { Button, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { ArticleList } from '../constants/StoreState';
+import {
+  Button,
+  FormGroup,
+  FormControl,
+  ControlLabel,
+  HelpBlock
+} from 'react-bootstrap';
 
 interface State {
   value: string;
 }
 interface Props {
-  id: number;
+  filters: ArticleList;
   dispatch: any;
-  currentlySelectedProject: string;
 }
 
 class AddArticle extends React.Component<Props, State> {
@@ -41,9 +46,12 @@ class AddArticle extends React.Component<Props, State> {
   }
 
   render() {
-    const { dispatch, currentlySelectedProject } = this.props;
-    const project = (currentlySelectedProject !== 'NONE' && currentlySelectedProject !== 'ALL')
-      ? currentlySelectedProject : undefined;
+    const { dispatch, filters } = this.props;
+    const { projectFilter } = filters;
+    const project =
+      projectFilter !== 'NONE' && projectFilter !== 'ALL'
+        ? projectFilter
+        : undefined;
 
     return (
       <form onSubmit={() => onclick}>
@@ -63,11 +71,13 @@ class AddArticle extends React.Component<Props, State> {
         </FormGroup>
         <Button
           type="button"
-          onClick={() => dispatch(addArticle(this.state.value, project))}
+          onClick={() => {
+            dispatch(addArticle(this.state.value, project));
+          }}
         >
           Submit
         </Button>
-      </form >
+      </form>
     );
   }
 }
@@ -78,10 +88,8 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-const mapStateToProps = (state: StoreState, ownProps: any) => {
-  return {
-    // currentlySelectedProject: state.projectFilter.get(ownProps.id)
-  };
+const mapStateToProps = (state: any, ownProps: { filters: ArticleList }) => {
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddArticle);
