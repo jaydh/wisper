@@ -3,19 +3,20 @@ import { connect } from 'react-redux';
 import { deleteArticle } from '../actions/deleteArticle';
 
 export interface Props {
-  dispatch: any;
-  id: string;
+  onDeleteClick: any;
 }
 
 class DeleteArticle extends React.Component<Props, {}> {
   render() {
-    const { dispatch, id } = this.props;
+    const { onDeleteClick } = this.props;
     return (
       <div>
         <button
           type="button"
           className="btn btn-danger"
-          onClick={() => dispatch(deleteArticle(id))}
+          onClick={() => {
+            onDeleteClick();
+          }}
         >
           delete
         </button>
@@ -24,10 +25,12 @@ class DeleteArticle extends React.Component<Props, {}> {
   }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => {
+const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
-    id: ownProps.id
+    onDeleteClick: () => {
+      dispatch(deleteArticle(ownProps.id));
+    }
   };
 };
 
-export default connect(mapStateToProps)(DeleteArticle);
+export default connect(null, mapDispatchToProps)(DeleteArticle);
