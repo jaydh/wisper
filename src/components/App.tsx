@@ -5,6 +5,7 @@ import '!!style-loader!css-loader!../css/creative.min.css';
 import 'whatwg-fetch';
 import { List } from 'immutable';
 import Canvas from '../containers/CanvasContainer';
+import Graph from '../containers/Graph';
 
 interface State {
   gitCommit: string;
@@ -48,6 +49,7 @@ class App extends React.Component<{}, State> {
           wispy
         </PageHeader>
         <Canvas/>
+        <Graph />
         <Logout />
         <p>
           Under active development <br />
