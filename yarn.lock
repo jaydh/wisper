@@ -2,6 +2,12 @@
 # yarn lockfile v1
 
 
+"@types/chart.js@^2.6.2":
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.6.2.tgz#793af4e0918c9b7cccb29918cd0d18b9fcc63862"
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/express-serve-static-core@*":
   version "4.0.49"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.0.49.tgz#3438d68d26e39db934ba941f18e3862a1beeb722"
@@ -14,6 +20,10 @@
   dependencies:
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
+
+"@types/jquery@*":
+  version "3.2.11"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.11.tgz#9119f91bb103b16ae8c4375b019a9b341b409f50"
 
 "@types/jsonwebtoken@^7.1.32":
   version "7.2.3"
