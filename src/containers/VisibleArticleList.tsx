@@ -17,7 +17,7 @@ const getArticlesWithProject = (
       articlesInProject = articles;
       break;
     case 'NONE':
-      articlesInProject = articles.filter(article => {
+      articlesInProject = articles.filter((article: articleType) => {
         if (article) {
           const projects = article.projects;
           if (!projects) {
@@ -28,7 +28,7 @@ const getArticlesWithProject = (
       }) as List<articleType>;
       break;
     default:
-      articlesInProject = articles.filter(article => {
+      articlesInProject = articles.filter((article: articleType)  => {
         if (article) {
           const projects = article.projects;
           if (projects) {
