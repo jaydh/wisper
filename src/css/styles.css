@@ -15,3 +15,7 @@
   box-sizing: border-box;
   cursor: se-resize;
 }
+
+.jumbotron{
+  height: 80vh;
+}

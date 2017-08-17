@@ -77,28 +77,27 @@ export default class Canvas extends React.Component<Props, State> {
     return (
       <div>
         <Button onClick={() => AddArticleList()}>Add List</Button>
-          <Jumbotron className="canvas">
-            {articleLists.map((articleList: ArticleList) => {
-              return (
-                <Draggable
-                  key={articleList.id}
-
-                  handle="strong"
-                  {...dragHandlers}
-                >
-                  <div className="box no-cursor">
-                    <strong className="cursor">
-                      <Button>Drag here</Button>
-                    </strong>
-                    <ResizableBox className="box" width={500} height={200}>
-                      <VisibleArticleList id={articleList.id} />
-                    </ResizableBox>
-                  </div>
-                </Draggable>
-              );
-            })}
-          </Jumbotron>
-
+        <Jumbotron className="canvas">
+          {articleLists.map((articleList: ArticleList) => {
+            return (
+              <Draggable
+                key={articleList.id}
+                bounds=".canvas"
+                handle="strong"
+                {...dragHandlers}
+              >
+                <div className="box no-cursor">
+                  <strong className="cursor">
+                    <Button>Drag here</Button>
+                  </strong>
+                  <ResizableBox className="box" width={500} height={200}>
+                    <VisibleArticleList id={articleList.id} />
+                  </ResizableBox>
+                </div>
+              </Draggable>
+            );
+          })}
+        </Jumbotron>
       </div>
     );
   }
