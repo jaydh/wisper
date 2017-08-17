@@ -4,7 +4,9 @@ import { Button, Jumbotron } from 'react-bootstrap';
 // import { StoreState } from '../constants/StoreState';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
-let Draggable = require('react-draggable');
+const Draggable = require('react-draggable');
+const ResizableBox = require('react-resizable').ResizableBox;
+import '!!style-loader!css-loader!../css/styles.css';
 
 interface Props {
   ListenToFirebase: any;
@@ -15,6 +17,8 @@ interface Props {
 interface State {
   activeDrags: number;
   deltaPosition: { x: number; y: number };
+  width: number;
+  height: number;
 }
 
 export default class Canvas extends React.Component<Props, State> {
@@ -25,11 +29,24 @@ export default class Canvas extends React.Component<Props, State> {
       deltaPosition: {
         x: 0,
         y: 0
-      }
+      },
+      width: 200,
+      height: 200
     };
     this.onStart = this.onStart.bind(this);
     this.onStop = this.onStop.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onResize = this.onResize.bind(this);
   }
+
+  onClick = () => {
+    this.setState({ width: 200, height: 200 });
+  };
+
+  onResize = (event: any, t: { element: any; size: any }) => {
+    this.setState({ width: t.size.width, height: t.size.height });
+  };
+
   onStart() {
     this.setState({ activeDrags: this.state.activeDrags + 1 });
   }
@@ -60,25 +77,28 @@ export default class Canvas extends React.Component<Props, State> {
     return (
       <div>
         <Button onClick={() => AddArticleList()}>Add List</Button>
-        <Jumbotron className="canvas">
-          {articleLists.map((articleList: ArticleList) => {
-            return (
-              <Draggable
-                key={articleList.id}
-                bounds=".canvas"
-                handle="strong"
-                {...dragHandlers}
-              >
-                <div className="box no-cursor">
-                  <strong className="cursor">
-                    <Button>Drag here</Button>
-                  </strong>
-                  <VisibleArticleList id={articleList.id} />
-                </div>
-              </Draggable>
-            );
-          })}
-        </Jumbotron>
+          <Jumbotron className="canvas">
+            {articleLists.map((articleList: ArticleList) => {
+              return (
+                <Draggable
+                  key={articleList.id}
+
+                  handle="strong"
+                  {...dragHandlers}
+                >
+                  <div className="box no-cursor">
+                    <strong className="cursor">
+                      <Button>Drag here</Button>
+                    </strong>
+                    <ResizableBox className="box" width={500} height={200}>
+                      <VisibleArticleList id={articleList.id} />
+                    </ResizableBox>
+                  </div>
+                </Draggable>
+              );
+            })}
+          </Jumbotron>
+
       </div>
     );
   }

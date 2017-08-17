@@ -4551,6 +4551,13 @@ react-redux@^5.0.5:
     loose-envify "^1.1.0"
     prop-types "^15.5.10"
 
+react-resizable@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/react-resizable/-/react-resizable-1.7.1.tgz#e8fd2c2247c9299d117fb245dbeed9c68c0e004c"
+  dependencies:
+    prop-types "^15.5.8"
+    react-draggable "^2.2.6"
+
 react-scripts-ts@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-scripts-ts/-/react-scripts-ts-2.6.0.tgz#75667fe16beeefcd551e44f607ed12b35e34b672"

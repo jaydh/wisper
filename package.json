@@ -32,6 +32,7 @@
     "react-dom": "^15.6.1",
     "react-draggable": "^2.2.6",
     "react-redux": "^5.0.5",
+    "react-resizable": "^1.7.1",
     "react-scripts-ts": "^2.5.0",
     "redux": "^3.7.2",
     "redux-batched-actions": "^0.1.6",
