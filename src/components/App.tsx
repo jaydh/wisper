@@ -6,6 +6,7 @@ import 'whatwg-fetch';
 import { List } from 'immutable';
 import Canvas from '../containers/CanvasContainer';
 import Graph from '../containers/Graph';
+import '!!style-loader!css-loader!../css/styles.css';
 
 interface State {
   gitCommit: string;
@@ -28,7 +29,7 @@ class App extends React.Component<{}, State> {
         return response.json();
       })
       .then(function (json: any) {
-        that.setState({ gitCommit: json.updated_at });
+        that.setState({ gitCommit: json.pushed_at });
       })
       .catch(function (ex: any) {
         console.log('parsing failed', ex);
@@ -44,7 +45,7 @@ class App extends React.Component<{}, State> {
  render() {
     const gitDate = new Date(this.state.gitCommit);
     return (
-      <div className="container">
+      <div>
         <PageHeader>
           wispy
         </PageHeader>
