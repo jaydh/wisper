@@ -16,7 +16,7 @@
   cursor: se-resize;
 }
 
-.no-cursor {
+.draggable-container {
   cursor: auto;
 }
 .cursor-y {

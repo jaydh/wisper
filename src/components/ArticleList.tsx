@@ -67,9 +67,9 @@ class ArticleList extends React.Component<Props, State> {
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
 
     return (
-      <Draggable handle="strong" {...dragHandlers}>
+      <Draggable handle="strong" bounds="body" {...dragHandlers}>
         <div
-          className=" no-cursor"
+          className="draggable-container"
           style={{
             position: 'relative',
             padding: '0',

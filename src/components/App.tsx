@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Logout from './Logout';
-import { PageHeader } from 'react-bootstrap';
+import { PageHeader, Button } from 'react-bootstrap';
 import '!!style-loader!css-loader!../css/creative.min.css';
 import 'whatwg-fetch';
 import Canvas from '../containers/CanvasContainer';
@@ -44,6 +44,11 @@ class App extends React.Component<{}, State> {
 
   render() {
     const gitDate = new Date(this.state.gitCommit);
+    const styles = {
+        sidebar: {
+          width: '40vw'
+        }
+    };
     var sidebarContent = <Graph />;
 
     return (
@@ -51,10 +56,16 @@ class App extends React.Component<{}, State> {
         <Sidebar
           sidebar={sidebarContent}
           open={this.state.sidebarOpen}
-          onSetOpen={this.onSetSidebarOpen}>
-        </Sidebar>
+          onSetOpen={this.onSetSidebarOpen}
+          pullRight={true}
+          styles={styles}
+        >
+       
         <PageHeader>
           wispy
+        <Button onClick={() => {this.onSetSidebarOpen(true); }}>
+          sidebar
+        </Button>
         </PageHeader>
         <Canvas />
         <Logout />
@@ -63,6 +74,8 @@ class App extends React.Component<{}, State> {
           Last updated: {gitDate.toLocaleString()} <br />
           Github Repo: <a>https://github.com/jaydh/wispy</a>
         </p>
+        </Sidebar>
+       
       </div>
     );
   }
