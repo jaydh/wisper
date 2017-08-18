@@ -66,13 +66,17 @@ class ArticleList extends React.Component<Props, State> {
     const { articles, id, filters } = this.props;
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
 
-    const style = {
-      height: this.state.height,
-      width: this.state.width
-    };
     return (
-      <Draggable handle="strong" style={{height: '200px', width: '200px', position: 'relative', overflow: 'auto', padding: '0'}} {...dragHandlers}>
-        <div className=" no-cursor">
+      <Draggable handle="strong" {...dragHandlers}>
+        <div
+          className=" no-cursor"
+          style={{
+            position: 'relative',
+            padding: '0',
+            height: this.state.height,
+            width: this.state.width
+          }}
+        >
           <strong className="cursor">
             <Button>Drag here</Button>
           </strong>
@@ -81,8 +85,8 @@ class ArticleList extends React.Component<Props, State> {
             className="box"
             onResize={this.onResize}
             minConstraints={[600, 200]}
-            height={style.height}
-            width={style.width}
+            height={this.state.height}
+            width={this.state.width}
           >
             <AddArticle filters={filters} />
             <ProjectSelector id={id} />

@@ -22,12 +22,12 @@
 .cursor-y {
   cursor: ns-resize;
 }
-.cursor-x {
-  cursor: ew-resize;
-}
 
 .box{
   overflow: auto;
+}
+.cursor-x {
+  cursor: ew-resize;
 }
 
 .container-fluid{
