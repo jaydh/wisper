@@ -68,7 +68,6 @@ class ArticleList extends React.Component<Props, State> {
       height: this.state.height,
       width: this.state.width
     };
-    console.log(style);
     return (
       <div>
         <Jumbotron>
@@ -80,7 +79,7 @@ class ArticleList extends React.Component<Props, State> {
           >
             <AddArticle filters={filters} />
             <ProjectSelector id={id} />
-            <ListGroup>
+            <ListGroup className="article-list" >
               {articles.map(article => {
                 return article
                   ? <ListGroupItem
