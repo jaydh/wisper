@@ -34,6 +34,7 @@
     "react-redux": "^5.0.5",
     "react-resizable": "^1.7.1",
     "react-scripts-ts": "^2.5.0",
+    "react-sidebar": "^2.3.2",
     "redux": "^3.7.2",
     "redux-batched-actions": "^0.1.6",
     "redux-devtools": "^3.4.0",

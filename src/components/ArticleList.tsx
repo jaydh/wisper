@@ -71,7 +71,7 @@ class ArticleList extends React.Component<Props, State> {
       width: this.state.width
     };
     return (
-      <Draggable handle="strong" style={style} {...dragHandlers}>
+      <Draggable handle="strong" style={{height: '200px', width: '200px', position: 'relative', overflow: 'auto', padding: '0'}} {...dragHandlers}>
         <div className=" no-cursor">
           <strong className="cursor">
             <Button>Drag here</Button>
@@ -80,6 +80,7 @@ class ArticleList extends React.Component<Props, State> {
           <Resizable
             className="box"
             onResize={this.onResize}
+            minConstraints={[600, 200]}
             height={style.height}
             width={style.width}
           >

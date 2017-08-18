@@ -2,7 +2,7 @@
   position: relative;
 }
 .react-resizable-handle {
-  position: absolute;
+  position: fixed;
   width: 20px;
   height: 20px;
   bottom: 0;
@@ -15,6 +15,7 @@
   box-sizing: border-box;
   cursor: se-resize;
 }
+
 .no-cursor {
   cursor: auto;
 }

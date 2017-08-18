@@ -1,16 +1,16 @@
 import * as React from 'react';
 import Logout from './Logout';
-import {  PageHeader } from 'react-bootstrap';
+import { PageHeader } from 'react-bootstrap';
 import '!!style-loader!css-loader!../css/creative.min.css';
 import 'whatwg-fetch';
-import { List } from 'immutable';
 import Canvas from '../containers/CanvasContainer';
-import Graph from '../containers/Graph';
+const Sidebar = require('react-sidebar').default;
 import '!!style-loader!css-loader!../css/styles.css';
+import Graph from '../containers/Graph';
 
 interface State {
   gitCommit: string;
-  articleListIDs: List<number>;
+  sidebarOpen: boolean;
 }
 
 class App extends React.Component<{}, State> {
@@ -18,12 +18,18 @@ class App extends React.Component<{}, State> {
     super();
     this.state = {
       gitCommit: 'not available',
-      articleListIDs: List([0])
+      sidebarOpen: false
     };
+    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
-    // Gets repository information
+
+  onSetSidebarOpen(open: boolean) {
+    this.setState({ sidebarOpen: open });
+  }
+
+  // Gets repository information
   componentWillMount() {
-    let that = this;
+    const that = this;
     fetch('https://api.github.com/repos/jaydh/wispy')
       .then(function (response: any) {
         return response.json();
@@ -36,21 +42,21 @@ class App extends React.Component<{}, State> {
       });
   }
 
-  addListClick() {
-    this.setState({
-      articleListIDs: this.state.articleListIDs.push(this.state.articleListIDs.size)
-    });
-  }
-
- render() {
+  render() {
     const gitDate = new Date(this.state.gitCommit);
+    var sidebarContent = <Graph />;
+
     return (
       <div className="container-fluid">
+        <Sidebar
+          sidebar={sidebarContent}
+          open={this.state.sidebarOpen}
+          onSetOpen={this.onSetSidebarOpen}>
+        </Sidebar>
         <PageHeader>
           wispy
         </PageHeader>
-        <Canvas/>
-        <Graph />
+        <Canvas />
         <Logout />
         <p>
           Under active development <br />
