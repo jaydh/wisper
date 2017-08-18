@@ -1,0 +1,14 @@
+    const Draggable = require('react-draggable');
+    const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
+
+    
+    <Draggable bounds=".canvas" handle="strong" {...dragHandlers}>
+              <div className="box no-cursor">
+                <strong className="cursor">
+                  <Button>Drag here</Button>
+                </strong>
+
+              </div>
+
+            </Draggable>
+

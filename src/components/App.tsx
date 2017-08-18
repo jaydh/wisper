@@ -45,7 +45,7 @@ class App extends React.Component<{}, State> {
  render() {
     const gitDate = new Date(this.state.gitCommit);
     return (
-      <div>
+      <div className="container-fluid">
         <PageHeader>
           wispy
         </PageHeader>
