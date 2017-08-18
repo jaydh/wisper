@@ -8,8 +8,9 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import { ListGroup, ListGroupItem, Jumbotron } from 'react-bootstrap';
+import { Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 const Resizable = require('react-resizable').ResizableBox;
+const Draggable = require('react-draggable');
 
 interface Props {
   articles: List<articleType>;
@@ -63,14 +64,19 @@ class ArticleList extends React.Component<Props, State> {
 
   render() {
     const { articles, id, filters } = this.props;
+    const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
 
     const style = {
       height: this.state.height,
       width: this.state.width
     };
     return (
-      <div>
-        <Jumbotron>
+      <Draggable handle="strong" style={style} {...dragHandlers}>
+        <div className=" no-cursor">
+          <strong className="cursor">
+            <Button>Drag here</Button>
+          </strong>
+
           <Resizable
             className="box"
             onResize={this.onResize}
@@ -79,7 +85,7 @@ class ArticleList extends React.Component<Props, State> {
           >
             <AddArticle filters={filters} />
             <ProjectSelector id={id} />
-            <ListGroup className="article-list" >
+            <ListGroup className="article-list">
               {articles.map(article => {
                 return article
                   ? <ListGroupItem
@@ -93,8 +99,8 @@ class ArticleList extends React.Component<Props, State> {
             </ListGroup>
             <Footer id={id} />
           </Resizable>
-        </Jumbotron>
-      </div>
+        </div>
+      </Draggable>
     );
   }
 }

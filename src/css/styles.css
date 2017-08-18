@@ -15,7 +15,20 @@
   box-sizing: border-box;
   cursor: se-resize;
 }
+.no-cursor {
+  cursor: auto;
+}
+.cursor-y {
+  cursor: ns-resize;
+}
+.cursor-x {
+  cursor: ew-resize;
+}
 
 .box{
   overflow: auto;
+}
+
+.container-fluid{
+  background-color: #FFFFFA
 }
