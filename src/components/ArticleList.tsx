@@ -27,8 +27,8 @@ class ArticleList extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {
-      width: 600,
-      height: 200,
+      width: window.innerWidth * 0.6,
+      height: window.innerHeight * 0.3,
       activeDrags: 0,
       deltaPosition: {
         x: 0,
@@ -72,7 +72,7 @@ class ArticleList extends React.Component<Props, State> {
           className="draggable-container"
           style={{
             position: 'relative',
-            padding: '0',
+            padding: '20px',
             height: this.state.height,
             width: this.state.width
           }}
@@ -84,7 +84,6 @@ class ArticleList extends React.Component<Props, State> {
           <Resizable
             className="box"
             onResize={this.onResize}
-            minConstraints={[600, 200]}
             height={this.state.height}
             width={this.state.width}
           >

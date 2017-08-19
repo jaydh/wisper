@@ -1,0 +1,107 @@
+[debug] [2017-08-19T21:41:42.130Z] ----------------------------------------------------------------------
+[debug] [2017-08-19T21:41:42.133Z] Command:       /usr/bin/node /usr/bin/firebase deploy
+[debug] [2017-08-19T21:41:42.133Z] CLI Version:   3.9.2
+[debug] [2017-08-19T21:41:42.133Z] Platform:      linux
+[debug] [2017-08-19T21:41:42.133Z] Node Version:  v8.4.0
+[debug] [2017-08-19T21:41:42.133Z] Time:          Sat Aug 19 2017 14:41:42 GMT-0700 (PDT)
+[debug] [2017-08-19T21:41:42.133Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-08-19T21:41:42.143Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-08-19T21:41:42.143Z] > authorizing via signed-in user
+[debug] [2017-08-19T21:41:42.145Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-19T21:41:42.145Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/zxX4B3B4C8pViV7xhUTWqjYtC8UawBaTb8C9s0DEJeI',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Sat Aug 19 2017 14:41:42 GMT-0700 (PDT)
+[debug] [2017-08-19T21:41:47.670Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-19T21:41:47.673Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/wisper-ffe5b  
+ Sat Aug 19 2017 14:41:47 GMT-0700 (PDT)
+[debug] [2017-08-19T21:41:48.845Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-19T21:41:48.847Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/wisper-ffe5b/tokens  
+ Sat Aug 19 2017 14:41:48 GMT-0700 (PDT)
+[debug] [2017-08-19T21:41:55.990Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'wisper-ffe5b'...
+[info] 
+[info] i  deploying functions, hosting
+[debug] [2017-08-19T21:42:04.354Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "dependencies": {
+    "firebase-admin": "~4.2.1",
+    "firebase-functions": "^0.5.7",
+    "request": "^2.81.0",
+    "scrape-metadata": "^2.0.0"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[info] i  runtimeconfig: ensuring necessary APIs are enabled...
+[debug] [2017-08-19T21:42:04.357Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/wisper-ffe5b?view=CONSUMER_VIEW  
+ Sat Aug 19 2017 14:42:04 GMT-0700 (PDT)
+[debug] [2017-08-19T21:42:04.358Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/wisper-ffe5b?view=CONSUMER_VIEW  
+ Sat Aug 19 2017 14:42:04 GMT-0700 (PDT)
+[debug] [2017-08-19T21:42:06.225Z] <<< HTTP RESPONSE 200
+[info] ✔  runtimeconfig: all necessary APIs are enabled
+[debug] [2017-08-19T21:42:06.751Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2017-08-19T21:42:06.755Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/wisper-ffe5b  
+ Sat Aug 19 2017 14:42:06 GMT-0700 (PDT)
+[debug] [2017-08-19T21:42:06.757Z] >>> HTTP REQUEST GET https://apikeys.googleapis.com/v1/projects/wisper-ffe5b/apiKeys  
+ Sat Aug 19 2017 14:42:06 GMT-0700 (PDT)
+[debug] [2017-08-19T21:42:08.367Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-19T21:42:11.336Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2017-08-19T21:42:12.245Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/wisper-ffe5b/configs  
+ Sat Aug 19 2017 14:42:12 GMT-0700 (PDT)
+[debug] [2017-08-19T21:42:13.419Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (16.15 KB) for uploading
+[debug] [2017-08-19T21:42:14.109Z] >>> HTTP REQUEST GET https://www.googleapis.com/storage/v1/b/staging.wisper-ffe5b.appspot.com  
+ Sat Aug 19 2017 14:42:14 GMT-0700 (PDT)
+[debug] [2017-08-19T21:42:14.643Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-19T21:42:14.645Z] >>> HTTP REQUEST POST https://www.googleapis.com/upload/storage/v1/b/staging.wisper-ffe5b.appspot.com/o?uploadType=media&name=firebase-functions-source ReadStream {
+  _readableState: 
+   ReadableState {
+     objectMode: false,
+     highWaterMark: 65536,
+     buffer: BufferList { head: [Object], tail: [Object], length: 1 },
+     length: 16542,
+     pipes: null,
+     pipesCount: 0,
+     flowing: null,
+     ended: true,
+     endEmitted: false,
+     reading: false,
+     sync: false,
+     needReadable: false,
+     emittedReadable: true,
+     readableListening: false,
+     resumeScheduled: false,
+     destroyed: false,
+     defaultEncoding: 'utf8',
+     awaitDrain: 0,
+     readingMore: false,
+     decoder: null,
+     encoding: null },
+  readable: true,
+  domain: null,
+  _events: { end: [Function] },
+  _eventsCount: 1,
+  _maxListeners: undefined,
+  path: '/tmp/firebase-functions-50096xVkzP68TDs0.zip',
+  fd: 15,
+  flags: 'r',
+  mode: 438,
+  start: undefined,
+  end: undefined,
+  autoClose: true,
+  pos: undefined,
+  bytesRead: 16542 } 
+ Sat Aug 19 2017 14:42:14 GMT-0700 (PDT)
+[debug] [2017-08-19T21:42:15.665Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[info] i  hosting: preparing build directory for upload...
+[debug] [2017-08-19T21:42:16.174Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/wisper-ffe5b/uploads/-KrwRHBrUE3nM78wNDOT?fileCount=7&message=  
+ Sat Aug 19 2017 14:42:16 GMT-0700 (PDT)
