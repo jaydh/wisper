@@ -23,13 +23,13 @@
   cursor: ns-resize;
 }
 
-.box{
-  overflow: auto;
+.resizable-container {
+  overflow: auto;    
 }
 .cursor-x {
   cursor: ew-resize;
 }
 
-.container-fluid{
-  background-color: #FFFFFA
+.container-fluid {
+  background-color: #fffffa;
 }

@@ -28,7 +28,7 @@ class ArticleList extends React.Component<Props, State> {
     super();
     this.state = {
       width: window.innerWidth * 0.6,
-      height: window.innerHeight * 0.3,
+      height: window.innerHeight * 0.6,
       activeDrags: 0,
       deltaPosition: {
         x: 0,
@@ -65,7 +65,6 @@ class ArticleList extends React.Component<Props, State> {
   render() {
     const { articles, id, filters } = this.props;
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
-
     return (
       <Draggable handle="strong" bounds="body" {...dragHandlers}>
         <div
@@ -82,13 +81,15 @@ class ArticleList extends React.Component<Props, State> {
           </strong>
 
           <Resizable
-            className="box"
+            className="resizable-container"
             onResize={this.onResize}
-            height={this.state.height}
-            width={this.state.width}
+            height={this.state.height * 0.85}
+            width={this.state.width * 0.95}
+            minConstraints={[200, 200]}
           >
             <AddArticle filters={filters} />
             <ProjectSelector id={id} />
+            <Footer id={id} />
             <ListGroup className="article-list">
               {articles.map(article => {
                 return article
@@ -101,7 +102,6 @@ class ArticleList extends React.Component<Props, State> {
                   : <br />;
               })}
             </ListGroup>
-            <Footer id={id} />
           </Resizable>
         </div>
       </Draggable>
