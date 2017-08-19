@@ -17,7 +17,7 @@ class App extends React.Component<{}, State> {
   constructor() {
     super();
     this.state = {
-      gitCommit: 'not available',
+      gitCommit: '',
       sidebarOpen: false
     };
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);

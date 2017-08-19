@@ -10,6 +10,7 @@ interface Props {
   link: string;
   metadata?: any;
   dateAdded: string;
+  fetching?: boolean;
 }
 interface State {
   isMenuOpen: boolean;
@@ -24,7 +25,7 @@ class Article extends React.Component<Props, State> {
   }
 
   render() {
-    const { id, completed, link, dateAdded, metadata } = this.props;
+    const { id, completed, link, dateAdded, metadata, fetching } = this.props;
     return (
       <div>
         <Button
@@ -39,9 +40,7 @@ class Article extends React.Component<Props, State> {
         </a>
         <Collapse in={this.state.isMenuOpen}>
           <div>
-            {metadata && (metadata.Description || metadata.ogDescription)
-              ? 'Description :' + metadata.ogDescription
-              : ''}
+            {fetching ? metadata : 'Fetching metadata'}
             Date added:{dateAdded} <br />
             Status: {completed.toString()} <br />
             <ToggleArticle id={id} />
