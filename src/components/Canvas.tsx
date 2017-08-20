@@ -1,6 +1,6 @@
 import * as React from 'react';
 import VisibleArticleList from '../containers/VisibleArticleList';
-import { Button, Jumbotron } from 'react-bootstrap';
+import { Jumbotron, Button } from 'react-bootstrap';
 // import { StoreState } from '../constants/StoreState';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
@@ -28,7 +28,10 @@ export default class Canvas extends React.Component<Props> {
     return (
       <div>
         <Button onClick={() => AddArticleList()}>Add List</Button>
-        <Jumbotron className="canvas">
+        <Jumbotron
+          className="canvas"
+          style={{ width: innerWidth * 0.8, height: innerHeight * 0.9 }}
+        >
           {articleLists.map((articleList: ArticleList) => {
             return (
               <VisibleArticleList key={articleList.id} id={articleList.id} />
