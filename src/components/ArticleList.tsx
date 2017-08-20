@@ -8,7 +8,7 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 const Rnd = require('react-rnd').default;
 
 interface Props {
@@ -37,7 +37,19 @@ class ArticleList extends React.Component<Props> {
           overflowY: 'auto',
           overflowX: 'hidden'
         }}
+        dragHandlerClassName=".dragger"
+        enableResizing={{
+          top: false,
+          right: false,
+          bottom: true,
+          left: false,
+          topRight: false,
+          bottomRight: true,
+          bottomLeft: true,
+          topLeft: false
+        }}
       >
+        <Button className="dragger" bsSize="xsmall">Move</Button>
         <ProjectSelector id={id} />
         <Footer id={id} />
         <AddArticle filters={filters} />
