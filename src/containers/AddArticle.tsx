@@ -31,7 +31,9 @@ class AddArticle extends React.Component<Props, State> {
   getValidationState() {
     // Checks if valid hyperlink
     const regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    if (regexp.test(this.state.value)) {
+    if (this.state.value === '') {
+      return undefined;
+    } else if (regexp.test(this.state.value)) {
       return 'success';
     } else if (!regexp.test(this.state.value)) {
       return 'warning';
@@ -42,6 +44,7 @@ class AddArticle extends React.Component<Props, State> {
   }
 
   handleChange(e: any) {
+    e.preventDefault();
     this.setState({ value: e.target.value });
   }
 
@@ -63,7 +66,7 @@ class AddArticle extends React.Component<Props, State> {
           <FormControl
             type="text"
             value={this.state.value}
-            placeholder="Enter text"
+            placeholder="Enter link"
             onChange={this.handleChange}
           />
           <FormControl.Feedback />

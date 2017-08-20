@@ -18,13 +18,17 @@
 
 .draggable-container {
   cursor: auto;
+  border: 2px black;
+  border-radius: 3px;
+  border-left-style: ridge;
+  border-bottom-style: groove;
 }
 .cursor-y {
   cursor: ns-resize;
 }
 
 .resizable-container {
-  overflow: auto;    
+  overflow: auto;
 }
 .cursor-x {
   cursor: ew-resize;

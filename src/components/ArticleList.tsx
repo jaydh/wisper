@@ -27,8 +27,8 @@ class ArticleList extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {
-      width: window.innerWidth * 0.6,
-      height: window.innerHeight * 0.6,
+      width: window.innerWidth * 0.8,
+      height: window.innerHeight * 0.7,
       activeDrags: 0,
       deltaPosition: {
         x: 0,
@@ -66,25 +66,25 @@ class ArticleList extends React.Component<Props, State> {
     const { articles, id, filters } = this.props;
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
     return (
-      <Draggable handle="strong" bounds="body" {...dragHandlers}>
+      <Draggable handle="strong" {...dragHandlers}>
         <div
           className="draggable-container"
           style={{
-            position: 'relative',
-            padding: '20px',
             height: this.state.height,
             width: this.state.width
           }}
         >
           <strong className="cursor">
-            <Button>Drag here</Button>
+            <Button bsSize="xsmall">
+              {'Drag'}
+            </Button>
           </strong>
 
           <Resizable
             className="resizable-container"
             onResize={this.onResize}
-            height={this.state.height * 0.85}
-            width={this.state.width * 0.95}
+            height={this.state.height * 0.95}
+            width={this.state.width}
             minConstraints={[200, 200]}
           >
             <AddArticle filters={filters} />

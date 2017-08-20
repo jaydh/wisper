@@ -15,7 +15,7 @@ function addArticleList(
   return articleListState.add({
     id: id,
     visibilityFilter: 'SHOW_ACTIVE',
-    projectFilter: 'NONE'
+    projectFilter: 'ALL'
   });
 }
 

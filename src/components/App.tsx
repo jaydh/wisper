@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Logout from './Logout';
 import { PageHeader, Button } from 'react-bootstrap';
-import '!!style-loader!css-loader!../css/creative.min.css';
 import 'whatwg-fetch';
 import Canvas from '../containers/CanvasContainer';
 const Sidebar = require('react-sidebar').default;
@@ -52,7 +51,6 @@ class App extends React.Component<{}, State> {
     var sidebarContent = <Graph />;
 
     return (
-      <div className="container-fluid">
         <Sidebar
           sidebar={sidebarContent}
           open={this.state.sidebarOpen}
@@ -60,7 +58,7 @@ class App extends React.Component<{}, State> {
           pullRight={true}
           styles={styles}
         >
-       
+        <div className="container-fluid">
         <PageHeader>
           wispy
         <Button onClick={() => {this.onSetSidebarOpen(true); }}>
@@ -74,9 +72,8 @@ class App extends React.Component<{}, State> {
           Last updated: {gitDate.toLocaleString()} <br />
           Github Repo: <a>https://github.com/jaydh/wispy</a>
         </p>
+        </div>
         </Sidebar>
-       
-      </div>
     );
   }
 }
