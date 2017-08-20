@@ -8,9 +8,8 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import { Button, ListGroup, ListGroupItem } from 'react-bootstrap';
-const Resizable = require('react-resizable').ResizableBox;
-const Draggable = require('react-draggable');
+import { Jumbotron, ListGroup, ListGroupItem } from 'react-bootstrap';
+const Rnd = require('react-rnd').default;
 
 interface Props {
   articles: List<articleType>;
@@ -20,91 +19,59 @@ interface Props {
 interface State {
   width: number;
   height: number;
-  activeDrags: number;
-  deltaPosition: { x: number; y: number };
 }
 class ArticleList extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {
       width: window.innerWidth * 0.8,
-      height: window.innerHeight * 0.7,
-      activeDrags: 0,
-      deltaPosition: {
-        x: 0,
-        y: 0
-      }
+      height: window.innerHeight * 0.7
     };
-    this.onResize = this.onResize.bind(this);
-    this.onStart = this.onStart.bind(this);
-    this.onStop = this.onStop.bind(this);
-  }
-
-  onResize = (event: any, t: { element: any; size: any }) => {
-    this.setState({ width: t.size.width, height: t.size.height });
-  };
-
-  onStart() {
-    this.setState({ activeDrags: this.state.activeDrags + 1 });
-  }
-
-  onStop() {
-    this.setState({ activeDrags: this.state.activeDrags - 1 });
-  }
-
-  handleDrag(e: any, ui: any) {
-    const { x, y } = this.state.deltaPosition;
-    this.setState({
-      deltaPosition: {
-        x: x + ui.deltaX,
-        y: y + ui.deltaY
-      }
-    });
   }
 
   render() {
     const { articles, id, filters } = this.props;
-    const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
     return (
-      <Draggable handle="strong" {...dragHandlers}>
-        <div
-          className="draggable-container"
+      <Jumbotron
+        style={{
+          width: this.state.width * 0.9 - 20,
+          height: this.state.height * 0.8 - 20
+        }}
+      >
+        <Rnd
+          className="article-list-container"
+          default={{
+            x: 0,
+            y: 0,
+            width: this.state.width * 0.9 - 40,
+            height: this.state.height * 0.8 - 40
+          }}
+          z={2}
+          minWidth={500}
+          minHeight={190}
+          bounds=".canvas"
           style={{
-            height: this.state.height,
-            width: this.state.width
+            overflow: 'auto',
+            padding: '20'
           }}
         >
-          <strong className="cursor">
-            <Button bsSize="xsmall">
-              {'Drag'}
-            </Button>
-          </strong>
-
-          <Resizable
-            className="resizable-container"
-            onResize={this.onResize}
-            height={this.state.height * 0.95}
-            width={this.state.width}
-            minConstraints={[200, 200]}
-          >
-            <AddArticle filters={filters} />
-            <ProjectSelector id={id} />
-            <Footer id={id} />
-            <ListGroup className="article-list">
-              {articles.map(article => {
-                return article
-                  ? <ListGroupItem
-                      key={article.id}
-                      bsStyle={article.completed ? 'success' : 'info'}
-                    >
-                      <Article key={article.id} {...article} />
-                    </ListGroupItem>
-                  : <br />;
-              })}
-            </ListGroup>
-          </Resizable>
-        </div>
-      </Draggable>
+          <AddArticle filters={filters} />
+          <ProjectSelector id={id} />
+          <Footer id={id} />
+          <ListGroup >
+            {articles.map(article => {
+              return article
+                ? <ListGroupItem
+                    key={article.id}
+                    bsStyle={article.completed ? 'success' : 'info'}
+                  >
+                    <Article key={article.id} {...article} />
+                  </ListGroupItem>
+                : <br />;
+            })}
+          </ListGroup>
+        </Rnd>
+      </Jumbotron>
     );
   }
 }
