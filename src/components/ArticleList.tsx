@@ -22,12 +22,11 @@ class ArticleList extends React.Component<Props> {
     const { articles, id, filters } = this.props;
     return (
       <Rnd
-        className="article-list-container"
         default={{
           x: 0,
           y: 0,
           width: innerWidth * 0.5,
-          height: innerHeight * 0.3
+          height: innerHeight * 0.6
         }}
         z={2}
         bounds=".canvas"
@@ -38,6 +37,15 @@ class ArticleList extends React.Component<Props> {
           overflowX: 'hidden'
         }}
         dragHandlerClassName=".dragger"
+        resizeHandlerStyles={{
+          bottom: {
+            height: '2em',
+            position: 'fixed',
+            borderBottom: '5px',
+            borderColor: ' #7070db',
+            borderRadius: '3px'
+          }
+        }}
         enableResizing={{
           top: false,
           right: false,
@@ -49,22 +57,31 @@ class ArticleList extends React.Component<Props> {
           topLeft: false
         }}
       >
-        <Button className="dragger" bsSize="xsmall">Move</Button>
-        <ProjectSelector id={id} />
-        <Footer id={id} />
-        <AddArticle filters={filters} />
-        <ListGroup>
-          {articles.map(article => {
-            return article
-              ? <ListGroupItem
-                  key={article.id}
-                  bsStyle={article.completed ? 'success' : 'info'}
-                >
-                  <Article key={article.id} {...article} />
-                </ListGroupItem>
-              : <br />;
-          })}
-        </ListGroup>
+        <Button
+          className="dragger"
+          bsSize="xsmall"
+          style={{ height: '2em', width: '100%' }}
+        >
+          {''}
+        </Button>
+        <div className="article-list-container">
+          <ProjectSelector id={id} />
+
+          <Footer id={id} />
+          <AddArticle filters={filters} />
+          <ListGroup>
+            {articles.map(article => {
+              return article
+                ? <ListGroupItem
+                    key={article.id}
+                    bsStyle={article.completed ? 'success' : 'info'}
+                  >
+                    <Article key={article.id} {...article} />
+                  </ListGroupItem>
+                : <br />;
+            })}
+          </ListGroup>
+        </div>
       </Rnd>
     );
   }

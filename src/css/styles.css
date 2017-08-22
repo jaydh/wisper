@@ -17,11 +17,9 @@
 }
 
 .article-list-container {
-  cursor: auto;
-  border: 2px black;
+  borderLeft: 2px black;
   border-radius: 3px;
-  border-left-style: ridge;
-  border-bottom-style: groove;
+  border-left-style: ridge;  
 }
 
 .cursor-y {
