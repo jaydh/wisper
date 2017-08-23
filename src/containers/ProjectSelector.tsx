@@ -14,8 +14,8 @@ class ProjectsFooter extends React.Component<Props> {
     const { projects, id } = this.props;
     return (
       <div>
-        <span>
-          Show project: {' '}
+        <p>
+          Project: {' '}
           <ProjectsFilterLink filter="ALL" id={id}>
             All
           </ProjectsFilterLink>
@@ -35,7 +35,7 @@ class ProjectsFooter extends React.Component<Props> {
           <ProjectsFilterLink filter="NONE" id={id}>
             None
           </ProjectsFilterLink>
-        </span>
+        </p>
       </div>
     );
   }

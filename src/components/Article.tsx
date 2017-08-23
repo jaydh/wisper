@@ -28,16 +28,21 @@ class Article extends React.Component<Props, State> {
     const { id, completed, link, dateAdded, metadata, fetching } = this.props;
     return (
       <div>
-        <Button
-          onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
-        >
-          More
-        </Button>
         <a href={link} target="_blank">
           {' '}{metadata && (metadata.title || metadata.ogTitle)
             ? metadata.title || metadata.ogTitle
             : link}
         </a>
+        <Button
+          bsStyle="more"
+          onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
+        >
+          {
+            // placeholder for SVG
+            ''
+          }
+        </Button>
+
         <Collapse in={this.state.isMenuOpen}>
           <div>
             {fetching ? metadata : 'Fetching metadata'}

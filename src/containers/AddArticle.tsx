@@ -7,7 +7,6 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  HelpBlock
 } from 'react-bootstrap';
 
 interface State {
@@ -70,10 +69,10 @@ class AddArticle extends React.Component<Props, State> {
             onChange={this.handleChange}
           />
           <FormControl.Feedback />
-          <HelpBlock>Enter valid hyperlink</HelpBlock>
         </FormGroup>
         <Button
           type="button"
+          bsStyle="submit"
           onClick={() => {
             dispatch(addArticle(this.state.value, project));
           }}

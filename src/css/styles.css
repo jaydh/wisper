@@ -1,3 +1,20 @@
+:root {
+  --main-background: #322931;
+  --darkGray: #433b42;
+  --gray: #5c545b;
+  --lightGray: #797379;
+  --lighterGray: #989498;
+  --lightererGray: #b9b5b8;
+  --white: #ffffff;
+  --red: #dd464c;
+  --orange: #fd8b19;
+  --yellow: #fdcc59;
+  --green: #8fc13e;
+  --lightBlue: #149b93;
+  --blue: #1290bf;
+  --pink: #c85e7c;
+  --darkRed: #b33508;
+}
 .react-resizable {
   position: relative;
 }
@@ -15,11 +32,43 @@
   box-sizing: border-box;
   cursor: se-resize;
 }
+.p {
+  font-size: 40px;
+}
+
+.container-fluid {
+  background-color: var(--main-background);
+}
+
+.btn-more {
+  width: .5em;
+  height: 100%;
+  background-color: var(--lightBlue);
+  color: white;
+}
+
+.btn-drag {
+  background-color: var(--blue);
+  height: 1em;
+  width: 100%;
+}
+
+.btn-submit {
+  background-color: var(--orange);
+  height: 2em;
+  width: 100%;
+}
+
+.btn-addList{
+  background-color: var(--pink);
+}
+
+.canvas {
+  background-color: var(--darkGray);
+}
 
 .article-list-container {
-  borderLeft: 2px black;
-  border-radius: 3px;
-  border-left-style: ridge;  
+  background-color: var(--gray);
 }
 
 .cursor-y {
@@ -27,12 +76,10 @@
 }
 
 .resizable-container {
-  overflow: auto;
+  border-left: 2px var(--white);
+  border-radius: 3px;
+  border-left-style: ridge;
 }
 .cursor-x {
   cursor: ew-resize;
-}
-
-.container-fluid {
-  background-color: #fffffa;
 }

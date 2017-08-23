@@ -11,30 +11,27 @@ import thunk from 'redux-thunk';
 import { initFirebase, auth } from './firebase';
 import LoginLoading from './components/LoginLoading';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import bootstrap from './bootstrap';
+bootstrap();
 
 let store = createStore(
-    appReducer,
-    composeWithDevTools(
-        applyMiddleware(thunk, logger)
-    )
+  appReducer,
+  composeWithDevTools(applyMiddleware(thunk, logger))
 );
 initFirebase();
 // let persistor = persistStore(store);
-auth().onAuthStateChanged(function (user: any) {
-    if (user) {
-        ReactDOM.render(
-            <Provider store={store}>
-                <App />
-            </Provider>,
-            document.getElementById('root'));
-    } else {
-        // persistor.purge();
-        ReactDOM.render(
-            <LoginLoading />,
-            document.getElementById('root')
-        );
-
-    }
+auth().onAuthStateChanged(function(user: any) {
+  if (user) {
+    ReactDOM.render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      document.getElementById('root')
+    );
+  } else {
+    // persistor.purge();
+    ReactDOM.render(<LoginLoading />, document.getElementById('root'));
+  }
 });
 
 registerServiceWorker();

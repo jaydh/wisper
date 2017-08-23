@@ -1,9 +1,8 @@
 import * as React from 'react';
 import Logout from './Logout';
-import { PageHeader, Button } from 'react-bootstrap';
+import { PageHeader } from 'react-bootstrap';
 import 'whatwg-fetch';
 import Canvas from '../containers/CanvasContainer';
-const Sidebar = require('react-sidebar').default;
 import '!!style-loader!css-loader!../css/styles.css';
 import Graph from '../containers/Graph';
 
@@ -19,11 +18,6 @@ class App extends React.Component<{}, State> {
       gitCommit: '',
       sidebarOpen: false
     };
-    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
-  }
-
-  onSetSidebarOpen(open: boolean) {
-    this.setState({ sidebarOpen: open });
   }
 
   // Gets repository information
@@ -43,29 +37,14 @@ class App extends React.Component<{}, State> {
 
   render() {
     const gitDate = new Date(this.state.gitCommit);
-    const styles = {
-        sidebar: {
-          width: '40vw'
-        }
-    };
-    var sidebarContent = <Graph />;
-
+    
     return (
-        <Sidebar
-          sidebar={sidebarContent}
-          open={this.state.sidebarOpen}
-          onSetOpen={this.onSetSidebarOpen}
-          pullRight={true}
-          styles={styles}
-        >
+      
         <div className="container-fluid">
         <PageHeader>
-          wispy
-        <Button onClick={() => {this.onSetSidebarOpen(true); }}>
-          sidebar
-        </Button>
+          <h1>wispy</h1>
         </PageHeader>
-        <Canvas />
+        <Canvas /><Graph />
         <Logout />
         <p>
           Under active development <br />
@@ -73,7 +52,6 @@ class App extends React.Component<{}, State> {
           Github Repo: <a>https://github.com/jaydh/wispy</a>
         </p>
         </div>
-        </Sidebar>
     );
   }
 }

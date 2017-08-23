@@ -8,7 +8,7 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import { Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Jumbotron, ListGroup, ListGroupItem } from 'react-bootstrap';
 const Rnd = require('react-rnd').default;
 
 interface Props {
@@ -21,7 +21,33 @@ class ArticleList extends React.Component<Props> {
   render() {
     const { articles, id, filters } = this.props;
     return (
+      <Jumbotron className="article-list-container">
+        <ProjectSelector id={id} />
+
+        <Footer id={id} />
+        <AddArticle filters={filters} />
+        <ListGroup>
+          {articles.map(article => {
+            return article
+              ? <ListGroupItem
+                  key={article.id}
+                  bsStyle={article.completed ? 'success' : 'info'}
+                >
+                  <Article key={article.id} {...article} />
+                </ListGroupItem>
+              : <br />;
+          })}
+        </ListGroup>
+      </Jumbotron>
+    );
+  }
+}
+
+class OuterArticleList extends React.Component<Props> {
+  render() {
+    return (
       <Rnd
+        className="resizable-container"
         default={{
           x: 0,
           y: 0,
@@ -30,13 +56,10 @@ class ArticleList extends React.Component<Props> {
         }}
         z={2}
         bounds=".canvas"
-        resizeGrid={[25, 25]}
-        dragGrid={[25, 25]}
         style={{
           overflowY: 'auto',
           overflowX: 'hidden'
         }}
-        dragHandlerClassName=".dragger"
         resizeHandlerStyles={{
           bottom: {
             height: '2em',
@@ -57,33 +80,9 @@ class ArticleList extends React.Component<Props> {
           topLeft: false
         }}
       >
-        <Button
-          className="dragger"
-          bsSize="xsmall"
-          style={{ height: '2em', width: '100%' }}
-        >
-          {''}
-        </Button>
-        <div className="article-list-container">
-          <ProjectSelector id={id} />
-
-          <Footer id={id} />
-          <AddArticle filters={filters} />
-          <ListGroup>
-            {articles.map(article => {
-              return article
-                ? <ListGroupItem
-                    key={article.id}
-                    bsStyle={article.completed ? 'success' : 'info'}
-                  >
-                    <Article key={article.id} {...article} />
-                  </ListGroupItem>
-                : <br />;
-            })}
-          </ListGroup>
-        </div>
+        <ArticleList {...this.props} />
       </Rnd>
     );
   }
 }
-export default ArticleList;
+export default OuterArticleList;

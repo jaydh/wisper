@@ -4,9 +4,9 @@ import articleLists from './articleLists';
 let { combineReducers } = require('redux-immutable');
 
 const appReducer = combineReducers({
-    articles,
-    projects,
-    articleLists
+  articles,
+  projects,
+  articleLists
 });
 
 export default appReducer;
