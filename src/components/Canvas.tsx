@@ -4,7 +4,6 @@ import { Jumbotron, Button } from 'react-bootstrap';
 // import { StoreState } from '../constants/StoreState';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
-const Aux = require('react-aux');
 
 interface Props {
   ListenToFirebase: any;
@@ -23,7 +22,7 @@ export default class Canvas extends React.Component<Props> {
   render() {
     const { articleLists, AddArticleList } = this.props;
     return (
-      <Aux>
+      <div>
         <Button bsStyle="addList" onClick={() => AddArticleList()}>Add List</Button>
         <Jumbotron className="canvas" style={{ height: innerHeight * 0.9 }}>
           {articleLists.map((articleList: ArticleList) => {
@@ -32,7 +31,7 @@ export default class Canvas extends React.Component<Props> {
             );
           })}
         </Jumbotron>
-      </Aux>
+      </div>
     );
   }
 }
