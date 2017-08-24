@@ -13,14 +13,15 @@ const Rnd = require('react-rnd').default;
 
 interface Props {
   articles: List<articleType>;
+  order: number;
   id: string;
-  filters: ArticleListType;
+  articleList: ArticleListType;
   articleListNum: number;
 }
 
 class ArticleList extends React.Component<Props> {
   render() {
-    const { articles, id, filters } = this.props;
+    const { articles, id, articleList } = this.props;
     return (
       <Jumbotron className="article-list-container">
         <Button className="drag" bsStyle="drag">
@@ -28,7 +29,7 @@ class ArticleList extends React.Component<Props> {
         </Button>
         <ProjectSelector id={id} />
         <Footer id={id} />
-        <AddArticle filters={filters} />
+        <AddArticle articleList={articleList} />
         <ListGroup>
           {articles.map(article => {
             return article
@@ -48,17 +49,19 @@ class ArticleList extends React.Component<Props> {
 
 class OuterArticleList extends React.Component<Props> {
   render() {
-    const { articleListNum } = this.props;
+    const { order } = this.props;
+    const width = innerWidth * 0.7;
+
     return (
       <Rnd
         className="resizable-container"
         default={{
-          x: innerWidth * 0.7 / articleListNum * (articleListNum - 1) ,
+          x: width * order,
           y: 0,
-          width: innerWidth * 0.7 / articleListNum,
-          height: innerHeight * 0.6
+          width: width,
+          height: innerHeight * 0.8
         }}
-        z={0}
+        z={order}
         bounds=".canvas"
         style={{
           overflowY: 'auto',

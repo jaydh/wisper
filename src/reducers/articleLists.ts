@@ -11,9 +11,12 @@ function addArticleList(
   const id =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
+  
+  const order = articleListState.size;
 
   return articleListState.add({
-    id: id,
+    id,
+    order,
     visibilityFilter: 'SHOW_ACTIVE',
     projectFilter: 'ALL'
   });
@@ -45,12 +48,9 @@ function setProjectFilter(
     : articleListState;
 }
 
-const articleLists = createReducer(
-  OrderedSet<ArticleList>(),
-  {
-    ADD_ARTICLE_LIST: addArticleList,
-    SET_VISIBILITY_FILTER: setVisibilityFilter,
-    SET_PROJECT_FILTER: setProjectFilter
-  }
-);
+const articleLists = createReducer(OrderedSet<ArticleList>(), {
+  ADD_ARTICLE_LIST: addArticleList,
+  SET_VISIBILITY_FILTER: setVisibilityFilter,
+  SET_PROJECT_FILTER: setProjectFilter
+});
 export default articleLists;

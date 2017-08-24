@@ -13,6 +13,7 @@ export interface Article {
 
 export interface ArticleList {
   id: string;
+  order: number;
   visibilityFilter: string;
   projectFilter: string;
 }

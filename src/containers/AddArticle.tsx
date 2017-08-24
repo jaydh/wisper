@@ -2,18 +2,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { addArticle } from '../actions/addArticle';
 import { ArticleList } from '../constants/StoreState';
-import {
-  Button,
-  FormGroup,
-  FormControl,
-  ControlLabel,
-} from 'react-bootstrap';
+import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 interface State {
   value: string;
 }
 interface Props {
-  filters: ArticleList;
+  articleList: ArticleList;
   dispatch: any;
 }
 
@@ -48,8 +43,8 @@ class AddArticle extends React.Component<Props, State> {
   }
 
   render() {
-    const { dispatch, filters } = this.props;
-    const { projectFilter } = filters;
+    const { dispatch, articleList } = this.props;
+    const { projectFilter } = articleList;
     const project =
       projectFilter !== 'NONE' && projectFilter !== 'ALL'
         ? projectFilter
@@ -90,7 +85,10 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-const mapStateToProps = (state: any, ownProps: { filters: ArticleList }) => {
+const mapStateToProps = (
+  state: any,
+  ownProps: { articleList: ArticleList }
+) => {
   return {};
 };
 
