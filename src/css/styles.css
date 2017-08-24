@@ -16,8 +16,12 @@
   --darkRed: #b33508;
 }
 
-.p {
-  font-size: 40px;
+.modal-container {
+  position: relative;
+}
+.modal-container .modal,
+.modal-container .modal-backdrop {
+  position: absolute;
 }
 
 .container-fluid {
@@ -36,8 +40,8 @@
   background-color: var(--blue);
   height: 1em;
   width: 2em;
-  top:2em;
-  left: 2em;
+  top: 1em;
+  left: 1em;
 }
 
 .btn-submit {
@@ -46,7 +50,7 @@
   width: 100%;
 }
 
-.btn-addList{
+.btn-addList {
   background-color: var(--pink);
 }
 
@@ -54,7 +58,7 @@
   background-color: var(--darkGray);
 }
 
-.list-group-item{
+.list-group-item {
   background-color: var(--yellow);
 }
 

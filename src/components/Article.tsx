@@ -29,11 +29,15 @@ class Article extends React.Component<Props, State> {
     const { id, completed, link, dateAdded, metadata, fetching } = this.props;
     return (
       <ListGroupItem bsStyle={completed ? 'success' : 'info'}>
+        {
+          // Todo: add onclick for updating lastread}
+        }
         <a href={link} target="_blank">
           {metadata && (metadata.title || metadata.ogTitle)
             ? metadata.ogTitle || metadata.title
             : link}
         </a>{' '}
+        {' '}
         <Button
           bsStyle="more"
           onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}

@@ -4,7 +4,6 @@ import { PageHeader } from 'react-bootstrap';
 import 'whatwg-fetch';
 import Canvas from '../containers/CanvasContainer';
 import '!!style-loader!css-loader!../css/styles.css';
-import Graph from '../containers/Graph';
 
 interface State {
   gitCommit: string;
@@ -43,14 +42,14 @@ class App extends React.Component<{}, State> {
         <div className="container-fluid">
         <PageHeader>
           wispy
+          <br/>
+          <small>
+          Under active development; Last updated: {gitDate.toLocaleString()} <br />
+          Source: <a>https://github.com/jaydh/wispy</a>
+        </small>
         </PageHeader>
-        <Canvas /><Graph />
+        <Canvas />
         <Logout />
-        <p>
-          Under active development <br />
-          Last updated: {gitDate.toLocaleString()} <br />
-          Github Repo: <a>https://github.com/jaydh/wispy</a>
-        </p>
         </div>
     );
   }

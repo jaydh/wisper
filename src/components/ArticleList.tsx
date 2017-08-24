@@ -27,6 +27,9 @@ class ArticleList extends React.Component<Props> {
         <Button className="drag" bsStyle="drag">
           {' '}
         </Button>
+        <h4>
+          Count: {articles.size}
+        </h4>
         <ProjectSelector id={id} />
         <Footer id={id} />
         <AddArticle articleList={articleList} />
