@@ -6,7 +6,6 @@ import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 interface State {
   value: string;
-  project: string;
 }
 interface Props {
   articleList: ArticleList;
@@ -16,15 +15,8 @@ interface Props {
 class AddArticle extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const { articleList: { projectFilter } } = this.props;
-    const project =
-      projectFilter !== 'NONE' && projectFilter !== 'ALL'
-        ? projectFilter
-        : undefined;
-
     this.state = {
-      value: '',
-      project: project || ''
+      value: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.getValidationState = this.getValidationState.bind(this);
@@ -50,21 +42,27 @@ class AddArticle extends React.Component<Props, State> {
     this.setState({ value: e.target.value });
   }
 
-  handleSubmit() {
+  handleSubmit(project: string) {
     const { dispatch } = this.props;
     if (this.getValidationState() === 'success') {
-      dispatch(addArticle(this.state.value, this.state.project));
+      dispatch(addArticle(this.state.value, project));
     } else {
       alert('Please enter valid link');
     }
   }
 
   render() {
+    const { articleList: { projectFilter } } = this.props;
+    const project =
+      projectFilter !== 'NONE' && projectFilter !== 'ALL'
+        ? projectFilter
+        : '';
+
     return (
       <form
         onSubmit={event => {
           event.preventDefault();
-          this.handleSubmit();
+          this.handleSubmit(project);
         }}
       >
         <FormGroup
@@ -84,7 +82,7 @@ class AddArticle extends React.Component<Props, State> {
           type="button"
           bsStyle="submit"
           onClick={() => {
-            this.handleSubmit();
+            this.handleSubmit(project);
           }}
         >
           Submit
