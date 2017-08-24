@@ -2,7 +2,7 @@ import * as React from 'react';
 import AddArticleToProject from '../containers/AddArticleToProject';
 import DeleteArticle from '../containers/DeleteArticle';
 import ToggleArticle from '../containers/ToggleArticle';
-import { Button, Collapse,ListGroupItem } from 'react-bootstrap';
+import { Button, Collapse, ListGroupItem } from 'react-bootstrap';
 import { fromJS } from 'immutable';
 
 interface Props {
@@ -28,9 +28,7 @@ class Article extends React.Component<Props, State> {
   render() {
     const { id, completed, link, dateAdded, metadata, fetching } = this.props;
     return (
-      <ListGroupItem
-        bsStyle={completed ? 'success' : 'info'}
-    >
+      <ListGroupItem bsStyle={completed ? 'success' : 'info'}>
         <a href={link} target="_blank">
           {metadata && (metadata.title || metadata.ogTitle)
             ? metadata.ogTitle || metadata.title
@@ -55,7 +53,7 @@ class Article extends React.Component<Props, State> {
             <DeleteArticle id={id} />
           </div>
         </Collapse>
-        </ListGroupItem>
+      </ListGroupItem>
     );
   }
 }
