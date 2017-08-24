@@ -14,9 +14,9 @@ interface ProjectMeta {
 }
 
 class Graph extends React.Component<Props> {
-  getProjectData() {
+  // this is probably way too verbose and can be reimplemented by mapping through the article
+  getProjectData(): Map<string, object> {
     const { articles, projects } = this.props;
-
     let projectData = Map<string, ProjectMeta>();
     projects.valueSeq().forEach((project: string) => {
       projectData = projectData.set(project, {
@@ -53,14 +53,21 @@ class Graph extends React.Component<Props> {
     return projectData;
   }
 
-  componentWillMount() {
-    setInterval(() => {
-      this.setState(this.getProjectData());
-    }, 5000);
+  getDomainData() {
+    const { articles } = this.props;
+    const domains = articles.map(
+      article => (article.metadata ? article.metadata.ogSiteName : '')
+    );
+    let domainCounts = Map<string, number>();
+    domains.map(
+      (x: string) => (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
+    );
+    return domainCounts;
   }
 
   render() {
     const projectData = this.getProjectData();
+    const domainCounts = this.getDomainData();
     const projectCount = projectData.map((t: ProjectMeta) => t.count);
     // const projectCompleted = projectData.map((t: ProjectMeta) => t.completed);
 
@@ -92,9 +99,39 @@ class Graph extends React.Component<Props> {
       ]
     };
 
+    const data2 = {
+      labels: domainCounts.keySeq().toJS(),
+      datasets: [
+        {
+          label: '# of Votes',
+          data: domainCounts.valueSeq().toJS(),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          hoverBorderWidth: 3
+        }
+      ]
+    };
+    console.log(data2);
+
     return (
       <div>
         <Doughnut data={data} />
+        <Doughnut data={data2} />
       </div>
     );
   }
