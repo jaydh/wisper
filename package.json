@@ -5,7 +5,8 @@
   "devDependencies": {},
   "scripts": {
     "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build && firebase deploy",
+    "build": "react-scripts-ts build",
+    "deploy": "react-scripts-ts build && firebase deploy --only hosting",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "analyze": "source-map-explorer build/static/js/main.*"

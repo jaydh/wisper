@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Doughnut } from 'react-chartjs-2';
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import { Article as ArticleType } from '../constants/StoreState';
 interface Props {
   articles: List<any>;
@@ -14,40 +14,27 @@ interface ProjectMeta {
 }
 
 class Graph extends React.Component<Props> {
-  // this is probably way too verbose and can be reimplemented by mapping through the article
+
   getProjectData(): Map<string, object> {
-    const { articles, projects } = this.props;
+    const { articles } = this.props;
     let projectData = Map<string, ProjectMeta>();
-    projects.valueSeq().forEach((project: string) => {
-      projectData = projectData.set(project, {
-        count: 0,
-        completed: 0
-      });
-    });
-    projectData = projectData.set('NONE', { count: 0, completed: 0 });
     articles.forEach((article: ArticleType) => {
-      if (article.projects) {
-        const articleProjects = Object.keys(article.projects).map(key => {
-          return article.projects ? article.projects[key] : 'NONE';
-        });
-        articleProjects.forEach(project => {
-          projectData = projectData.update(project, (meta: ProjectMeta) => {
-            return {
-              ...meta,
-              count: meta.count + 1,
-              completed: meta.completed + Number(article.completed)
-            };
-          });
-        });
-      } else {
-        projectData = projectData.update('NONE', (meta: ProjectMeta) => {
-          return {
-            ...meta,
-            count: meta.count + 1,
-            completed: meta.completed + Number(article.completed)
-          };
-        });
-      }
+      const key = article.projects
+        ? fromJS(article.projects).valueSeq()
+        : fromJS(['NONE']);
+      key.forEach(
+        (t: string) =>
+          (projectData = projectData.update(
+            t,
+            (meta: ProjectMeta = { count: 0, completed: 0 }) => {
+              return {
+                ...meta,
+                count: meta.count + 1,
+                completed: meta.completed + Number(article.completed)
+              };
+            }
+          ))
+      );
     });
 
     return projectData;
@@ -60,7 +47,8 @@ class Graph extends React.Component<Props> {
     );
     let domainCounts = Map<string, number>();
     domains.map(
-      (x: string) => (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
+      (x: string) =>
+        (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
     );
     return domainCounts;
   }
