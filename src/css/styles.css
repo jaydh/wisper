@@ -54,6 +54,10 @@
   background-color: var(--pink);
 }
 
+.btn-logout {
+  background-color: var(--darkRed);
+}
+
 .canvas {
   background-color: var(--darkGray);
 }
@@ -68,5 +72,8 @@
   border-left: 2px var(--white);
   border-radius: 3px;
   border-left-style: ridge;
+}
 
+.page-header {
+  color: var(--blue);
 }

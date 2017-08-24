@@ -43,9 +43,6 @@ export default class Canvas extends React.Component<Props, State> {
     return (
       <div>
         <Modal show={this.state.showModal} onHide={() => this.close()}>
-          <Modal.Header closeButton={true}>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
           <Modal.Body>
             <Graph />
           </Modal.Body>

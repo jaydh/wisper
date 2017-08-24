@@ -6,5 +6,6 @@ export default () => {
   bootstrapUtils.addStyle(Button, 'addList');
   bootstrapUtils.addStyle(Button, 'drag');
   bootstrapUtils.addStyle(Button, 'submit');
+  bootstrapUtils.addStyle(Button, 'logout');  
   bootstrapUtils.addStyle(Jumbotron, 'canvas');
 };
