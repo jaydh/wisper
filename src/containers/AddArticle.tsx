@@ -6,6 +6,7 @@ import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 interface State {
   value: string;
+  project: string;
 }
 interface Props {
   articleList: ArticleList;
@@ -15,8 +16,15 @@ interface Props {
 class AddArticle extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const { articleList: { projectFilter } } = this.props;
+    const project =
+      projectFilter !== 'NONE' && projectFilter !== 'ALL'
+        ? projectFilter
+        : undefined;
+
     this.state = {
-      value: ''
+      value: '',
+      project: project || ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.getValidationState = this.getValidationState.bind(this);
@@ -42,23 +50,30 @@ class AddArticle extends React.Component<Props, State> {
     this.setState({ value: e.target.value });
   }
 
-  render() {
-    const { dispatch, articleList } = this.props;
-    const { projectFilter } = articleList;
-    const project =
-      projectFilter !== 'NONE' && projectFilter !== 'ALL'
-        ? projectFilter
-        : undefined;
+  handleSubmit() {
+    const { dispatch } = this.props;
+    if (this.getValidationState() === 'success') {
+      dispatch(addArticle(this.state.value, this.state.project));
+    } else {
+      alert('Please enter valid link');
+    }
+  }
 
+  render() {
     return (
-      <form onSubmit={() => onclick}>
+      <form
+        onSubmit={event => {
+          event.preventDefault();
+          this.handleSubmit();
+        }}
+      >
         <FormGroup
           controlId="formBasicText"
+          type="text"
           validationState={this.getValidationState()}
         >
           <ControlLabel>Add article</ControlLabel>
           <FormControl
-            type="text"
             value={this.state.value}
             placeholder="Enter link"
             onChange={this.handleChange}
@@ -69,7 +84,7 @@ class AddArticle extends React.Component<Props, State> {
           type="button"
           bsStyle="submit"
           onClick={() => {
-            dispatch(addArticle(this.state.value, project));
+            this.handleSubmit();
           }}
         >
           Submit
