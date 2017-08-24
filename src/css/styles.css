@@ -48,9 +48,12 @@
 }
 
 .btn-drag {
+  position: fixed;
   background-color: var(--blue);
   height: 1em;
-  width: 100%;
+  width: 2em;
+  top:2em;
+  left: 2em;
 }
 
 .btn-submit {
@@ -69,6 +72,7 @@
 
 .article-list-container {
   background-color: var(--gray);
+  margin-bottom: 0;
 }
 
 .cursor-y {

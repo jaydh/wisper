@@ -8,7 +8,7 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import { Jumbotron, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Button, Jumbotron, ListGroup, ListGroupItem } from 'react-bootstrap';
 const Rnd = require('react-rnd').default;
 
 interface Props {
@@ -22,19 +22,21 @@ class ArticleList extends React.Component<Props> {
     const { articles, id, filters } = this.props;
     return (
       <Jumbotron className="article-list-container">
+        <Button className="drag" bsStyle="drag">
+          {' '}
+        </Button>
         <ProjectSelector id={id} />
-
         <Footer id={id} />
         <AddArticle filters={filters} />
         <ListGroup>
           {articles.map(article => {
             return article
               ? <ListGroupItem
-                  key={article.id}
-                  bsStyle={article.completed ? 'success' : 'info'}
-                >
-                  <Article key={article.id} {...article} />
-                </ListGroupItem>
+                key={article.id}
+                bsStyle={article.completed ? 'success' : 'info'}
+              >
+                <Article key={article.id} {...article} />
+              </ListGroupItem>
               : <br />;
           })}
         </ListGroup>
@@ -51,29 +53,21 @@ class OuterArticleList extends React.Component<Props> {
         default={{
           x: 0,
           y: 0,
-          width: innerWidth * 0.5,
+          width: innerWidth * 0.7,
           height: innerHeight * 0.6
         }}
-        z={2}
+        z={0}
         bounds=".canvas"
         style={{
           overflowY: 'auto',
           overflowX: 'hidden'
         }}
-        resizeHandlerStyles={{
-          bottom: {
-            height: '2em',
-            position: 'fixed',
-            borderBottom: '5px',
-            borderColor: ' #7070db',
-            borderRadius: '3px'
-          }
-        }}
+        dragHandlerClassName=".drag"
         enableResizing={{
           top: false,
-          right: false,
+          right: true,
           bottom: true,
-          left: false,
+          left: true,
           topRight: false,
           bottomRight: true,
           bottomLeft: true,
