@@ -19,13 +19,13 @@ class Graph extends React.Component<Props> {
     const { articles } = this.props;
     let projectData = Map<string, ProjectMeta>();
     articles.forEach((article: ArticleType) => {
-      const key = article.projects
+      const keys = article.projects
         ? fromJS(article.projects).valueSeq()
         : fromJS(['NONE']);
-      key.forEach(
-        (t: string) =>
+      keys.forEach(
+        (key: string) =>
           (projectData = projectData.update(
-            t,
+            key,
             (meta: ProjectMeta = { count: 0, completed: 0 }) => {
               return {
                 ...meta,
