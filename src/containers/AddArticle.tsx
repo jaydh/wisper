@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { addArticle } from '../actions/addArticle';
 import { ArticleList } from '../constants/StoreState';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
@@ -10,7 +10,7 @@ interface State {
 }
 interface Props {
   articleList: ArticleList;
-  dispatch: any;
+  dispatch: Dispatch<AddArticle>;
 }
 
 class AddArticle extends React.Component<Props, State> {

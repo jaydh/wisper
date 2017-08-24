@@ -2,7 +2,8 @@ import * as React from 'react';
 import AddArticleToProject from '../containers/AddArticleToProject';
 import DeleteArticle from '../containers/DeleteArticle';
 import ToggleArticle from '../containers/ToggleArticle';
-import { Button, Collapse } from 'react-bootstrap';
+import { Button, Collapse,ListGroupItem } from 'react-bootstrap';
+import { fromJS } from 'immutable';
 
 interface Props {
   id: string;
@@ -27,12 +28,14 @@ class Article extends React.Component<Props, State> {
   render() {
     const { id, completed, link, dateAdded, metadata, fetching } = this.props;
     return (
-      <div>
+      <ListGroupItem
+        bsStyle={completed ? 'success' : 'info'}
+    >
         <a href={link} target="_blank">
-          {' '}{metadata && (metadata.title || metadata.ogTitle)
+          {metadata && (metadata.title || metadata.ogTitle)
             ? metadata.ogTitle || metadata.title
             : link}
-        </a>
+        </a>{' '}
         <Button
           bsStyle="more"
           onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
@@ -42,10 +45,9 @@ class Article extends React.Component<Props, State> {
             ''
           }
         </Button>
-
         <Collapse in={this.state.isMenuOpen}>
           <div>
-            {fetching ? metadata : 'Fetching metadata'}
+            {!fetching && metadata ? fromJS(metadata) : 'Fetching metadata'}
             Date added:{dateAdded} <br />
             Status: {completed.toString()} <br />
             <ToggleArticle id={id} />
@@ -53,7 +55,7 @@ class Article extends React.Component<Props, State> {
             <DeleteArticle id={id} />
           </div>
         </Collapse>
-      </div>
+        </ListGroupItem>
     );
   }
 }

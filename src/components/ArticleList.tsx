@@ -8,7 +8,7 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import { Button, Jumbotron, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Button, Jumbotron, ListGroup } from 'react-bootstrap';
 const Rnd = require('react-rnd').default;
 
 interface Props {
@@ -31,15 +31,8 @@ class ArticleList extends React.Component<Props> {
         <Footer id={id} />
         <AddArticle articleList={articleList} />
         <ListGroup>
-          {articles.map(article => {
-            return article
-              ? <ListGroupItem
-                  key={article.id}
-                  bsStyle={article.completed ? 'success' : 'info'}
-                >
-                  <Article key={article.id} {...article} />
-                </ListGroupItem>
-              : <br />;
+          {articles.map((article: articleType) => {
+            return <Article key={article.id} {...article} />;
           })}
         </ListGroup>
       </Jumbotron>
