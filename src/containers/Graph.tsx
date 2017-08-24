@@ -126,7 +126,6 @@ class Graph extends React.Component<Props> {
         }
       ]
     };
-    console.log(data2);
 
     return (
       <div>
