@@ -42,7 +42,7 @@ class App extends React.Component<{}, State> {
       
         <div className="container-fluid">
         <PageHeader>
-          <h1>wispy</h1>
+          wispy
         </PageHeader>
         <Canvas /><Graph />
         <Logout />

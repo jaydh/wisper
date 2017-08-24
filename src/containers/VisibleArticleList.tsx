@@ -28,7 +28,7 @@ const getArticlesWithProject = (
       }) as List<articleType>;
       break;
     default:
-      articlesInProject = articles.filter((article: articleType)  => {
+      articlesInProject = articles.filter((article: articleType) => {
         if (article) {
           const projects = article.projects;
           if (projects) {
@@ -72,9 +72,11 @@ function mapStateToProps(state: any, ownProps: any) {
   const filters = state
     .get('articleLists')
     .find((list: ArticleListType) => list.id === ownProps.id);
+  const articleListNum = state.get('articleLists').size;
   return {
     articles: getVisibleArticles(state.get('articles'), filters),
-    filters
+    filters,
+    articleListNum
   };
 }
 

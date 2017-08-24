@@ -15,6 +15,7 @@ interface Props {
   articles: List<articleType>;
   id: string;
   filters: ArticleListType;
+  articleListNum: number;
 }
 
 class ArticleList extends React.Component<Props> {
@@ -32,11 +33,11 @@ class ArticleList extends React.Component<Props> {
           {articles.map(article => {
             return article
               ? <ListGroupItem
-                key={article.id}
-                bsStyle={article.completed ? 'success' : 'info'}
-              >
-                <Article key={article.id} {...article} />
-              </ListGroupItem>
+                  key={article.id}
+                  bsStyle={article.completed ? 'success' : 'info'}
+                >
+                  <Article key={article.id} {...article} />
+                </ListGroupItem>
               : <br />;
           })}
         </ListGroup>
@@ -47,13 +48,14 @@ class ArticleList extends React.Component<Props> {
 
 class OuterArticleList extends React.Component<Props> {
   render() {
+    const { articleListNum } = this.props;
     return (
       <Rnd
         className="resizable-container"
         default={{
-          x: 0,
+          x: innerWidth * 0.7 / articleListNum * (articleListNum - 1) ,
           y: 0,
-          width: innerWidth * 0.7,
+          width: innerWidth * 0.7 / articleListNum,
           height: innerHeight * 0.6
         }}
         z={0}
