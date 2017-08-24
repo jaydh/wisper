@@ -1,13 +1,13 @@
 import createReducer from './createReducer';
 import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
 import { AddArticleFromServer } from '../actions/syncArticles';
-import { List } from 'immutable';
+import { List, fromJS } from 'immutable';
 
 function addArticleToProject(
   projectState: List<String>,
   action: AddArticleToProjectFulfilled
 ) {
-  return projectState.includes(action.project.toLocaleLowerCase())
+  return projectState.includes(action.project)
     ? projectState
     : projectState.push(action.project);
 }
@@ -17,10 +17,12 @@ function addArticleFromServer(
   action: AddArticleFromServer
 ) {
   if (action.article) {
-    const projects = action.article.projects;
+    const projects = fromJS(action.article.projects);
     if (projects) {
-      const projectIDs = Object.keys(projects).map(key => projects[key].toLocaleLowerCase());
-      const newProjectIDs = projectIDs.filter(key => !projectState.contains(key));
+      const projectIDs = projects.valueSeq();
+      const newProjectIDs = projectIDs.filter(
+        (key: string) => !projectState.contains(key)
+      );
       return projectState.concat(newProjectIDs);
     }
   }
