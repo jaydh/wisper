@@ -30,7 +30,7 @@ class Article extends React.Component<Props, State> {
       <div>
         <a href={link} target="_blank">
           {' '}{metadata && (metadata.title || metadata.ogTitle)
-            ? metadata.title || metadata.ogTitle
+            ? metadata.ogTitle || metadata.title
             : link}
         </a>
         <Button
