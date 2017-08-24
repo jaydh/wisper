@@ -5,7 +5,6 @@ import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './components/App';
 import appReducer from './reducers/index';
-import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 // let { persistStore, autoRehydrate } = require('redux-persist-immutable');
 import { initFirebase, auth } from './firebase';
@@ -16,7 +15,7 @@ bootstrap();
 
 let store = createStore(
   appReducer,
-  composeWithDevTools(applyMiddleware(thunk, logger))
+  composeWithDevTools(applyMiddleware(thunk))
 );
 initFirebase();
 // let persistor = persistStore(store);
