@@ -8,7 +8,7 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import { Button, Jumbotron, ListGroup } from 'react-bootstrap';
+import { Jumbotron, ListGroup } from 'react-bootstrap';
 const Rnd = require('react-rnd').default;
 
 interface Props {
@@ -24,9 +24,6 @@ class ArticleList extends React.Component<Props> {
     const { articles, id, articleList } = this.props;
     return (
       <Jumbotron className="article-list-container">
-        <Button className="drag" bsStyle="drag">
-          {' '}
-        </Button>
         <h4>
           Count: {articles.size}
         </h4>
@@ -51,6 +48,10 @@ class OuterArticleList extends React.Component<Props> {
     return (
       <Rnd
         className="resizable-container"
+        style={{
+          overflowY: 'auto',
+          overflowX: 'hidden'
+        }}
         default={{
           x: width * order,
           y: 0,
@@ -59,22 +60,28 @@ class OuterArticleList extends React.Component<Props> {
         }}
         z={order}
         bounds=".canvas"
-        style={{
-          overflowY: 'auto',
-          overflowX: 'hidden'
-        }}
         dragHandlerClassName=".drag"
         enableResizing={{
           top: false,
-          right: true,
-          bottom: true,
-          left: true,
+          right: false,
+          bottom: false,
+          left: false,
           topRight: false,
           bottomRight: true,
-          bottomLeft: true,
+          bottomLeft: false,
           topLeft: false
         }}
+        resizeHandlerStyles={{
+          bottomRight: {
+            border: 'solid #1290bf',
+            borderWidth: '0 3px 3px 0',
+            display: 'inline-block',
+            padding: '3px',
+            position: 'fixed'
+          }
+        }}
       >
+        <i className="drag" />
         <ArticleList {...this.props} />
       </Rnd>
     );

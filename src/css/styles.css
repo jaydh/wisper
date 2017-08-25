@@ -35,15 +35,15 @@
   color: white;
 }
 
-.btn-drag {
+.drag {
+  border: solid var(--blue);
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
   position: fixed;
-  background-color: var(--blue);
-  height: 1em;
-  width: 2em;
-  top: 1em;
-  left: 1em;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
 }
-
 .btn-submit {
   background-color: var(--orange);
   height: 2em;
@@ -69,9 +69,6 @@
 .article-list-container {
   background-color: var(--gray);
   margin-bottom: 0;
-  border-left: 2px var(--white);
-  border-radius: 3px;
-  border-left-style: ridge;
 }
 
 .page-header {
