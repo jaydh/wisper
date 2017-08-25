@@ -46,7 +46,7 @@ class AddArticle extends React.Component<Props, State> {
     const { dispatch } = this.props;
     if (this.getValidationState() === 'success') {
       dispatch(addArticle(this.state.value, project));
-      this.setState({value: ''})
+      this.setState({ value: '' });
     } else {
       alert('Please enter valid link');
     }
@@ -55,9 +55,7 @@ class AddArticle extends React.Component<Props, State> {
   render() {
     const { articleList: { projectFilter } } = this.props;
     const project =
-      projectFilter !== 'NONE' && projectFilter !== 'ALL'
-        ? projectFilter
-        : '';
+      projectFilter !== 'NONE' && projectFilter !== 'ALL' ? projectFilter : '';
 
     return (
       <form
