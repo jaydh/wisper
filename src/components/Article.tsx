@@ -36,8 +36,8 @@ class Article extends React.Component<Props, State> {
           {metadata && (metadata.title || metadata.ogTitle)
             ? metadata.ogTitle || metadata.title
             : link}
-        </a>{' '}
-        {' '}
+        </a>
+        <ToggleArticle id={id} />
         <Button
           bsStyle="more"
           onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
@@ -51,8 +51,6 @@ class Article extends React.Component<Props, State> {
           <div>
             {!fetching && metadata ? fromJS(metadata) : 'Fetching metadata'}
             Date added:{dateAdded} <br />
-            Status: {completed.toString()} <br />
-            <ToggleArticle id={id} />
             <AddArticleToProject id={id} />
             <DeleteArticle id={id} />
           </div>

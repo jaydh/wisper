@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { toggleArticleRead } from '../actions/toggleArticleRead';
+import { Button } from 'react-bootstrap';
 
 export interface Props {
   onToggleClick: any;
@@ -12,15 +13,14 @@ class ToggleArticleRead extends React.Component<Props> {
     const { onToggleClick } = this.props;
     return (
       <div>
-        <button
-          type="button"
-          className="btn"
+        <Button
+          bsStyle="more"
           onClick={() => {
             onToggleClick();
           }}
         >
-          Toggle
-        </button>
+          {'\''}
+        </Button>
       </div>
     );
   }
