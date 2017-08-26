@@ -2,7 +2,7 @@ import * as React from 'react';
 import AddArticleToProject from '../containers/AddArticleToProject';
 import DeleteArticle from '../containers/DeleteArticle';
 import ToggleArticle from '../containers/ToggleArticle';
-import { Button, Collapse, ListGroupItem } from 'react-bootstrap';
+import { Glyphicon, Button, Collapse, ListGroupItem } from 'react-bootstrap';
 import { fromJS } from 'immutable';
 
 interface Props {
@@ -32,24 +32,45 @@ class Article extends React.Component<Props, State> {
         {
           // Todo: add onclick for updating lastread}
         }
-        <a href={link} target="_blank">
-          {metadata && (metadata.title || metadata.ogTitle)
-            ? metadata.ogTitle || metadata.title
-            : link}
-        </a>
-        <ToggleArticle id={id} />
-        <Button
-          bsStyle="more"
-          onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
-        >
-          {
-            // placeholder for SVG
-            ''
-          }
-        </Button>
+        <span>
+          <ToggleArticle id={id} />
+          <Button
+            bsStyle="more"
+            bsSize="xsmall"
+            onClick={() =>
+              this.setState({ isMenuOpen: !this.state.isMenuOpen })}
+          >
+            <Glyphicon glyph="menu-hamburger" />
+          </Button>
+          <Button
+            bsStyle="more"
+            bsSize="xsmall"
+            onClick={() =>
+              this.setState({ isMenuOpen: !this.state.isMenuOpen })}
+          >
+            <Glyphicon glyph="option-vertical" />
+          </Button>
+          <a href={link} target="_blank">
+            {metadata && (metadata.title || metadata.ogTitle)
+              ? metadata.ogTitle || metadata.title
+              : link}
+          </a>
+        </span>
         <Collapse in={this.state.isMenuOpen}>
           <div>
-            {!fetching && metadata ? fromJS(metadata) : 'Fetching metadata'}
+            {/*add filtering inside this map*/}
+            {!fetching && metadata
+              ? fromJS(metadata).keySeq().map((t: string) => {
+                  return (
+                    <p
+                      key={t}
+                      style={{ fontSize: '.9em' }}
+                    >
+                      {t}: {fromJS(metadata).get(t)} <br />
+                    </p>
+                  );
+                })
+              : 'Fetching metadata'}
             Date added:{dateAdded} <br />
             <AddArticleToProject id={id} />
             <DeleteArticle id={id} />

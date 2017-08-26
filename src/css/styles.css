@@ -31,29 +31,9 @@ p {
 }
 
 .btn-more {
-  width: .5em;
-  height: 100%;
+  float:right;
+  margin: .2em;
   background-color: var(--lightBlue);
-  color: white;
-}
-
-.drag {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 1em;
-  left: 1em;
-  float: left;
-  width: 1.5em;
-  height: 1.5em;
-  border: solid var(--blue);
-  border-radius: 10px 0px;
-  border-width: 0 5px 5px 0;
-  transform: rotate(180deg);
-  -webkit-transform: rotate(180deg);
-}
-
-.resize {
-  position: sticky;
 }
 
 .btn-submit {
@@ -73,6 +53,25 @@ p {
   background-color: var(--green);
   position: absolute;
   right: 1em;
+}
+
+.drag {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 1em;
+  left: 1em;
+  float: left;
+  width: 1.5em;
+  height: 1.5em;
+  border: solid var(--blue);
+  border-radius: 10px 0px;
+  border-width: 0 5px 5px 0;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+
+.resize {
+  position: sticky;
 }
 
 .canvas {

@@ -58,7 +58,7 @@ class OuterArticleList extends React.Component<Props> {
           x: 0,
           y: 0,
           width: width,
-          height: innerHeight * 0.8
+          height: innerHeight * 0.5
         }}
         z={order}
         bounds=".canvas"
