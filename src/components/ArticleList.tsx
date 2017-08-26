@@ -51,10 +51,8 @@ class OuterArticleList extends React.Component<Props> {
       <Rnd
         className="resizable-container"
         style={{
-          overflowY: 'scroll',
-          overflowX: 'hidden',
+          overflowY: 'auto',
           '-webkit-overflow-scrolling': 'touch'
-
         }}
         default={{
           x: 0,
@@ -77,11 +75,15 @@ class OuterArticleList extends React.Component<Props> {
         }}
         resizeHandlerStyles={{
           bottomRight: {
+            zIndex: '100',
             border: 'solid #1290bf',
             borderWidth: '0 6px 6px 0',
-            display: 'inline-block',
+            bottom: '1em',
+            right: '1em',
             padding: '3px',
-            position: 'fixed'
+            position: 'sticky',
+            'webkit-position': '-webkit-sticky',
+            float: 'right'
           }
         }}
       >

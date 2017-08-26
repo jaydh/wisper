@@ -60,7 +60,7 @@ export default class Canvas extends React.Component<Props, State> {
         >
           Analytics
         </Button>
-        <Jumbotron className="canvas" style={{ height: innerHeight * 0.9 }}>
+        <Jumbotron className="canvas" style={{ height: innerHeight }}>
           {articleLists.map((articleList: ArticleList) => {
             return (
               <VisibleArticleList key={articleList.id} id={articleList.id} />
