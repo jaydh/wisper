@@ -38,7 +38,8 @@ p {
 }
 
 .drag {
-  position: -webkit-sticky;
+  position: sticky;
+  -webkit-position: -webkit-sticky;
   top: 1em;
   left: 1em;  
   float: left;
