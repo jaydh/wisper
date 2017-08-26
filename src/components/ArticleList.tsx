@@ -51,8 +51,10 @@ class OuterArticleList extends React.Component<Props> {
       <Rnd
         className="resizable-container"
         style={{
-          overflowY: 'auto',
-          overflowX: 'hidden'
+          overflowY: 'scroll',
+          overflowX: 'hidden',
+          '-webkit-overflow-scrolling': 'touch'
+
         }}
         default={{
           x: 0,
