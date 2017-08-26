@@ -74,7 +74,7 @@ class OuterArticleList extends React.Component<Props> {
         resizeHandlerStyles={{
           bottomRight: {
             border: 'solid #1290bf',
-            borderWidth: '0 3px 3px 0',
+            borderWidth: '0 6px 6px 0',
             display: 'inline-block',
             padding: '3px',
             position: 'fixed'
