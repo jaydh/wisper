@@ -9,6 +9,7 @@ import {
   ArticleList as ArticleListType
 } from '../constants/StoreState';
 import { Jumbotron, ListGroup } from 'react-bootstrap';
+import DeleteArticleList from '../containers/DeleteArticleList';
 const Rnd = require('react-rnd').default;
 
 interface Props {
@@ -24,6 +25,7 @@ class ArticleList extends React.Component<Props> {
     const { articles, id, articleList } = this.props;
     return (
       <Jumbotron className="article-list-container">
+        <DeleteArticleList id={id} />
         <h4>
           Count: {articles.size}
         </h4>
@@ -53,7 +55,7 @@ class OuterArticleList extends React.Component<Props> {
           overflowX: 'hidden'
         }}
         default={{
-          x: width * order,
+          x: 0,
           y: 0,
           width: width,
           height: innerHeight * 0.8

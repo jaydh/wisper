@@ -4,7 +4,7 @@ export interface AddArticleList {
   type: 'ADD_ARTICLE_LIST';
 }
 
-export function AddArticleList(): AddArticleList {
+export function addArticleList(): AddArticleList {
   return {
     type: 'ADD_ARTICLE_LIST'
   };
@@ -15,7 +15,7 @@ export interface DeleteArticleList {
   id: string;
 }
 
-export function DeleteArticleList(id: string): DeleteArticleList {
+export function deleteArticleList(id: string): DeleteArticleList {
   return {
     type: 'DELETE_ARTICLE_LIST',
     id
