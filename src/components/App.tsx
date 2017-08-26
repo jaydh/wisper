@@ -42,14 +42,13 @@ class App extends React.Component<{}, State> {
         <div className="container-fluid">
         <PageHeader>
           wispy
-          <br/>
-          <small>
-          Under active development; Last updated: {gitDate.toLocaleString()} <br />
-          Source: <a>https://github.com/jaydh/wispy</a>
-        </small>
-        </PageHeader>
+          </PageHeader>
         <Canvas />
         <Logout />
+        <p>
+          Under active development; Last updated: {gitDate.toLocaleString()} <br />
+          Source: <a>https://github.com/jaydh/wispy</a>
+          </p>
         </div>
     );
   }
