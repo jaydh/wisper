@@ -39,7 +39,7 @@ p {
 
 .drag {
   position: -webkit-sticky;
-  -webkit-position: -webkit-sticky;
+  position: sticky;
   top: 1em;
   left: 1em;
   float: left;
@@ -51,6 +51,11 @@ p {
   transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
 }
+
+.resize {
+  position: sticky;
+}
+
 .btn-submit {
   background-color: var(--orange);
   height: 2em;

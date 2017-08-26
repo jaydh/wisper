@@ -73,6 +73,9 @@ class OuterArticleList extends React.Component<Props> {
           bottomLeft: false,
           topLeft: false
         }}
+        resizeHandlerClasses={{
+          bottomRight: 'resize'
+        }}
         resizeHandlerStyles={{
           bottomRight: {
             zIndex: '100',
@@ -82,7 +85,6 @@ class OuterArticleList extends React.Component<Props> {
             right: '1em',
             padding: '3px',
             position: '-webkit-sticky',
-            'webkit-position': '-webkit-sticky',
             float: 'right'
           }
         }}
