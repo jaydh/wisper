@@ -81,7 +81,7 @@ class OuterArticleList extends React.Component<Props> {
             bottom: '1em',
             right: '1em',
             padding: '3px',
-            position: 'sticky',
+            position: '-webkit-sticky',
             'webkit-position': '-webkit-sticky',
             float: 'right'
           }
