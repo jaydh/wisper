@@ -82,13 +82,7 @@ function sortArticles(articleState: List<articleType>, action: SortArticles) {
             b.metadata && (b.metadata.title || b.metadata.ogTitle)
               ? b.metadata.ogTitle || b.metadata.title
               : b.link;
-          if (aa.localeCompare(bb) < 1) {
-            return -1;
-          }
-          if (aa.localeCompare(bb) > 1) {
-            return 1;
-          }
-          return 0;
+          return aa.localeCompare(bb);
         })
         .toList();
     default:
