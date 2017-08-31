@@ -1,10 +1,11 @@
-import { connect } from 'react-redux';
-import ArticleList from '../components/ArticleList';
-import { List } from 'immutable';
+import { connect } from "react-redux";
+import { sortArticles } from "../actions/sortArticles";
+import ArticleList from "../components/ArticleList";
+import { List } from "immutable";
 import {
   Article as articleType,
   ArticleList as ArticleListType
-} from '../constants/StoreState';
+} from "../constants/StoreState";
 // error when typing articleInProj with List<articleType>;
 
 const getArticlesWithProject = (
@@ -13,10 +14,10 @@ const getArticlesWithProject = (
 ) => {
   let articlesInProject;
   switch (projectFilter) {
-    case 'ALL':
+    case "ALL":
       articlesInProject = articles;
       break;
-    case 'NONE':
+    case "NONE":
       articlesInProject = articles.filter((article: articleType) => {
         if (article) {
           const projects = article.projects;
@@ -53,33 +54,43 @@ const getVisibleArticles = (
 
   const articlesInProject = getArticlesWithProject(articles, projectFilter);
   switch (visibilityFilter) {
-    case 'SHOW_ALL':
+    case "SHOW_ALL":
       return articlesInProject;
-    case 'SHOW_COMPLETED':
+    case "SHOW_COMPLETED":
       return articlesInProject.filter(t => {
         return t ? t.completed : false;
       }) as List<articleType>;
-    case 'SHOW_ACTIVE':
+    case "SHOW_ACTIVE":
       return articlesInProject.filter(t => {
         return t ? !t.completed : false;
       }) as List<articleType>;
     default:
-      throw new Error('Unknown filter: ' + visibilityFilter);
+      throw new Error("Unknown filter: " + visibilityFilter);
   }
 };
 
 function mapStateToProps(state: any, ownProps: any) {
   const articleList = state
-    .get('articleLists')
+    .get("articleLists")
     .find((list: ArticleListType) => list.id === ownProps.id);
   return {
-    articles: getVisibleArticles(state.get('articles'), articleList),
+    articles: getVisibleArticles(state.get("articles"), articleList),
     order: articleList.order,
-    articleListNum: state.get('articleLists').size,
+    articleListNum: state.get("articleLists").size,
     articleList
   };
 }
 
-const VisibleArticleList = connect(mapStateToProps, {})(ArticleList);
+function mapDispatchToProps(dispatch: any, ownProps: any) {
+  return {
+    onClick: (filter: string) => {
+      dispatch(sortArticles(filter));
+    }
+  };
+}
+
+const VisibleArticleList = connect(mapStateToProps, mapDispatchToProps)(
+  ArticleList
+);
 
 export default VisibleArticleList;

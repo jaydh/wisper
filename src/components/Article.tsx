@@ -58,20 +58,20 @@ class Article extends React.Component<Props, State> {
         </span>
         <Collapse in={this.state.isMenuOpen}>
           <div>
+          Date added:{dateAdded} <br />
             {/*add filtering inside this map*/}
             {!fetching && metadata
               ? fromJS(metadata).keySeq().map((t: string) => {
                   return (
-                    <p
+                    <h5
                       key={t}
                       style={{ fontSize: '.9em' }}
                     >
                       {t}: {fromJS(metadata).get(t)} <br />
-                    </p>
+                    </h5>
                   );
                 })
               : 'Fetching metadata'}
-            Date added:{dateAdded} <br />
             <AddArticleToProject id={id} />
             <DeleteArticle id={id} />
           </div>

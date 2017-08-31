@@ -3,7 +3,7 @@ export interface Article {
   id: string;
   link: string;
 
-  metadata?: Object;
+  metadata?: any;
   dateAdded: string;
   dateRead?: string;
   lastViewed?: string;

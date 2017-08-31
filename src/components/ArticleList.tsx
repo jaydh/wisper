@@ -8,7 +8,12 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from "../constants/StoreState";
-import { Jumbotron, ListGroup } from "react-bootstrap";
+import {
+  DropdownButton,
+  MenuItem,
+  Jumbotron,
+  ListGroup
+} from "react-bootstrap";
 import DeleteArticleList from "../containers/DeleteArticleList";
 const Rnd = require("react-rnd").default;
 
@@ -18,14 +23,28 @@ interface Props {
   id: string;
   articleList: ArticleListType;
   articleListNum: number;
+  onClick: any;
 }
 
 class ArticleList extends React.Component<Props> {
   render() {
-    const { articles, id, articleList } = this.props;
+    const { articles, id, articleList, onClick } = this.props;
     return (
       <Jumbotron className="article-list-container">
         <DeleteArticleList id={id} />
+        <DropdownButton title="Sort" id="bg-nested-dropdown" bsSize="xs">
+          <MenuItem
+            eventKey="1"
+            onClick={() => {
+              onClick("date");
+            }}
+          >
+            by date added
+          </MenuItem>
+          <MenuItem eventKey="2" onClick={() => onClick("title")}>
+            by title
+          </MenuItem>
+        </DropdownButton>
         <h4>Count: {articles.size}</h4>
         <ProjectSelector id={id} />
         <Footer id={id} />

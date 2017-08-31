@@ -1,10 +1,11 @@
-import { AddArticleFulfilled } from '../actions/addArticle';
-import { DeleteArticleFulfilled } from '../actions/deleteArticle';
-import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
-import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
-import { Article as articleType } from '../constants/StoreState';
-import { List } from 'immutable';
-import createReducer from './createReducer';
+import { AddArticleFulfilled } from "../actions/addArticle";
+import { DeleteArticleFulfilled } from "../actions/deleteArticle";
+import { ToggleArticleReadFulfilled } from "../actions/toggleArticleRead";
+import { AddArticleToProjectFulfilled } from "../actions/addArticleToProject";
+import { SortArticles } from "../actions/sortArticles";
+import { Article as articleType } from "../constants/StoreState";
+import { List } from "immutable";
+import createReducer from "./createReducer";
 
 const now = new Date();
 
@@ -53,6 +54,40 @@ function addArticleFromServer(articleState: List<articleType>, action: any) {
   return check ? articleState.push(action.article) : articleState;
 }
 
+function sortArticles(articleState: List<articleType>, action: SortArticles) {
+  switch (action.filter) {
+    case "date":
+      return articleState
+        .sort((a, b) => {
+          const aa = new Date(a.dateAdded);
+          const bb = new Date(b.dateAdded);
+          if (aa < bb) return -1;
+          if (aa > bb) return 1;
+          return 0;
+        })
+        .toList();
+    case "title":
+      return articleState
+        .sort((a, b) => {
+          const aa =
+            a.metadata && (a.metadata.title || a.metadata.ogTitle)
+              ? a.metadata.ogTitle || a.metadata.title
+              : a.link;
+
+          const bb =
+            b.metadata && (b.metadata.title || b.metadata.ogTitle)
+              ? b.metadata.ogTitle || b.metadata.title
+              : b.link;
+          if (aa.localeCompare(bb) < 1) return -1;
+          if (aa.localeCompare(bb) > 1) return 1;
+          return 0;
+        })
+        .toList();
+    default:
+      return articleState;
+  }
+}
+
 function deleteArticleFromServer(articleState: List<articleType>, action: any) {
   return articleState.filter(
     article => (article ? article.id !== action.article.id : false)
@@ -99,7 +134,8 @@ const articles = createReducer(List(), {
   ADD_ARTICLE_TO_PROJECT: addArticleToProject,
   UPDATE_ARTICLE: updateArticle,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
-  DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer
+  DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,
+  SORT_ARTICLES: sortArticles
 });
 
 export default articles;
