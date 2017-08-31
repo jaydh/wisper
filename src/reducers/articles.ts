@@ -1,11 +1,11 @@
-import { AddArticleFulfilled } from "../actions/addArticle";
-import { DeleteArticleFulfilled } from "../actions/deleteArticle";
-import { ToggleArticleReadFulfilled } from "../actions/toggleArticleRead";
-import { AddArticleToProjectFulfilled } from "../actions/addArticleToProject";
-import { SortArticles } from "../actions/sortArticles";
-import { Article as articleType } from "../constants/StoreState";
-import { List } from "immutable";
-import createReducer from "./createReducer";
+import { AddArticleFulfilled } from '../actions/addArticle';
+import { DeleteArticleFulfilled } from '../actions/deleteArticle';
+import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
+import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
+import { SortArticles } from '../actions/sortArticles';
+import { Article as articleType } from '../constants/StoreState';
+import { List } from 'immutable';
+import createReducer from './createReducer';
 
 const now = new Date();
 
@@ -56,17 +56,21 @@ function addArticleFromServer(articleState: List<articleType>, action: any) {
 
 function sortArticles(articleState: List<articleType>, action: SortArticles) {
   switch (action.filter) {
-    case "date":
+    case 'date':
       return articleState
         .sort((a, b) => {
           const aa = new Date(a.dateAdded);
           const bb = new Date(b.dateAdded);
-          if (aa < bb) return -1;
-          if (aa > bb) return 1;
+          if (aa < bb) {
+            return -1;
+          }
+          if (aa > bb) {
+            return 1;
+          }
           return 0;
         })
         .toList();
-    case "title":
+    case 'title':
       return articleState
         .sort((a, b) => {
           const aa =
@@ -78,8 +82,12 @@ function sortArticles(articleState: List<articleType>, action: SortArticles) {
             b.metadata && (b.metadata.title || b.metadata.ogTitle)
               ? b.metadata.ogTitle || b.metadata.title
               : b.link;
-          if (aa.localeCompare(bb) < 1) return -1;
-          if (aa.localeCompare(bb) > 1) return 1;
+          if (aa.localeCompare(bb) < 1) {
+            return -1;
+          }
+          if (aa.localeCompare(bb) > 1) {
+            return 1;
+          }
           return 0;
         })
         .toList();

@@ -1,21 +1,21 @@
-import * as React from "react";
-import Article from "./Article";
-import AddArticle from "../containers/AddArticle";
-import Footer from "./ArticleListFooter";
-import ProjectSelector from "../containers/ProjectSelector";
-import { List } from "immutable";
+import * as React from 'react';
+import Article from './Article';
+import AddArticle from '../containers/AddArticle';
+import Footer from './ArticleListFooter';
+import ProjectSelector from '../containers/ProjectSelector';
+import { List } from 'immutable';
 import {
   Article as articleType,
   ArticleList as ArticleListType
-} from "../constants/StoreState";
+} from '../constants/StoreState';
 import {
   DropdownButton,
   MenuItem,
   Jumbotron,
   ListGroup
-} from "react-bootstrap";
-import DeleteArticleList from "../containers/DeleteArticleList";
-const Rnd = require("react-rnd").default;
+} from 'react-bootstrap';
+import DeleteArticleList from '../containers/DeleteArticleList';
+const Rnd = require('react-rnd').default;
 
 interface Props {
   articles: List<articleType>;
@@ -36,12 +36,12 @@ class ArticleList extends React.Component<Props> {
           <MenuItem
             eventKey="1"
             onClick={() => {
-              onClick("date");
+              onClick('date');
             }}
           >
             by date added
           </MenuItem>
-          <MenuItem eventKey="2" onClick={() => onClick("title")}>
+          <MenuItem eventKey="2" onClick={() => onClick('title')}>
             by title
           </MenuItem>
         </DropdownButton>
@@ -68,9 +68,9 @@ class OuterArticleList extends React.Component<Props> {
       <Rnd
         className="resizable-container"
         style={{
-          cursor: "auto",
-          overflowY: "auto",
-          "-webkit-overflow-scrolling": "touch"
+          cursor: 'auto',
+          overflowY: 'auto',
+          '-webkit-overflow-scrolling': 'touch'
         }}
         default={{
           x: 0,
@@ -92,18 +92,18 @@ class OuterArticleList extends React.Component<Props> {
           topLeft: false
         }}
         resizeHandlerClasses={{
-          bottomRight: "resize"
+          bottomRight: 'resize'
         }}
         resizeHandlerStyles={{
           bottomRight: {
-            zIndex: "100",
-            border: "solid #1290bf",
-            borderWidth: "0 6px 6px 0",
-            bottom: "1em",
-            right: "1em",
-            padding: "3px",
-            position: "-webkit-sticky",
-            float: "right"
+            zIndex: '100',
+            border: 'solid #1290bf',
+            borderWidth: '0 6px 6px 0',
+            bottom: '1em',
+            right: '1em',
+            padding: '3px',
+            position: '-webkit-sticky',
+            float: 'right'
           }
         }}
       >

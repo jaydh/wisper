@@ -27,6 +27,13 @@ class Article extends React.Component<Props, State> {
 
   render() {
     const { id, completed, link, dateAdded, metadata, fetching } = this.props;
+    const visibleMeta = fromJS([
+      'ogTitle',
+      'title',
+      'ogSiteName',
+      'ogDescription',
+      'description'
+    ]);
     return (
       <ListGroupItem bsStyle={completed ? 'success' : 'info'}>
         {
@@ -42,36 +49,32 @@ class Article extends React.Component<Props, State> {
           >
             <Glyphicon glyph="menu-hamburger" />
           </Button>
-          <Button
-            bsStyle="more"
-            bsSize="xsmall"
-            onClick={() =>
-              this.setState({ isMenuOpen: !this.state.isMenuOpen })}
-          >
-            <Glyphicon glyph="option-vertical" />
-          </Button>
           <a href={link} target="_blank">
-            {metadata && (metadata.title || metadata.ogTitle)
-              ? metadata.ogTitle || metadata.title
-              : link}
+            {metadata && (metadata.title || metadata.ogTitle) ? (
+              metadata.ogTitle || metadata.title
+            ) : (
+              link
+            )}
           </a>
         </span>
         <Collapse in={this.state.isMenuOpen}>
           <div>
-          Date added:{dateAdded} <br />
+            Date added:{dateAdded} <br />
             {/*add filtering inside this map*/}
-            {!fetching && metadata
-              ? fromJS(metadata).keySeq().map((t: string) => {
+            {!fetching && metadata ? (
+              fromJS(metadata)
+                .keySeq()
+                .filter((t: string) => visibleMeta.includes(t))
+                .map((t: string) => {
                   return (
-                    <h5
-                      key={t}
-                      style={{ fontSize: '.9em' }}
-                    >
+                    <h5 key={t} style={{ fontSize: '.9em' }}>
                       {t}: {fromJS(metadata).get(t)} <br />
                     </h5>
                   );
                 })
-              : 'Fetching metadata'}
+            ) : (
+              'Fetching metadata'
+            )}
             <AddArticleToProject id={id} />
             <DeleteArticle id={id} />
           </div>
