@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { sortArticles } from '../actions/sortArticles';
 import ArticleList from '../components/ArticleList';
 import { List } from 'immutable';
 import {
@@ -81,16 +80,6 @@ function mapStateToProps(state: any, ownProps: any) {
   };
 }
 
-function mapDispatchToProps(dispatch: any, ownProps: any) {
-  return {
-    onClick: (filter: string) => {
-      dispatch(sortArticles(filter));
-    }
-  };
-}
-
-const VisibleArticleList = connect(mapStateToProps, mapDispatchToProps)(
-  ArticleList
-);
+const VisibleArticleList = connect(mapStateToProps)(ArticleList);
 
 export default VisibleArticleList;

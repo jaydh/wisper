@@ -3,17 +3,13 @@ import Article from './Article';
 import AddArticle from '../containers/AddArticle';
 import Footer from './ArticleListFooter';
 import ProjectSelector from '../containers/ProjectSelector';
+import Sort from '../containers/Sort';
 import { List } from 'immutable';
 import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import {
-  DropdownButton,
-  MenuItem,
-  Jumbotron,
-  ListGroup
-} from 'react-bootstrap';
+import { Jumbotron, ListGroup, ButtonGroup } from 'react-bootstrap';
 import DeleteArticleList from '../containers/DeleteArticleList';
 const Rnd = require('react-rnd').default;
 
@@ -28,25 +24,17 @@ interface Props {
 
 class ArticleList extends React.Component<Props> {
   render() {
-    const { articles, id, articleList, onClick } = this.props;
+    const { articles, id, articleList } = this.props;
     return (
       <Jumbotron className="article-list-container">
         <DeleteArticleList id={id} />
-        <DropdownButton title="Sort" id="bg-nested-dropdown" bsSize="xs">
-          <MenuItem
-            eventKey="1"
-            onClick={() => {
-              onClick('date');
-            }}
-          >
-            by date added
-          </MenuItem>
-          <MenuItem eventKey="2" onClick={() => onClick('title')}>
-            by title
-          </MenuItem>
-        </DropdownButton>
-        <h4>Count: {articles.size}</h4>
-        <ProjectSelector id={id} />
+
+        <ButtonGroup>
+          <ProjectSelector id={id} />
+          <Sort />
+        </ButtonGroup>
+
+        <h5>Count: {articles.size}</h5>
         <Footer id={id} />
         <AddArticle articleList={articleList} />
         <ListGroup>
