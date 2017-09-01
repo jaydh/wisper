@@ -85,6 +85,20 @@ function sortArticles(articleState: List<articleType>, action: SortArticles) {
           return aa.localeCompare(bb);
         })
         .toList();
+    case 'dateRead':
+      return articleState
+        .sort((a, b) => {
+          const aa = a.dateRead ? new Date(a.dateRead) : new Date();
+          const bb = b.dateRead ? new Date(b.dateRead) : new Date();
+          if (aa < bb) {
+            return -1;
+          }
+          if (aa > bb) {
+            return 1;
+          }
+          return 0;
+        })
+        .toList();
     default:
       return articleState;
   }

@@ -27,6 +27,9 @@ class Sort extends React.Component<Props> {
         <MenuItem eventKey="2" onClick={() => onClick('title')}>
           by title
         </MenuItem>
+        <MenuItem eventKey="3" onClick={() => onClick('dateRead')}>
+          by date read
+        </MenuItem>
       </DropdownButton>
     );
   }

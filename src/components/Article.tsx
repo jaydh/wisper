@@ -11,6 +11,7 @@ interface Props {
   link: string;
   metadata?: any;
   dateAdded: string;
+  dateRead?: string;
   fetching?: boolean;
 }
 interface State {
@@ -26,7 +27,15 @@ class Article extends React.Component<Props, State> {
   }
 
   render() {
-    const { id, completed, link, dateAdded, metadata, fetching } = this.props;
+    const {
+      id,
+      completed,
+      link,
+      dateAdded,
+      dateRead,
+      metadata,
+      fetching
+    } = this.props;
     const visibleMeta = fromJS([
       'ogTitle',
       'title',
@@ -59,7 +68,10 @@ class Article extends React.Component<Props, State> {
         </span>
         <Collapse in={this.state.isMenuOpen}>
           <div>
-            <h5>Date added:{dateAdded}</h5> <br />
+            <h5>
+              Date added: {dateAdded} <br />
+              {dateRead ? 'Date Read: ' + dateRead : ' '}
+            </h5>
             {!fetching && metadata ? (
               fromJS(metadata)
                 .keySeq()
