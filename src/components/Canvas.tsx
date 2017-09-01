@@ -54,10 +54,7 @@ export default class Canvas extends React.Component<Props, State> {
         <Button bsStyle="addList" onClick={() => AddArticleList()}>
           Add List
         </Button>
-        <Button
-          bsStyle="analytics"
-          onClick={() => this.open()}
-        >
+        <Button bsStyle="analytics" onClick={() => this.open()}>
           Analytics
         </Button>
         <Jumbotron className="canvas" style={{ height: innerHeight }}>
