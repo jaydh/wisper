@@ -13,10 +13,10 @@ const getArticlesWithProject = (
 ) => {
   let articlesInProject;
   switch (projectFilter) {
-    case 'ALL':
+    case 'All':
       articlesInProject = articles;
       break;
-    case 'NONE':
+    case 'None':
       articlesInProject = articles.filter((article: articleType) => {
         if (article) {
           const projects = article.projects;
@@ -53,13 +53,13 @@ const getVisibleArticles = (
 
   const articlesInProject = getArticlesWithProject(articles, projectFilter);
   switch (visibilityFilter) {
-    case 'SHOW_ALL':
+    case 'All':
       return articlesInProject;
-    case 'SHOW_COMPLETED':
+    case 'Completed':
       return articlesInProject.filter(t => {
         return t ? t.completed : false;
       }) as List<articleType>;
-    case 'SHOW_ACTIVE':
+    case 'Active':
       return articlesInProject.filter(t => {
         return t ? !t.completed : false;
       }) as List<articleType>;

@@ -46,20 +46,20 @@ class ProjectSelector extends React.Component<Props> {
   }
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: Props) => {
-  return {
-    onClick: (filter: string) => {
-      dispatch(setProjectFilter(filter, ownProps.id));
-    }
-  };
-};
-
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
     projects: state.get('projects'),
     currentProject: state
       .get('articleLists')
       .find((list: ArticleListType) => list.id === ownProps.id).projectFilter
+  };
+};
+
+const mapDispatchToProps = (dispatch: any, ownProps: Props) => {
+  return {
+    onClick: (filter: string) => {
+      dispatch(setProjectFilter(filter, ownProps.id));
+    }
   };
 };
 

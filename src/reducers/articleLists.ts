@@ -18,8 +18,8 @@ function addArticleList(
   return articleListState.add({
     id,
     order,
-    visibilityFilter: 'SHOW_ACTIVE',
-    projectFilter: 'ALL'
+    visibilityFilter: 'Active',
+    projectFilter: 'All'
   });
 }
 

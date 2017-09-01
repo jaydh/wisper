@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Article from './Article';
 import AddArticle from '../containers/AddArticle';
-import Footer from './ArticleListFooter';
 import ProjectSelector from '../containers/ProjectSelector';
+import ActiveSelector from '../containers/ActiveSelector';
 import Sort from '../containers/Sort';
 import { List } from 'immutable';
 import {
@@ -30,12 +30,12 @@ class ArticleList extends React.Component<Props> {
         <DeleteArticleList id={id} />
 
         <ButtonGroup>
+          <ActiveSelector id={id} />
           <ProjectSelector id={id} />
           <Sort />
         </ButtonGroup>
 
         <h5>Count: {articles.size}</h5>
-        <Footer id={id} />
         <AddArticle articleList={articleList} />
         <ListGroup>
           {articles.map((article: articleType) => {
