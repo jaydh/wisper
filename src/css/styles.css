@@ -8,12 +8,16 @@
   --white: #ffffff;
   --red: #dd464c;
   --orange: #fd8b19;
-  --yellow: #fdcc59;
+  --yellow: #f8d175;
   --green: #8fc13e;
   --lightBlue: #149b93;
   --blue: #1290bf;
   --pink: #c85e7c;
   --darkRed: #b33508;
+}
+
+h5 {
+  color: var(--darkGray);
 }
 p {
   color: var(--green);
@@ -31,13 +35,13 @@ p {
 }
 
 .btn-more {
-  float:right;
-  margin: .2em;
-  background-color: var(--lightBlue);
+  float: right;
+  margin: 0.2em;
+  background-color: var(--yellow);
 }
 
 .btn-submit {
-  background-color: var(--orange);
+  background-color: var(--lightBlue);
   height: 2em;
   width: 100%;
 }
@@ -80,7 +84,7 @@ p {
 }
 
 .list-group-item {
-  background-color: var(--yellow);
+  background-color: var(--white);
 }
 
 .article-list-container {
