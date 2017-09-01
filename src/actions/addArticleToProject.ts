@@ -47,21 +47,23 @@ export function addArticleToProject(articleHash: string, project: string) {
       '/userData/' + user + '/' + 'articles/' + articleHash + '/projects'
     );
 
+    const projects = database.ref('/userData/' + user + '/projects/');
+
     projectRef.once('value', function(snapshot: any) {
       projectRef
         .push(project)
         .then(() => {
-          dispatch(
-            AddArticleToProjectFulfilled(
-              articleHash,
-              project
-            )
-          );
+          dispatch(AddArticleToProjectFulfilled(articleHash, project));
         })
         .catch((error: string) => {
           console.log(error);
           dispatch(AddArticleToProjectRejected());
         });
+    });
+    projects.once('value').then(function(snapshot: any) {
+      if (!snapshot.hasChild(project)) {
+        projects.push(project);
+      }
     });
   };
 }
