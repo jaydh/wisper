@@ -1,7 +1,7 @@
 import { AddArticleFulfilled } from '../actions/addArticle';
 import { DeleteArticleFulfilled } from '../actions/deleteArticle';
 import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
-import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
+// import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
 import { SortArticles } from '../actions/sortArticles';
 import { Article as articleType } from '../constants/StoreState';
 import { List } from 'immutable';
@@ -109,7 +109,7 @@ function deleteArticleFromServer(articleState: List<articleType>, action: any) {
     article => (article ? article.id !== action.article.id : false)
   );
 }
-
+/*
 function addArticleToProject(
   articleState: List<articleType>,
   action: AddArticleToProjectFulfilled
@@ -123,7 +123,7 @@ function addArticleToProject(
       : article;
   });
 }
-
+*/
 function toggleArticleRead(
   articleState: List<articleType>,
   action: ToggleArticleReadFulfilled
@@ -147,7 +147,7 @@ const articles = createReducer(List(), {
   ADD_ARTICLE_FULFILLED: addArticle,
   DELETE_ARTICLE_FULFILLED: deleteArticle,
   TOGGLE_ARTICLE_READ: toggleArticleRead,
-  ADD_ARTICLE_TO_PROJECT: addArticleToProject,
+  // ADD_ARTICLE_TO_PROJECT: addArticleToProject,
   UPDATE_ARTICLE: updateArticle,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,

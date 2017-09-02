@@ -2,16 +2,17 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { addArticleToProject } from '../actions/addArticleToProject';
 import { Form } from 'react-bootstrap';
+import { Article as articleType } from '../constants/StoreState';
 
 export interface Props {
   dispatch: any;
-  id: string;
+  article: articleType;
 }
 
 class AddArticleToProject extends React.Component<Props, {}> {
   render() {
     let input: any;
-    const { dispatch, id } = this.props;
+    const { dispatch, article } = this.props;
 
     return (
       <Form
@@ -20,7 +21,7 @@ class AddArticleToProject extends React.Component<Props, {}> {
           if (!input.value.trim()) {
             return;
           }
-          dispatch(addArticleToProject(id, input.value));
+          dispatch(addArticleToProject(article, input.value));
           input.value = '';
         }}
       >
@@ -39,7 +40,9 @@ class AddArticleToProject extends React.Component<Props, {}> {
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    id: ownProps.id
+    article: state
+      .get('articles')
+      .find((t: articleType) => t.id === ownProps.id)
   };
 };
 

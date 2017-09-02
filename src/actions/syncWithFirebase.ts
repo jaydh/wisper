@@ -2,7 +2,7 @@ import { auth, database } from '../firebase';
 // import * as constants from '../constants/actionTypes';
 import { Dispatch } from 'react-redux';
 import { Article as articleType } from '../constants/StoreState';
-
+import { fromJS } from 'immutable';
 // todo: add types
 
 export interface AddArticleFromServer {
@@ -58,6 +58,17 @@ export function ListenToFirebase() {
   const projectRef = database.ref('/userData/' + user + '/projects/');
 
   return (dispatch: Dispatch<any>) => {
+    projectRef.on('child_changed', function(snapshot: any) {
+      dispatch(UpdateProject(fromJS(snapshot.val()).valueSeq()));
+    });
+
+    projectRef.on('child_added', function(snapshot: any) {
+      dispatch(AddProject(snapshot.val()));
+    });
+
+    projectRef.on('child_removed', function(snapshot: any) {
+      dispatch(DeleteProject(snapshot.val()));
+    });
     articleRef.on('child_changed', function(snapshot: any) {
       dispatch(UpdateArticle(snapshot.val()));
     });
@@ -68,18 +79,6 @@ export function ListenToFirebase() {
 
     articleRef.on('child_removed', function(snap: any) {
       dispatch(DeleteArticleFromServer(snap.val()));
-    });
-
-    projectRef.on('child_changed', function(snapshot: any) {
-      dispatch(UpdateProject(snapshot.val()));
-    });
-
-    projectRef.on('child_added', function(snapshot: any) {
-      dispatch(AddProject(snapshot.val()));
-    });
-
-    projectRef.on('child_removed', function(snapshot: any) {
-      dispatch(DeleteProject(snapshot.val()));
     });
   };
 }

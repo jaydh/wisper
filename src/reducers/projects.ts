@@ -1,22 +1,58 @@
 import createReducer from './createReducer';
 import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
-// import { AddArticleFromServer } from '../actions/syncArticles';
-import { Map, List } from 'immutable';
-
+import { AddArticleFromServer } from '../actions/syncWithFirebase';
+import { Set, fromJS, Map } from 'immutable';
+import { Article as articleType } from '../constants/StoreState';
+function projectWordBank(
+  projectState: Map<String, Set<string>>,
+  projects: Set<string>,
+  article: articleType
+): Map<String, Set<string>> {
+  const visibleMeta = fromJS([
+    'ogTitle',
+    'title',
+    'ogSiteName',
+    'ogDescription',
+    'description'
+  ]);
+ 
+  // Adds words in description to word bank
+  let newProjectState = projectState;
+  projects.forEach((project: string) => {
+    let newWords: Set<string> = Set();
+    if (projectState.has(project) && article.metadata) {
+      const meta = fromJS(article.metadata);
+      meta
+        .keySeq()
+        .filter((t: string) => visibleMeta.includes(t))
+        .forEach(
+          (t: string) =>
+            (newWords = newWords.union(Set(meta.get(t).split(' '))))
+        );
+      newWords = newWords.union(projectState.get(project), newWords);
+      newProjectState = newProjectState.set(project, newWords);
+    }
+  });
+  return newProjectState;
+}
 function addArticleToProject(
-  projectState: Map<String, List<string>>,
+  projectState: Map<String, Set<string>>,
   action: AddArticleToProjectFulfilled
-): Map<String, List<string>> {
-  return projectState.has(action.project)
-    ? projectState
-    : projectState.set(action.project, List([]));
+): Map<String, Set<string>> {
+  return projectWordBank(projectState, Set([action.project]), action.article);
 }
 
-function addProject(projectState: Map<String, List<string>>, action: any) {
-  return projectState.set(action.project.id, action.project.dictionary);
+function addProject(projectState: Map<String, Set<string>>, action: any) {
+  return projectState.update(action.project.id, (t = Set([])) =>
+    t.union(action.project.dictionary)
+  );
 }
 
-function updateProject(projectState: Map<String, List<string>>, action: any) {
+function deleteProject(projectState: Map<String, Set<string>>, action: any) {
+  return projectState.delete(action.project.id);
+}
+
+function updateProject(projectState: Map<String, Set<string>>, action: any) {
   return projectState.mapKeys((project: string) => {
     return project === action.project.id
       ? action.project
@@ -24,33 +60,39 @@ function updateProject(projectState: Map<String, List<string>>, action: any) {
   });
 }
 
-/*
-function addArticleFromServer(
-  projectState: Map<String, Meta>,
-  action: AddArticleFromServer
-): Map<String, Meta> {
-  const projects = fromJS(action.article.projects);
-  console.log('pstate', projectState);
-  if (projects) {
-    let newProjectState = projectState;
-    const projectIDs = projects.valueSeq();
-    projectIDs
-      .filter((key: string) => !projectState.has(key))
-      .forEach((project: string) => {
-        newProjectState = newProjectState.set(project, action.meta);
-      });
-    console.log(newProjectState.toJS());
-    return newProjectState;
+function updateArticle(projectState: Map<String, Set<string>>, action: any) {
+  if (action.article.projects) {
+    const projects = fromJS(action.article.projects)
+      .valueSeq()
+      .toSet();
+    return projectWordBank(projectState, projects, action.article);
   }
-
   return projectState;
-}*/
+}
 
-const projectReducer = createReducer(Map<String, List<String>>(), {
+function addArticleFromServer(
+  projectState: Map<String, Set<string>>,
+  action: AddArticleFromServer
+): Map<String, Set<string>> {
+  const projects = action.article.projects
+    ? fromJS(action.article.projects)
+        .valueSeq()
+        .toSet()
+    : Set(['']);
+  return projectWordBank(
+    projectState,
+    projects,
+    action.article
+  );
+}
+
+const projectReducer = createReducer(Map<String, Set<String>>(), {
   ADD_ARTICLE_TO_PROJECT_FULFILLED: addArticleToProject,
   UPDATE_PROJECT: updateProject,
-  ADD_PROJECT: addProject
-  // ADD_ARTICLE_FROM_SERVER: addArticleFromServer
+  ADD_PROJECT: addProject,
+  DELETE_PROJECT: deleteProject,
+  UPDATE_ARTICLE: updateArticle,
+  ADD_ARTICLE_FROM_SERVER: addArticleFromServer
 });
 
 export default projectReducer;

@@ -2,13 +2,13 @@ import * as constants from '../constants/actionTypes';
 import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
 import { List, fromJS } from 'immutable';
-
+import { Article as articleType } from '../constants/StoreState';
 export interface AddArticleToProjectRequested {
   type: constants.ADD_ARTICLE_TO_PROJECT_REQUESTED;
 }
 export interface AddArticleToProjectFulfilled {
   type: constants.ADD_ARTICLE_TO_PROJECT_FULFILLED;
-  articleHash: string;
+  article: articleType;
   project: string;
 }
 export interface AddArticleToProjectRejected {
@@ -28,22 +28,22 @@ function AddArticleToProjectRejected(): AddArticleToProjectRejected {
 }
 
 function AddArticleToProjectFulfilled(
-  articleHash: string,
+  article: articleType,
   project: string
 ): AddArticleToProjectFulfilled {
   return {
     type: constants.ADD_ARTICLE_TO_PROJECT_FULFILLED,
-    articleHash: articleHash,
-    project: project
+    article,
+    project
   };
 }
-export function addArticleToProject(articleHash: string, project: string) {
+export function addArticleToProject(article: articleType, project: string) {
   const user = auth().currentUser.uid;
   return (dispatch: Dispatch<any>) => {
     dispatch(AddArticleToProjectRequested());
 
     const projectRef = database.ref(
-      '/userData/' + user + '/' + 'articles/' + articleHash + '/projects'
+      '/userData/' + user + '/' + 'articles/' + article.id + '/projects'
     );
     const projects = database.ref('/userData/' + user + '/projects/');
 
@@ -51,7 +51,7 @@ export function addArticleToProject(articleHash: string, project: string) {
       projectRef
         .push(project)
         .then(() => {
-          dispatch(AddArticleToProjectFulfilled(articleHash, project));
+          dispatch(AddArticleToProjectFulfilled(article, project));
         })
         .catch((error: string) => {
           console.log(error);
