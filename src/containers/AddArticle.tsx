@@ -55,7 +55,7 @@ class AddArticle extends React.Component<Props, State> {
   render() {
     const { articleList: { projectFilter } } = this.props;
     const project =
-      projectFilter !== 'NONE' && projectFilter !== 'ALL' ? projectFilter : '';
+      projectFilter !== 'None' && projectFilter !== 'All' ? projectFilter : '';
 
     return (
       <form
