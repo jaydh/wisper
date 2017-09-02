@@ -41,7 +41,7 @@ class ProjectSelector extends React.Component<Props> {
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    projects: state.get('projects'),
+    projects: state.get('projects').keySeq(),
     currentProject: state
       .get('articleLists')
       .find((list: ArticleListType) => list.id === ownProps.id).projectFilter

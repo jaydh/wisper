@@ -1,6 +1,6 @@
 import Canvas from '../components/Canvas';
 import { connect } from 'react-redux';
-import { ListenToFirebase } from '../actions/syncArticles';
+import { ListenToFirebase } from '../actions/syncWithFirebase';
 import { addArticleList } from '../actions/articleList';
 
 const mapDispatchToProps = (dispatch: any) => {

@@ -50,7 +50,7 @@ class ArticleList extends React.Component<Props> {
 class OuterArticleList extends React.Component<Props> {
   render() {
     const { order } = this.props;
-    const width = innerWidth * 0.7;
+    const width = innerWidth * 0.8;
 
     return (
       <Rnd
@@ -64,7 +64,7 @@ class OuterArticleList extends React.Component<Props> {
           x: 0,
           y: 0,
           width: width,
-          height: innerHeight * 0.5
+          height: innerHeight * .8
         }}
         z={order}
         bounds=".canvas"
