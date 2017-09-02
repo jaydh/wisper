@@ -1,0 +1,33 @@
+import addArticle from '../actions/addArticle';
+export default function(store: any) {
+  store.dispatch(
+    addArticle(
+      'http://www.huffingtonpost.com/entry/the-top-10-weird-news-stories-of-2016-and-well-try-not-to-talk-politics_us_58642341e4b0de3a08f6fe20'
+    )
+  );
+  store.dispatch(
+    addArticle(
+      'https://www.nytimes.com/2017/09/01/us/politics/trump-comey-firing-letter.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news'
+    )
+  );
+  store.dispatch(
+    addArticle(
+      'https://www.nytimes.com/2017/09/01/us/politics/john-kelly-trump.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news'
+    )
+  );
+  store.dispatch(
+    addArticle(
+      'https://www.nytimes.com/2017/09/01/sports/serena-birth-baby.html?module=WatchingPortal&region=c-column-middle-span-region&pgType=Homepage&action=click&mediaId=thumb_square&state=standard&contentPlacement=5&version=internal&contentCollection=www.nytimes.com&contentId=https%3A%2F%2Fwww.nytimes.com%2F2017%2F09%2F01%2Fsports%2Fserena-birth-baby.html&eventName=Watching-article-click'
+    )
+  );
+  store.dispatch(
+    addArticle(
+      'https://www.nytimes.com/2017/09/01/us/houston-evacuees-hurricane-home.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=span-ab-top-region&region=top-news&WT.nav=top-news'
+    )
+  );
+  store.dispatch(
+    addArticle(
+      'https://stackoverflow.com/questions/6909126/javascript-sort-with-unicode'
+    )
+  );
+}

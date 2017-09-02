@@ -11,6 +11,7 @@ import { initFirebase, auth } from './firebase';
 import LoginLoading from './components/LoginLoading';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import bootstrap from './bootstrap';
+import demo from './constants/demo';
 bootstrap();
 
 let store = createStore(
@@ -21,6 +22,9 @@ initFirebase();
 // let persistor = persistStore(store);
 auth().onAuthStateChanged(function(user: any) {
   if (user) {
+    if (user.isAnonymous) {
+      demo(store);
+    }
     ReactDOM.render(
       <Provider store={store}>
         <App />

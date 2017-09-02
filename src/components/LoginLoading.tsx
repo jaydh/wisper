@@ -14,7 +14,16 @@ export default class LoginLoading extends React.Component {
           onClick={() => auth().signInWithRedirect(provider)}
           block={true}
         >
-          Create with Google authentication
+          Login{' '}
+        </Button>
+
+        <Button
+          bsStyle="primary"
+          bsSize="large"
+          onClick={() => auth().signInAnonymously()}
+          block={true}
+        >
+          Try anonymously
         </Button>
       </div>
     );
