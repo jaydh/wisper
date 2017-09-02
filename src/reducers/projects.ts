@@ -1,37 +1,56 @@
 import createReducer from './createReducer';
 import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
-import { AddArticleFromServer } from '../actions/syncArticles';
-import { List, fromJS } from 'immutable';
+// import { AddArticleFromServer } from '../actions/syncArticles';
+import { Map, List } from 'immutable';
 
 function addArticleToProject(
-  projectState: List<String>,
+  projectState: Map<String, List<string>>,
   action: AddArticleToProjectFulfilled
-) {
-  return projectState.includes(action.project)
+): Map<String, List<string>> {
+  return projectState.has(action.project)
     ? projectState
-    : projectState.push(action.project);
+    : projectState.set(action.project, List([]));
 }
 
+function addProject(projectState: Map<String, List<string>>, action: any) {
+  return projectState.set(action.project.id, action.project.dictionary);
+}
+
+function updateProject(projectState: Map<String, List<string>>, action: any) {
+  return projectState.mapKeys((project: string) => {
+    return project === action.project.id
+      ? action.project
+      : projectState.get(project);
+  });
+}
+
+/*
 function addArticleFromServer(
-  projectState: List<String>,
+  projectState: Map<String, Meta>,
   action: AddArticleFromServer
-) {
-  if (action.article) {
-    const projects = fromJS(action.article.projects);
-    if (projects) {
-      const projectIDs = projects.valueSeq();
-      const newProjectIDs = projectIDs.filter(
-        (key: string) => !projectState.contains(key)
-      );
-      return projectState.concat(newProjectIDs);
-    }
+): Map<String, Meta> {
+  const projects = fromJS(action.article.projects);
+  console.log('pstate', projectState);
+  if (projects) {
+    let newProjectState = projectState;
+    const projectIDs = projects.valueSeq();
+    projectIDs
+      .filter((key: string) => !projectState.has(key))
+      .forEach((project: string) => {
+        newProjectState = newProjectState.set(project, action.meta);
+      });
+    console.log(newProjectState.toJS());
+    return newProjectState;
   }
-  return projectState;
-}
 
-const projectReducer = createReducer(List([]), {
+  return projectState;
+}*/
+
+const projectReducer = createReducer(Map<String, List<String>>(), {
   ADD_ARTICLE_TO_PROJECT_FULFILLED: addArticleToProject,
-  ADD_ARTICLE_FROM_SERVER: addArticleFromServer
+  UPDATE_PROJECT: updateProject,
+  ADD_PROJECT: addProject
+  // ADD_ARTICLE_FROM_SERVER: addArticleFromServer
 });
 
 export default projectReducer;

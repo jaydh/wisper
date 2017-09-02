@@ -31,21 +31,55 @@ function DeleteArticleFromServer(article: articleType) {
   };
 }
 
+export function UpdateProject(project: any) {
+  return {
+    type: 'UPDATE_PROJECT',
+    project
+  };
+}
+
+export function AddProject(project: any) {
+  return {
+    type: 'ADD_PROJECT',
+    project
+  };
+}
+
+function DeleteProject(project: any) {
+  return {
+    type: 'DELETE_PROJECT',
+    project
+  };
+}
+
 export function ListenToFirebase() {
   const user = auth().currentUser.uid;
-  const ref = database.ref('/userData/' + user + '/articles/');
+  const articleRef = database.ref('/userData/' + user + '/articles/');
+  const projectRef = database.ref('/userData/' + user + '/projects/');
 
   return (dispatch: Dispatch<any>) => {
-    ref.on('child_changed', function(snapshot: any) {
+    articleRef.on('child_changed', function(snapshot: any) {
       dispatch(UpdateArticle(snapshot.val()));
     });
 
-    ref.on('child_added', function(snap: any) {
+    articleRef.on('child_added', function(snap: any) {
       dispatch(AddArticleFromServer(snap.val()));
     });
 
-    ref.on('child_removed', function(snap: any) {
+    articleRef.on('child_removed', function(snap: any) {
       dispatch(DeleteArticleFromServer(snap.val()));
+    });
+
+    projectRef.on('child_changed', function(snapshot: any) {
+      dispatch(UpdateProject(snapshot.val()));
+    });
+
+    projectRef.on('child_added', function(snapshot: any) {
+      dispatch(AddProject(snapshot.val()));
+    });
+
+    projectRef.on('child_removed', function(snapshot: any) {
+      dispatch(DeleteProject(snapshot.val()));
     });
   };
 }
