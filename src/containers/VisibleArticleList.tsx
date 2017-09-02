@@ -18,13 +18,7 @@ const getArticlesWithProject = (
       break;
     case 'None':
       articlesInProject = articles.filter((article: articleType) => {
-        if (article) {
-          const projects = article.projects;
-          if (!projects) {
-            return true;
-          }
-        }
-        return false;
+        return !article.projects;
       }) as List<articleType>;
       break;
     default:
@@ -56,13 +50,13 @@ const getVisibleArticles = (
     case 'All':
       return articlesInProject;
     case 'Completed':
-      return articlesInProject.filter(t => {
-        return t ? t.completed : false;
-      }) as List<articleType>;
+      return articlesInProject.filter((t: articleType) => t.completed) as List<
+        articleType
+      >;
     case 'Active':
-      return articlesInProject.filter(t => {
-        return t ? !t.completed : false;
-      }) as List<articleType>;
+      return articlesInProject.filter((t: articleType) => !t.completed) as List<
+        articleType
+      >;
     default:
       throw new Error('Unknown filter: ' + visibilityFilter);
   }
