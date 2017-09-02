@@ -18,7 +18,7 @@ exports.getMetadata = functions.database
         }
       });
       // check if article was deleted before metadata was being processed
-      if (functions.database.ref('/userData/{uId}/articles/{articleID}/link')) {
+      if (functions.database.ref('/userData/{uId}/articles/{articleID}')) {
         event.data.ref.parent.child('metadata').update(truthyMetadata);
         event.data.ref.parent.update({ fetching: false });
       }
