@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { addArticle } from '../actions/addArticle';
+import addArticle from '../actions/addArticle';
 import { ArticleList } from '../constants/StoreState';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
