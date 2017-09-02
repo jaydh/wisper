@@ -2,7 +2,13 @@ import * as React from 'react';
 import AddArticleToProject from '../containers/AddArticleToProject';
 import DeleteArticle from '../containers/DeleteArticle';
 import ToggleArticle from '../containers/ToggleArticle';
-import { Glyphicon, Button, Collapse, ListGroupItem } from 'react-bootstrap';
+import {
+  Glyphicon,
+  Button,
+  ButtonGroup,
+  Collapse,
+  ListGroupItem
+} from 'react-bootstrap';
 import { fromJS } from 'immutable';
 
 interface Props {
@@ -48,7 +54,15 @@ class Article extends React.Component<Props, State> {
         {
           // Todo: add onclick for updating lastread}
         }
-        <span>
+        {fetching && <Glyphicon glyph="refresh" />}
+        <a href={link} target="_blank">
+          {metadata && (metadata.title || metadata.ogTitle) ? (
+            metadata.ogTitle || metadata.title
+          ) : (
+            link
+          )}
+        </a>
+        <ButtonGroup>
           <ToggleArticle id={id} />
           <Button
             bsStyle="more"
@@ -58,14 +72,8 @@ class Article extends React.Component<Props, State> {
           >
             <Glyphicon glyph="menu-hamburger" />
           </Button>
-          <a href={link} target="_blank">
-            {metadata && (metadata.title || metadata.ogTitle) ? (
-              metadata.ogTitle || metadata.title
-            ) : (
-              link
-            )}
-          </a>
-        </span>
+        </ButtonGroup>
+
         <Collapse in={this.state.isMenuOpen}>
           <div>
             <h5>
