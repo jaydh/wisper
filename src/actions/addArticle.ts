@@ -41,7 +41,7 @@ function AddArticleFulfilled(
   };
 }
 
-export function addArticle(articleLink: string, project?: string) {
+export default function addArticle(articleLink: string, project?: string) {
   const user = auth().currentUser.uid;
   const now = new Date();
 
@@ -61,7 +61,7 @@ export function addArticle(articleLink: string, project?: string) {
     articleRef.once('value').then(function(snapshot: any) {
       // Check if article in database
       if (snapshot.exists()) {
-        alert('Article already in database');
+        dispatch(AddArticleRejected());
       } else {
         articleRef
           .set({
