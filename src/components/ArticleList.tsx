@@ -28,7 +28,7 @@ class ArticleList extends React.Component<Props> {
     return (
       <Jumbotron className="article-list-container">
         <DeleteArticleList id={id} />
-
+        <AddArticle articleList={articleList} />
         <ButtonGroup>
           <ActiveSelector id={id} />
           <ProjectSelector id={id} />
@@ -36,7 +36,6 @@ class ArticleList extends React.Component<Props> {
         </ButtonGroup>
 
         <h5>Count: {articles.size}</h5>
-        <AddArticle articleList={articleList} />
         <ListGroup>
           {articles.map((article: articleType) => {
             return <Article key={article.id} {...article} />;
@@ -64,7 +63,7 @@ class OuterArticleList extends React.Component<Props> {
           x: 0,
           y: 0,
           width: width,
-          height: innerHeight * .8
+          height: innerHeight * 0.8
         }}
         z={order}
         bounds=".canvas"
