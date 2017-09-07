@@ -54,7 +54,14 @@ class Article extends React.Component<Props, State> {
         {
           // Todo: add onclick for updating lastread}
         }
-        <ButtonGroup bsStyle="article">
+        <ButtonGroup
+          style={{
+            position: 'absolute',
+            right: '1em',
+            width: '5em',
+            height: '5em'
+          }}
+        >
           <ToggleArticle id={id} />
           <Button
             bsStyle="more"
