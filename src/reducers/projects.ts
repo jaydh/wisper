@@ -1,6 +1,12 @@
 import createReducer from './createReducer';
 import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
-import { AddArticleFromServer } from '../actions/syncWithFirebase';
+import {
+  AddArticleFromServer,
+  UpdateProject,
+  AddProject,
+  DeleteProject,
+  UpdateArticle
+} from '../actions/syncWithFirebase';
 import { Set, fromJS, Map } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 var pos = require('pos');
@@ -69,17 +75,26 @@ function addArticleToProject(
   return projectWordBank(projectState, Set([action.project]), action.article);
 }
 
-function addProject(projectState: Map<string, Set<string>>, action: any) {
+function addProject(
+  projectState: Map<string, Set<string>>,
+  action: AddProject
+) {
   return projectState.update(action.project.id, (t = Set([])) =>
     t.union(action.project.dictionary)
   );
 }
 
-function deleteProject(projectState: Map<string, Set<string>>, action: any) {
+function deleteProject(
+  projectState: Map<string, Set<string>>,
+  action: DeleteProject
+) {
   return projectState.delete(action.project.id);
 }
 
-function updateProject(projectState: Map<string, Set<string>>, action: any) {
+function updateProject(
+  projectState: Map<string, Set<string>>,
+  action: UpdateProject
+) {
   return projectState.mapKeys((project: string) => {
     return project === action.project.id
       ? action.project
@@ -87,7 +102,10 @@ function updateProject(projectState: Map<string, Set<string>>, action: any) {
   });
 }
 
-function updateArticle(projectState: Map<string, Set<string>>, action: any) {
+function updateArticle(
+  projectState: Map<string, Set<string>>,
+  action: UpdateArticle
+) {
   if (action.article.projects) {
     const projects = fromJS(action.article.projects)
       .valueSeq()

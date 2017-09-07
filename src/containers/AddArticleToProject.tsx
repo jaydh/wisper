@@ -5,14 +5,14 @@ import { Form } from 'react-bootstrap';
 import { Article as articleType } from '../constants/StoreState';
 
 export interface Props {
-  dispatch: any;
   article: articleType;
+  onAddToProject: (p: string) => void;
 }
 
 class AddArticleToProject extends React.Component<Props, {}> {
   render() {
     let input: any;
-    const { dispatch, article } = this.props;
+    const { onAddToProject } = this.props;
 
     return (
       <Form
@@ -21,7 +21,7 @@ class AddArticleToProject extends React.Component<Props, {}> {
           if (!input.value.trim()) {
             return;
           }
-          dispatch(addArticleToProject(article, input.value));
+          onAddToProject(input.value);
           input.value = '';
         }}
       >
@@ -45,5 +45,14 @@ const mapStateToProps = (state: any, ownProps: any) => {
       .find((t: articleType) => t.id === ownProps.id)
   };
 };
+const mapDispatchToProps = (dispatch: any, ownProps: Props) => {
+  return {
+    onAddToProject: (project: string) => {
+      dispatch(addArticleToProject(ownProps.article, project));
+    }
+  };
+};
 
-export default connect(mapStateToProps)(AddArticleToProject);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  AddArticleToProject
+);

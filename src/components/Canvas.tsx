@@ -7,8 +7,8 @@ import { ArticleList } from '../constants/StoreState';
 import Graph from '../containers/Graph';
 
 interface Props {
-  ListenToFirebase: any;
-  AddArticleList: any;
+  ListenToFirebase: () => void;
+  AddArticleList: () => void;
   articleLists: OrderedMap<string, ArticleList>;
 }
 

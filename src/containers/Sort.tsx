@@ -1,21 +1,17 @@
 import * as React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
-import { sortArticles } from '../actions/sortArticles';
+import sortArticles from '../actions/sortArticles';
 import { connect } from 'react-redux';
 
 interface Props {
-  onClick: any;
+  onClick: (t: string) => void;
 }
 
 class Sort extends React.Component<Props> {
   render() {
     const { onClick } = this.props;
     return (
-      <DropdownButton
-        title="Sort"
-        id="bg-nested-dropdown"
-        noCaret={true}
-      >
+      <DropdownButton title="Sort" id="bg-nested-dropdown" noCaret={true}>
         <MenuItem
           eventKey="1"
           onClick={() => {

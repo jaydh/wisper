@@ -8,7 +8,7 @@ import { ArticleList as ArticleListType } from '../constants/StoreState';
 interface Props {
   projects: List<String>;
   currentProject: string;
-  onClick: any;
+  onClick: (t: string) => void;
   id: string;
 }
 

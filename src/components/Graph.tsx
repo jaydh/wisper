@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
-import { Article as ArticleType } from '../constants/StoreState';
+import { Article as articleType } from '../constants/StoreState';
 interface Props {
-  articles: List<any>;
+  articles: List<articleType>;
   projects: List<String>;
 }
 
@@ -13,11 +13,10 @@ interface ProjectMeta {
 }
 
 class Graph extends React.Component<Props> {
-
   getProjectData(): Map<string, object> {
     const { articles } = this.props;
     let projectData = Map<string, ProjectMeta>();
-    articles.forEach((article: ArticleType) => {
+    articles.forEach((article: articleType) => {
       const keys = article.projects
         ? fromJS(article.projects).valueSeq()
         : fromJS(['NONE']);
@@ -42,7 +41,8 @@ class Graph extends React.Component<Props> {
   getDomainData() {
     const { articles } = this.props;
     const domains = articles.map(
-      article => (article.metadata ? article.metadata.ogSiteName : '')
+      (article: articleType) =>
+        article.metadata ? article.metadata.ogSiteName : ''
     );
     let domainCounts = Map<string, number>();
     domains.map(
@@ -122,4 +122,4 @@ class Graph extends React.Component<Props> {
     );
   }
 }
- export default Graph
+export default Graph;

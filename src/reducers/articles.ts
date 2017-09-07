@@ -1,8 +1,12 @@
 import { AddArticleFulfilled } from '../actions/addArticle';
 import { DeleteArticleFulfilled } from '../actions/deleteArticle';
 import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
-// import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
 import { SortArticles } from '../actions/sortArticles';
+import {
+  UpdateArticle,
+  AddArticleFromServer,
+  DeleteArticleFromServer
+} from '../actions/syncWithFirebase';
 import { Article as articleType } from '../constants/StoreState';
 import { List } from 'immutable';
 import createReducer from './createReducer';
@@ -39,7 +43,7 @@ function deleteArticle(
   );
 }
 
-function updateArticle(articleState: List<articleType>, action: any) {
+function updateArticle(articleState: List<articleType>, action: UpdateArticle) {
   return articleState.map(article => {
     return article && article.id === action.article.id
       ? action.article
@@ -47,10 +51,13 @@ function updateArticle(articleState: List<articleType>, action: any) {
   });
 }
 
-function addArticleFromServer(articleState: List<articleType>, action: any) {
+function addArticleFromServer(
+  articleState: List<articleType>,
+  action: AddArticleFromServer
+) {
   let check =
     articleState.filter(article => {
-      return article ? action.articleHash === article.id : false;
+      return article ? action.article.id === article.id : false;
     }).size === 0;
   return check ? articleState.push(action.article) : articleState;
 }
@@ -105,7 +112,10 @@ function sortArticles(articleState: List<articleType>, action: SortArticles) {
   }
 }
 
-function deleteArticleFromServer(articleState: List<articleType>, action: any) {
+function deleteArticleFromServer(
+  articleState: List<articleType>,
+  action: DeleteArticleFromServer
+) {
   return articleState.filter(
     article => (article ? article.id !== action.article.id : false)
   );
@@ -148,7 +158,6 @@ const articles = createReducer(List(), {
   ADD_ARTICLE_FULFILLED: addArticle,
   DELETE_ARTICLE_FULFILLED: deleteArticle,
   TOGGLE_ARTICLE_READ: toggleArticleRead,
-  // ADD_ARTICLE_TO_PROJECT: addArticleToProject,
   UPDATE_ARTICLE: updateArticle,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,

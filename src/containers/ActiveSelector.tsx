@@ -5,7 +5,7 @@ import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { ArticleList as ArticleListType } from '../constants/StoreState';
 
 interface Props {
-  onClick: any;
+  onClick: (t: string) => void;
   currentActive: string;
 }
 

@@ -5,6 +5,7 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
+import sortArticles from '../actions/sortArticles';
 // error when typing articleInProj with List<articleType>;
 
 const getArticlesWithProject = (
@@ -74,6 +75,16 @@ function mapStateToProps(state: any, ownProps: any) {
   };
 }
 
-const VisibleArticleList = connect(mapStateToProps)(ArticleList);
+function mapDispatchToProps(dispatch: any) {
+  return {
+    sortByDate: () => {
+      dispatch(sortArticles('date'));
+    }
+  };
+}
+
+const VisibleArticleList = connect(mapStateToProps, mapDispatchToProps)(
+  ArticleList
+);
 
 export default VisibleArticleList;

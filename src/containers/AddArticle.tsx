@@ -9,7 +9,7 @@ import {
   FormControl,
   ControlLabel
 } from 'react-bootstrap';
-import { fromJS, Map } from 'immutable';
+import { Set, fromJS, Map } from 'immutable';
 
 const options = {
   strictMode: false,
@@ -46,8 +46,8 @@ interface State {
 }
 interface Props {
   articleList: ArticleList;
-  onAdd: any;
-  wordbanks: any;
+  onAdd: (t: string, p?: string) => void;
+  wordbanks: Map<string, Set<string>>;
 }
 
 class AddArticle extends React.Component<Props, State> {
@@ -62,7 +62,7 @@ class AddArticle extends React.Component<Props, State> {
     this.getValidationState = this.getValidationState.bind(this);
   }
 
-  parseUri(str: string): any {
+  parseUri(str: string) {
     let o = options,
       m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str) as object,
       uri = {},

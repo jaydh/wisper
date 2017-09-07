@@ -19,10 +19,13 @@ interface Props {
   id: string;
   articleList: ArticleListType;
   articleListNum: number;
-  onClick: any;
+  sortByDate(): () => void;
 }
 
 class ArticleList extends React.Component<Props> {
+  componentDidMount() {
+    this.props.sortByDate();
+  }
   render() {
     const { articles, id, articleList } = this.props;
     return (

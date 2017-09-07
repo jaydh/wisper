@@ -4,7 +4,7 @@ import { deleteArticle } from '../actions/deleteArticle';
 import { Button, Glyphicon } from 'react-bootstrap';
 
 export interface Props {
-  onDeleteClick: any;
+  onDeleteClick: () => void;
 }
 
 class DeleteArticle extends React.Component<Props, {}> {

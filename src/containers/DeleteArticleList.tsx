@@ -4,7 +4,7 @@ import { deleteArticleList } from '../actions/articleList';
 import { Glyphicon } from 'react-bootstrap';
 
 export interface Props {
-  onDeleteClick: any;
+  onDeleteClick: () => void;
 }
 
 class DeleteArticleList extends React.Component<Props, {}> {

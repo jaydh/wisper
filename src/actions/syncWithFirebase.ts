@@ -3,11 +3,35 @@ import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
 import { Article as articleType } from '../constants/StoreState';
 import { fromJS } from 'immutable';
-// todo: add types
 
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
   article: articleType;
+}
+
+export interface UpdateArticle {
+  type: 'UPDATE_ARTICLE';
+  article: articleType;
+}
+
+export interface DeleteArticleFromServer {
+  type: 'DELETE_ARTICLE_FROM_SERVER';
+  article: articleType;
+}
+
+export interface AddProject {
+  type: 'ADD_PROJECT';
+  project: any;
+}
+
+export interface UpdateProject {
+  type: 'UPDATE_PROJECT';
+  project: any;
+}
+
+export interface DeleteProject {
+  type: 'DELETE_PROJECT';
+  project: any;
 }
 
 function UpdateArticle(article: articleType) {

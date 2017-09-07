@@ -4,7 +4,7 @@ import { toggleArticleRead } from '../actions/toggleArticleRead';
 import { Glyphicon, Button } from 'react-bootstrap';
 
 export interface Props {
-  onToggleClick: any;
+  onToggleClick: () => void;
   id: string;
 }
 
