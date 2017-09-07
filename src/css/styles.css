@@ -35,14 +35,13 @@ p {
 }
 
 .btn-more {
-  margin: 0.2em;
   background-color: var(--pink);
+  height: 2em;
+  width: 2em;
 }
 
 .btn-submit {
   background-color: var(--lightBlue);
-  height: 2em;
-  width: 100%;
 }
 
 .btn-addList {
@@ -56,6 +55,13 @@ p {
   background-color: var(--green);
   position: absolute;
   right: 1em;
+}
+
+.btn-group-article {
+  position: absolute;
+  right: 1em;
+  width: 5em;
+  height: 5em;
 }
 
 .drag {

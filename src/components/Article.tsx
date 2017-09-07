@@ -42,6 +42,7 @@ class Article extends React.Component<Props, State> {
       metadata,
       fetching
     } = this.props;
+    console.log('f', fetching);
     const visibleMeta = fromJS([
       'ogTitle',
       'title',
@@ -54,15 +55,7 @@ class Article extends React.Component<Props, State> {
         {
           // Todo: add onclick for updating lastread}
         }
-        {fetching && <Glyphicon glyph="refresh" />}
-        <a href={link} target="_blank">
-          {metadata && (metadata.title || metadata.ogTitle) ? (
-            metadata.ogTitle || metadata.title
-          ) : (
-            link
-          )}
-        </a>
-        <ButtonGroup>
+        <ButtonGroup bsStyle="article">
           <ToggleArticle id={id} />
           <Button
             bsStyle="more"
@@ -73,6 +66,20 @@ class Article extends React.Component<Props, State> {
             <Glyphicon glyph="menu-hamburger" />
           </Button>
         </ButtonGroup>
+
+        {fetching && <Glyphicon glyph="refresh" />}
+        <a
+          className="article-link"
+          href={link}
+          target="_blank"
+          style={{ display: 'inline-block', width: '70%' }}
+        >
+          {metadata && (metadata.title || metadata.ogTitle) ? (
+            metadata.ogTitle || metadata.title
+          ) : (
+            link
+          )}
+        </a>
 
         <Collapse in={this.state.isMenuOpen}>
           <div>

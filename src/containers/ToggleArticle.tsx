@@ -12,17 +12,15 @@ class ToggleArticleRead extends React.Component<Props> {
   render() {
     const { onToggleClick } = this.props;
     return (
-      <div>
-        <Button
-          bsStyle="more"
-          bsSize="xsmall"
-          onClick={() => {
-            onToggleClick();
-          }}
-        >
-          <Glyphicon glyph="ok" />
-        </Button>
-      </div>
+      <Button
+        bsStyle="more"
+        bsSize="xsmall"
+        onClick={() => {
+          onToggleClick();
+        }}
+      >
+        <Glyphicon glyph="ok" />
+      </Button>
     );
   }
 }
