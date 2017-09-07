@@ -16,6 +16,7 @@ class DeleteArticleList extends React.Component<Props, {}> {
         onClick={() => onDeleteClick()}
         className="close"
         aria-label="Close"
+        style={{ position: 'absolute', top: '1em', right: '1em' }}
       >
         <Glyphicon glyph="remove" />
       </button>
