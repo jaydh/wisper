@@ -4,6 +4,7 @@ export interface Article {
   link: string;
 
   metadata?: any;
+  fetching?: boolean;
   dateAdded: string;
   dateRead?: string;
   lastViewed?: string;
