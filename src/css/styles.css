@@ -36,7 +36,7 @@ p {
 
 .btn-more {
   margin: 0.2em;
-  background-color: var(--yellow);
+  background-color: var(--pink);
 }
 
 .btn-submit {
@@ -83,7 +83,7 @@ p {
 }
 
 .list-group-item {
-  background-color: var(--white);
+  background-color: var(--yellow);
 }
 
 .article-list-container {
