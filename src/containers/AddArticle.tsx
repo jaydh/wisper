@@ -137,10 +137,11 @@ class AddArticle extends React.Component<Props, State> {
     );
   }
 
-  handleSubmit() {
+  handleSubmit(useSuggest: boolean) {
     const { onAdd } = this.props;
     const { articleList: { projectFilter } } = this.props;
-    const project =
+    let project = useSuggest ? this.state.suggestion : projectFilter;
+    project =
       projectFilter !== 'None' && projectFilter !== 'All' ? projectFilter : '';
 
     if (this.getValidationState() === 'success') {
@@ -157,7 +158,7 @@ class AddArticle extends React.Component<Props, State> {
       <form
         onSubmit={event => {
           event.preventDefault();
-          this.handleSubmit();
+          this.handleSubmit(false);
         }}
       >
         <FormGroup
@@ -169,7 +170,7 @@ class AddArticle extends React.Component<Props, State> {
 
           <InputGroup>
             <InputGroup.Button>
-              <Button onClick={() => this.handleSubmit()}>Submit</Button>
+              <Button onClick={() => this.handleSubmit(false)}>Submit</Button>
             </InputGroup.Button>
             <FormControl
               value={this.state.value}
@@ -181,7 +182,9 @@ class AddArticle extends React.Component<Props, State> {
         </FormGroup>
         {this.getValidationState() === 'success' &&
         (projectFilter === 'All' || projectFilter === 'None') && (
-          <h1>{this.state.suggestion}</h1>
+          <Button onClick={() => this.handleSubmit(true)}>
+            Add to {this.state.suggestion} project?
+          </Button>
         )}
       </form>
     );
