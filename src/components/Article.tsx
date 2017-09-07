@@ -42,7 +42,6 @@ class Article extends React.Component<Props, State> {
       metadata,
       fetching
     } = this.props;
-    console.log('f', fetching);
     const visibleMeta = fromJS([
       'ogTitle',
       'title',
