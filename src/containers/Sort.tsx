@@ -15,11 +15,20 @@ class Sort extends React.Component<Props> {
         <MenuItem
           eventKey="1"
           onClick={() => {
-            onClick('date');
+            onClick('date-asc');
           }}
         >
-          by date added
+          by date added (recent first)
         </MenuItem>
+        <MenuItem
+          eventKey="1"
+          onClick={() => {
+            onClick('date-desc');
+          }}
+        >
+          by date added (recent last)
+        </MenuItem>
+
         <MenuItem eventKey="2" onClick={() => onClick('title')}>
           by title
         </MenuItem>

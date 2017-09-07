@@ -64,7 +64,7 @@ function addArticleFromServer(
 
 function sortArticles(articleState: List<articleType>, action: SortArticles) {
   switch (action.filter) {
-    case 'date':
+    case 'date-desc':
       return articleState
         .sort((a, b) => {
           const aa = new Date(a.dateAdded);
@@ -78,6 +78,21 @@ function sortArticles(articleState: List<articleType>, action: SortArticles) {
           return 0;
         })
         .toList();
+    case 'date-asc':
+      return articleState
+        .sort((b, a) => {
+          const aa = new Date(a.dateAdded);
+          const bb = new Date(b.dateAdded);
+          if (aa < bb) {
+            return -1;
+          }
+          if (aa > bb) {
+            return 1;
+          }
+          return 0;
+        })
+        .toList();
+
     case 'title':
       return articleState
         .sort((a, b) => {
