@@ -3,11 +3,28 @@ import { AddArticleToProjectFulfilled } from '../actions/addArticleToProject';
 import { AddArticleFromServer } from '../actions/syncWithFirebase';
 import { Set, fromJS, Map } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
+var pos = require('pos');
+
+// Project wordbanks only contain unique identifiers
+// only do this afte projects are pulled. turn this into an action
+// Small bug where the set doing the subtracting keeps the common word
+/*function makeProjectsUnique(
+  projectState: Map<string, Set<string>>
+): Map<string, Set<string>> {
+  let newProjectState = projectState;
+  newProjectState.keySeq().forEach((t: string) => {
+    const others = newProjectState.delete(t).valueSeq();
+    const unique = newProjectState.get(t).subtract(...others.toJS());
+    newProjectState = newProjectState.set(t, unique);
+  });
+  return newProjectState;
+}*/
+
 function projectWordBank(
-  projectState: Map<String, Set<string>>,
+  projectState: Map<string, Set<string>>,
   projects: Set<string>,
   article: articleType
-): Map<String, Set<string>> {
+): Map<string, Set<string>> {
   const visibleMeta = fromJS([
     'ogTitle',
     'title',
@@ -15,7 +32,9 @@ function projectWordBank(
     'ogDescription',
     'description'
   ]);
- 
+  const tagger = new pos.Tagger();
+  const tagsToKeep = fromJS(['JJ', 'NN', 'NNP', 'NNPS', 'VB']);
+
   // Adds words in description to word bank
   let newProjectState = projectState;
   projects.forEach((project: string) => {
@@ -25,34 +44,42 @@ function projectWordBank(
       meta
         .keySeq()
         .filter((t: string) => visibleMeta.includes(t))
-        .forEach(
-          (t: string) =>
-            (newWords = newWords.union(Set(meta.get(t).split(' '))))
-        );
-      newWords = newWords.union(projectState.get(project), newWords);
+        .forEach((t: string) => {
+          const words = new pos.Lexer().lex(meta.get(t));
+          const taggedWords = fromJS(tagger.tag(words))
+            .filter((p: any) => {
+              return tagsToKeep.includes(p.get(1));
+            })
+            .map((p: any) => p.get(0));
+          newWords = newWords.union(taggedWords.valueSeq());
+        });
+      newWords = newWords
+        .union(projectState.get(project), newWords)
+        .map((t: string) => t.toLowerCase())
+        .toSet();
       newProjectState = newProjectState.set(project, newWords);
     }
   });
   return newProjectState;
 }
 function addArticleToProject(
-  projectState: Map<String, Set<string>>,
+  projectState: Map<string, Set<string>>,
   action: AddArticleToProjectFulfilled
-): Map<String, Set<string>> {
+): Map<string, Set<string>> {
   return projectWordBank(projectState, Set([action.project]), action.article);
 }
 
-function addProject(projectState: Map<String, Set<string>>, action: any) {
+function addProject(projectState: Map<string, Set<string>>, action: any) {
   return projectState.update(action.project.id, (t = Set([])) =>
     t.union(action.project.dictionary)
   );
 }
 
-function deleteProject(projectState: Map<String, Set<string>>, action: any) {
+function deleteProject(projectState: Map<string, Set<string>>, action: any) {
   return projectState.delete(action.project.id);
 }
 
-function updateProject(projectState: Map<String, Set<string>>, action: any) {
+function updateProject(projectState: Map<string, Set<string>>, action: any) {
   return projectState.mapKeys((project: string) => {
     return project === action.project.id
       ? action.project
@@ -60,7 +87,7 @@ function updateProject(projectState: Map<String, Set<string>>, action: any) {
   });
 }
 
-function updateArticle(projectState: Map<String, Set<string>>, action: any) {
+function updateArticle(projectState: Map<string, Set<string>>, action: any) {
   if (action.article.projects) {
     const projects = fromJS(action.article.projects)
       .valueSeq()
@@ -71,22 +98,18 @@ function updateArticle(projectState: Map<String, Set<string>>, action: any) {
 }
 
 function addArticleFromServer(
-  projectState: Map<String, Set<string>>,
+  projectState: Map<string, Set<string>>,
   action: AddArticleFromServer
-): Map<String, Set<string>> {
+): Map<string, Set<string>> {
   const projects = action.article.projects
     ? fromJS(action.article.projects)
         .valueSeq()
         .toSet()
     : Set(['']);
-  return projectWordBank(
-    projectState,
-    projects,
-    action.article
-  );
+  return projectWordBank(projectState, projects, action.article);
 }
 
-const projectReducer = createReducer(Map<String, Set<String>>(), {
+const projectReducer = createReducer(Map<string, Set<string>>(), {
   ADD_ARTICLE_TO_PROJECT_FULFILLED: addArticleToProject,
   UPDATE_PROJECT: updateProject,
   ADD_PROJECT: addProject,
