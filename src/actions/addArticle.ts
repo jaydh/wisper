@@ -73,7 +73,7 @@ export default function addArticle(articleLink: string, project?: string) {
           .set({
             link: articleLink,
             id: hash,
-            dateAdded: now.toLocaleDateString(),
+            dateAdded: now.toLocaleString(),
             completed: false,
             fetchting: true
           })
