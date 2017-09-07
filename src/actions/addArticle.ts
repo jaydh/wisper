@@ -11,10 +11,16 @@ export interface AddArticleFulfilled {
   type: constants.ADD_ARTICLE_FULFILLED;
   articleLink: string;
   articleHash: string;
-  projectWithKey?: Object;
+  project?: string;
 }
 export interface AddArticleRejected {
   type: constants.ADD_ARTICLE_REJECTED;
+}
+
+export interface AddArticle {
+  type: 'ADD_ARTICLE';
+  articleLink: string;
+  project: string;
 }
 
 function AddArticleRequested(): AddArticleRequested {
@@ -31,13 +37,13 @@ function AddArticleRejected(): AddArticleRejected {
 
 function AddArticleFulfilled(
   articleLink: string,
-  projectWithKey?: Object
+  project?: string
 ): AddArticleFulfilled {
   return {
     type: constants.ADD_ARTICLE_FULFILLED,
     articleLink: articleLink,
     articleHash: SHA1.hex(articleLink),
-    projectWithKey: projectWithKey
+    project: project
   };
 }
 

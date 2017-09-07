@@ -24,7 +24,7 @@ function addArticle(
         link: action.articleLink,
         dateAdded: now.toLocaleDateString(),
         completed: false,
-        projects: action.projectWithKey
+        projects: action.project
       })
     : articleState;
 }
