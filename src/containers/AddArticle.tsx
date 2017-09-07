@@ -145,8 +145,7 @@ class AddArticle extends React.Component<Props, State> {
 
     if (this.getValidationState() === 'success') {
       onAdd(this.state.parse.source, project);
-      this.setState({ parse: '' ,value:''});    
-      
+      this.setState({ parse: '', value: '' });
     } else {
       alert('Please enter valid link');
     }
