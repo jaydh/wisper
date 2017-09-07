@@ -180,7 +180,9 @@ class AddArticle extends React.Component<Props, State> {
           <FormControl.Feedback />
         </FormGroup>
         {this.getValidationState() === 'success' &&
-        projectFilter === ('All' || 'None') && <h1>{this.state.suggestion}</h1>}
+        (projectFilter === 'All' || projectFilter === 'None') && (
+          <h1>{this.state.suggestion}</h1>
+        )}
       </form>
     );
   }
