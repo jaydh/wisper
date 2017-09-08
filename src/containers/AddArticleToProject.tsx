@@ -13,7 +13,6 @@ class AddArticleToProject extends React.Component<Props, {}> {
   render() {
     let input: any;
     const { onAddToProject, article } = this.props;
-    console.log('1', article);
     return (
       <Form
         onSubmit={e => {
