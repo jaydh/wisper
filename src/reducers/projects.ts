@@ -9,7 +9,6 @@ import {
 } from '../actions/syncWithFirebase';
 import { Set, fromJS, Map } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
-var pos = require('pos');
 
 // Project wordbanks only contain unique identifiers
 // only do this afte projects are pulled. turn this into an action
@@ -31,34 +30,13 @@ function projectWordBank(
   projects: Set<string>,
   article: articleType
 ): Map<string, Set<string>> {
-  const visibleMeta = fromJS([
-    'ogTitle',
-    'title',
-    'ogSiteName',
-    'ogDescription',
-    'description'
-  ]);
-  const tagger = new pos.Tagger();
-  const tagsToKeep = fromJS(['JJ', 'NN', 'NNP', 'NNPS', 'VB']);
-
+  
   // Adds words in description to word bank
   let newProjectState = projectState;
   projects.forEach((project: string) => {
     let newWords: Set<string> = Set();
     if (projectState.has(project) && article.metadata) {
-      const meta = fromJS(article.metadata);
-      meta
-        .keySeq()
-        .filter((t: string) => visibleMeta.includes(t))
-        .forEach((t: string) => {
-          const words = new pos.Lexer().lex(meta.get(t));
-          const taggedWords = fromJS(tagger.tag(words))
-            .filter((p: any) => {
-              return tagsToKeep.includes(p.get(1));
-            })
-            .map((p: any) => p.get(0));
-          newWords = newWords.union(taggedWords.valueSeq());
-        });
+     
       newWords = newWords
         .union(projectState.get(project), newWords)
         .map((t: string) => t.toLowerCase())

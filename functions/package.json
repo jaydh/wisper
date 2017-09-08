@@ -4,7 +4,9 @@
   "dependencies": {
     "firebase-admin": "~4.2.1",
     "firebase-functions": "^0.5.7",
+    "immutable": "^3.8.1",
     "node-fetch": "^1.7.2",
+    "pos": "^0.4.2",
     "request": "^2.81.0",
     "scrape-metadata": "^2.0.0"
   },
