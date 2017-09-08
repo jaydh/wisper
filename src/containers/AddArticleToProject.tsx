@@ -6,14 +6,14 @@ import { Article as articleType } from '../constants/StoreState';
 
 export interface Props {
   article: articleType;
-  onAddToProject: (p: string) => void;
+  onAddToProject: (t: articleType, p: string) => void;
 }
 
 class AddArticleToProject extends React.Component<Props, {}> {
   render() {
     let input: any;
-    const { onAddToProject } = this.props;
-
+    const { onAddToProject, article } = this.props;
+    console.log('1', article);
     return (
       <Form
         onSubmit={e => {
@@ -21,7 +21,7 @@ class AddArticleToProject extends React.Component<Props, {}> {
           if (!input.value.trim()) {
             return;
           }
-          onAddToProject(input.value);
+          onAddToProject(article, input.value);
           input.value = '';
         }}
       >
@@ -45,10 +45,10 @@ const mapStateToProps = (state: any, ownProps: any) => {
       .find((t: articleType) => t.id === ownProps.id)
   };
 };
-const mapDispatchToProps = (dispatch: any, ownProps: Props) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    onAddToProject: (project: string) => {
-      dispatch(addArticleToProject(ownProps.article, project));
+    onAddToProject: (article: articleType, project: string) => {
+      dispatch(addArticleToProject(article, project));
     }
   };
 };
