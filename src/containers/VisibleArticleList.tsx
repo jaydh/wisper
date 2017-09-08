@@ -78,7 +78,7 @@ function mapStateToProps(state: any, ownProps: any) {
 function mapDispatchToProps(dispatch: any) {
   return {
     sortByDate: () => {
-      dispatch(sortArticles('date'));
+      dispatch(sortArticles('date-asc'));
     }
   };
 }
