@@ -75,7 +75,7 @@ export default function addArticle(articleLink: string, project?: string) {
             id: hash,
             dateAdded: now.toLocaleString(),
             completed: false,
-            fetchting: true
+            fetching: true
           })
           .then(articleRef.child('projects').update(projectWithKey))
           .then(() => {
