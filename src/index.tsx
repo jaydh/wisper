@@ -12,6 +12,8 @@ import LoginLoading from './components/LoginLoading';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import bootstrap from './bootstrap';
 import demo from './constants/demo';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
 bootstrap();
 
 let store = createStore(
