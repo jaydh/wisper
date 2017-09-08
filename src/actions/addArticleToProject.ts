@@ -77,11 +77,20 @@ export function addArticleToProject(article: articleType, project: string) {
       })
       .then(function(dictionary: any) {
         projects.once('value').then(function(snapshot: any) {
-          if (!snapshot.hasChild(project)) {
+          const push = () =>
             projects.push({
               id: project,
               dictionary: dictionary.valueSeq().toJS()
             });
+          if (snapshot.val()) {
+            const proj = fromJS(snapshot.val())
+              .valueSeq()
+              .map((t: any) => t.id);
+            if (!proj.has(project)) {
+              push();
+            }
+          } else {
+            push();
           }
         });
       });
