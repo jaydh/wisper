@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import appReducer from './reducers/index';
 import thunk from 'redux-thunk';
-// let { persistStore, autoRehydrate } = require('redux-persist-immutable');
+const { persistStore, autoRehydrate } = require('redux-persist-immutable');
 import { initFirebase, auth } from './firebase';
 import LoginLoading from './components/LoginLoading';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -18,10 +18,11 @@ bootstrap();
 
 let store = createStore(
   appReducer,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeWithDevTools(applyMiddleware(thunk)),
+  autoRehydrate()
 );
 initFirebase();
-// let persistor = persistStore(store);
+let persistor = persistStore(store);
 auth().onAuthStateChanged(function(user: any) {
   if (user) {
     if (user.isAnonymous) {
@@ -34,7 +35,7 @@ auth().onAuthStateChanged(function(user: any) {
       document.getElementById('root')
     );
   } else {
-    // persistor.purge();
+    persistor.purge();
     ReactDOM.render(<LoginLoading />, document.getElementById('root'));
   }
 });
