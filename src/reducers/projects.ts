@@ -2,7 +2,7 @@ import createReducer from './createReducer';
 import {
   UpdateProject,
   AddProject,
-  DeleteProject,
+  DeleteProject
 } from '../actions/syncWithFirebase';
 import { Set, Map } from 'immutable';
 
@@ -28,7 +28,7 @@ function updateProject(
 ) {
   return projectState.mapKeys((project: string) => {
     return project === action.project.id
-      ? action.project
+      ? action.project.dictionary
       : projectState.get(project);
   });
 }
@@ -36,7 +36,7 @@ function updateProject(
 const projectReducer = createReducer(Map<string, Set<string>>(), {
   UPDATE_PROJECT: updateProject,
   ADD_PROJECT: addProject,
-  DELETE_PROJECT: deleteProject,
+  DELETE_PROJECT: deleteProject
 });
 
 export default projectReducer;

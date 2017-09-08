@@ -2,8 +2,6 @@ import { auth, database } from '../firebase';
 // import * as constants from '../constants/actionTypes';
 import { Dispatch } from 'react-redux';
 import { Article as articleType } from '../constants/StoreState';
-import { fromJS } from 'immutable';
-
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
   article: articleType;
@@ -83,7 +81,7 @@ export function ListenToFirebase() {
 
   return (dispatch: Dispatch<any>) => {
     projectRef.on('child_changed', function(snapshot: any) {
-      dispatch(UpdateProject(fromJS(snapshot.val()).valueSeq()));
+      dispatch(UpdateProject(snapshot.val()));
     });
 
     projectRef.on('child_added', function(snapshot: any) {
