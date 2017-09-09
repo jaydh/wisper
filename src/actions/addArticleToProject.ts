@@ -60,7 +60,7 @@ export function addArticleToProject(article: articleType, project: string) {
     });
 
     fetch(
-      'http://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/' +
+      'https://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/' +
         project +
         '/json'
     )
@@ -85,8 +85,8 @@ export function addArticleToProject(article: articleType, project: string) {
           if (snapshot.val()) {
             const proj = fromJS(snapshot.val())
               .valueSeq()
-              .map((t: any) => t.id);
-            if (!proj.has(project)) {
+              .map((t: Map<string, any>) => t.get('id'));
+            if (!proj.includes(project)) {
               push();
             }
           } else {
