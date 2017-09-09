@@ -62,6 +62,7 @@ exports.addKeywordsFromMetadata = functions.database
               .map(p => p.get(0));
             newWords = newWords.union(taggedWords.valueSeq());
           });
+        newWords = newWords.map(t => t.toLocaleLowerCase());
         userDataRef
           .child('projects')
           .child(projectKey)
