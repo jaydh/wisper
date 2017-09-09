@@ -26,11 +26,7 @@ function updateProject(
   projectState: Map<string, Set<string>>,
   action: UpdateProject
 ) {
-  return projectState.mapKeys((project: string) => {
-    return project === action.project.id
-      ? action.project.dictionary
-      : projectState.get(project);
-  });
+  return projectState.set(action.project.id, Set(action.project.dictionary));
 }
 
 const projectReducer = createReducer(Map<string, Set<string>>(), {
