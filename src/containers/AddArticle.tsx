@@ -168,9 +168,11 @@ class AddArticle extends React.Component<Props, State> {
         >
           <ControlLabel>Add article</ControlLabel>
 
-          <InputGroup>
+          <InputGroup bsSize="large">
             <InputGroup.Button>
-              <Button onClick={() => this.handleSubmit(false)}>Submit</Button>
+              <Button bsSize="large" onClick={() => this.handleSubmit(false)}>
+                Submit
+              </Button>
             </InputGroup.Button>
             <FormControl
               value={this.state.value}
@@ -183,7 +185,7 @@ class AddArticle extends React.Component<Props, State> {
         {this.getValidationState() === 'success' &&
         (projectFilter === 'All' || projectFilter === 'None') &&
         this.state.suggestion && (
-          <Button onClick={() => this.handleSubmit(true)}>
+          <Button bsSize="large" onClick={() => this.handleSubmit(true)}>
             Add to {this.state.suggestion} project?
           </Button>
         )}

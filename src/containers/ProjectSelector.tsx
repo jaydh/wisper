@@ -18,7 +18,6 @@ class ProjectSelector extends React.Component<Props> {
     const options = ['All', ...projects.toJS(), 'None'];
     return (
       <DropdownButton
-        bsStyle="default"
         title={currentProject}
         noCaret={true}
         id="dropdown-no-caret"

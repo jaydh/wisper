@@ -14,7 +14,6 @@ class ToggleArticleRead extends React.Component<Props> {
     return (
       <Button
         bsStyle="more"
-        bsSize="xsmall"
         onClick={() => {
           onToggleClick();
         }}

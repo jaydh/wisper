@@ -20,7 +20,14 @@ h5 {
   color: var(--darkGray);
 }
 p {
-  color: var(--green);
+  font-size: 1.5em;
+}
+a {
+  font-size: 2em;
+}
+.articleInfo {
+  color: var(--blue);  
+  font-size: 1.5em;
 }
 .modal-container {
   position: relative;
@@ -36,8 +43,8 @@ p {
 
 .btn-more {
   background-color: var(--pink);
-  height: 2em;
-  width: 2em;
+  height: 2.5em;
+  width: 2.5em;
 }
 
 .btn-submit {

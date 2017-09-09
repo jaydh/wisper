@@ -65,7 +65,6 @@ class Article extends React.Component<Props, State> {
           <ToggleArticle id={id} />
           <Button
             bsStyle="more"
-            bsSize="xsmall"
             onClick={() =>
               this.setState({ isMenuOpen: !this.state.isMenuOpen })}
           >
@@ -88,11 +87,11 @@ class Article extends React.Component<Props, State> {
         </a>
 
         <Collapse in={this.state.isMenuOpen}>
-          <div>
-            <h5>
+          <div className="articleInfo">
+            <p>
               Date added: {dateAdded} <br />
               {dateRead ? 'Date Read: ' + dateRead : ' '}
-            </h5>
+            </p>
             {!fetching && metadata ? (
               fromJS(metadata)
                 .keySeq()
