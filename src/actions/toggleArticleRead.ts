@@ -53,7 +53,7 @@ export function toggleArticleRead(articleHash: string) {
       } else {
         const completed = snapshot.val().completed;
         const newDateRead = !completed
-          ? now.toLocaleDateString()
+          ? now.toLocaleString()
           : snapshot.val().dateRead as string;
         const update = {
           dateRead: newDateRead,
