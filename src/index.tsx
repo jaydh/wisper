@@ -36,7 +36,12 @@ auth().onAuthStateChanged(function(user: any) {
     );
   } else {
     persistor.purge();
-    ReactDOM.render(<LoginLoading />, document.getElementById('root'));
+    ReactDOM.render(
+      <Provider store={store}>
+        <LoginLoading />
+      </Provider>,
+      document.getElementById('root')
+    );
   }
 });
 
