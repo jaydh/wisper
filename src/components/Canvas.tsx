@@ -25,9 +25,8 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    const { ListenToFirebase, AddArticleList } = this.props;
+    const { ListenToFirebase } = this.props;
     ListenToFirebase();
-    AddArticleList();
   }
 
   close() {
