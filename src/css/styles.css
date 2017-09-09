@@ -20,10 +20,10 @@ h5 {
   color: var(--darkGray);
 }
 p {
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 a {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 .articleInfo {
   color: var(--blue);  
