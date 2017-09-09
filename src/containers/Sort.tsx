@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { Dropdown, MenuItem } from 'react-bootstrap';
 import sortArticles from '../actions/sortArticles';
 import { connect } from 'react-redux';
 
@@ -11,31 +11,34 @@ class Sort extends React.Component<Props> {
   render() {
     const { onClick } = this.props;
     return (
-      <DropdownButton title="Sort" id="bg-nested-dropdown" noCaret={true}>
-        <MenuItem
-          eventKey="1"
-          onClick={() => {
-            onClick('date-asc');
-          }}
-        >
-          by date added (recent first)
-        </MenuItem>
-        <MenuItem
-          eventKey="1"
-          onClick={() => {
-            onClick('date-desc');
-          }}
-        >
-          by date added (recent last)
-        </MenuItem>
+      <Dropdown id="bg-nested-dropdown">
+        <Dropdown.Toggle noCaret={true}>Sort</Dropdown.Toggle>
+        <Dropdown.Menu className="filter-dropdown ">
+          <MenuItem
+            eventKey="1"
+            onClick={() => {
+              onClick('date-asc');
+            }}
+          >
+            by date added (recent first)
+          </MenuItem>
+          <MenuItem
+            eventKey="1"
+            onClick={() => {
+              onClick('date-desc');
+            }}
+          >
+            by date added (recent last)
+          </MenuItem>
 
-        <MenuItem eventKey="2" onClick={() => onClick('title')}>
-          by title
-        </MenuItem>
-        <MenuItem eventKey="3" onClick={() => onClick('dateRead')}>
-          by date read
-        </MenuItem>
-      </DropdownButton>
+          <MenuItem eventKey="2" onClick={() => onClick('title')}>
+            by title
+          </MenuItem>
+          <MenuItem eventKey="3" onClick={() => onClick('dateRead')}>
+            by date read
+          </MenuItem>
+        </Dropdown.Menu>
+      </Dropdown>
     );
   }
 }

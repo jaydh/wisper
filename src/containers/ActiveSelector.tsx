@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import * as React from 'react';
 import { setVisibilityFilter } from '../actions/visibilityFilter';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { Dropdown, MenuItem } from 'react-bootstrap';
 import { ArticleList as ArticleListType } from '../constants/StoreState';
 
 interface Props {
@@ -14,23 +14,22 @@ class ActiveSelector extends React.Component<Props> {
     const { onClick, currentActive } = this.props;
     const actives = ['Active', 'Completed', 'All'];
     return (
-      <DropdownButton
-        title={currentActive}
-        id="bg-nested-dropdown"
-        noCaret={true}
-      >
-        {actives.map((t: string) => (
-          <MenuItem
-            key={t}
-            eventKey="1"
-            onClick={() => {
-              onClick(t);
-            }}
-          >
-            {t}
-          </MenuItem>
-        ))}
-      </DropdownButton>
+      <Dropdown id="bg-nested-dropdown">
+        <Dropdown.Toggle noCaret={true}>{currentActive}</Dropdown.Toggle>
+        <Dropdown.Menu className="filter-dropdown ">
+          {actives.map((t: string) => (
+            <MenuItem
+              key={t}
+              eventKey="1"
+              onClick={() => {
+                onClick(t);
+              }}
+            >
+              {t}
+            </MenuItem>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
     );
   }
 }

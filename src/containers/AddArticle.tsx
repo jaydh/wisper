@@ -170,7 +170,10 @@ class AddArticle extends React.Component<Props, State> {
 
           <InputGroup bsSize="large">
             <InputGroup.Button>
-              <Button bsSize="large" onClick={() => this.handleSubmit(false)}>
+              <Button
+                bsStyle="submit"
+                onClick={() => this.handleSubmit(false)}
+              >
                 Submit
               </Button>
             </InputGroup.Button>

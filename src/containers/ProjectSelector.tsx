@@ -2,7 +2,7 @@ import * as React from 'react';
 import { setProjectFilter } from '../actions/projectFilter';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { Dropdown, MenuItem } from 'react-bootstrap';
 import { ArticleList as ArticleListType } from '../constants/StoreState';
 
 interface Props {
@@ -17,23 +17,24 @@ class ProjectSelector extends React.Component<Props> {
     const { projects, currentProject, onClick } = this.props;
     const options = ['All', ...projects.toJS(), 'None'];
     return (
-      <DropdownButton
-        title={currentProject}
-        noCaret={true}
-        id="dropdown-no-caret"
-      >
-        {options.map(project => {
-          return (
-            <MenuItem
-              eventKey={String(project)}
-              key={String(project)}
-              onClick={() => onClick(String(project))}
-            >
-              {project}
-            </MenuItem>
-          );
-        })}
-      </DropdownButton>
+      <Dropdown id="bg-nested-dropdown">
+        <Dropdown.Toggle className="filter" noCaret={true}>
+          {currentProject}
+        </Dropdown.Toggle>
+        <Dropdown.Menu className="filter-dropdown ">
+          {options.map(project => {
+            return (
+              <MenuItem
+                eventKey={String(project)}
+                key={String(project)}
+                onClick={() => onClick(String(project))}
+              >
+                {project}
+              </MenuItem>
+            );
+          })}
+        </Dropdown.Menu>
+      </Dropdown>
     );
   }
 }

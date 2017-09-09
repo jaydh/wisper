@@ -26,7 +26,7 @@ a {
   font-size: 1.5em;
 }
 .articleInfo {
-  color: var(--blue);  
+  color: var(--blue);
   font-size: 1.5em;
 }
 .modal-container {
@@ -48,7 +48,8 @@ a {
 }
 
 .btn-submit {
-  background-color: var(--lightBlue);
+  height: 2.5em;
+  background-color: var(--blue);
 }
 
 .btn-addList {
@@ -60,8 +61,18 @@ a {
 }
 .btn-analytics {
   background-color: var(--green);
-  position: absolute;
-  right: 1em;
+}
+
+#bg-nested-dropdown {
+  background-color: var(--lightBlue);
+}
+
+.filter {
+  background-color: var(--lightBlue);
+}
+
+.filter-dropdown {
+  background: linear-gradient(to bottom right, var(--blue), var(--lightBlue));
 }
 
 .drag {
