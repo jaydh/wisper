@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import addArticle from '../actions/addArticle';
-import { ArticleList } from '../constants/StoreState';
 import {
   InputGroup,
   Button,
@@ -45,9 +44,9 @@ interface State {
   suggestion: string;
 }
 interface Props {
-  articleList: ArticleList;
   onAdd: (t: string, p?: string) => void;
   wordbanks: Map<string, Set<string>>;
+  projectFilter: string;
 }
 
 class AddArticle extends React.Component<Props, State> {
@@ -138,8 +137,7 @@ class AddArticle extends React.Component<Props, State> {
   }
 
   handleSubmit(useSuggest: boolean) {
-    const { onAdd } = this.props;
-    const { articleList: { projectFilter } } = this.props;
+    const { onAdd, projectFilter } = this.props;
     let project = useSuggest ? this.state.suggestion : projectFilter;
     project =
       projectFilter !== 'None' && projectFilter !== 'All' ? projectFilter : '';
@@ -153,7 +151,7 @@ class AddArticle extends React.Component<Props, State> {
   }
 
   render() {
-    const { articleList: { projectFilter } } = this.props;
+    const { projectFilter } = this.props;
     return (
       <form
         onSubmit={event => {
@@ -170,10 +168,7 @@ class AddArticle extends React.Component<Props, State> {
 
           <InputGroup bsSize="large">
             <InputGroup.Button>
-              <Button
-                bsStyle="submit"
-                onClick={() => this.handleSubmit(false)}
-              >
+              <Button bsStyle="submit" onClick={() => this.handleSubmit(false)}>
                 Submit
               </Button>
             </InputGroup.Button>
@@ -205,11 +200,10 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-const mapStateToProps = (
-  state: any,
-  ownProps: { articleList: ArticleList }
-) => {
-  return { wordbanks: state.get('projects') };
+const mapStateToProps = (state: any, ownProps: { projectFilter: string }) => {
+  return {
+    wordbanks: state.get('projects')
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddArticle);

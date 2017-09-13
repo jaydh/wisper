@@ -9,7 +9,6 @@ interface Props {
   projects: List<String>;
   currentProject: string;
   onClick: (t: string) => void;
-  id: string;
 }
 
 class ProjectSelector extends React.Component<Props> {
@@ -51,7 +50,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any, ownProps: Props) => {
+const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onClick: (filter: string) => {
       dispatch(setProjectFilter(filter, ownProps.id));
