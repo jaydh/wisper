@@ -96,7 +96,7 @@ a {
 }
 
 .canvas {
-  background-color: var(--darkGray);
+  background: linear-gradient(to bottom right, var(--gray), var(--darkGray));
 }
 
 .list-group-item {
