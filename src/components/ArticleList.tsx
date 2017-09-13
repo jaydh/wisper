@@ -5,10 +5,7 @@ import ProjectSelector from '../containers/ProjectSelector';
 import ActiveSelector from '../containers/ActiveSelector';
 import Sort from '../containers/Sort';
 import { List } from 'immutable';
-import {
-  Article as articleType,
-  ArticleList as ArticleListType
-} from '../constants/StoreState';
+import { Article as articleType } from '../constants/StoreState';
 import { Jumbotron, ListGroup, ButtonGroup } from 'react-bootstrap';
 import DeleteArticleList from '../containers/DeleteArticleList';
 const Rnd = require('react-rnd').default;
@@ -17,25 +14,21 @@ interface Props {
   articles: List<articleType>;
   order: number;
   id: string;
-  articleList: ArticleListType;
-  articleListNum: number;
-  sortByDate(): () => void;
+  sort: string;
+  projectFilter: string;
 }
 
 class ArticleList extends React.Component<Props> {
-  componentDidMount() {
-    this.props.sortByDate();
-  }
   render() {
-    const { articles, id, articleList } = this.props;
+    const { articles, id, projectFilter } = this.props;
     return (
       <Jumbotron className="article-list-container">
         <DeleteArticleList id={id} />
-        <AddArticle articleList={articleList} />
+        <AddArticle projectFilter={projectFilter} />
         <ButtonGroup>
           <ActiveSelector id={id} />
           <ProjectSelector id={id} />
-          <Sort />
+          <Sort id={id} />
         </ButtonGroup>
 
         <h5>Count: {articles.size}</h5>
@@ -60,7 +53,7 @@ class OuterArticleList extends React.Component<Props> {
         style={{
           cursor: 'auto',
           overflowY: 'auto',
-          '-webkit-overflow-scrolling': 'touch'
+          WebkitOverflowScrolling: 'touch'
         }}
         default={{
           x: 0,

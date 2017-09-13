@@ -17,6 +17,7 @@ export interface ArticleList {
   order: number;
   visibilityFilter: string;
   projectFilter: string;
+  sort: string;
 }
 
 export interface StoreState {

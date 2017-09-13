@@ -1,7 +1,6 @@
 import { AddArticleFulfilled } from '../actions/addArticle';
 import { DeleteArticleFulfilled } from '../actions/deleteArticle';
 import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
-import { SortArticles } from '../actions/sortArticles';
 import {
   UpdateArticle,
   AddArticleFromServer,
@@ -62,71 +61,6 @@ function addArticleFromServer(
   return check ? articleState.push(action.article) : articleState;
 }
 
-function sortArticles(articleState: List<articleType>, action: SortArticles) {
-  switch (action.filter) {
-    case 'date-desc':
-      return articleState
-        .sort((a, b) => {
-          const aa = new Date(a.dateAdded);
-          const bb = new Date(b.dateAdded);
-          if (aa < bb) {
-            return -1;
-          }
-          if (aa > bb) {
-            return 1;
-          }
-          return 0;
-        })
-        .toList();
-    case 'date-asc':
-      return articleState
-        .sort((b, a) => {
-          const aa = new Date(a.dateAdded);
-          const bb = new Date(b.dateAdded);
-          if (aa < bb) {
-            return -1;
-          }
-          if (aa > bb) {
-            return 1;
-          }
-          return 0;
-        })
-        .toList();
-
-    case 'title':
-      return articleState
-        .sort((a, b) => {
-          const aa =
-            a.metadata && (a.metadata.title || a.metadata.ogTitle)
-              ? a.metadata.ogTitle || a.metadata.title
-              : a.link;
-
-          const bb =
-            b.metadata && (b.metadata.title || b.metadata.ogTitle)
-              ? b.metadata.ogTitle || b.metadata.title
-              : b.link;
-          return aa.localeCompare(bb);
-        })
-        .toList();
-    case 'dateRead':
-      return articleState
-        .sort((a, b) => {
-          const aa = a.dateRead ? new Date(a.dateRead) : new Date();
-          const bb = b.dateRead ? new Date(b.dateRead) : new Date();
-          if (aa < bb) {
-            return -1;
-          }
-          if (aa > bb) {
-            return 1;
-          }
-          return 0;
-        })
-        .toList();
-    default:
-      return articleState;
-  }
-}
-
 function deleteArticleFromServer(
   articleState: List<articleType>,
   action: DeleteArticleFromServer
@@ -176,7 +110,6 @@ const articles = createReducer(List(), {
   UPDATE_ARTICLE: updateArticle,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,
-  SORT_ARTICLES: sortArticles
 });
 
 export default articles;

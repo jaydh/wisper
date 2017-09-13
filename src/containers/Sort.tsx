@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dropdown, MenuItem } from 'react-bootstrap';
-import sortArticles from '../actions/sortArticles';
+import setSortFilter from '../actions/setSortFilter';
 import { connect } from 'react-redux';
 
 interface Props {
@@ -46,7 +46,7 @@ class Sort extends React.Component<Props> {
 function mapDispatchToProps(dispatch: any, ownProps: any) {
   return {
     onClick: (filter: string) => {
-      dispatch(sortArticles(filter));
+      dispatch(setSortFilter(filter, ownProps.id));
     }
   };
 }

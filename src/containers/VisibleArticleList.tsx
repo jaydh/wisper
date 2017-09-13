@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
 import ArticleList from '../components/ArticleList';
-import { List } from 'immutable';
+import { List, fromJS } from 'immutable';
 import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import sortArticles from '../actions/sortArticles';
 // error when typing articleInProj with List<articleType>;
 
 const getArticlesWithProject = (
@@ -24,17 +23,8 @@ const getArticlesWithProject = (
       break;
     default:
       articlesInProject = articles.filter((article: articleType) => {
-        if (article) {
-          const projects = article.projects;
-          if (projects) {
-            return (
-              Object.keys(article.projects)
-                .map(key => projects[key])
-                .indexOf(projectFilter) > -1
-            );
-          }
-        }
-        return false;
+        const projects = fromJS(article.projects);
+        return projects ? projects.includes(projectFilter) : false;
       }) as List<articleType>;
   }
   return articlesInProject;
@@ -44,9 +34,12 @@ const getVisibleArticles = (
   articles: List<articleType>,
   articleList: ArticleListType
 ): List<articleType> => {
-  const { visibilityFilter, projectFilter } = articleList;
-
-  const articlesInProject = getArticlesWithProject(articles, projectFilter);
+  const { visibilityFilter, projectFilter, sort } = articleList;
+  const sortedArticles = getSortedArticles(articles, sort);
+  const articlesInProject = getArticlesWithProject(
+    sortedArticles,
+    projectFilter
+  );
   switch (visibilityFilter) {
     case 'All':
       return articlesInProject;
@@ -63,6 +56,71 @@ const getVisibleArticles = (
   }
 };
 
+function getSortedArticles(articles: List<articleType>, sort: string) {
+  switch (sort) {
+    case 'date-desc':
+      return articles
+        .sort((a, b) => {
+          const aa = new Date(a.dateAdded);
+          const bb = new Date(b.dateAdded);
+          if (aa < bb) {
+            return -1;
+          }
+          if (aa > bb) {
+            return 1;
+          }
+          return 0;
+        })
+        .toList();
+    case 'date-asc':
+      return articles
+        .sort((b, a) => {
+          const aa = new Date(a.dateAdded);
+          const bb = new Date(b.dateAdded);
+          if (aa < bb) {
+            return -1;
+          }
+          if (aa > bb) {
+            return 1;
+          }
+          return 0;
+        })
+        .toList();
+
+    case 'title':
+      return articles
+        .sort((a, b) => {
+          const aa =
+            a.metadata && (a.metadata.title || a.metadata.ogTitle)
+              ? a.metadata.ogTitle || a.metadata.title
+              : a.link;
+
+          const bb =
+            b.metadata && (b.metadata.title || b.metadata.ogTitle)
+              ? b.metadata.ogTitle || b.metadata.title
+              : b.link;
+          return aa.localeCompare(bb);
+        })
+        .toList();
+    case 'dateRead':
+      return articles
+        .sort((a, b) => {
+          const aa = a.dateRead ? new Date(a.dateRead) : new Date();
+          const bb = b.dateRead ? new Date(b.dateRead) : new Date();
+          if (aa < bb) {
+            return -1;
+          }
+          if (aa > bb) {
+            return 1;
+          }
+          return 0;
+        })
+        .toList();
+    default:
+      return articles;
+  }
+}
+
 function mapStateToProps(state: any, ownProps: any) {
   const articleList = state
     .get('articleLists')
@@ -70,21 +128,11 @@ function mapStateToProps(state: any, ownProps: any) {
   return {
     articles: getVisibleArticles(state.get('articles'), articleList),
     order: articleList.order,
-    articleListNum: state.get('articleLists').size,
-    articleList
+    sort: articleList.sort,
+    projectFilter: articleList.projectFilter
   };
 }
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    sortByDate: () => {
-      dispatch(sortArticles('date-asc'));
-    }
-  };
-}
-
-const VisibleArticleList = connect(mapStateToProps, mapDispatchToProps)(
-  ArticleList
-);
+const VisibleArticleList = connect(mapStateToProps)(ArticleList);
 
 export default VisibleArticleList;
