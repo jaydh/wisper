@@ -23,7 +23,7 @@ function addArticleList(
   return articleListState.add({
     id,
     order,
-    sort: 'date-desc',
+    sort: 'date-asc',
     visibilityFilter: 'Active',
     projectFilter: 'All'
   });
