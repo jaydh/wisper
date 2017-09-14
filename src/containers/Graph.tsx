@@ -13,8 +13,23 @@ interface ProjectMeta {
   completed: number;
 }
 
-class Graph extends React.Component<Props> {
+const Colors = [
+  '#F9ED69',
+  '#F08A5D',
+  '#B83B5E',
+  '#6A2C70',
+  '#08D9D6',
+  '#252A34',
+  '#FF2E63',
+  '#7AC7C4',
+  '#F73859',
+  '#FFCFDF',
+  '#FEFDCA',
+  '#E0F9B5',
+  '#A5DEE5'
+];
 
+class Graph extends React.Component<Props> {
   getProjectData(): Map<string, object> {
     const { articles } = this.props;
     let projectData = Map<string, ProjectMeta>();
@@ -46,7 +61,7 @@ class Graph extends React.Component<Props> {
       article => (article.metadata ? article.metadata.ogSiteName : '')
     );
     let domainCounts = Map<string, number>();
-    domains.map(
+    domains.forEach(
       (x: string) =>
         (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
     );
@@ -59,66 +74,64 @@ class Graph extends React.Component<Props> {
     const projectCount = projectData.map((t: ProjectMeta) => t.count);
     // const projectCompleted = projectData.map((t: ProjectMeta) => t.completed);
 
-    const data = {
-      labels: projectCount.keySeq().toJS(),
-      datasets: [
-        {
-          label: '# of Votes',
-          data: projectCount.valueSeq().toJS(),
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1,
-          hoverBorderWidth: 3
-        }
-      ]
+    const dynamicColors = function() {
+      return Colors[Math.floor(Math.random() * Colors.length)];
+    };
+    const dataColors = projectData
+      .map(() => dynamicColors())
+      .valueSeq()
+      .toJS();
+    const dataColors2 = domainCounts
+      .map(() => dynamicColors())
+      .valueSeq()
+      .toJS();
+    const data = () => {
+      return {
+        labels: projectCount.keySeq().toJS(),
+        datasets: [
+          {
+            data: projectCount.valueSeq().toJS(),
+            backgroundColor: dataColors,
+            borderWidth: 1,
+            hoverBorderWidth: 3
+          }
+        ]
+      };
     };
 
     const data2 = {
       labels: domainCounts.keySeq().toJS(),
       datasets: [
         {
-          label: '# of Votes',
           data: domainCounts.valueSeq().toJS(),
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
+          backgroundColor: dataColors2,
           borderWidth: 1,
           hoverBorderWidth: 3
         }
       ]
     };
-
+    const options = {
+      title: {
+        display: true,
+        text: 'Project Count Distribution'
+      },
+      legend: {
+        display: false
+      }
+    };
+    const options2 = {
+      title: {
+        display: true,
+        text: 'Sources'
+      },
+      legend: {
+        display: false
+      }
+    };
     return (
-      <div>
-        <Doughnut data={data} />
-        <Doughnut data={data2} />
+      <div style={{ height: '200em' }}>
+        <Doughnut data={data} options={options} />
+        <Doughnut data={data2} options={options2} />
       </div>
     );
   }
