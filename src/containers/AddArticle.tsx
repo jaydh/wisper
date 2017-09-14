@@ -138,9 +138,9 @@ class AddArticle extends React.Component<Props, State> {
 
   handleSubmit(useSuggest: boolean) {
     const { onAdd, projectFilter } = this.props;
-    let project = useSuggest ? this.state.suggestion : projectFilter;
-    project =
+    let project =
       projectFilter !== 'None' && projectFilter !== 'All' ? projectFilter : '';
+    project = useSuggest ? this.state.suggestion : project;
 
     if (this.getValidationState() === 'success') {
       onAdd(this.state.parse.source, project);
