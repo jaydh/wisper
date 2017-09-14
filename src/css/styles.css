@@ -93,6 +93,9 @@ a {
 
 .resize {
   position: sticky;
+  position: -webkit-sticky;
+  border: solid var(--blue);
+  border-width: 0 6px 6px 0;
 }
 
 .canvas {

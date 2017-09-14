@@ -22,22 +22,29 @@ class ArticleList extends React.Component<Props> {
   render() {
     const { articles, id, projectFilter } = this.props;
     return (
-      <Jumbotron className="article-list-container">
-        <DeleteArticleList id={id} />
-        <AddArticle projectFilter={projectFilter} />
-        <ButtonGroup>
-          <ActiveSelector id={id} />
-          <ProjectSelector id={id} />
-          <Sort id={id} />
-        </ButtonGroup>
+      <div>
+        <Jumbotron
+          className="article-list-container"
+          style={{
+            marginBottom: '0'
+          }}
+        >
+          <DeleteArticleList id={id} />
+          <AddArticle projectFilter={projectFilter} />
+          <ButtonGroup>
+            <ActiveSelector id={id} />
+            <ProjectSelector id={id} />
+            <Sort id={id} />
+          </ButtonGroup>
 
-        <h5>Count: {articles.size}</h5>
-        <ListGroup>
-          {articles.map((article: articleType) => {
-            return <Article key={article.id} {...article} />;
-          })}
-        </ListGroup>
-      </Jumbotron>
+          <h5>Count: {articles.size}</h5>
+          <ListGroup>
+            {articles.map((article: articleType) => {
+              return <Article key={article.id} {...article} />;
+            })}
+          </ListGroup>
+        </Jumbotron>
+      </div>
     );
   }
 }
@@ -46,7 +53,7 @@ class OuterArticleList extends React.Component<Props> {
   render() {
     const { order } = this.props;
     const width = innerWidth * 0.8;
-
+    console.log('render');
     return (
       <Rnd
         className="resizable-container"
@@ -80,12 +87,9 @@ class OuterArticleList extends React.Component<Props> {
         resizeHandlerStyles={{
           bottomRight: {
             zIndex: '100',
-            border: 'solid #1290bf',
-            borderWidth: '0 6px 6px 0',
+            position: '-webkit-sticky',
             bottom: '1em',
             right: '1em',
-            padding: '3px',
-            position: '-webkit-sticky',
             float: 'right'
           }
         }}
