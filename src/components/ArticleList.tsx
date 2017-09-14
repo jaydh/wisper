@@ -16,6 +16,12 @@ interface Props {
   id: string;
   sort: string;
   projectFilter: string;
+  xPosition: number;
+  yPosition: number;
+  width: number;
+  height: number;
+  onResize: (x: number, y: number) => void;
+  onReposition: (x: number, y: number) => void;
 }
 
 class ArticleList extends React.Component<Props> {
@@ -51,9 +57,15 @@ class ArticleList extends React.Component<Props> {
 
 class OuterArticleList extends React.Component<Props> {
   render() {
-    const { order } = this.props;
-    const width = innerWidth * 0.8;
-    console.log('render');
+    const {
+      order,
+      xPosition,
+      yPosition,
+      width,
+      height,
+      onResize,
+      onReposition
+    } = this.props;
     return (
       <Rnd
         className="resizable-container"
@@ -63,10 +75,10 @@ class OuterArticleList extends React.Component<Props> {
           WebkitOverflowScrolling: 'touch'
         }}
         default={{
-          x: 0,
-          y: 0,
+          x: xPosition,
+          y: yPosition,
           width: width,
-          height: innerHeight * 0.8
+          height: height
         }}
         z={order}
         bounds=".canvas"
@@ -92,6 +104,18 @@ class OuterArticleList extends React.Component<Props> {
             right: '1em',
             float: 'right'
           }
+        }}
+        onResizeStop={(
+          e: MouseEvent | TouchEvent,
+          dir: any,
+          refToElement: any,
+          delta: any,
+          position: Position
+        ) => {
+          onResize(delta.width, delta.height);
+        }}
+        onDragStop={(e: MouseEvent | TouchEvent, data: any) => {
+          onReposition(data.lastX, data.lastY);
         }}
       >
         <i className="drag" />

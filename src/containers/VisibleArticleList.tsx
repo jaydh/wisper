@@ -5,6 +5,10 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
+import {
+  resizeArticleList,
+  repositionArticleList
+} from '../actions/articleList';
 
 const getArticlesWithProject = (
   articles: List<articleType>,
@@ -128,10 +132,27 @@ function mapStateToProps(state: any, ownProps: any) {
     articles: getVisibleArticles(state.get('articles'), articleList),
     order: articleList.order,
     sort: articleList.sort,
-    projectFilter: articleList.projectFilter
+    projectFilter: articleList.projectFilter,
+    xPosition: articleList.xPosition,
+    yPosition: articleList.yPosition,
+    height: articleList.height,
+    width: articleList.width
   };
 }
 
-const VisibleArticleList = connect(mapStateToProps)(ArticleList);
+const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+  return {
+    onResize: (x: number, y: number) => {
+      dispatch(resizeArticleList(ownProps.id, x, y));
+    },
+    onReposition: (x: number, y: number) => {
+      dispatch(repositionArticleList(ownProps.id, x, y));
+    }
+  };
+};
+
+const VisibleArticleList = connect(mapStateToProps, mapDispatchToProps)(
+  ArticleList
+);
 
 export default VisibleArticleList;

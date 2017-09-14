@@ -21,3 +21,43 @@ export function deleteArticleList(id: string): DeleteArticleList {
     id
   };
 }
+
+export interface ResizeArticleList {
+  type: 'RESIZE_ARTICLE_LIST';
+  id: string;
+  x: number;
+  y: number;
+}
+
+export function resizeArticleList(
+  id: string,
+  x: number,
+  y: number
+): ResizeArticleList {
+  return {
+    type: 'RESIZE_ARTICLE_LIST',
+    id,
+    x,
+    y
+  };
+}
+
+export interface RepositionArticleList {
+  type: 'REPOSITION_ARTICLE_LIST';
+  id: string;
+  x: number;
+  y: number;
+}
+
+export function repositionArticleList(
+  id: string,
+  x: number,
+  y: number
+): RepositionArticleList {
+  return {
+    type: 'REPOSITION_ARTICLE_LIST',
+    id,
+    x,
+    y
+  };
+}

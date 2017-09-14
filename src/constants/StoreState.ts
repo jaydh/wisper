@@ -18,6 +18,10 @@ export interface ArticleList {
   visibilityFilter: string;
   projectFilter: string;
   sort: string;
+  xPosition: number;
+  yPosition: number;
+  width: number;
+  height: number;
 }
 
 export interface StoreState {

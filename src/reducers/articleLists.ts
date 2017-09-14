@@ -1,6 +1,11 @@
 import { OrderedSet } from 'immutable';
 import createReducer from './createReducer';
-import { AddArticleList, DeleteArticleList } from '../actions/articleList';
+import {
+  AddArticleList,
+  DeleteArticleList,
+  ResizeArticleList,
+  RepositionArticleList
+} from '../actions/articleList';
 import { SetVisbilityFilter } from '../actions/visibilityFilter';
 import { SetProjectFilter } from '../actions/projectFilter';
 import { ArticleList } from '../constants/StoreState';
@@ -25,7 +30,11 @@ function addArticleList(
     order,
     sort: 'date-asc',
     visibilityFilter: 'Active',
-    projectFilter: 'All'
+    projectFilter: 'All',
+    xPosition: 0,
+    yPosition: 0,
+    width: innerWidth * 0.5,
+    height: innerWidth * 0.8
   });
 }
 
@@ -69,11 +78,44 @@ function setSortFilter(
     return list.id === action.id ? { ...list, sort: action.filter } : list;
   });
 }
+
+function resizeArticleList(
+  articleListState: OrderedSet<ArticleList>,
+  action: ResizeArticleList
+) {
+  return articleListState.map((list: ArticleList) => {
+    return list.id === action.id
+      ? {
+          ...list,
+          width: list.width + action.x,
+          height: list.height + action.y
+        }
+      : list;
+  });
+}
+
+function repositionArticleList(
+  articleListState: OrderedSet<ArticleList>,
+  action: RepositionArticleList
+) {
+  return articleListState.map((list: ArticleList) => {
+    return list.id === action.id
+      ? {
+          ...list,
+          xPosition: action.x,
+          yPosition: action.y
+        }
+      : list;
+  });
+}
+
 const articleLists = createReducer(OrderedSet<ArticleList>(), {
   ADD_ARTICLE_LIST: addArticleList,
   DELETE_ARTICLE_LIST: deleteArticleList,
   SET_VISIBILITY_FILTER: setVisibilityFilter,
   SET_PROJECT_FILTER: setProjectFilter,
-  SET_SORT_FILTER: setSortFilter
+  SET_SORT_FILTER: setSortFilter,
+  RESIZE_ARTICLE_LIST: resizeArticleList,
+  REPOSITION_ARTICLE_LIST: repositionArticleList
 });
 export default articleLists;
