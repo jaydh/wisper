@@ -34,7 +34,7 @@ function addArticleList(
     xPosition: 0,
     yPosition: 0,
     width: innerWidth * 0.5,
-    height: innerWidth * 0.8
+    height: innerHeight * 0.8
   });
 }
 
