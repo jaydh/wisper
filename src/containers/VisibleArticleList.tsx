@@ -5,13 +5,12 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-// error when typing articleInProj with List<articleType>;
 
 const getArticlesWithProject = (
   articles: List<articleType>,
   projectFilter: string
 ) => {
-  let articlesInProject;
+  let articlesInProject: List<articleType>;
   switch (projectFilter) {
     case 'All':
       articlesInProject = articles;
