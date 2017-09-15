@@ -15,13 +15,14 @@ function addArticleList(
   articleListState: OrderedSet<ArticleList>,
   action: AddArticleList
 ): OrderedSet<ArticleList> {
-  const id =
-    Math.random()
-      .toString(36)
-      .substring(2, 15) +
-    Math.random()
-      .toString(36)
-      .substring(2, 15);
+  const id = action.id
+    ? action.id
+    : Math.random()
+        .toString(36)
+        .substring(2, 15) +
+      Math.random()
+        .toString(36)
+        .substring(2, 15);
 
   const order = articleListState.size;
 

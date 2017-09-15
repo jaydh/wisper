@@ -32,42 +32,42 @@ export interface DeleteProject {
   project: any;
 }
 
-function UpdateArticle(article: articleType) {
+function updateArticle(article: articleType) {
   return {
     type: 'UPDATE_ARTICLE',
     article
   };
 }
 
-export function AddArticleFromServer(article: articleType) {
+export function addArticleFromServer(article: articleType) {
   return {
     type: 'ADD_ARTICLE_FROM_SERVER',
     article
   };
 }
 
-function DeleteArticleFromServer(article: articleType) {
+function deleteArticleFromServer(article: articleType) {
   return {
     type: 'DELETE_ARTICLE_FROM_SERVER',
     article
   };
 }
 
-export function UpdateProject(project: any) {
+export function updateProject(project: any) {
   return {
     type: 'UPDATE_PROJECT',
     project
   };
 }
 
-export function AddProject(project: any) {
+export function addProject(project: any) {
   return {
     type: 'ADD_PROJECT',
     project
   };
 }
 
-function DeleteProject(project: any) {
+function deleteProject(project: any) {
   return {
     type: 'DELETE_PROJECT',
     project
@@ -81,26 +81,26 @@ export function ListenToFirebase() {
 
   return (dispatch: Dispatch<any>) => {
     projectRef.on('child_changed', function(snapshot: any) {
-      dispatch(UpdateProject(snapshot.val()));
+      dispatch(updateProject(snapshot.val()));
     });
 
     projectRef.on('child_added', function(snapshot: any) {
-      dispatch(AddProject(snapshot.val()));
+      dispatch(addProject(snapshot.val()));
     });
 
     projectRef.on('child_removed', function(snapshot: any) {
-      dispatch(DeleteProject(snapshot.val()));
+      dispatch(deleteProject(snapshot.val()));
     });
     articleRef.on('child_changed', function(snapshot: any) {
-      dispatch(UpdateArticle(snapshot.val()));
+      dispatch(updateArticle(snapshot.val()));
     });
 
     articleRef.on('child_added', function(snap: any) {
-      dispatch(AddArticleFromServer(snap.val()));
+      dispatch(addArticleFromServer(snap.val()));
     });
 
     articleRef.on('child_removed', function(snap: any) {
-      dispatch(DeleteArticleFromServer(snap.val()));
+      dispatch(deleteArticleFromServer(snap.val()));
     });
   };
 }

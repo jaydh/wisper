@@ -2,11 +2,13 @@
 
 export interface AddArticleList {
   type: 'ADD_ARTICLE_LIST';
+  id?: string;
 }
 
-export function addArticleList(): AddArticleList {
+export function addArticleList(id?: string): AddArticleList {
   return {
-    type: 'ADD_ARTICLE_LIST'
+    type: 'ADD_ARTICLE_LIST',
+    id
   };
 }
 

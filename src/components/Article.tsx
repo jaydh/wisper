@@ -98,9 +98,9 @@ class Article extends React.Component<Props, State> {
                 .filter((t: string) => visibleMeta.includes(t))
                 .map((t: string) => {
                   return (
-                    <h5 key={t} style={{ fontSize: '.9em' }}>
+                    <p key={t} style={{ fontSize: '.9em' }}>
                       {t}: {fromJS(metadata).get(t)} <br />
-                    </h5>
+                    </p>
                   );
                 })
             ) : (

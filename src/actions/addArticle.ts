@@ -1,6 +1,7 @@
 import * as constants from '../constants/actionTypes';
 import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
+import { fromJS, List } from 'immutable';
 let Hashes = require('jshashes');
 var SHA1 = new Hashes.SHA1();
 
@@ -20,7 +21,7 @@ export interface AddArticleRejected {
 export interface AddArticle {
   type: 'ADD_ARTICLE';
   articleLink: string;
-  project: string;
+  project?: string;
 }
 
 function AddArticleRequested(): AddArticleRequested {
@@ -87,5 +88,45 @@ export default function addArticle(articleLink: string, project?: string) {
           });
       }
     });
+    if (project) {
+      const projects = database.ref('/userData/' + user + '/projects/');
+
+      // Gets dictionary data for project and updates project dicionary accordingly
+      fetch(
+        'https://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/' +
+          project +
+          '/json'
+      )
+        .then(function(response: any) {
+          return response.json();
+        })
+        .then(function(json: any) {
+          let dictionary: List<string> = fromJS([]);
+          const synonymGroups = fromJS(json).toList();
+          synonymGroups.forEach((t: any) => {
+            dictionary = dictionary.merge(t.get('syn'));
+          });
+          return dictionary;
+        })
+        .then(function(dictionary: any) {
+          projects.once('value').then(function(snapshot: any) {
+            const push = () =>
+              projects.push({
+                id: project,
+                dictionary: dictionary.valueSeq().toJS()
+              });
+            if (snapshot.val()) {
+              const proj = fromJS(snapshot.val())
+                .valueSeq()
+                .map((t: Map<string, any>) => t.get('id'));
+              if (!proj.includes(project)) {
+                push();
+              }
+            } else {
+              push();
+            }
+          });
+        });
+    }
   };
 }

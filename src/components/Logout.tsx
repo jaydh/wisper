@@ -5,7 +5,7 @@ export default class Logout extends React.Component {
   render() {
     return (
       <div>
-        <Button bsStyle="logout" onClick={() => auth().signOut()}>
+        <Button bsStyle="logout" bsSize="large" onClick={() => auth().signOut()}>
           Logout
         </Button>
       </div>

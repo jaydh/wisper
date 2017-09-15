@@ -59,6 +59,7 @@ export function addArticleToProject(article: articleType, project: string) {
         });
     });
 
+    // Gets dictionary data for project and updates project dicionary accordingly
     fetch(
       'https://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/' +
         project +

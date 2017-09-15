@@ -45,10 +45,10 @@ class App extends React.Component<{}, State> {
           </PageHeader>
         <Canvas />
         <Logout />
-        <p>
+        <h2>
           Under active development; Last updated: {gitDate.toLocaleString()} <br />
           Source: <a>https://github.com/jaydh/wispy</a>
-          </p>
+          </h2>
         </div>
     );
   }
