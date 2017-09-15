@@ -21,9 +21,10 @@ h5 {
 }
 p {
   font-size: 1.3em;
+  color: black;
 }
 a {
-  font-size: 1.5em;
+  font-size: 1.1em;
 }
 .articleInfo {
   color: var(--blue);
@@ -99,7 +100,7 @@ a {
 }
 
 .canvas {
-  background: linear-gradient(to bottom right, var(--gray), var(--darkGray));
+  background: linear-gradient(to bottom right, var(--darkGray), var(--gray));
 }
 
 .list-group-item {
@@ -107,7 +108,7 @@ a {
 }
 
 .article-list-container {
-  background-color: var(--gray);
+  background: linear-gradient(to bottom right, var(--white), var(--lightererGray));
   margin-bottom: 0;
 }
 
