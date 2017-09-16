@@ -11,16 +11,24 @@ exports.getMetadata = functions.database
   .onCreate(event => {
     const article = event.data.val();
     event.data.ref.parent.update({ fetching: true });
-    return scrape(article, (err, meta) => {
-      let updates = {};
-      // Filters out null/undefined values
-      updates['/metadata/'] = fromJS(meta)
-        .filter(t => t)
-        .toJS();
-      updates['/fetching'] = false;
 
-      return event.data.ref.parent.update(updates);
-    });
+    var promise = new Promise(function(resolve, reject) {
+      scrape(article, (err, meta) => {
+        let updates = {};
+        // Filters out null/undefined values
+        updates['/metadata/'] = fromJS(meta)
+          .filter(t => t)
+          .toJS();
+        updates['/fetching'] = false;
+
+        if (updates) {
+          resolve(updates);
+        } else {
+          reject(Error('Updates is null'));
+        }
+      }
+    )}).then(updates => event.data.ref.parent.update(updates));
+    return promise;
   });
 
 exports.addKeywordsFromMetadata = functions.database
@@ -67,30 +75,3 @@ exports.addKeywordsFromMetadata = functions.database
       }
     });
   });
-
-/*
-exports.getSynonyms = functions.database
-  .ref('/userData/{uID}/projects/{projectID}')
-  .onCreate(event => {
-    fetch(
-      'http://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/' +
-        event.params.projectID +
-        '/json'
-    )
-      .then(function() {
-        return response.json();
-      })
-      .then(function() {
-        let dictionary = fromJS([]);
-        const synonymGroups = fromJS(json).toList();
-        synonymGroups.forEach(t => {
-          dictionary = dictionary.merge(t.get('syn'));
-        });
-        return dictionary;
-      })
-      .then(function(dictionary) {
-        event.data.ref.set({
-          dictionary: dictionary.valueSeq().toJS()
-        });
-      });
-  });*/
