@@ -26,8 +26,8 @@ exports.getMetadata = functions.database
         } else {
           reject(Error('Updates is null'));
         }
-      }
-    )}).then(updates => event.data.ref.parent.update(updates));
+      });
+    }).then(updates => event.data.ref.parent.update(updates));
     return promise;
   });
 
