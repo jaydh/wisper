@@ -12,7 +12,7 @@ exports.getMetadata = functions.database
     const article = event.data.val();
     event.data.ref.parent.update({ fetching: true });
 
-    var promise = new Promise(function(resolve, reject) {
+    const promise = new Promise(function(resolve, reject) {
       scrape(article, (err, meta) => {
         let updates = {};
         // Filters out null/undefined values
@@ -21,11 +21,7 @@ exports.getMetadata = functions.database
           .toJS();
         updates['/fetching'] = false;
 
-        if (updates) {
-          resolve(updates);
-        } else {
-          reject(Error('Updates is null'));
-        }
+        resolve(updates);
       });
     }).then(updates => event.data.ref.parent.update(updates));
     return promise;
@@ -34,44 +30,61 @@ exports.getMetadata = functions.database
 exports.addKeywordsFromMetadata = functions.database
   .ref('/userData/{uID}/articles/{articleID}/projects/{projectID}')
   .onCreate(event => {
-    const userDataRef = event.data.ref.parent.parent.parent.parent;
-    return userDataRef.once('value').then(function(snapshot) {
-      const project = event.data.val();
-      const metaToKeep = fromJS([
-        'ogTitle',
-        'title',
-        'ogSiteName',
-        'ogDescription',
-        'description'
-      ]);
-      const tagsToKeep = fromJS(['JJ', 'NN', 'NNP', 'NNPS', 'VB']);
-      const tagger = new pos.Tagger();
-      const userData = snapshot.val();
-      const article = userData.articles[event.params.articleID];
-      const [projectKey, projectValue] = fromJS(userData['projects']).findEntry(
-        t => t.get('id') === project
-      );
-      const dictionary = projectValue.get('dictionary');
-      if (article.metadata) {
-        let newWords = Set(dictionary);
-        const meta = fromJS(article.metadata);
-        meta
-          .keySeq()
-          .filter(t => metaToKeep.includes(t))
-          .forEach(t => {
-            const words = new pos.Lexer().lex(meta.get(t));
-            const taggedWords = fromJS(tagger.tag(words))
-              .filter(p => {
-                return tagsToKeep.includes(p.get(1));
-              })
-              .map(p => p.get(0));
-            newWords = newWords.union(taggedWords.valueSeq());
-          });
-        newWords = newWords.map(t => t.toLocaleLowerCase());
-        userDataRef
-          .child('projects')
-          .child(projectKey)
-          .update({ dictionary: newWords.toJS() });
-      }
-    });
+    const project = event.data.val();
+    const metaToKeep = fromJS([
+      'ogTitle',
+      'title',
+      'ogSiteName',
+      'ogDescription',
+      'description'
+    ]);
+    const tagsToKeep = fromJS(['JJ', 'NN', 'NNP', 'NNPS', 'VB']);
+    const tagger = new pos.Tagger();
+
+    const articleRef = event.data.ref.parent.parent;
+    const masterProjectRef = event.data.ref.parent.parent.parent.parent.child(
+      'projects'
+    );
+
+    return masterProjectRef
+      .once('value')
+      .then(function(snapshot) {
+        const [key, value] = fromJS(snapshot.val()).findEntry(
+          t => t.get('id') === project
+        );
+        const dictionary = value.get('dictionary');
+        if (dictionary) return { key, dictionary };
+      })
+      .then(projectData =>
+        articleRef.once('value').then(function(snapshot) {
+          const article = snapshot.val();
+          let updatedDictionary = projectData.dictionary;
+          if (article.metadata) {
+            let newWords = Set(projectData.dictionary);
+            const meta = fromJS(article.metadata);
+            meta
+              .keySeq()
+              .filter(t => metaToKeep.includes(t))
+              .forEach(t => {
+                const words = new pos.Lexer().lex(meta.get(t));
+                const taggedWords = fromJS(tagger.tag(words))
+                  .filter(p => {
+                    return tagsToKeep.includes(p.get(1));
+                  })
+                  .map(p => p.get(0));
+                newWords = newWords.union(taggedWords.valueSeq());
+              });
+            updatedDictionary = newWords.toJS();
+          }
+          return {
+            key: projectData.key,
+            dictionary: updatedDictionary
+          };
+        })
+      )
+      .then(updates => {
+        masterProjectRef
+          .child(updates.key)
+          .update({ dictionary: updates.dictionary });
+      });
   });
