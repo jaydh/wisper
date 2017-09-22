@@ -22,6 +22,7 @@ export interface ArticleList {
   yPosition: number;
   width: number;
   height: number;
+  locked: boolean;
 }
 
 export interface StoreState {

@@ -136,7 +136,8 @@ function mapStateToProps(state: any, ownProps: any) {
     xPosition: articleList.xPosition,
     yPosition: articleList.yPosition,
     height: articleList.height,
-    width: articleList.width
+    width: articleList.width,
+    locked: articleList.locked
   };
 }
 

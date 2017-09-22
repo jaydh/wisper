@@ -63,3 +63,15 @@ export function repositionArticleList(
     y
   };
 }
+
+export interface ToggleLockArticleList {
+  type: 'LOCK_ARTICLE_LIST';
+  id: string;
+}
+
+export function togglelockArticleList(id: string) {
+  return {
+    type: 'LOCK_ARTICLE_LIST',
+    id
+  };
+}

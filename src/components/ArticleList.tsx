@@ -8,6 +8,7 @@ import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 import { Jumbotron, ListGroup, ButtonGroup } from 'react-bootstrap';
 import DeleteArticleList from '../containers/DeleteArticleList';
+import LockArticleList from '../containers/LockArticleList';
 const Rnd = require('react-rnd').default;
 
 interface Props {
@@ -20,6 +21,7 @@ interface Props {
   yPosition: number;
   width: number;
   height: number;
+  locked: boolean;
   onResize: (x: number, y: number) => void;
   onReposition: (x: number, y: number) => void;
 }
@@ -35,6 +37,7 @@ class ArticleList extends React.Component<Props> {
             marginBottom: '0'
           }}
         >
+          <LockArticleList id={id} />
           <DeleteArticleList id={id} />
           <AddArticle projectFilter={projectFilter} />
           <ButtonGroup>
@@ -64,7 +67,8 @@ class OuterArticleList extends React.Component<Props> {
       width,
       height,
       onResize,
-      onReposition
+      onReposition,
+      locked
     } = this.props;
     return (
       <Rnd
@@ -89,10 +93,11 @@ class OuterArticleList extends React.Component<Props> {
           bottom: false,
           left: false,
           topRight: false,
-          bottomRight: true,
+          bottomRight: !locked,
           bottomLeft: false,
           topLeft: false
         }}
+        disableDragging={locked}
         resizeHandlerClasses={{
           bottomRight: 'resize'
         }}
@@ -118,7 +123,7 @@ class OuterArticleList extends React.Component<Props> {
           onReposition(data.lastX, data.lastY);
         }}
       >
-        <i className="drag" />
+        {!locked && <i className="drag" />}
         <ArticleList {...this.props} />
       </Rnd>
     );
