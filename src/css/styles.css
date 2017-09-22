@@ -14,10 +14,15 @@
   --blue: #1290bf;
   --pink: #c85e7c;
   --darkRed: #b33508;
+  --background: #818aa3;
+  --canvas: #a491d3;
+  --articleList: #f5f2b8;
+  --text: #c5dca0;
+  --link: #f9dad0;
 }
 
 h5 {
-  color: var(--darkGray);
+  color: var(--link);
 }
 p {
   font-size: 1.3em;
@@ -39,7 +44,7 @@ a {
 }
 
 .container-fluid {
-  background-color: var(--main-background);
+  background-color: var(--background);
 }
 
 .btn-more {
@@ -100,15 +105,19 @@ a {
 }
 
 .canvas {
-  background: linear-gradient(to bottom right, var(--darkGray), var(--gray));
+  background: linear-gradient(to bottom right, var(--canvas), var(--gray));
 }
 
 .list-group-item {
-  background-color: var(--yellow);
+  background-color: var(--link);
 }
 
 .article-list-container {
-  background: linear-gradient(to bottom right, var(--white), var(--lightererGray));
+  background: linear-gradient(
+    to bottom right,
+    var(--articleList),
+    var(--lightererGray)
+  );
   margin-bottom: 0;
 }
 
