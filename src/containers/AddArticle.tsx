@@ -82,18 +82,12 @@ class AddArticle extends React.Component<Props, State> {
 
   getValidationState() {
     // Checks if valid hyperlink
-    if (this.state.parse === '') {
-      return undefined;
-    } else if (
-      this.state.parse.authority !== '' &&
-      this.state.parse.protocol !== ''
-    ) {
-      return 'success';
-    } else if (
-      this.state.parse.authority === '' ||
-      this.state.parse.protocol === ''
-    ) {
+    if (this.state.parse.authority === '' || this.state.parse.protocol === '') {
       return 'warning';
+    } else if (this.state.parse.authority && this.state.parse.protocol) {
+      return 'success';
+    } else if (this.state.parse === '') {
+      return undefined;
     } else if (!this.state.parse) {
       return 'error';
     }
@@ -113,6 +107,12 @@ class AddArticle extends React.Component<Props, State> {
     let counts = Map<string, number>();
     wordbanks.keySeq().forEach((t: string) => {
       paths.union(queries).forEach((p: string) => {
+        if (p === t) {
+          this.setState({
+            suggestion: p
+          });
+          return;
+        }
         if (wordbanks.get(t).includes(p.toLocaleLowerCase())) {
           counts = counts.update(t, (count: number = 0) => count + 1);
         }
@@ -126,11 +126,10 @@ class AddArticle extends React.Component<Props, State> {
 
   handleChange(e: any) {
     e.preventDefault();
-    const parse = this.parseUri(e.target.value);
     this.setState(
       {
         value: e.target.value,
-        parse: parse
+        parse: this.parseUri(e.target.value)
       },
       () => this.getSuggestion()
     );
