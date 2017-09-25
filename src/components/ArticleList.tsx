@@ -13,6 +13,7 @@ const Rnd = require('react-rnd').default;
 
 interface Props {
   articles: List<articleType>;
+  articlesInActivity: List<articleType>;
   order: number;
   id: string;
   sort: string;
@@ -28,7 +29,7 @@ interface Props {
 
 class ArticleList extends React.Component<Props> {
   render() {
-    const { articles, id, projectFilter } = this.props;
+    const { articles, id, projectFilter, articlesInActivity } = this.props;
     return (
       <div>
         <Jumbotron
@@ -42,7 +43,7 @@ class ArticleList extends React.Component<Props> {
           <AddArticle projectFilter={projectFilter} />
           <ButtonGroup>
             <ActiveSelector id={id} />
-            <ProjectSelector id={id} />
+            <ProjectSelector id={id} articlesInActivity={articlesInActivity} />
             <Sort id={id} />
           </ButtonGroup>
 

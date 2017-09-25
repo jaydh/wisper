@@ -14,7 +14,6 @@ import bootstrap from './bootstrap';
 import demo from './constants/demo';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
-import { fromJS } from 'immutable';
 bootstrap();
 
 let store = createStore(
@@ -28,7 +27,7 @@ auth().onAuthStateChanged(function(user: any) {
   if (user) {
     if (
       user.isAnonymous &&
-      fromJS(store.getState()).get('articles').size === 0
+      (store.getState() as any).get('articles').size === 0
     ) {
       demo(store, persistor);
     }

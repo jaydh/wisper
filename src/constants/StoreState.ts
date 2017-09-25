@@ -2,7 +2,6 @@ import { List, OrderedSet } from 'immutable';
 export interface Article {
   id: string;
   link: string;
-
   metadata?: any;
   fetching?: boolean;
   dateAdded: string;

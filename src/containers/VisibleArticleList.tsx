@@ -10,10 +10,10 @@ import {
   repositionArticleList
 } from '../actions/articleList';
 
-const getArticlesWithProject = (
+function getArticlesWithProject(
   articles: List<articleType>,
   projectFilter: string
-) => {
+) {
   let articlesInProject: List<articleType>;
   switch (projectFilter) {
     case 'All':
@@ -31,33 +31,27 @@ const getArticlesWithProject = (
       }) as List<articleType>;
   }
   return articlesInProject;
-};
+}
 
-const getVisibleArticles = (
+function getVisibleArticles(
   articles: List<articleType>,
-  articleList: ArticleListType
-): List<articleType> => {
-  const { visibilityFilter, projectFilter, sort } = articleList;
-  const sortedArticles = getSortedArticles(articles, sort);
-  const articlesInProject = getArticlesWithProject(
-    sortedArticles,
-    projectFilter
-  );
+  visibilityFilter: string
+): List<articleType> {
   switch (visibilityFilter) {
     case 'All':
-      return articlesInProject;
+      return articles;
     case 'Completed':
-      return articlesInProject.filter((t: articleType) => t.completed) as List<
+      return articles.filter((t: articleType) => t.completed) as List<
         articleType
       >;
     case 'Active':
-      return articlesInProject.filter((t: articleType) => !t.completed) as List<
+      return articles.filter((t: articleType) => !t.completed) as List<
         articleType
       >;
     default:
       throw new Error('Unknown filter: ' + visibilityFilter);
   }
-};
+}
 
 function getSortedArticles(articles: List<articleType>, sort: string) {
   switch (sort) {
@@ -128,8 +122,18 @@ function mapStateToProps(state: any, ownProps: any) {
   const articleList = state
     .get('articleLists')
     .find((list: ArticleListType) => list.id === ownProps.id);
+  const articles = state.get('articles');
+  const { visibilityFilter, projectFilter, sort } = articleList;
+  const articlesInActivity = getVisibleArticles(articles, visibilityFilter);
+  const sortedActiveArticles = getSortedArticles(articlesInActivity, sort);
+  const sortedActiveArticlesInProject = getArticlesWithProject(
+    sortedActiveArticles,
+    projectFilter
+  );
+
   return {
-    articles: getVisibleArticles(state.get('articles'), articleList),
+    articles: sortedActiveArticlesInProject,
+    articlesInActivity,
     order: articleList.order,
     sort: articleList.sort,
     projectFilter: articleList.projectFilter,

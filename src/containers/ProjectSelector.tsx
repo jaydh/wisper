@@ -1,19 +1,28 @@
 import * as React from 'react';
 import { setProjectFilter } from '../actions/projectFilter';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
+import { List, fromJS } from 'immutable';
 import { Dropdown, MenuItem } from 'react-bootstrap';
-import { ArticleList as ArticleListType } from '../constants/StoreState';
+import {
+  ArticleList as ArticleListType,
+  Article as articleType
+} from '../constants/StoreState';
 
 interface Props {
   projects: List<String>;
   currentProject: string;
+  articlesInActivity: List<articleType>;
   onClick: (t: string) => void;
 }
 
 class ProjectSelector extends React.Component<Props> {
   render() {
-    const { projects, currentProject, onClick } = this.props;
+    const {
+      projects,
+      currentProject,
+      onClick,
+      articlesInActivity
+    } = this.props;
     const options = ['All', ...projects.toJS(), 'None'];
     return (
       <Dropdown id="bg-nested-dropdown">
@@ -28,7 +37,23 @@ class ProjectSelector extends React.Component<Props> {
                 key={String(project)}
                 onClick={() => onClick(String(project))}
               >
-                {project}
+                {project}{' '}
+                <div style={{ float: 'right' }}>
+                  {articlesInActivity
+                    .filter((t: articleType) => {
+                      switch (project) {
+                        case 'All':
+                          return true;
+                        case 'None':
+                          return !t.projects;
+                        default:
+                          return t.projects
+                            ? fromJS(t.projects).includes(project)
+                            : false;
+                      }
+                    })
+                    .count()}
+                </div>
               </MenuItem>
             );
           })}
