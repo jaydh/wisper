@@ -55,8 +55,14 @@ class Graph extends React.Component<Props> {
   render() {
     const projectData = this.getProjectData();
     const domainCounts = this.getDomainData();
+    console.log('huh');
+    console.log('huh');
+
     const projectCount = projectData.map((t: ProjectMeta) => t.count);
-    // const projectCompleted = projectData.map((t: ProjectMeta) => t.completed);
+    const projectCompletedPercentage = projectData.map(
+      (t: ProjectMeta) => t.completed / t.count
+    );
+    console.log(projectCompletedPercentage.toJS());
 
     const data = {
       labels: projectCount.keySeq().toJS(),
@@ -114,10 +120,39 @@ class Graph extends React.Component<Props> {
       ]
     };
 
+    const data3 = {
+      labels: projectCompletedPercentage.keySeq().toJS(),
+      datasets: [
+        {
+          label: '# of Votes',
+          data: projectCompletedPercentage.valueSeq().toJS(),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          hoverBorderWidth: 3
+        }
+      ]
+    };
+
     return (
       <div>
         <Doughnut data={data} />
         <Doughnut data={data2} />
+        <Doughnut data={data3} />
       </div>
     );
   }

@@ -3,6 +3,7 @@ import Logout from './Logout';
 import { PageHeader } from 'react-bootstrap';
 import 'whatwg-fetch';
 import Canvas from '../containers/CanvasContainer';
+import Graph from '../containers/Graph';
 import '!!style-loader!css-loader!../css/styles.css';
 
 interface State {
@@ -38,12 +39,12 @@ class App extends React.Component<{}, State> {
     const gitDate = new Date(this.state.gitCommit);
     
     return (
-      
-        <div className="container-fluid">
+      <div className="container-fluid">
         <PageHeader>
           wispy
           </PageHeader>
         <Canvas />
+        <Graph />
         <Logout />
         <h2>
           Under active development; Last updated: {gitDate.toLocaleString()} <br />
