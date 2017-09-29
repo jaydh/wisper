@@ -55,12 +55,12 @@ class Dailies extends React.Component<Props, State> {
           </FormGroup>
         </Form>
 
-        <Jumbotron>
+        {!dailies.isEmpty() && <Jumbotron>
           {dailies
             .filter((t: Daily) => {
-              return t.completedOn && t.completedOn.isEmpty()
+              return t.completedOn && !t.completedOn.isEmpty()
                 ? t.completedOn.last().toDateString() !==
-                  new Date().toDateString()
+                new Date().toDateString()
                 : true;
             })
             .map((t: Daily) => {
@@ -70,7 +70,7 @@ class Dailies extends React.Component<Props, State> {
                 </Button>
               );
             })}
-        </Jumbotron>
+        </Jumbotron>}
       </div>
     );
   }
