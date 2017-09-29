@@ -4,6 +4,7 @@ import { PageHeader } from 'react-bootstrap';
 import 'whatwg-fetch';
 import Canvas from '../containers/CanvasContainer';
 import Graph from '../containers/Graph';
+import Dailies from '../components/Dailies';
 import '!!style-loader!css-loader!../css/styles.css';
 
 interface State {
@@ -24,33 +25,33 @@ class App extends React.Component<{}, State> {
   componentWillMount() {
     const that = this;
     fetch('https://api.github.com/repos/jaydh/wispy')
-      .then(function (response: any) {
+      .then(function(response: any) {
         return response.json();
       })
-      .then(function (json: any) {
+      .then(function(json: any) {
         that.setState({ gitCommit: json.pushed_at });
       })
-      .catch(function (ex: any) {
+      .catch(function(ex: any) {
         console.log('parsing failed', ex);
       });
   }
 
   render() {
     const gitDate = new Date(this.state.gitCommit);
-    
+
     return (
       <div className="container-fluid">
-        <PageHeader>
-          wispy
-          </PageHeader>
+        <PageHeader>wispy</PageHeader>
+        <Dailies />
         <Canvas />
         <Graph />
         <Logout />
         <h2>
-          Under active development; Last updated: {gitDate.toLocaleString()} <br />
-          Source: <a>https://github.com/jaydh/wispy</a>
-          </h2>
-        </div>
+          Under active development; Last updated: {gitDate.toLocaleString()}{' '}
+          <br />
+          Source: <a>{'https://github.com/jaydh/wispy'}</a>
+        </h2>
+      </div>
     );
   }
 }

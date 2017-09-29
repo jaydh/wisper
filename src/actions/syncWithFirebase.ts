@@ -1,7 +1,8 @@
 import { auth, database } from '../firebase';
 // import * as constants from '../constants/actionTypes';
 import { Dispatch } from 'react-redux';
-import { Article as articleType } from '../constants/StoreState';
+import { Article as articleType, Daily } from '../constants/StoreState';
+
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
   article: articleType;
@@ -74,10 +75,35 @@ function deleteProject(project: any) {
   };
 }
 
+export interface AddDailyFromServer {
+  type: 'ADD_DAILY_FROM_SERVER';
+  daily: Daily;
+}
+
+export interface DeleteDailyFromServer {
+  type: 'DELETE_DAILY_FROM_SERVER';
+  daily: Daily;
+}
+
+export function addDailyFromServer(daily: Daily) {
+  return {
+    type: 'ADD_DAILY_FROM_SERVER',
+    daily
+  };
+}
+
+function deleteDailyFromServer(daily: Daily) {
+  return {
+    type: 'DELETE_DAILY_FROM_SERVER',
+    daily
+  };
+}
+
 export function ListenToFirebase() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
   const projectRef = database.ref('/userData/' + user + '/projects/');
+  const dailyRef = database.ref('/userData/' + user + '/dailies/');
 
   return (dispatch: Dispatch<any>) => {
     projectRef.on('child_changed', function(snapshot: any) {
@@ -101,6 +127,14 @@ export function ListenToFirebase() {
 
     articleRef.on('child_removed', function(snap: any) {
       dispatch(deleteArticleFromServer(snap.val()));
+    });
+
+    dailyRef.on('child_added', function(snapshot: any) {
+      dispatch(addDailyFromServer(snapshot.val()));
+    });
+
+    dailyRef.on('child_removed', function(snapshot: any) {
+      dispatch(deleteDailyFromServer(snapshot.val()));
     });
   };
 }

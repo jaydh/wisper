@@ -11,6 +11,13 @@ export interface Article {
   completed: boolean;
 }
 
+export interface Daily {
+  id: string;
+  title: string;
+  createdOn: Date;
+  completedOn: OrderedSet<Date>;
+}
+
 export interface ArticleList {
   id: string;
   order: number;

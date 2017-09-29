@@ -23,6 +23,7 @@ let store = createStore(
 );
 initFirebase();
 let persistor = persistStore(store);
+persistor.purge();
 auth().onAuthStateChanged(function(user: any) {
   if (user) {
     if (
