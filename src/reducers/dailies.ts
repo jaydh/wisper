@@ -15,11 +15,11 @@ function addDaily(dailyState: List<Daily>, action: any) {
     }).size === 0;
   return check
     ? dailyState.push({
-      id: action.id,
-      title: action.title,
-      createdOn: new Date(),
-      completedOn: OrderedSet()
-    })
+        id: action.id,
+        title: action.title,
+        createdOn: new Date(),
+        completedOn: OrderedSet()
+      })
     : dailyState;
 }
 
@@ -28,7 +28,9 @@ function addDailyFromServer(
   action: AddDailyFromServer
 ) {
   if (action.daily.completedOn) {
-    action.daily.completedOn = fromJS(action.daily.completedOn).toSet().map((t: string) => new Date(t));
+    action.daily.completedOn = fromJS(action.daily.completedOn)
+      .toSet()
+      .map((t: string) => new Date(t));
   }
   let check =
     dailyState.filter(daily => {
@@ -53,7 +55,7 @@ function completeDaily(
     if (t.id === action.id) {
       t.completedOn = t.completedOn
         ? t.completedOn.add(action.date)
-        : OrderedSet(action.date);
+        : OrderedSet([action.date]);
     }
     return t;
   });
