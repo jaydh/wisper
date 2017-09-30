@@ -4,6 +4,7 @@ import { Jumbotron, Button } from 'react-bootstrap';
 // import { StoreState } from '../constants/StoreState';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
+import Graph from '../containers/Graph';
 
 interface Props {
   ListenToFirebase: () => void;
@@ -35,6 +36,7 @@ export default class Canvas extends React.Component<Props> {
             );
           })}
         </Jumbotron>
+        <Graph />
       </div>
     );
   }

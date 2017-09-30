@@ -3,7 +3,6 @@ import Logout from './Logout';
 import { PageHeader } from 'react-bootstrap';
 import 'whatwg-fetch';
 import Canvas from '../containers/CanvasContainer';
-import Graph from '../containers/Graph';
 import Dailies from '../components/Dailies';
 import '!!style-loader!css-loader!../css/styles.css';
 
@@ -44,7 +43,6 @@ class App extends React.Component<{}, State> {
         <PageHeader>wispy</PageHeader>
         <Dailies />
         <Canvas />
-        <Graph />
         <Logout />
         <h2>
           Under active development; Last updated: {gitDate.toLocaleString()}{' '}

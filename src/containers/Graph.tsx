@@ -1,17 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Doughnut } from 'react-chartjs-2';
+import { Polar, HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
-import { Article as ArticleType } from '../constants/StoreState';
-interface Props {
-  articles: List<any>;
-  projects: List<String>;
-}
-
-interface ProjectMeta {
-  count: number;
-  completed: number;
-}
+import { Article as articleType } from '../constants/StoreState';
 
 const Colors = [
   '#F9ED69',
@@ -29,11 +20,21 @@ const Colors = [
   '#A5DEE5'
 ];
 
+interface Props {
+  articles: List<articleType>;
+  projects: List<String>;
+}
+
+interface ProjectMeta {
+  count: number;
+  completed: number;
+}
+
 class Graph extends React.Component<Props> {
   getProjectData(): Map<string, object> {
     const { articles } = this.props;
     let projectData = Map<string, ProjectMeta>();
-    articles.forEach((article: ArticleType) => {
+    articles.forEach((article: articleType) => {
       const keys = article.projects
         ? fromJS(article.projects).valueSeq()
         : fromJS(['NONE']);
@@ -58,10 +59,11 @@ class Graph extends React.Component<Props> {
   getDomainData() {
     const { articles } = this.props;
     const domains = articles.map(
-      article => (article.metadata ? article.metadata.ogSiteName : '')
+      (article: articleType) =>
+        article.metadata ? article.metadata.ogSiteName : ''
     );
     let domainCounts = Map<string, number>();
-    domains.forEach(
+    domains.map(
       (x: string) =>
         (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
     );
@@ -72,7 +74,9 @@ class Graph extends React.Component<Props> {
     const projectData = this.getProjectData();
     const domainCounts = this.getDomainData();
     const projectCount = projectData.map((t: ProjectMeta) => t.count);
-    // const projectCompleted = projectData.map((t: ProjectMeta) => t.completed);
+    const projectCompletedPercentage = projectData.map(
+      (t: ProjectMeta) => t.completed / t.count
+    );
 
     const dynamicColors = function() {
       return Colors[Math.floor(Math.random() * Colors.length)];
@@ -85,26 +89,68 @@ class Graph extends React.Component<Props> {
       .map(() => dynamicColors())
       .valueSeq()
       .toJS();
-    const data = () => {
-      return {
-        labels: projectCount.keySeq().toJS(),
-        datasets: [
-          {
-            data: projectCount.valueSeq().toJS(),
-            backgroundColor: dataColors,
-            borderWidth: 1,
-            hoverBorderWidth: 3
-          }
-        ]
-      };
+
+    const dataColors3 = projectCompletedPercentage
+      .map(() => dynamicColors())
+      .valueSeq()
+      .toJS();
+
+    const data = {
+      labels: projectCount.keySeq().toJS(),
+
+      datasets: [
+        {
+          data: projectCount.valueSeq().toJS(),
+          backgroundColor: dataColors,
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          hoverBorderWidth: 3
+        }
+      ]
     };
 
     const data2 = {
       labels: domainCounts.keySeq().toJS(),
+
       datasets: [
         {
           data: domainCounts.valueSeq().toJS(),
           backgroundColor: dataColors2,
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          hoverBorderWidth: 3
+        }
+      ]
+    };
+
+    const data3 = {
+      labels: projectCompletedPercentage.keySeq().toJS(),
+      datasets: [
+        {
+          data: projectCompletedPercentage.valueSeq().toJS(),
+          backgroundColor: dataColors3,
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
           borderWidth: 1,
           hoverBorderWidth: 3
         }
@@ -128,15 +174,25 @@ class Graph extends React.Component<Props> {
         display: false
       }
     };
+    const options3 = {
+      title: {
+        display: true,
+        text: 'Project Completed Percentage'
+      },
+      legend: {
+        display: false
+      }
+    };
+
     return (
-      <div style={{ height: '200em' }}>
+      <div>
         <Doughnut data={data} options={options} />
-        <Doughnut data={data2} options={options2} />
+        <HorizontalBar data={data2} options={options2} />
+        <Polar data={data3} options={options3} />
       </div>
     );
   }
 }
-
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
     articles: state.get('articles'),
