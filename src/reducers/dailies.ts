@@ -18,7 +18,8 @@ function addDaily(dailyState: List<Daily>, action: any) {
         id: action.id,
         title: action.title,
         createdOn: new Date(),
-        completedOn: OrderedSet()
+        completedOn: OrderedSet(),
+        completed: false
       })
     : dailyState;
 }

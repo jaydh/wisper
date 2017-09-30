@@ -16,6 +16,7 @@ export interface Daily {
   title: string;
   createdOn: Date;
   completedOn: OrderedSet<Date>;
+  completed: boolean;
 }
 
 export interface ArticleList {
