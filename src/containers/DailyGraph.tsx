@@ -53,6 +53,7 @@ class DailyGraph extends React.Component<Props> {
         .toJS()
     };
     const options = {
+      maintainAspectRatio: false,
       scales: {
         yAxes: [
           {
@@ -70,7 +71,7 @@ class DailyGraph extends React.Component<Props> {
                 new Date().getMonth() - 1,
                 1
               ),
-              unit: 'week',
+              unit: 'day',
               displayFormats: {
                 millisecond: 'MMM DD',
                 second: 'MMM DD',
@@ -97,7 +98,7 @@ class DailyGraph extends React.Component<Props> {
 
     return (
       <div>
-        <Bubble data={data} options={options} />
+        <Bubble data={data} options={options} width={100} height={400} />
       </div>
     );
   }

@@ -4,7 +4,8 @@ import {
   FormGroup,
   FormControl,
   Jumbotron,
-  Button
+  Button,
+  Collapse
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import addDaily from '../actions/dailies/addDaily';
@@ -21,12 +22,13 @@ interface Props {
 
 interface State {
   dailyValue: string;
+  graphOpen: boolean;
 }
 
 class Dailies extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { dailyValue: '' };
+    this.state = { dailyValue: '', graphOpen: false };
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange(e: any) {
@@ -67,7 +69,7 @@ class Dailies extends React.Component<Props, State> {
               .filter((t: Daily) => {
                 return t.completedOn && !t.completedOn.isEmpty()
                   ? t.completedOn.last().toDateString() !==
-                    new Date().toDateString()
+                      new Date().toDateString()
                   : true;
               })
               .map((t: Daily) => {
@@ -77,7 +79,19 @@ class Dailies extends React.Component<Props, State> {
                   </Button>
                 );
               })}
-            <DailyGraph />
+            <Button
+              onClick={() => {
+                this.setState({ graphOpen: !this.state.graphOpen });
+              }}
+              style={{ float: 'right' }}
+            >
+              Show graph
+            </Button>
+            {this.state.graphOpen && (
+              <Collapse in={this.state.graphOpen}>
+                <DailyGraph />
+              </Collapse>
+            )}
           </Jumbotron>
         )}
       </div>
