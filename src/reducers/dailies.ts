@@ -9,19 +9,9 @@ import {
 import createReducer from './createReducer';
 
 function addDaily(dailyState: List<Daily>, action: any) {
-  let check =
-    dailyState.filter(daily => {
-      return daily ? action.id === daily.id : false;
-    }).size === 0;
-  return check
-    ? dailyState.push({
-        id: action.id,
-        title: action.title,
-        createdOn: new Date(),
-        completedOn: OrderedSet(),
-        completed: false
-      })
-    : dailyState;
+  return dailyState.find((v: Daily) => action.daily.id === v.id)
+    ? dailyState
+    : dailyState.push(action.daily);
 }
 
 function addDailyFromServer(
@@ -33,12 +23,10 @@ function addDailyFromServer(
       .toSet()
       .map((t: string) => new Date(t));
   }
-  let check =
-    dailyState.filter(daily => {
-      return daily ? action.daily.id === daily.id : false;
-    }).size === 0;
-
-  return check ? dailyState.push(action.daily) : dailyState;
+  const entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
+  return entry
+    ? dailyState.set(entry[0], entry[1])
+    : dailyState.push(action.daily);
 }
 
 function deleteDailyFromServer(
@@ -52,14 +40,11 @@ function completeDaily(
   dailyState: List<Daily>,
   action: CompleteDailyFulfilled
 ) {
-  return dailyState.map((t: Daily) => {
-    if (t.id === action.id) {
-      t.completedOn = t.completedOn
-        ? t.completedOn.add(action.date)
-        : OrderedSet([action.date]);
-    }
-    return t;
-  });
+  let [key, daily] = dailyState.findEntry((v: Daily) => action.id === v.id);
+  daily.completedOn = daily.completedOn
+    ? daily.completedOn.add(action.date)
+    : OrderedSet([action.date]);
+  return key ? dailyState.set(key, daily) : dailyState;
 }
 
 export default createReducer(List(), {
