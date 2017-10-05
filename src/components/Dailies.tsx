@@ -11,6 +11,7 @@ import addDaily from '../actions/dailies/addDaily';
 import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { List, OrderedSet } from 'immutable';
+import DailyGraph from '../containers/DailyGraph';
 
 interface Props {
   onComplete: (id: string) => void;
@@ -54,9 +55,8 @@ class Dailies extends React.Component<Props, State> {
             />
           </FormGroup>
         </Form>
-
-        { // Only show if there are dailies active
-          dailies
+        {// Only show if there are dailies active
+        dailies
           .map((t: Daily) => t.completedOn)
           .filter(
             (t: OrderedSet<Date>) =>
@@ -77,6 +77,7 @@ class Dailies extends React.Component<Props, State> {
                   </Button>
                 );
               })}
+            <DailyGraph />
           </Jumbotron>
         )}
       </div>

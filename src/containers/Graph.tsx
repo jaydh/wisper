@@ -121,7 +121,10 @@ class Graph extends React.Component<Props> {
 
       datasets: [
         {
-          data: domainCounts.valueSeq().toJS(),
+          data: domainCounts
+            .valueSeq()
+            .sort()
+            .toJS(),
           backgroundColor: dataColors2,
           borderColor: [
             'rgba(255,99,132,1)',
@@ -162,7 +165,7 @@ class Graph extends React.Component<Props> {
         text: 'Project Count Distribution'
       },
       legend: {
-        display: false
+        display: true
       }
     };
     const options2 = {
