@@ -25,7 +25,7 @@ function addDailyFromServer(
   }
   const entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
   return entry
-    ? dailyState.set(entry[0], entry[1])
+    ? dailyState.set(entry[0], action.daily)
     : dailyState.push(action.daily);
 }
 
@@ -40,7 +40,7 @@ function completeDaily(
   dailyState: List<Daily>,
   action: CompleteDailyFulfilled
 ) {
-  let [key, daily] = dailyState.findEntry((v: Daily) => action.id === v.id);
+  let [key, daily] = dailyState.findEntry((t: Daily) => action.id === t.id);
   daily.completedOn = daily.completedOn
     ? daily.completedOn.add(action.date)
     : OrderedSet([action.date]);
