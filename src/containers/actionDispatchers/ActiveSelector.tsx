@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import * as React from 'react';
-import { setVisibilityFilter } from '../actions/visibilityFilter';
+import { setVisibilityFilter } from '../../actions/visibilityFilter';
 import { Dropdown, MenuItem } from 'react-bootstrap';
-import { ArticleList as ArticleListType } from '../constants/StoreState';
+import { ArticleList as ArticleListType } from '../../constants/StoreState';
 
 interface Props {
   onClick: (t: string) => void;

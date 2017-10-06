@@ -1,21 +1,24 @@
 import * as React from 'react';
-import VisibleArticleList from '../containers/VisibleArticleList';
+import { connect } from 'react-redux';
+import { ListenToFirebase } from '../actions/syncWithFirebase';
+import { addArticleList } from '../actions/articleList';
+
 import { Jumbotron, Button } from 'react-bootstrap';
-// import { StoreState } from '../constants/StoreState';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
-import Graph from '../containers/Graph';
+import VisibleArticleList from '../containers/VisibleArticleList';
+import Graph from './graphs/Graph';
 
 interface Props {
-  ListenToFirebase: () => void;
+  listenOnMount: () => void;
   AddArticleList: () => void;
   articleLists: OrderedMap<string, ArticleList>;
 }
 
-export default class Canvas extends React.Component<Props> {
+class Canvas extends React.Component<Props> {
   componentWillMount() {
-    const { ListenToFirebase } = this.props;
-    ListenToFirebase();
+    const { listenOnMount } = this.props;
+    listenOnMount();
   }
 
   render() {
@@ -41,3 +44,21 @@ export default class Canvas extends React.Component<Props> {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    AddArticleList: () => {
+      dispatch(addArticleList());
+    },
+    listenOnMount: () => {
+      dispatch(ListenToFirebase());
+    }
+  };
+};
+
+const mapStateToProps = (state: any, ownProps: any) => {
+  return {
+    articleLists: state.get('articleLists')
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Canvas);

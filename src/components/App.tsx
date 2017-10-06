@@ -2,8 +2,8 @@ import * as React from 'react';
 import Logout from './Logout';
 import { PageHeader } from 'react-bootstrap';
 import 'whatwg-fetch';
-import Canvas from '../containers/CanvasContainer';
-import Dailies from '../components/Dailies';
+import Canvas from '../containers/Canvas';
+import Dailies from '../containers/Dailies';
 import '!!style-loader!css-loader!../css/styles.css';
 
 interface State {

@@ -12,7 +12,7 @@ import addDaily from '../actions/dailies/addDaily';
 import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { List, OrderedSet } from 'immutable';
-import DailyGraph from '../containers/DailyGraph';
+import DailyGraph from './graphs/DailyGraph';
 
 interface Props {
   onComplete: (id: string) => void;

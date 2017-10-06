@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Bubble } from 'react-chartjs-2';
 import { List } from 'immutable';
-import { Daily } from '../constants/StoreState';
+import { Daily } from '../../constants/StoreState';
 
 const Colors = [
   '#F9ED69',

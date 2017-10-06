@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dropdown, MenuItem } from 'react-bootstrap';
-import setSortFilter from '../actions/setSortFilter';
+import setSortFilter from '../../actions/setSortFilter';
 import { connect } from 'react-redux';
 
 interface Props {

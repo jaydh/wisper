@@ -1,14 +1,15 @@
 import * as React from 'react';
 import Article from './Article';
-import AddArticle from '../containers/AddArticle';
-import ProjectSelector from '../containers/ProjectSelector';
-import ActiveSelector from '../containers/ActiveSelector';
-import Sort from '../containers/Sort';
+import AddArticle from '../containers/actionDispatchers/AddArticle';
+import ProjectSelector from '../containers/actionDispatchers/ProjectSelector';
+import ActiveSelector from '../containers/actionDispatchers/ActiveSelector';
+import Sort from '../containers/actionDispatchers/Sort';
+import DeleteArticleList from '../containers/actionDispatchers/DeleteArticleList';
+import LockArticleList from '../containers/actionDispatchers/LockArticleList';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 import { Jumbotron, ListGroup, ButtonGroup } from 'react-bootstrap';
-import DeleteArticleList from '../containers/DeleteArticleList';
-import LockArticleList from '../containers/LockArticleList';
+
 const Rnd = require('react-rnd').default;
 
 interface Props {

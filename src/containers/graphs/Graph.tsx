@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Polar, HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
-import { Article as articleType } from '../constants/StoreState';
+import { Article as articleType } from '../../constants/StoreState';
 
 const Colors = [
   '#F9ED69',

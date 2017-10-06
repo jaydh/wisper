@@ -1,7 +1,7 @@
 import * as React from 'react';
-import AddArticleToProject from '../containers/AddArticleToProject';
-import DeleteArticle from '../containers/DeleteArticle';
-import ToggleArticle from '../containers/ToggleArticle';
+import AddArticleToProject from '../containers/actionDispatchers/AddArticleToProject';
+import DeleteArticle from '../containers/actionDispatchers/DeleteArticle';
+import ToggleArticle from '../containers/actionDispatchers/ToggleArticle';
 import {
   Glyphicon,
   Button,
@@ -79,11 +79,9 @@ class Article extends React.Component<Props, State> {
           target="_blank"
           style={{ display: 'inline-block', width: '70%' }}
         >
-          {metadata && (metadata.title || metadata.ogTitle) ? (
-            metadata.ogTitle || metadata.title
-          ) : (
-            link
-          )}
+          {metadata && (metadata.title || metadata.ogTitle)
+            ? metadata.ogTitle || metadata.title
+            : link}
         </a>
 
         <Collapse in={this.state.isMenuOpen}>
@@ -92,20 +90,18 @@ class Article extends React.Component<Props, State> {
               Date added: {dateAdded} <br />
               {dateRead ? 'Date Read: ' + dateRead : ' '}
             </p>
-            {!fetching && metadata ? (
-              fromJS(metadata)
-                .keySeq()
-                .filter((t: string) => visibleMeta.includes(t))
-                .map((t: string) => {
-                  return (
-                    <p key={t} style={{ fontSize: '.9em' }}>
-                      {t}: {fromJS(metadata).get(t)} <br />
-                    </p>
-                  );
-                })
-            ) : (
-              'Fetching metadata'
-            )}
+            {!fetching && metadata
+              ? fromJS(metadata)
+                  .keySeq()
+                  .filter((t: string) => visibleMeta.includes(t))
+                  .map((t: string) => {
+                    return (
+                      <p key={t} style={{ fontSize: '.9em' }}>
+                        {t}: {fromJS(metadata).get(t)} <br />
+                      </p>
+                    );
+                  })
+              : 'Fetching metadata'}
             <AddArticleToProject id={id} />
             <DeleteArticle id={id} />
           </div>
