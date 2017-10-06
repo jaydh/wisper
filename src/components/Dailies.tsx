@@ -56,7 +56,15 @@ class Dailies extends React.Component<Props, State> {
               onChange={this.handleChange}
             />
           </FormGroup>
+          <Button
+            onClick={() => {
+              this.setState({ graphOpen: !this.state.graphOpen });
+            }}
+          >
+            Show graph
+          </Button>
         </Form>
+
         {// Only show if there are dailies active
         dailies
           .map((t: Daily) => t.completedOn)
@@ -79,14 +87,6 @@ class Dailies extends React.Component<Props, State> {
                   </Button>
                 );
               })}
-            <Button
-              onClick={() => {
-                this.setState({ graphOpen: !this.state.graphOpen });
-              }}
-              style={{ float: 'right' }}
-            >
-              Show graph
-            </Button>
             {this.state.graphOpen && (
               <Collapse in={this.state.graphOpen}>
                 <DailyGraph />
