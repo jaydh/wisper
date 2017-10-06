@@ -21,6 +21,7 @@
     "babel-jest": "^20.0.3",
     "bootstrap": "^3.3.7",
     "chart.js": "^2.6.0",
+    "chartjs-plugin-zoom": "^0.5.0",
     "firebase": "^4.2.0",
     "firebase-functions": "^0.6.1",
     "immutable": "^3.8.1",

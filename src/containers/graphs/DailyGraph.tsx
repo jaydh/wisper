@@ -36,14 +36,16 @@ class DailyGraph extends React.Component<Props> {
         .map((t: Daily) => {
           const color = dynamicColors();
           return {
-            data: t.completedOn? t.completedOn
-              .map((p: Date) => {
-                return {
-                  x: p,
-                  y: t.title
-                };
-              })
-              .toJS(): [],
+            data: t.completedOn
+              ? t.completedOn
+                  .map((p: Date) => {
+                    return {
+                      x: p,
+                      y: t.title
+                    };
+                  })
+                  .toJS()
+              : [],
             backgroundColor: color,
             pointStyle: 'rectRounded',
             radius: 10
@@ -60,7 +62,7 @@ class DailyGraph extends React.Component<Props> {
             labels: dailies.map((t: Daily) => t.title).toJS(),
             gridLines: {
               display: true,
-              drawBorder: false,
+              drawBorder: false
             }
           }
         ],
