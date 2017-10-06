@@ -35,16 +35,15 @@ class DailyGraph extends React.Component<Props> {
       datasets: dailies
         .map((t: Daily) => {
           const color = dynamicColors();
-          console.log(t.completedOn.toJS());
           return {
-            data: t.completedOn
+            data: t.completedOn? t.completedOn
               .map((p: Date) => {
                 return {
                   x: p,
                   y: t.title
                 };
               })
-              .toJS(),
+              .toJS(): [],
             backgroundColor: color,
             pointStyle: 'rectRounded',
             radius: 10
@@ -58,20 +57,30 @@ class DailyGraph extends React.Component<Props> {
         yAxes: [
           {
             type: 'category',
-            labels: dailies.map((t: Daily) => t.title).toJS()
+            labels: dailies.map((t: Daily) => t.title).toJS(),
+            gridLines: {
+              display: true,
+              drawBorder: false,
+            }
           }
         ],
         xAxes: [
           {
             type: 'time',
+            gridLines: {
+              display: true
+            },
             time: {
-              // Last month
+              // Last two weeks
               min: new Date(
                 new Date().getFullYear(),
-                new Date().getMonth() - 1,
+                new Date().getMonth(),
+                new Date().getDay() / 4 - 2,
                 1
               ),
               unit: 'day',
+              stepSize: 1,
+              categorySpacing: 0,
               displayFormats: {
                 millisecond: 'MMM DD',
                 second: 'MMM DD',
@@ -98,7 +107,7 @@ class DailyGraph extends React.Component<Props> {
 
     return (
       <div>
-        <Bubble data={data} options={options} width={100} height={400} />
+        <Bubble data={data} options={options} width={100} height={200} />
       </div>
     );
   }
