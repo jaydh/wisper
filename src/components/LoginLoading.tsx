@@ -2,9 +2,6 @@ import * as React from 'react';
 import { auth, provider } from '../firebase';
 import { Button } from 'react-bootstrap';
 export default class LoginLoading extends React.Component {
-  componentWillUnmount() {
-    window.location.reload();
-  }
   render() {
     const wellStyles = { maxWidth: 400, margin: 'auto' };
     return (
