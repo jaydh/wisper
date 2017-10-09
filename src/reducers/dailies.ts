@@ -45,14 +45,14 @@ function completeDaily(
   dailyState: List<Daily>,
   action: CompleteDailyFulfilled
 ) {
-  const key = dailyState.findKey((t: Daily) => action.id === t.id);
-  return typeof key !== 'undefined'
-    ? dailyState.update(key, (t: Daily) => {
-        t.completedOn = t.completedOn.add(action.date);
-        console.log(t);
-        return t;
-      })
-    : dailyState;
+  return dailyState.map((t: Daily) => {
+    return t.id === action.id
+      ? {
+          ...t,
+          completedOn: t.completedOn.add(action.date),
+        }
+      : t;
+  });
 }
 
 export default createReducer(List(), {
