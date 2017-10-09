@@ -5,13 +5,18 @@ import {
   AddDailyFromServer,
   DeleteDailyFromServer
 } from '../actions/syncWithFirebase';
-
 import createReducer from './createReducer';
 
 function addDaily(dailyState: List<Daily>, action: any) {
-  return dailyState.find((v: Daily) => action.daily.id === v.id)
+  return dailyState.find((v: Daily) => action.id === v.id)
     ? dailyState
-    : dailyState.push(action.daily);
+    : dailyState.push({
+        createdOn: new Date(),
+        completed: false,
+        completedOn: OrderedSet(),
+        title: action.title,
+        id: action.id
+      });
 }
 
 function addDailyFromServer(
@@ -30,21 +35,24 @@ function addDailyFromServer(
 }
 
 function deleteDailyFromServer(
-  articleState: List<Daily>,
+  dailyState: List<Daily>,
   action: DeleteDailyFromServer
 ) {
-  return articleState.filter(t => (t ? t.id !== action.daily.id : false));
+  return dailyState.filter(t => (t ? t.id !== action.daily.id : false));
 }
 
 function completeDaily(
   dailyState: List<Daily>,
   action: CompleteDailyFulfilled
 ) {
-  let [key, daily] = dailyState.findEntry((t: Daily) => action.id === t.id);
-  daily.completedOn = daily.completedOn
-    ? daily.completedOn.add(action.date)
-    : OrderedSet([action.date]);
-  return key ? dailyState.set(key, daily) : dailyState;
+  const key = dailyState.findKey((t: Daily) => action.id === t.id);
+  return typeof key !== 'undefined'
+    ? dailyState.update(key, (t: Daily) => {
+        t.completedOn = t.completedOn.add(action.date);
+        console.log(t);
+        return t;
+      })
+    : dailyState;
 }
 
 export default createReducer(List(), {
