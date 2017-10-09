@@ -2,9 +2,13 @@
 # yarn lockfile v1
 
 
+"@firebase/webchannel-wrapper@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.2.1.tgz#2c4dbc15edd1de4f656d543a6f512ded7978ef72"
+
 "@types/chart.js@^2.6.2":
-  version "2.6.6"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.6.6.tgz#c5f390236a3023c49b9696a5fdd4063682333985"
+  version "2.6.8"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.6.8.tgz#f382e642a46f5d58d803bfa599f267c0ab33718e"
 
 "@types/express-serve-static-core@*":
   version "4.0.49"
@@ -43,10 +47,11 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@^15.5.2":
-  version "15.5.5"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.5.tgz#6b117c7697b61fe74132bfe5c72bceb3319433b8"
+"@types/react-dom@^16.0.1":
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.1.tgz#de159d00dd70050000f462e8bcff0c08ef803dee"
   dependencies:
+    "@types/node" "*"
     "@types/react" "*"
 
 "@types/react-redux@^4.4.47":
@@ -1992,9 +1997,10 @@ firebase-functions@^0.6.1:
     sha1 "^1.1.1"
 
 firebase@^4.2.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.4.0.tgz#cffa34964c38ae24157ec930dbe147816fd8e3f4"
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.5.0.tgz#e0973a9803b74c4c9d73d19f874712e6e9d16ba7"
   dependencies:
+    "@firebase/webchannel-wrapper" "^0.2.1"
     dom-storage "^2.0.2"
     faye-websocket "0.9.3"
     jsonwebtoken "^7.3.0"
@@ -2457,8 +2463,8 @@ ieee754@^1.1.4:
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.8.tgz#be33d40ac10ef1926701f6f08a2d86fbfd1ad3e4"
 
 immutable@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
 imurmurhash@^0.1.4:
   version "0.1.4"
@@ -4515,8 +4521,8 @@ react-bootstrap@^0.31.2:
     warning "^3.0.0"
 
 react-chartjs-2@^2.5.7:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.6.2.tgz#3631b5f79dce494ea1ea87f011389a540782223b"
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.6.4.tgz#6474d4480a6c74f2061ee0bbbe6d0f4db2170a81"
   dependencies:
     lodash "^4.17.4"
     prop-types "^15.5.8"

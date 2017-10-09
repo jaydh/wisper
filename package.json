@@ -14,7 +14,7 @@
   "dependencies": {
     "@types/chart.js": "^2.6.2",
     "@types/react-bootstrap": "^0.0.52",
-    "@types/react-dom": "^15.5.2",
+    "@types/react-dom": "^16.0.1",
     "@types/react-redux": "^4.4.47",
     "@types/redux-logger": "^3.0.0",
     "aux": "^0.0.6",
