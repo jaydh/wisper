@@ -48,6 +48,7 @@ export default function addDaily(daily: string) {
 
     const hash = SHA1.hex(daily);
     const dailyRef = database.ref('/userData/' + user + '/dailies/' + hash);
+    dailyRef.parent.off();
 
     dailyRef.once('value').then(function(snapshot: any) {
       // Check if article in database
