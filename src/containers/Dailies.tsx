@@ -64,16 +64,17 @@ class Dailies extends React.Component<Props, State> {
             Show graph
           </Button>
         </Form>
-
-        {// Only show if there are dailies active
-        dailies
-          .map((t: Daily) => t.completedOn)
-          .filter(
-            (t: OrderedSet<Date>) =>
-              t ? t.last().toDateString() !== new Date().toDateString() : true
-          ).size !== 0 && (
-          <Jumbotron>
-            {dailies
+        <Jumbotron>
+          {// Only show if there are dailies active
+          dailies
+            .map((t: Daily) => t.completedOn)
+            .filter(
+              (t: OrderedSet<Date>) =>
+                t && t.last()
+                  ? t.last().toDateString() !== new Date().toDateString()
+                  : true
+            ).size !== 0 &&
+            dailies
               .filter((t: Daily) => {
                 return t.completedOn && !t.completedOn.isEmpty()
                   ? t.completedOn.last().toDateString() !==
@@ -87,19 +88,18 @@ class Dailies extends React.Component<Props, State> {
                   </Button>
                 );
               })}
-            {this.state.graphOpen && (
-              <Collapse in={this.state.graphOpen}>
-                <DailyGraph />
-              </Collapse>
-            )}
-          </Jumbotron>
-        )}
+          {this.state.graphOpen && (
+            <Collapse in={this.state.graphOpen}>
+              <DailyGraph />
+            </Collapse>
+          )}
+        </Jumbotron>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => {
+const mapStateToProps = (state: any) => {
   return {
     dailies: state.get('dailies')
   };
