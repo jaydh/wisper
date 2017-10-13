@@ -26,7 +26,8 @@ function addDailyFromServer(
   if (action.daily.completedOn) {
     action.daily.completedOn = fromJS(action.daily.completedOn)
       .toSet()
-      .map((t: string) => new Date(t));
+      .map((t: string) => new Date(t))
+      .sort();
   }
   const entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
   return entry
@@ -49,7 +50,7 @@ function completeDaily(
     return t.id === action.id
       ? {
           ...t,
-          completedOn: t.completedOn.add(action.date),
+          completedOn: t.completedOn.add(action.date).sort()
         }
       : t;
   });

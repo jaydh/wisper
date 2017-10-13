@@ -45,14 +45,16 @@ export default function completeDaily(id: string) {
     );
 
     dailyRef.once('value').then(function(snapshot: any) {
-      const now = new Date().toLocaleString();
+      const now = new Date();
       const update: OrderedSet<Date> = snapshot.val()
         ? fromJS(snapshot.val())
-            .toSet()
+            .toOrderedSet()
+            .map((t: string) => new Date(t))
+            .sort()
             .add(now)
         : OrderedSet([now]);
       dailyRef
-        .set(update.toJS())
+        .set(update.map((t: Date) => t.toLocaleString()).toJS())
         .then(() => {
           dispatch(CompleteDailyFulfilled(id));
         })
