@@ -10,13 +10,15 @@ import createReducer from './createReducer';
 function addDaily(dailyState: List<Daily>, action: any) {
   return dailyState.find((v: Daily) => action.id === v.id)
     ? dailyState
-    : dailyState.push({
-        createdOn: new Date(),
-        completed: false,
-        completedOn: OrderedSet(),
-        title: action.title,
-        id: action.id
-      });
+    : dailyState
+        .push({
+          createdOn: new Date(),
+          completed: false,
+          completedOn: OrderedSet(),
+          title: action.title,
+          id: action.id
+        })
+        .sort((a: Daily, b: Daily) => a.title.localeCompare(b.title));
 }
 
 function addDailyFromServer(
@@ -31,8 +33,12 @@ function addDailyFromServer(
   }
   const entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
   return entry
-    ? dailyState.set(entry[0], action.daily)
-    : dailyState.push(action.daily);
+    ? dailyState
+        .set(entry[0], action.daily)
+        .sort((a: Daily, b: Daily) => a.title.localeCompare(b.title))
+    : dailyState
+        .push(action.daily)
+        .sort((a: Daily, b: Daily) => a.title.localeCompare(b.title));
 }
 
 function deleteDailyFromServer(
