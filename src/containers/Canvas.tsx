@@ -2,7 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { ListenToFirebase } from '../actions/syncWithFirebase';
 import { addArticleList } from '../actions/articleList';
-
 import { Jumbotron, Button } from 'react-bootstrap';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
@@ -17,8 +16,7 @@ interface Props {
 
 class Canvas extends React.Component<Props> {
   componentWillMount() {
-    const { listenOnMount } = this.props;
-    listenOnMount();
+    this.props.listenOnMount();
   }
 
   render() {
@@ -39,7 +37,9 @@ class Canvas extends React.Component<Props> {
             );
           })}
         </Jumbotron>
-        <Graph />
+        <Jumbotron>
+          <Graph />
+        </Jumbotron>
       </div>
     );
   }
