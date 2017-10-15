@@ -1,8 +1,8 @@
-import * as constants from '../constants/actionTypes';
-import { auth, database } from '../firebase';
+import * as constants from '../../constants/actionTypes';
+import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import { List, fromJS } from 'immutable';
-import { Article as articleType } from '../constants/StoreState';
+import { Article as articleType } from '../../constants/StoreState';
 export interface AddArticleToProjectRequested {
   type: constants.ADD_ARTICLE_TO_PROJECT_REQUESTED;
 }

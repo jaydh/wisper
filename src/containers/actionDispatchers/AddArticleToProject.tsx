@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { addArticleToProject } from '../../actions/addArticleToProject';
+import { addArticleToProject } from '../../actions/articles/addArticleToProject';
 import { Form } from 'react-bootstrap';
 import { Article as articleType } from '../../constants/StoreState';
 

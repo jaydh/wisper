@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import addArticle from '../../actions/addArticle';
+import addArticle from '../../actions/articles/addArticle';
 import {
   InputGroup,
   Button,

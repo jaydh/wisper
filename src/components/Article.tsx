@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { Article as articleType } from '../constants/StoreState';
+import { ArticleViewed } from '../actions/articles/articleViewed';
 import AddArticleToProject from '../containers/actionDispatchers/AddArticleToProject';
 import DeleteArticle from '../containers/actionDispatchers/DeleteArticle';
 import ToggleArticle from '../containers/actionDispatchers/ToggleArticle';
@@ -12,13 +15,8 @@ import {
 import { fromJS } from 'immutable';
 
 interface Props {
-  id: string;
-  completed: boolean;
-  link: string;
-  metadata?: any;
-  dateAdded: string;
-  dateRead?: string;
-  fetching?: boolean;
+  onArticleView: (t: string) => void;
+  article: articleType;
 }
 interface State {
   isMenuOpen: boolean;
@@ -33,15 +31,7 @@ class Article extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      id,
-      completed,
-      link,
-      dateAdded,
-      dateRead,
-      metadata,
-      fetching
-    } = this.props;
+    const { onArticleView, article } = this.props;
     const visibleMeta = fromJS([
       'ogTitle',
       'title',
@@ -50,7 +40,7 @@ class Article extends React.Component<Props, State> {
       'description'
     ]);
     return (
-      <ListGroupItem bsStyle={completed ? 'success' : 'info'}>
+      <ListGroupItem bsStyle={article.completed ? 'success' : 'info'}>
         {
           // Todo: add onclick for updating lastread}
         }
@@ -62,7 +52,7 @@ class Article extends React.Component<Props, State> {
             height: '5em'
           }}
         >
-          <ToggleArticle id={id} />
+          <ToggleArticle id={article.id} />
           <Button
             bsStyle="more"
             onClick={() =>
@@ -72,38 +62,42 @@ class Article extends React.Component<Props, State> {
           </Button>
         </ButtonGroup>
 
-        {fetching && <Glyphicon glyph="refresh" />}
+        {article.fetching && <Glyphicon glyph="refresh" />}
         <a
           className="article-link"
-          href={link}
+          href={article.link}
           target="_blank"
           style={{ display: 'inline-block', width: '70%' }}
+          onClick={() => {
+            onArticleView(article.id);
+          }}
         >
-          {metadata && (metadata.title || metadata.ogTitle)
-            ? metadata.ogTitle || metadata.title
-            : link}
+          {article.metadata &&
+          (article.metadata.title || article.metadata.ogTitle)
+            ? article.metadata.ogTitle || article.metadata.title
+            : article.link}
         </a>
 
         <Collapse in={this.state.isMenuOpen}>
           <div className="articleInfo">
             <p>
-              Date added: {dateAdded} <br />
-              {dateRead ? 'Date Read: ' + dateRead : ' '}
+              Date added: {article.dateAdded} <br />
+              {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
             </p>
-            {!fetching && metadata
-              ? fromJS(metadata)
+            {!article.fetching && article.metadata
+              ? fromJS(article.metadata)
                   .keySeq()
                   .filter((t: string) => visibleMeta.includes(t))
                   .map((t: string) => {
                     return (
                       <p key={t} style={{ fontSize: '.9em' }}>
-                        {t}: {fromJS(metadata).get(t)} <br />
+                        {t}: {fromJS(article.metadata).get(t)} <br />
                       </p>
                     );
                   })
               : 'Fetching metadata'}
-            <AddArticleToProject id={id} />
-            <DeleteArticle id={id} />
+            <AddArticleToProject id={article.id} />
+            <DeleteArticle id={article.id} />
           </div>
         </Collapse>
       </ListGroupItem>
@@ -111,4 +105,15 @@ class Article extends React.Component<Props, State> {
   }
 }
 
-export default Article;
+const mapStateToProps = (state: any, ownProps: any) => {
+  return ownProps;
+};
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    onArticleView: (articleID: string) => {
+      dispatch(ArticleViewed(articleID));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Article);

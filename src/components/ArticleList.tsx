@@ -51,7 +51,7 @@ class ArticleList extends React.Component<Props> {
           <h5>Count: {articles.size}</h5>
           <ListGroup>
             {articles.map((article: articleType) => {
-              return <Article key={article.id} {...article} />;
+              return <Article key={article.id} article={article} />;
             })}
           </ListGroup>
         </Jumbotron>

@@ -1,5 +1,5 @@
-import * as constants from '../constants/actionTypes';
-import { auth, database } from '../firebase';
+import * as constants from '../../constants/actionTypes';
+import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import { fromJS, List } from 'immutable';
 let Hashes = require('jshashes');

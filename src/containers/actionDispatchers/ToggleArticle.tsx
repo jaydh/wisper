@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { toggleArticleRead } from '../../actions/toggleArticleRead';
+import { toggleArticleRead } from '../../actions/articles/toggleArticleRead';
 import { Glyphicon, Button } from 'react-bootstrap';
 
 export interface Props {

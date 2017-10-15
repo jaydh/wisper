@@ -1,4 +1,4 @@
-import addArticle from '../actions/addArticle';
+import addArticle from '../actions/articles/addArticle';
 import {
   addArticleList,
   repositionArticleList,
