@@ -1,4 +1,4 @@
-import { List, OrderedSet } from 'immutable';
+import { List, Set } from 'immutable';
 export interface Article {
   id: string;
   link: string;
@@ -6,8 +6,8 @@ export interface Article {
   fetching?: boolean;
   dateAdded: string;
   dateRead?: string;
-  lastViewed?: string;
   projects?: Object;
+  viewedOn: Set<Date>;
   completed: boolean;
 }
 
@@ -15,7 +15,7 @@ export interface Daily {
   id: string;
   title: string;
   createdOn: Date;
-  completedOn: OrderedSet<Date>;
+  completedOn: Set<Date>;
   completed: boolean;
 }
 
@@ -34,7 +34,7 @@ export interface ArticleList {
 
 export interface StoreState {
   hash?: string;
-  articleLists: OrderedSet<ArticleList>;
+  articleLists: Set<ArticleList>;
   articles: List<Article>;
   projects?: List<String>;
 }

@@ -1,13 +1,14 @@
-import { AddArticleFulfilled } from '../actions/addArticle';
-import { DeleteArticleFulfilled } from '../actions/deleteArticle';
-import { ToggleArticleReadFulfilled } from '../actions/toggleArticleRead';
+import { AddArticleFulfilled } from '../actions/articles/addArticle';
+import { DeleteArticleFulfilled } from '../actions/articles/deleteArticle';
+import { ToggleArticleReadFulfilled } from '../actions/articles/toggleArticleRead';
+import { ArticleViewedFulfilled } from '../actions/articles/articleViewed';
 import {
   UpdateArticle,
   AddArticleFromServer,
   DeleteArticleFromServer
 } from '../actions/syncWithFirebase';
 import { Article as articleType } from '../constants/StoreState';
-import { List } from 'immutable';
+import { fromJS, List, Set } from 'immutable';
 import createReducer from './createReducer';
 
 const now = new Date();
@@ -28,7 +29,8 @@ function addArticle(
         dateAdded: now.toLocaleDateString(),
         completed: false,
         fetching: true,
-        projects: action.project
+        projects: action.project,
+        viewedOn: Set()
       })
     : articleState;
 }
@@ -43,6 +45,12 @@ function deleteArticle(
 }
 
 function updateArticle(articleState: List<articleType>, action: UpdateArticle) {
+  if (action.article.viewedOn) {
+    action.article.viewedOn = fromJS(action.article.viewedOn)
+      .toSet()
+      .map((t: string) => new Date(t))
+      .sort();
+  }
   return articleState.map(article => {
     return article && article.id === action.article.id
       ? action.article
@@ -58,6 +66,13 @@ function addArticleFromServer(
     articleState.filter(article => {
       return article ? action.article.id === article.id : false;
     }).size === 0;
+  if (action.article.viewedOn) {
+    action.article.viewedOn = fromJS(action.article.viewedOn)
+      .toSet()
+      .map((t: string) => new Date(t))
+      .sort();
+  }
+
   return check ? articleState.push(action.article) : articleState;
 }
 
@@ -69,21 +84,21 @@ function deleteArticleFromServer(
     article => (article ? article.id !== action.article.id : false)
   );
 }
-/*
-function addArticleToProject(
-  articleState: List<articleType>,
-  action: AddArticleToProjectFulfilled
+
+function articleViewed(
+  dailyState: List<articleType>,
+  action: ArticleViewedFulfilled
 ) {
-  return articleState.map(article => {
-    return article && article.id === action.articleHash
+  return dailyState.map((t: articleType) => {
+    return t.id === action.id
       ? {
-          ...article,
-          project: action.project
+          ...t,
+          completedOn: t.viewedOn.add(action.date).sort()
         }
-      : article;
+      : t;
   });
 }
-*/
+
 function toggleArticleRead(
   articleState: List<articleType>,
   action: ToggleArticleReadFulfilled
@@ -110,6 +125,7 @@ const articles = createReducer(List(), {
   UPDATE_ARTICLE: updateArticle,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,
+  ARTICLE_VIEWED_FULFILLED: articleViewed
 });
 
 export default articles;
