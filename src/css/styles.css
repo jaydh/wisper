@@ -1,5 +1,8 @@
 :root {
-  --main-background: #322931;
+  --main-background: #ffffff;
+  --canvas: #fffffa;
+  --articleList: #00bfb2;
+  --link: #1a5e63;
   --darkGray: #433b42;
   --gray: #5c545b;
   --lightGray: #797379;
@@ -8,17 +11,12 @@
   --white: #ffffff;
   --red: #dd464c;
   --orange: #fd8b19;
-  --yellow: #f8d175;
   --green: #8fc13e;
   --lightBlue: #149b93;
   --blue: #1290bf;
   --pink: #c85e7c;
   --darkRed: #b33508;
-  --background: #818aa3;
-  --canvas: #a491d3;
-  --articleList: #f5f2b8;
   --text: #c5dca0;
-  --link: #f9dad0;
 }
 
 h5 {
@@ -44,7 +42,7 @@ a {
 }
 
 .container-fluid {
-  background-color: var(--background);
+  background-color: var(--main-background);
 }
 
 .btn-more {
@@ -73,14 +71,6 @@ a {
   background-color: var(--lightBlue);
 }
 
-.filter {
-  background-color: var(--lightBlue);
-}
-
-.filter-dropdown {
-  background: linear-gradient(to bottom right, var(--blue), var(--lightBlue));
-}
-
 .drag {
   cursor: move;
   position: -webkit-sticky;
@@ -105,7 +95,7 @@ a {
 }
 
 .canvas {
-  background: linear-gradient(to bottom right, var(--canvas), var(--gray));
+  background: var(--canvas);
 }
 
 .list-group-item {
@@ -113,12 +103,7 @@ a {
 }
 
 .article-list-container {
-  background: linear-gradient(
-    to bottom right,
-    var(--articleList),
-    var(--lightererGray)
-  );
-  margin-bottom: 0;
+  background: #00bfb2;
 }
 
 .page-header {
