@@ -83,6 +83,7 @@ class DailyGraph extends React.Component<Props> {
                 new Date().getDay() / 4 - 2,
                 1
               ),
+              max: new Date(),
               unit: 'day',
               stepSize: 1,
               displayFormats: {

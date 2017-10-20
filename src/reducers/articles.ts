@@ -93,7 +93,7 @@ function articleViewed(
     return t.id === action.id
       ? {
           ...t,
-          completedOn: t.viewedOn.add(action.date).sort()
+          viewedOn: t.viewedOn.add(action.date).sort()
         }
       : t;
   });
