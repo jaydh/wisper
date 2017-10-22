@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Polar, HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
 import { Article as articleType } from '../../constants/StoreState';
+import { Grid, Col, Row } from 'react-bootstrap';
 
 const Colors = [
   '#F9ED69',
@@ -72,7 +73,9 @@ class Graph extends React.Component<Props> {
 
   render() {
     const projectData = this.getProjectData();
-    const domainCounts = this.getDomainData();
+    const domainCounts = this.getDomainData().sort(
+      (a: number, b: number) => (b > a ? 1 : -1)
+    );
     const projectCount = projectData.map((t: ProjectMeta) => t.count);
     const projectCompletedPercentage = projectData.map(
       (t: ProjectMeta) => t.completed / t.count
@@ -121,10 +124,7 @@ class Graph extends React.Component<Props> {
 
       datasets: [
         {
-          data: domainCounts
-            .valueSeq()
-            .sort()
-            .toJS(),
+          data: domainCounts.valueSeq().toJS(),
           backgroundColor: dataColors2,
           borderColor: [
             'rgba(255,99,132,1)',
@@ -165,7 +165,7 @@ class Graph extends React.Component<Props> {
         text: 'Project Count Distribution'
       },
       legend: {
-        display: true
+        display: false
       }
     };
     const options2 = {
@@ -188,11 +188,19 @@ class Graph extends React.Component<Props> {
     };
 
     return (
-      <div>
-        <Doughnut data={data} options={options} />
-        <HorizontalBar data={data2} options={options2} />
-        <Polar data={data3} options={options3} />
-      </div>
+      <Grid>
+        <Col md={6}>
+          <HorizontalBar data={data2} options={options2} />
+        </Col>
+        <Col md={6}>
+          <Row>
+            <Doughnut data={data} options={options} />
+          </Row>
+          <Row>
+            <Polar data={data3} options={options3} />
+          </Row>
+        </Col>
+      </Grid>
     );
   }
 }
