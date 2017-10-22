@@ -76,7 +76,7 @@ function completeDaily(
         completedOn: t.completedOn.add(action.date).sort()
       };
     }
-    return t
+    return t;
   });
 }
 
