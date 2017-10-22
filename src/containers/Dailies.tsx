@@ -5,7 +5,8 @@ import {
   FormControl,
   Jumbotron,
   Button,
-  Collapse
+  Collapse,
+  Glyphicon
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import addDaily from '../actions/dailies/addDaily';
@@ -61,7 +62,7 @@ class Dailies extends React.Component<Props, State> {
               this.setState({ graphOpen: !this.state.graphOpen });
             }}
           >
-            Show graph
+            <Glyphicon glyph="stats" />
           </Button>
         </Form>
         <Jumbotron className="canvas">
@@ -75,7 +76,10 @@ class Dailies extends React.Component<Props, State> {
             .map((t: Daily) => {
               return (
                 <Button key={t.id} onClick={() => onComplete(t.id)}>
-                  {t.title}
+                  {t.streakCount > 0 && (
+                    <Glyphicon glyph="fire">{t.streakCount}</Glyphicon>
+                  )}
+                 {' '} {t.title}
                 </Button>
               );
             })}

@@ -16,7 +16,8 @@ function addDaily(dailyState: List<Daily>, action: any) {
           completed: false,
           completedOn: OrderedSet(),
           title: action.title,
-          id: action.id
+          id: action.id,
+          streakCount: 0
         })
         .sort((a: Daily, b: Daily) => a.title.localeCompare(b.title));
 }

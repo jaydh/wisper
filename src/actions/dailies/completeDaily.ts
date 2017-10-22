@@ -1,6 +1,7 @@
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import { fromJS, OrderedSet } from 'immutable';
+import { Daily } from '../../constants/StoreState';
 
 export interface CompleteDailyRequested {
   type: 'COMPLETE_DAILY_REQUESTED';
@@ -37,11 +38,15 @@ function CompleteDailyFulfilled(id: string): CompleteDailyFulfilled {
 
 export default function completeDaily(id: string) {
   const user = auth().currentUser.uid;
-  return (dispatch: Dispatch<any>) => {
+  return (dispatch: Dispatch<any>, getState: Function) => {
     dispatch(CompleteDailyRequested());
 
     const dailyRef = database.ref(
       '/userData/' + user + '/dailies/' + id + '/completedOn'
+    );
+
+    const streakRef = database.ref(
+      '/userData/' + user + '/dailies/' + id + '/streakCount'
     );
 
     dailyRef.once('value').then(function(snapshot: any) {
@@ -57,6 +62,13 @@ export default function completeDaily(id: string) {
         .set(update.map((t: Date) => t.toLocaleString()).toJS())
         .then(() => {
           dispatch(CompleteDailyFulfilled(id));
+        })
+        .then(() => {
+          streakRef.set(
+            getState()
+              .get('dailies')
+              .find((t: Daily) => id === t.id).streakCount
+          );
         })
         .catch((error: string) => {
           console.log(error);
