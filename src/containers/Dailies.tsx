@@ -78,8 +78,8 @@ class Dailies extends React.Component<Props, State> {
                 <Button key={t.id} onClick={() => onComplete(t.id)}>
                   {t.streakCount > 0 && (
                     <Glyphicon glyph="fire">{t.streakCount}</Glyphicon>
-                  )}
-                 {' '} {t.title}
+                  )}{' '}
+                  {t.title}
                 </Button>
               );
             })}
