@@ -30,16 +30,14 @@ class Canvas extends React.Component<Props> {
         >
           Add List
         </Button>
-        <Jumbotron className="canvas" style={{ height: innerHeight }}>
+        <Jumbotron className="canvas articlelist-canvas" style={{ height: innerHeight }}>
           {articleLists.map((articleList: ArticleList) => {
             return (
               <VisibleArticleList key={articleList.id} id={articleList.id} />
             );
           })}
         </Jumbotron>
-        <Jumbotron>
-          <Graph />
-        </Jumbotron>
+        <Graph />
       </div>
     );
   }

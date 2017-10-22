@@ -64,7 +64,7 @@ class Dailies extends React.Component<Props, State> {
             Show graph
           </Button>
         </Form>
-        <Jumbotron>
+        <Jumbotron className="canvas">
           {dailies
             .filter((t: Daily) => {
               return t.completedOn && !t.completedOn.isEmpty()

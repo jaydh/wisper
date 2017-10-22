@@ -87,7 +87,7 @@ class OuterArticleList extends React.Component<Props> {
           height: height
         }}
         z={order}
-        bounds=".canvas"
+        bounds=".articlelist-canvas"
         dragHandlerClassName=".drag"
         enableResizing={{
           top: false,
