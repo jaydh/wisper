@@ -5,19 +5,19 @@ import { List } from 'immutable';
 import { Daily } from '../../constants/StoreState';
 
 const Colors = [
-  '#F9ED69',
-  '#F08A5D',
-  '#B83B5E',
-  '#6A2C70',
-  '#08D9D6',
-  '#252A34',
-  '#FF2E63',
-  '#7AC7C4',
-  '#F73859',
-  '#FFCFDF',
-  '#FEFDCA',
-  '#E0F9B5',
-  '#A5DEE5'
+  '#7F7EFF',
+  '#706677',
+  '#ED254E',
+  '#7D4E57',
+  '#EF798A',
+  '#CCFBFE',
+  '#8D6A9F',
+  '#00A9A5',
+  '#C4F1BE',
+  '#F1DEDE',
+  '#E36397',
+  '#577399',
+  '#1B998B'
 ];
 
 interface Props {

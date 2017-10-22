@@ -6,19 +6,19 @@ import { Article as articleType } from '../../constants/StoreState';
 import { Grid, Col, Row } from 'react-bootstrap';
 
 const Colors = [
-  '#F9ED69',
-  '#F08A5D',
-  '#B83B5E',
-  '#6A2C70',
-  '#08D9D6',
-  '#252A34',
-  '#FF2E63',
-  '#7AC7C4',
-  '#F73859',
-  '#FFCFDF',
-  '#FEFDCA',
-  '#E0F9B5',
-  '#A5DEE5'
+  '#7F7EFF',
+  '#706677',
+  '#ED254E',
+  '#7D4E57',
+  '#EF798A',
+  '#CCFBFE',
+  '#8D6A9F',
+  '#00A9A5',
+  '#C4F1BE',
+  '#F1DEDE',
+  '#E36397',
+  '#577399',
+  '#1B998B'
 ];
 
 interface Props {
@@ -105,14 +105,7 @@ class Graph extends React.Component<Props> {
         {
           data: projectCount.valueSeq().toJS(),
           backgroundColor: dataColors,
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
+          borderColor: ['#f2b632'],
           borderWidth: 1,
           hoverBorderWidth: 3
         }
@@ -126,14 +119,7 @@ class Graph extends React.Component<Props> {
         {
           data: domainCounts.valueSeq().toJS(),
           backgroundColor: dataColors2,
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
+          borderColor: ['#f2b632'],
           borderWidth: 1,
           hoverBorderWidth: 3
         }
@@ -146,14 +132,7 @@ class Graph extends React.Component<Props> {
         {
           data: projectCompletedPercentage.valueSeq().toJS(),
           backgroundColor: dataColors3,
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
+          borderColor: ['#f2b632'],
           borderWidth: 1,
           hoverBorderWidth: 3
         }
@@ -165,9 +144,10 @@ class Graph extends React.Component<Props> {
         text: 'Project Count Distribution'
       },
       legend: {
-        display: false
+        display: true,
+        position: 'right'
       }
-    };
+    } as any;
     const options2 = {
       title: {
         display: true,

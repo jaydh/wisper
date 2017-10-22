@@ -1,8 +1,8 @@
 :root {
-  --main-background: #ffffff;
-  --canvas: #fffffa;
-  --articleList: #00bfb2;
-  --link: #1a5e63;
+  --main-background: #252839;
+  --canvas: #677077;
+  --articleList: #b5b5b7;
+  --link: #f2b632;
   --darkGray: #433b42;
   --gray: #5c545b;
   --lightGray: #797379;
@@ -19,9 +19,6 @@
   --text: #c5dca0;
 }
 
-h5 {
-  color: var(--link);
-}
 p {
   font-size: 1.3em;
   color: black;
@@ -103,7 +100,7 @@ a {
 }
 
 .article-list-container {
-  background: #00bfb2;
+  background: var(--articleList);
 }
 
 .page-header {
