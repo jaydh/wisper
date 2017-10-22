@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import addDaily from '../actions/dailies/addDaily';
 import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
-import { List, OrderedSet } from 'immutable';
+import { List } from 'immutable';
 import DailyGraph from './graphs/DailyGraph';
 
 interface Props {
@@ -65,29 +65,20 @@ class Dailies extends React.Component<Props, State> {
           </Button>
         </Form>
         <Jumbotron>
-          {// Only show if there are dailies active
-          dailies
-            .map((t: Daily) => t.completedOn)
-            .filter(
-              (t: OrderedSet<Date>) =>
-                t && t.last()
-                  ? t.last().toDateString() !== new Date().toDateString()
-                  : true
-            ).size !== 0 &&
-            dailies
-              .filter((t: Daily) => {
-                return t.completedOn && !t.completedOn.isEmpty()
-                  ? t.completedOn.last().toDateString() !==
-                      new Date().toDateString()
-                  : true;
-              })
-              .map((t: Daily) => {
-                return (
-                  <Button key={t.id} onClick={() => onComplete(t.id)}>
-                    {t.title}
-                  </Button>
-                );
-              })}
+          {dailies
+            .filter((t: Daily) => {
+              return t.completedOn && !t.completedOn.isEmpty()
+                ? t.completedOn.last().toDateString() !==
+                    new Date().toDateString()
+                : true;
+            })
+            .map((t: Daily) => {
+              return (
+                <Button key={t.id} onClick={() => onComplete(t.id)}>
+                  {t.title}
+                </Button>
+              );
+            })}
           {this.state.graphOpen && (
             <Collapse in={this.state.graphOpen}>
               <DailyGraph />
