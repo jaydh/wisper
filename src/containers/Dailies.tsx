@@ -65,7 +65,7 @@ class Dailies extends React.Component<Props, State> {
             <Glyphicon glyph="stats" />
           </Button>
         </Form>
-        <Jumbotron className="canvas">
+        <Jumbotron className="daily-canvas">
           {dailies
             .filter((t: Daily) => {
               return t.completedOn && !t.completedOn.isEmpty()

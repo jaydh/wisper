@@ -43,7 +43,7 @@ a {
 }
 
 .btn-more {
-  background-color: var(--pink);
+  background-color: var(--blue);
   height: 2.5em;
   width: 2.5em;
 }
@@ -89,6 +89,10 @@ a {
   position: -webkit-sticky;
   border: solid var(--blue);
   border-width: 0 6px 6px 0;
+}
+
+.daily-canvas {
+  background: var(--articleList);
 }
 
 .canvas {

@@ -6,7 +6,6 @@ import { Daily } from '../../constants/StoreState';
 
 const Colors = [
   '#7F7EFF',
-  '#706677',
   '#ED254E',
   '#7D4E57',
   '#EF798A',
@@ -51,7 +50,7 @@ class DailyGraph extends React.Component<Props> {
             label: t.title
           };
         })
-        .toJS(),
+        .toJS()
     };
     const options = {
       maintainAspectRatio: false,
@@ -65,7 +64,8 @@ class DailyGraph extends React.Component<Props> {
             labels: dailies.map((t: Daily) => t.title).toJS(),
             gridLines: {
               display: true,
-              drawBorder: false
+              drawBorder: false,
+              color: '#577399'
             }
           }
         ],
@@ -73,7 +73,8 @@ class DailyGraph extends React.Component<Props> {
           {
             type: 'time',
             gridLines: {
-              display: true
+              display: true,
+              color: '#1290bf'
             },
             time: {
               // Last two weeks
