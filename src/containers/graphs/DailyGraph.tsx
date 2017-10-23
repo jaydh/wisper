@@ -46,7 +46,7 @@ class DailyGraph extends React.Component<Props> {
               : [],
             backgroundColor: color,
             pointStyle: 'rectRounded',
-            radius: 10,
+            radius: 8,
             label: t.title
           };
         })
@@ -76,6 +76,13 @@ class DailyGraph extends React.Component<Props> {
               display: true,
               color: '#1290bf'
             },
+            ticks: {
+              autoskip: true,
+              callback: function(tick: any, index: any, array: any) {
+                return index % 3 ? '' : tick;
+              }
+            },
+
             time: {
               // Last two weeks
               min: new Date(
