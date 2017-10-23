@@ -8,7 +8,7 @@ import DeleteArticleList from '../containers/actionDispatchers/DeleteArticleList
 import LockArticleList from '../containers/actionDispatchers/LockArticleList';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
-import { Jumbotron, ListGroup, ButtonGroup } from 'react-bootstrap';
+import { Glyphicon, Jumbotron, ListGroup, ButtonGroup } from 'react-bootstrap';
 
 const Rnd = require('react-rnd').default;
 
@@ -47,8 +47,9 @@ class ArticleList extends React.Component<Props> {
             <ProjectSelector id={id} articlesInActivity={articlesInActivity} />
             <Sort id={id} />
           </ButtonGroup>
-
-          <h5>Count: {articles.size}</h5>
+          <p style={{ float: 'right' }}>
+            <Glyphicon glyph="list-alt" /> {articles.size}
+          </p>
           <ListGroup>
             {articles.map((article: articleType) => {
               return <Article key={article.id} article={article} />;
