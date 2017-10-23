@@ -36,7 +36,10 @@ function CompleteDailyFulfilled(id: string): CompleteDailyFulfilled {
   };
 }
 
-export default function completeDaily(id: string) {
+export default function completeDaily(
+  id: string,
+  completionDate: Date = new Date()
+) {
   const user = auth().currentUser.uid;
   return (dispatch: Dispatch<any>, getState: Function) => {
     dispatch(CompleteDailyRequested());
@@ -50,14 +53,13 @@ export default function completeDaily(id: string) {
     );
 
     dailyRef.once('value').then(function(snapshot: any) {
-      const now = new Date();
       const update: OrderedSet<Date> = snapshot.val()
         ? fromJS(snapshot.val())
             .toOrderedSet()
             .map((t: string) => new Date(t))
             .sort()
-            .add(now)
-        : OrderedSet([now]);
+            .add(completionDate)
+        : OrderedSet([completionDate]);
       dailyRef
         .set(update.map((t: Date) => t.toLocaleString()).toJS())
         .then(() => {
