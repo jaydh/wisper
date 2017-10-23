@@ -84,19 +84,6 @@ class Graph extends React.Component<Props> {
     const dynamicColors = function() {
       return Colors[Math.floor(Math.random() * Colors.length)];
     };
-    const dataColors = projectData
-      .map(() => dynamicColors())
-      .valueSeq()
-      .toJS();
-    const dataColors2 = domainCounts
-      .map(() => dynamicColors())
-      .valueSeq()
-      .toJS();
-
-    const dataColors3 = projectCompletedPercentage
-      .map(() => dynamicColors())
-      .valueSeq()
-      .toJS();
 
     const data = {
       labels: projectCount.keySeq().toJS(),
@@ -104,9 +91,15 @@ class Graph extends React.Component<Props> {
       datasets: [
         {
           data: projectCount.valueSeq().toJS(),
-          backgroundColor: dataColors,
-          borderColor: ['#f2b632'],
-          borderWidth: 1,
+          backgroundColor: projectData
+            .map(() => dynamicColors())
+            .valueSeq()
+            .toJS(),
+          borderColor: projectCount
+            .valueSeq()
+            .map(() => '#f2b632')
+            .toJS(),
+          borderWidth: 1.5,
           hoverBorderWidth: 3
         }
       ]
@@ -118,8 +111,14 @@ class Graph extends React.Component<Props> {
       datasets: [
         {
           data: domainCounts.valueSeq().toJS(),
-          backgroundColor: dataColors2,
-          borderColor: ['#f2b632'],
+          backgroundColor: domainCounts
+            .map(() => dynamicColors())
+            .valueSeq()
+            .toJS(),
+          borderColor: domainCounts
+            .valueSeq()
+            .map(() => '#f2b632')
+            .toJS(),
           borderWidth: 1,
           hoverBorderWidth: 3
         }
@@ -131,9 +130,15 @@ class Graph extends React.Component<Props> {
       datasets: [
         {
           data: projectCompletedPercentage.valueSeq().toJS(),
-          backgroundColor: dataColors3,
-          borderColor: ['#f2b632'],
-          borderWidth: 1,
+          backgroundColor: projectCompletedPercentage
+            .map(() => dynamicColors())
+            .valueSeq()
+            .toJS(),
+          borderColor: projectCompletedPercentage
+            .valueSeq()
+            .map(() => '#f2b632')
+            .toJS(),
+          borderWidth: 1.5,
           hoverBorderWidth: 3
         }
       ]
