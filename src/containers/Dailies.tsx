@@ -76,7 +76,7 @@ class Dailies extends React.Component<Props, State> {
             .map((t: Daily) => {
               return (
                 <Button key={t.id} onClick={() => onComplete(t.id)}>
-                  {t.streakCount > 0 && (
+                  {t.streakCount > 5 && (
                     <Glyphicon glyph="fire">{t.streakCount}</Glyphicon>
                   )}{' '}
                   {t.title}
