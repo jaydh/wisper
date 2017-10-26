@@ -54,19 +54,23 @@ function completeDaily(
   action: CompleteDailyFulfilled
 ) {
   return dailyState.map((t: Daily) => {
-    let streakCount = 0;
+    let streakCount = 1;
     if (t.id === action.id) {
       let streak = true;
       let completedStack = t.completedOn
         ? t.completedOn.toList()
         : List([new Date()]);
       let next = new Date();
-      while (streak) {
+      while (streak && completedStack.last()) {
         let dayBefore = new Date(next.getTime());
         dayBefore.setDate(next.getDate() - 1);
         next = completedStack.last();
         completedStack = completedStack.pop();
-        if (next.getDate() !== dayBefore.getDate()) {
+        const last = next;
+        if (
+          next.getDate() !== dayBefore.getDate() ||
+          next.getDate() !== last.getDate()
+        ) {
           streak = false;
         }
         streakCount++;
