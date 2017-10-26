@@ -1,3 +1,7 @@
+var moment = require('moment');
+moment().format();
+let Hashes = require('jshashes');
+let SHA1 = new Hashes.SHA1();
 import addArticle from '../actions/articles/addArticle';
 import {
   addArticleList,
@@ -7,6 +11,8 @@ import {
 import setSortFilter from '../actions/setSortFilter';
 import { setProjectFilter } from '../actions/projectFilter';
 import { setVisibilityFilter } from '../actions/visibilityFilter';
+import addDaily from '../actions/dailies/addDaily';
+import completeDaily from '../actions/dailies/completeDaily';
 
 export default function(store: any, persistor: any) {
   persistor.purge();
@@ -126,4 +132,85 @@ export default function(store: any, persistor: any) {
   store.dispatch(
     repositionArticleList('1', innerWidth * 0.4, innerHeight * 0.1)
   );
+  const now = moment();
+  const ids = [
+    SHA1.hex('Excercise'),
+    SHA1.hex('Check the garbage'),
+    SHA1.hex('Water plants'),
+    SHA1.hex('Water plants')
+  ];
+  store
+    .dispatch(addDaily('Excercise'))
+    .then(() => store.dispatch(addDaily('Check the garbage')))
+    .then(() => store.dispatch(addDaily('Water plants')))
+    .then(() => store.dispatch(addDaily('Water plants')))
+    .then(() =>
+      store
+        .dispatch(
+          completeDaily(
+            ids[0],
+            now
+              .clone()
+              .subtract(1, 'day')
+              .toDate()
+          )
+        )
+        .then(() =>
+          store.dispatch(
+            completeDaily(
+              ids[0],
+              now
+                .clone()
+                .subtract(2, 'day')
+                .toDate()
+            )
+          )
+        )
+        .then(() =>
+          store.dispatch(
+            completeDaily(
+              ids[0],
+              now
+                .clone()
+                .subtract(2, 'day')
+                .toDate()
+            )
+          )
+        )
+        .then(() =>
+          store
+            .dispatch(
+              completeDaily(
+                ids[0],
+                now
+                  .clone()
+                  .subtract(3, 'day')
+                  .toDate()
+              )
+            )
+            .then(() =>
+              store
+                .dispatch(
+                  completeDaily(
+                    ids[0],
+                    now
+                      .clone()
+                      .subtract(4, 'day')
+                      .toDate()
+                  )
+                )
+                .then(() =>
+                  store.dispatch(
+                    completeDaily(
+                      ids[0],
+                      now
+                        .clone()
+                        .subtract(5, 'day')
+                        .toDate()
+                    )
+                  )
+                )
+            )
+        )
+    );
 }
