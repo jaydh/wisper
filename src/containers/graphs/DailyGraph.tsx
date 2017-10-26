@@ -45,8 +45,8 @@ class DailyGraph extends React.Component<Props> {
                   .toJS()
               : [],
             backgroundColor: color,
-            pointStyle: 'rectRounded',
-            radius: 8,
+            pointStyle: 'circle',
+            radius: 5,
             label: t.title
           };
         })
