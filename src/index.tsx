@@ -7,7 +7,7 @@ import App from './components/App';
 import appReducer from './reducers/index';
 import thunk from 'redux-thunk';
 const { persistStore, autoRehydrate } = require('redux-persist-immutable');
-import { initFirebase, auth } from './firebase';
+import { initFirebase, auth, database } from './firebase';
 import LoginLoading from './components/LoginLoading';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import bootstrap from './bootstrap';
@@ -23,13 +23,19 @@ let store = createStore(
 );
 initFirebase();
 let persistor = persistStore(store);
+persistor.purge();
+
 auth().onAuthStateChanged(function(user: any) {
   if (user) {
-    if (
-      user.isAnonymous &&
-      (store.getState() as any).get('articles').size === 0
-    ) {
-      demo(store, persistor);
+    if (user.isAnonymous) {
+      database
+        .ref('/userData/' + user.uid)
+        .once('value')
+        .then(function(snapshot: any) {
+          if (!snapshot.val()) {
+            demo(store, persistor);
+          }
+        });
     }
     ReactDOM.render(
       <Provider store={store}>
