@@ -9,34 +9,7 @@ import {
   ControlLabel
 } from 'react-bootstrap';
 import { Set, fromJS, Map } from 'immutable';
-
-const options = {
-  strictMode: false,
-  key: [
-    'source',
-    'protocol',
-    'authority',
-    'userInfo',
-    'user',
-    'password',
-    'host',
-    'port',
-    'relative',
-    'path',
-    'directory',
-    'file',
-    'query',
-    'anchor'
-  ],
-  q: {
-    name: 'queryKey',
-    parser: /(?:^|&)([^&=]*)=?([^&]*)/g
-  },
-  parser: {
-    strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-    loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
-  }
-};
+import parseUri from '../../helpers/parseURI';
 
 interface State {
   value: string;
@@ -61,23 +34,15 @@ class AddArticle extends React.Component<Props, State> {
     this.getValidationState = this.getValidationState.bind(this);
   }
 
-  parseUri(str: string) {
-    let o = options,
-      m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str) as object,
-      uri = {},
-      i = 14;
-
-    while (i--) {
-      uri[o.key[i]] = m[i] || '';
-    }
-
-    uri[o.q.name] = {};
-    uri[o.key[12]].replace(o.q.parser, function($0: any, $1: any, $2: any) {
-      if ($1) {
-        uri[o.q.name][$1] = $2;
-      }
-    });
-    return uri;
+  handleChange(e: any) {
+    e.preventDefault();
+    this.setState(
+      {
+        value: e.target.value,
+        parse: parseUri(e.target.value)
+      },
+      () => this.getSuggestion()
+    );
   }
 
   getValidationState() {
@@ -123,18 +88,6 @@ class AddArticle extends React.Component<Props, State> {
       suggestion: counts.findKey((count: number) => count === max)
     });
   }
-
-  handleChange(e: any) {
-    e.preventDefault();
-    this.setState(
-      {
-        value: e.target.value,
-        parse: this.parseUri(e.target.value)
-      },
-      () => this.getSuggestion()
-    );
-  }
-
   handleSubmit(useSuggest: boolean) {
     const { onAdd, projectFilter } = this.props;
     let project =
@@ -180,12 +133,12 @@ class AddArticle extends React.Component<Props, State> {
           <FormControl.Feedback />
         </FormGroup>
         {this.getValidationState() === 'success' &&
-        (projectFilter === 'All' || projectFilter === 'None') &&
-        this.state.suggestion && (
-          <Button bsSize="large" onClick={() => this.handleSubmit(true)}>
-            Add to {this.state.suggestion} project?
-          </Button>
-        )}
+          (projectFilter === 'All' || projectFilter === 'None') &&
+          this.state.suggestion && (
+            <Button bsSize="large" onClick={() => this.handleSubmit(true)}>
+              Add to {this.state.suggestion} project?
+            </Button>
+          )}
       </form>
     );
   }
