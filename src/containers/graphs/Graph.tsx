@@ -21,6 +21,13 @@ const Colors = [
   '#1B998B'
 ];
 
+const dynamicColors = function(thisColors: any) {
+  const index = Math.floor(Math.random() * thisColors.size);
+  const val = thisColors.get(index);
+  thisColors = thisColors.delete(index);
+  return val;
+};
+
 interface Props {
   articles: List<articleType>;
   projects: List<String>;
@@ -29,11 +36,13 @@ interface Props {
 interface ProjectMeta {
   count: number;
   completed: number;
+  color: string;
 }
 
 class Graph extends React.Component<Props> {
   getProjectData(): Map<string, object> {
     const { articles } = this.props;
+    let thisColors = fromJS(Colors);
     let projectData = Map<string, ProjectMeta>();
     articles.forEach((article: articleType) => {
       const keys = article.projects
@@ -43,7 +52,13 @@ class Graph extends React.Component<Props> {
         (key: string) =>
           (projectData = projectData.update(
             key,
-            (meta: ProjectMeta = { count: 0, completed: 0 }) => {
+            (
+              meta: ProjectMeta = {
+                count: 0,
+                completed: 0,
+                color: dynamicColors(thisColors)
+              }
+            ) => {
               return {
                 ...meta,
                 count: meta.count + 1,
@@ -72,19 +87,18 @@ class Graph extends React.Component<Props> {
   }
 
   render() {
-    const projectData = this.getProjectData();
     const domainCounts = this.getDomainData().sort(
       (a: number, b: number) => (b > a ? 1 : -1)
     );
+    const projectData = this.getProjectData();
     const projectCount = projectData.map((t: ProjectMeta) => t.count);
     const projectCompletedPercentage = projectData.map(
       (t: ProjectMeta) => t.completed / t.count
     );
-
-    const dynamicColors = function() {
-      return Colors[Math.floor(Math.random() * Colors.length)];
-    };
-
+    const borderColors = projectCount
+      .valueSeq()
+      .map(() => '#f2b632')
+      .toJS();
     const data = {
       labels: projectCount.keySeq().toJS(),
 
@@ -92,13 +106,10 @@ class Graph extends React.Component<Props> {
         {
           data: projectCount.valueSeq().toJS(),
           backgroundColor: projectData
-            .map(() => dynamicColors())
+            .map((t: ProjectMeta) => t.color)
             .valueSeq()
             .toJS(),
-          borderColor: projectCount
-            .valueSeq()
-            .map(() => '#f2b632')
-            .toJS(),
+          borderColor: borderColors,
           borderWidth: 1.5,
           hoverBorderWidth: 3
         }
@@ -112,13 +123,10 @@ class Graph extends React.Component<Props> {
         {
           data: domainCounts.valueSeq().toJS(),
           backgroundColor: domainCounts
-            .map(() => dynamicColors())
+            .map(() => dynamicColors(fromJS(Colors)))
             .valueSeq()
             .toJS(),
-          borderColor: domainCounts
-            .valueSeq()
-            .map(() => '#f2b632')
-            .toJS(),
+          borderColor: borderColors,
           borderWidth: 1,
           hoverBorderWidth: 3
         }
@@ -130,14 +138,11 @@ class Graph extends React.Component<Props> {
       datasets: [
         {
           data: projectCompletedPercentage.valueSeq().toJS(),
-          backgroundColor: projectCompletedPercentage
-            .map(() => dynamicColors())
+          backgroundColor: projectData
+            .map((t: ProjectMeta) => t.color)
             .valueSeq()
             .toJS(),
-          borderColor: projectCompletedPercentage
-            .valueSeq()
-            .map(() => '#f2b632')
-            .toJS(),
+          borderColor: borderColors,
           borderWidth: 1.5,
           hoverBorderWidth: 3
         }
