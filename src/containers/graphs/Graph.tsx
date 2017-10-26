@@ -4,6 +4,7 @@ import { Polar, HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
 import { Article as articleType } from '../../constants/StoreState';
 import { Grid, Col, Row } from 'react-bootstrap';
+import parseUri from '../../helpers/parseURI';
 
 const Colors = [
   '#7F7EFF',
@@ -76,14 +77,18 @@ class Graph extends React.Component<Props> {
     const { articles } = this.props;
     const domains = articles.map(
       (article: articleType) =>
-        article.metadata ? article.metadata.ogSiteName : ''
+        article.metadata
+          ? article.metadata.ogSiteName ||
+            article.metadata.siteName ||
+            parseUri(article.link).authority
+          : article.link
     );
     let domainCounts = Map<string, number>();
     domains.map(
       (x: string) =>
         (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
     );
-    return domainCounts;
+    return domainCounts.filter((t: number) => t > 1);
   }
 
   render() {
@@ -165,8 +170,21 @@ class Graph extends React.Component<Props> {
       },
       legend: {
         display: false
+      },
+      scales: {
+        xAxes: [
+          {
+            id: 'x-axis-0',
+            gridLines: {
+              display: false
+            },
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
       }
-    };
+    } as any;
     const options3 = {
       title: {
         display: true,
