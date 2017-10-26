@@ -1,7 +1,7 @@
 import * as constants from '../../constants/actionTypes';
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
-// import { fromJS, List } from 'immutable';
+import { fromJS, List } from 'immutable';
 let Hashes = require('jshashes');
 var SHA1 = new Hashes.SHA1();
 
@@ -88,7 +88,7 @@ export default function addArticle(articleLink: string, project?: string) {
           });
       }
     });
-    /*    if (project) {
+    if (project) {
       const projects = database.ref('/userData/' + user + '/projects/');
 
       // Gets dictionary data for project and updates project dicionary accordingly
@@ -127,6 +127,6 @@ export default function addArticle(articleLink: string, project?: string) {
             }
           });
         });
-    }*/
+    }
   };
 }
