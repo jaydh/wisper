@@ -81,7 +81,7 @@ class Graph extends React.Component<Props> {
           ? article.metadata.ogSiteName ||
             article.metadata.siteName ||
             parseUri(article.link).authority
-          : article.link
+          : parseUri(article.link).authority
     );
     let domainCounts = Map<string, number>();
     domains.map(
