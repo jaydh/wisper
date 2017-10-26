@@ -50,7 +50,7 @@ export default function addDaily(daily: string) {
     const dailyRef = database.ref('/userData/' + user + '/dailies/' + hash);
     dailyRef.parent.off();
 
-    dailyRef.once('value').then(function(snapshot: any) {
+    return dailyRef.once('value').then(function(snapshot: any) {
       // Check if article in database
       if (snapshot.exists()) {
         dispatch(AddDailyRejected());

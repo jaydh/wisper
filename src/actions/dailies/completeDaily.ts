@@ -28,14 +28,16 @@ function CompleteDailyRejected(): CompleteDailyRejected {
   };
 }
 
-function CompleteDailyFulfilled(id: string): CompleteDailyFulfilled {
+function CompleteDailyFulfilled(
+  id: string,
+  date: Date
+): CompleteDailyFulfilled {
   return {
     type: 'COMPLETE_DAILY_FULFILLED',
-    date: new Date(),
+    date,
     id
   };
 }
-
 export default function completeDaily(
   id: string,
   completionDate: Date = new Date()
@@ -52,7 +54,7 @@ export default function completeDaily(
       '/userData/' + user + '/dailies/' + id + '/streakCount'
     );
 
-    dailyRef.once('value').then(function(snapshot: any) {
+    return dailyRef.once('value').then(function(snapshot: any) {
       const update: OrderedSet<Date> = snapshot.val()
         ? fromJS(snapshot.val())
             .toOrderedSet()
@@ -60,10 +62,10 @@ export default function completeDaily(
             .sort()
             .add(completionDate)
         : OrderedSet([completionDate]);
-      dailyRef
+      return dailyRef
         .set(update.map((t: Date) => t.toLocaleString()).toJS())
         .then(() => {
-          dispatch(CompleteDailyFulfilled(id));
+          dispatch(CompleteDailyFulfilled(id, completionDate));
         })
         .then(() => {
           streakRef.set(
