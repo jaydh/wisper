@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Jumbotron, Button, Collapse, Glyphicon } from 'react-bootstrap';
+import { Jumbotron, Button, ButtonGroup,Collapse, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
@@ -35,6 +35,7 @@ class Dailies extends React.Component<Props, State> {
         </Button>
 
         <Jumbotron className="daily-canvas">
+          <ButtonGroup>
           {dailies
             .filter((t: Daily) => {
               return t.completedOn && !t.completedOn.isEmpty()
@@ -44,7 +45,11 @@ class Dailies extends React.Component<Props, State> {
             })
             .map((t: Daily) => {
               return (
-                <Button key={t.id} onClick={() => onComplete(t.id)}>
+                <Button
+                  bsStyle="daily"
+                  key={t.id}
+                  onClick={() => onComplete(t.id)}
+                >
                   {t.streakCount > 4 && (
                     <Glyphicon glyph="fire">{t.streakCount}</Glyphicon>
                   )}{' '}
@@ -52,6 +57,7 @@ class Dailies extends React.Component<Props, State> {
                 </Button>
               );
             })}
+            </ButtonGroup>
           {this.state.graphOpen && (
             <Collapse in={this.state.graphOpen}>
               <DailyGraph />

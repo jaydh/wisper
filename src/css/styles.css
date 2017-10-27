@@ -64,6 +64,10 @@ a {
   background-color: var(--green);
 }
 
+.btn-daily {
+  background-color: var(--link);
+}
+
 #bg-nested-dropdown {
   background-color: var(--lightBlue);
 }

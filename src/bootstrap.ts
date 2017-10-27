@@ -8,6 +8,7 @@ export default () => {
   bootstrapUtils.addStyle(Button, 'drag');
   bootstrapUtils.addStyle(Button, 'submit');
   bootstrapUtils.addStyle(Button, 'logout');
+  bootstrapUtils.addStyle(Button, 'daily');
   bootstrapUtils.addStyle(Jumbotron, 'canvas');
   bootstrapUtils.addStyle(DropdownButton, 'filter');
 };
