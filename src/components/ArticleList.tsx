@@ -30,7 +30,13 @@ interface Props {
 
 class ArticleList extends React.Component<Props> {
   render() {
-    const { articles, id, projectFilter, articlesInActivity } = this.props;
+    const {
+      articles,
+      id,
+      projectFilter,
+      articlesInActivity,
+      locked
+    } = this.props;
     return (
       <div>
         <Jumbotron
@@ -40,7 +46,7 @@ class ArticleList extends React.Component<Props> {
           }}
         >
           <LockArticleList id={id} />
-          <DeleteArticleList id={id} />
+          {!locked && <DeleteArticleList id={id} />}
           <AddArticle projectFilter={projectFilter} />
           <ButtonGroup>
             <ActiveSelector id={id} />
