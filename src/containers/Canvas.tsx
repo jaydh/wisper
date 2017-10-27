@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { ListenToFirebase } from '../actions/syncWithFirebase';
-import { addArticleList } from '../actions/articleList';
-import { Jumbotron, Button } from 'react-bootstrap';
+import { Jumbotron } from 'react-bootstrap';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
 import VisibleArticleList from '../containers/VisibleArticleList';
@@ -20,16 +19,9 @@ class Canvas extends React.Component<Props> {
   }
 
   render() {
-    const { articleLists, AddArticleList } = this.props;
+    const { articleLists } = this.props;
     return (
       <div>
-        <Button
-          bsStyle="addList"
-          bsSize="large"
-          onClick={() => AddArticleList()}
-        >
-          Add List
-        </Button>
         {articleLists.size !== 0 && (
           <Jumbotron
             className="canvas articlelist-canvas"
@@ -50,9 +42,6 @@ class Canvas extends React.Component<Props> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    AddArticleList: () => {
-      dispatch(addArticleList());
-    },
     listenOnMount: () => {
       dispatch(ListenToFirebase());
     }

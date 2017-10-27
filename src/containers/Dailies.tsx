@@ -1,15 +1,6 @@
 import * as React from 'react';
-import {
-  Form,
-  FormGroup,
-  FormControl,
-  Jumbotron,
-  Button,
-  Collapse,
-  Glyphicon
-} from 'react-bootstrap';
+import { Jumbotron, Button, Collapse, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import addDaily from '../actions/dailies/addDaily';
 import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { List } from 'immutable';
@@ -22,49 +13,27 @@ interface Props {
 }
 
 interface State {
-  dailyValue: string;
   graphOpen: boolean;
 }
 
 class Dailies extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { dailyValue: '', graphOpen: false };
-    this.handleChange = this.handleChange.bind(this);
-  }
-  handleChange(e: any) {
-    e.preventDefault();
-    this.setState({ dailyValue: e.target.value });
+    this.state = { graphOpen: false };
   }
 
   render() {
-    const { onComplete, dailies, AddDaily } = this.props;
+    const { onComplete, dailies } = this.props;
     return (
       <div>
-        <Form
-          inline={true}
-          onSubmit={event => {
-            event.preventDefault();
-            AddDaily(this.state.dailyValue);
-            this.setState({ dailyValue: '' });
+        <Button
+          onClick={() => {
+            this.setState({ graphOpen: !this.state.graphOpen });
           }}
         >
-          <FormGroup controlId="formBasicText">
-            <FormControl
-              type="text"
-              value={this.state.dailyValue}
-              placeholder="Add daily"
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <Button
-            onClick={() => {
-              this.setState({ graphOpen: !this.state.graphOpen });
-            }}
-          >
-            <Glyphicon glyph="stats" />
-          </Button>
-        </Form>
+          <Glyphicon glyph="stats" />
+        </Button>
+
         <Jumbotron className="daily-canvas">
           {dailies
             .filter((t: Daily) => {
@@ -102,9 +71,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    AddDaily: (daily: string) => {
-      dispatch(addDaily(daily));
-    },
     onComplete: (id: string) => {
       dispatch(completeDaily(id));
     }

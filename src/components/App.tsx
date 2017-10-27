@@ -5,7 +5,7 @@ import 'whatwg-fetch';
 import Canvas from '../containers/Canvas';
 import Dailies from '../containers/Dailies';
 import '!!style-loader!css-loader!../css/styles.css';
-
+import Menu from './Menu';
 interface State {
   gitCommit: string;
   sidebarOpen: boolean;
@@ -37,11 +37,12 @@ class App extends React.Component<{}, State> {
 
   render() {
     const gitDate = new Date(this.state.gitCommit);
-
     return (
       <div className="container-fluid">
+        <Menu />
         <PageHeader>wispy</PageHeader>
         <Dailies />
+
         <Canvas />
         <Logout />
         <h2>

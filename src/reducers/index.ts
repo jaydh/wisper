@@ -2,7 +2,7 @@ import articles from './articles';
 import projects from './projects';
 import articleLists from './articleLists';
 import dailies from './dailies';
-let { combineReducers } = require('redux-immutable');
+import { combineReducers } from 'redux-immutable';
 
 const appReducer = combineReducers({
   articles,
@@ -10,5 +10,4 @@ const appReducer = combineReducers({
   articleLists,
   dailies
 });
-
 export default appReducer;
