@@ -24,15 +24,19 @@ initFirebase();
 let persistor = persistStore(store);
 
 auth().onAuthStateChanged(function(user: any) {
-  if (user && user.isAnonymous) {
-    database
-      .ref('/userData/' + user.uid)
-      .once('value')
-      .then(function(snapshot: any) {
-        if (!snapshot.val()) {
-          demo(store, persistor);
-        }
-      });
+  if (user) {
+    if (user.isAnonymous) {
+      database
+        .ref('/userData/' + user.uid)
+        .once('value')
+        .then(function(snapshot: any) {
+          if (!snapshot.val()) {
+            demo(store, persistor);
+          }
+        });
+    }
+  } else {
+    persistor.purge();
   }
   ReactDOM.render(
     <Provider store={store}>
