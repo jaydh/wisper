@@ -4,6 +4,8 @@ import { PageHeader } from 'react-bootstrap';
 import 'whatwg-fetch';
 import Canvas from '../containers/Canvas';
 import Dailies from '../containers/Dailies';
+import LoginLoading from './LoginLoading';
+import { auth } from '../firebase';
 import '!!style-loader!css-loader!../css/styles.css';
 import Menu from './Menu';
 interface State {
@@ -34,17 +36,21 @@ class App extends React.Component<{}, State> {
         console.log('parsing failed', ex);
       });
   }
-
   render() {
     const gitDate = new Date(this.state.gitCommit);
     return (
       <div className="container-fluid">
         <Menu />
         <PageHeader>wispy</PageHeader>
-        <Dailies />
-
-        <Canvas />
-        <Logout />
+        {auth().currentUser ? (
+          <div>
+            <Dailies />
+            <Canvas />
+            <Logout />
+          </div>
+        ) : (
+          <LoginLoading />
+        )}
         <h2>
           Under active development; Last updated: {gitDate.toLocaleString()}{' '}
           <br />

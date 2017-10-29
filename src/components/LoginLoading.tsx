@@ -3,27 +3,27 @@ import { auth, provider } from '../firebase';
 import { Button } from 'react-bootstrap';
 export default class LoginLoading extends React.Component {
   render() {
-    const wellStyles = { maxWidth: 400, margin: 'auto' };
     return (
-      <div className="well" style={wellStyles}>
-        <h2> Create account</h2>
-        <Button
-          bsStyle="primary"
-          bsSize="large"
-          onClick={() => auth().signInWithRedirect(provider)}
-          block={true}
-        >
-          Login{' '}
-        </Button>
+      <div className="container-fluid login">
+        <div className="well" style={{ maxWidth: 400, margin: 'auto' }}>
+          <Button
+            bsStyle="daily"
+            bsSize="large"
+            onClick={() => auth().signInWithRedirect(provider)}
+            block={true}
+          >
+            Authenticate with Google{' '}
+          </Button>
 
-        <Button
-          bsStyle="primary"
-          bsSize="large"
-          onClick={() => auth().signInAnonymously()}
-          block={true}
-        >
-          Try anonymously
-        </Button>
+          <Button
+            bsStyle="daily"
+            bsSize="large"
+            onClick={() => auth().signInAnonymously()}
+            block={true}
+          >
+            Demo{' '}
+          </Button>
+        </div>
       </div>
     );
   }

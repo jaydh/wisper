@@ -8,7 +8,6 @@ import appReducer from './reducers/index';
 import thunk from 'redux-thunk';
 const { persistStore, autoRehydrate } = require('redux-persist-immutable');
 import { initFirebase, auth, database } from './firebase';
-import LoginLoading from './components/LoginLoading';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import bootstrap from './bootstrap';
 import demo from './constants/demo';
@@ -25,32 +24,22 @@ initFirebase();
 let persistor = persistStore(store);
 
 auth().onAuthStateChanged(function(user: any) {
-  if (user) {
-    if (user.isAnonymous) {
-      database
-        .ref('/userData/' + user.uid)
-        .once('value')
-        .then(function(snapshot: any) {
-          if (!snapshot.val()) {
-            demo(store, persistor);
-          }
-        });
-    }
-    ReactDOM.render(
-      <Provider store={store}>
-        <App />
-      </Provider>,
-      document.getElementById('root')
-    );
-  } else {
-    persistor.purge();
-    ReactDOM.render(
-      <Provider store={store}>
-        <LoginLoading />
-      </Provider>,
-      document.getElementById('root')
-    );
+  if (user && user.isAnonymous) {
+    database
+      .ref('/userData/' + user.uid)
+      .once('value')
+      .then(function(snapshot: any) {
+        if (!snapshot.val()) {
+          demo(store, persistor);
+        }
+      });
   }
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('root')
+  );
 });
 
 registerServiceWorker();
