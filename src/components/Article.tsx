@@ -31,6 +31,7 @@ class Article extends React.Component<Props, State> {
 
   render() {
     const { onArticleView, article } = this.props;
+
     return (
       <ListGroupItem>
         <ButtonGroup
@@ -85,6 +86,12 @@ class Article extends React.Component<Props, State> {
             )}
             <p>
               Date added: {article.dateAdded} <br />
+              {article.viewedOn
+                ? `Last viewed on ${article.viewedOn
+                    .last()
+                    .toLocaleString()} - viewed ${article.viewedOn
+                    .size} time(s)`
+                : ''}
               {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
             </p>
             <AddArticleToProject id={article.id} />

@@ -45,8 +45,8 @@ class DailyGraph extends React.Component<Props> {
                   .toJS()
               : [],
             backgroundColor: color,
-            pointStyle: 'circle',
-            radius: 5,
+            pointStyle: 'rectRot',
+            radius: 8,
             label: t.title
           };
         })
@@ -59,13 +59,14 @@ class DailyGraph extends React.Component<Props> {
           {
             type: 'category',
             ticks: {
-              source: 'labels'
+              source: 'labels',
+              fontColor: '#ffffff'
             },
             labels: dailies.map((t: Daily) => t.title).toJS(),
             gridLines: {
               display: true,
               drawBorder: false,
-              color: '#577399'
+              color: '#f2b632'
             }
           }
         ],
@@ -74,13 +75,14 @@ class DailyGraph extends React.Component<Props> {
             type: 'time',
             gridLines: {
               display: true,
-              color: '#1290bf'
+              color: '#f2b632'
             },
             ticks: {
               autoskip: true,
               callback: function(tick: any, index: any, array: any) {
-                return index % 3 ? '' : tick;
-              }
+                return index % 7 ? '' : tick;
+              },
+              fontColor: '#ffffff'
             },
 
             time: {
@@ -92,6 +94,7 @@ class DailyGraph extends React.Component<Props> {
                 1
               ),
               max: new Date(),
+              round: 'day',
               unit: 'day',
               stepSize: 1,
               displayFormats: {

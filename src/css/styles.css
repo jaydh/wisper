@@ -109,7 +109,7 @@ a {
 }
 
 .daily-canvas {
-  background: var(--articleList);
+  background: var(--canvas);
 }
 
 .canvas {
