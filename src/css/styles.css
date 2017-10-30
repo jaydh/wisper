@@ -18,8 +18,8 @@
   --darkRed: #b33508;
   --text: #c5dca0;
 }
-h2{
-  color: var(--link)
+h2 {
+  color: var(--link);
 }
 p {
   font-size: 1.3em;
@@ -98,6 +98,7 @@ a {
 
 .well {
   margin: auto;
+  background-color: var(--canvas);
 }
 
 .resize {

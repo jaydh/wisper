@@ -12,7 +12,6 @@ import {
   Collapse,
   ListGroupItem
 } from 'react-bootstrap';
-import { fromJS } from 'immutable';
 
 interface Props {
   onArticleView: (t: string) => void;
@@ -32,18 +31,8 @@ class Article extends React.Component<Props, State> {
 
   render() {
     const { onArticleView, article } = this.props;
-    const visibleMeta = fromJS([
-      'ogTitle',
-      'title',
-      'ogSiteName',
-      'ogDescription',
-      'description'
-    ]);
     return (
-      <ListGroupItem bsStyle={article.completed ? 'success' : 'info'}>
-        {
-          // Todo: add onclick for updating lastread}
-        }
+      <ListGroupItem>
         <ButtonGroup
           style={{
             position: 'absolute',
@@ -80,22 +69,24 @@ class Article extends React.Component<Props, State> {
 
         <Collapse in={this.state.isMenuOpen}>
           <div className="articleInfo">
+            {!article.fetching && article.metadata ? (
+              <p>
+                {article.metadata.ogDescrption || article.metadata.description
+                  ? `Description: ${article.metadata.ogDescrption ||
+                      article.metadata.description}`
+                  : ''}
+                <br />
+                {article.metadata.ogSiteName
+                  ? `Domain: ${article.metadata.ogSiteName}`
+                  : ''}
+              </p>
+            ) : (
+              'Fetching metadata'
+            )}
             <p>
               Date added: {article.dateAdded} <br />
               {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
             </p>
-            {!article.fetching && article.metadata
-              ? fromJS(article.metadata)
-                  .keySeq()
-                  .filter((t: string) => visibleMeta.includes(t))
-                  .map((t: string) => {
-                    return (
-                      <p key={t} style={{ fontSize: '.9em' }}>
-                        {t}: {fromJS(article.metadata).get(t)} <br />
-                      </p>
-                    );
-                  })
-              : 'Fetching metadata'}
             <AddArticleToProject id={article.id} />
             <DeleteArticle id={article.id} />
           </div>
