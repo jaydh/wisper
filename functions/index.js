@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const scrape = require('scrape-metadata');
 const fetch = require('node-fetch');
 const pos = require('pos');
-const { Set, List, fromJS } = require('immutable');
+const { Map, Set, List, fromJS } = require('immutable');
 admin.initializeApp(functions.config().firebase);
 
 exports.getMetadata = functions.database
@@ -86,5 +86,35 @@ exports.addKeywordsFromMetadata = functions.database
         masterProjectRef
           .child(updates.key)
           .update({ dictionary: updates.dictionary });
+      });
+  });
+
+exports.getProjectSynonyms = functions.database
+  .ref('/userData/{uID}/projects/{projectPushID}')
+  .onCreate(event => {
+    console.log(event.params);
+    console.log(event.data.val());
+    const project = event.data.val().id;
+    console.log(project);
+    // Gets dictionary data for project and updates project dicionary accordingly
+    return fetch(
+      `https://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/${project}/json`
+    )
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(json) {
+        let dictionary = fromJS([]);
+        const synonymGroups = fromJS(json).toList();
+        synonymGroups.forEach(t => {
+          dictionary = dictionary.merge(t.get('syn'));
+        });
+        return dictionary;
+      })
+      .then(function(dictionary) {
+        event.data.ref.set({
+          id: project,
+          dictionary: dictionary.valueSeq().toJS()
+        });
       });
   });
