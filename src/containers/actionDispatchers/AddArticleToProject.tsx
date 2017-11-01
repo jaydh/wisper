@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { addArticleToProject } from '../../actions/articles/addArticleToProject';
+import addArticleToProject from '../../actions/articles/addArticleToProject';
 import { Form } from 'react-bootstrap';
 import { Article as articleType } from '../../constants/StoreState';
 
 export interface Props {
   article: articleType;
-  onAddToProject: (t: articleType, p: string) => void;
+  onAddToProject: (t: string, p: string) => void;
 }
 
 class AddArticleToProject extends React.Component<Props, {}> {
@@ -20,7 +20,7 @@ class AddArticleToProject extends React.Component<Props, {}> {
           if (!input.value.trim()) {
             return;
           }
-          onAddToProject(article, input.value);
+          onAddToProject(article.id, input.value);
           input.value = '';
         }}
       >
@@ -46,7 +46,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onAddToProject: (article: articleType, project: string) => {
+    onAddToProject: (article: string, project: string) => {
       dispatch(addArticleToProject(article, project));
     }
   };

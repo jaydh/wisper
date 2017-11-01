@@ -1,14 +1,13 @@
 import * as constants from '../../constants/actionTypes';
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
-import { List, fromJS } from 'immutable';
-import { Article as articleType } from '../../constants/StoreState';
+import { fromJS } from 'immutable';
 export interface AddArticleToProjectRequested {
   type: constants.ADD_ARTICLE_TO_PROJECT_REQUESTED;
 }
 export interface AddArticleToProjectFulfilled {
   type: constants.ADD_ARTICLE_TO_PROJECT_FULFILLED;
-  article: articleType;
+  article: string;
   project: string;
 }
 export interface AddArticleToProjectRejected {
@@ -28,7 +27,7 @@ function AddArticleToProjectRejected(): AddArticleToProjectRejected {
 }
 
 function AddArticleToProjectFulfilled(
-  article: articleType,
+  article: string,
   project: string
 ): AddArticleToProjectFulfilled {
   return {
@@ -37,51 +36,36 @@ function AddArticleToProjectFulfilled(
     project
   };
 }
-export function addArticleToProject(article: articleType, project: string) {
+export default function addArticleToProject(
+  articleID: string,
+  project: string
+) {
   const user = auth().currentUser.uid;
   return (dispatch: Dispatch<any>) => {
     dispatch(AddArticleToProjectRequested());
 
     const projectRef = database.ref(
-      '/userData/' + user + '/' + 'articles/' + article.id + '/projects'
+      '/userData/' + user + '/' + 'articles/' + articleID + '/projects'
     );
     const projects = database.ref('/userData/' + user + '/projects/');
 
-    projectRef.once('value', function(snapshot: any) {
-      projectRef
-        .push(project)
-        .then(() => {
-          dispatch(AddArticleToProjectFulfilled(article, project));
-        })
-        .catch((error: string) => {
-          console.log(error);
-          dispatch(AddArticleToProjectRejected());
-        });
-    });
-
-    // Gets dictionary data for project and updates project dicionary accordingly
-    fetch(
-      'https://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/' +
-        project +
-        '/json'
-    )
-      .then(function(response: any) {
-        return response.json();
+    projectRef
+      .once('value', function(snapshot: any) {
+        projectRef
+          .push(project)
+          .then(() => {
+            dispatch(AddArticleToProjectFulfilled(articleID, project));
+          })
+          .catch((error: string) => {
+            console.log(error);
+            dispatch(AddArticleToProjectRejected());
+          });
       })
-      .then(function(json: any) {
-        let dictionary: List<string> = fromJS([]);
-        const synonymGroups = fromJS(json).toList();
-        synonymGroups.forEach((t: any) => {
-          dictionary = dictionary.merge(t.get('syn'));
-        });
-        return dictionary;
-      })
-      .then(function(dictionary: any) {
+      .then(() => {
         projects.once('value').then(function(snapshot: any) {
           const push = () =>
             projects.push({
-              id: project,
-              dictionary: dictionary.valueSeq().toJS()
+              id: project
             });
           if (snapshot.val()) {
             const proj = fromJS(snapshot.val())

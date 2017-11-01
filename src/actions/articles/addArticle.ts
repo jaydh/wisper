@@ -1,7 +1,7 @@
 import * as constants from '../../constants/actionTypes';
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
-import { fromJS, List } from 'immutable';
+import AddArticleToProject from './addArticleToProject';
 let Hashes = require('jshashes');
 var SHA1 = new Hashes.SHA1();
 
@@ -65,72 +65,33 @@ export default function addArticle(articleLink: string, project?: string) {
     let projectWithKey = {};
     projectWithKey[projectPushKey] = project ? project : null;
 
-    return articleRef
-      .once('value')
-      .then(function(snapshot: any) {
-        // Check if article in database
-        if (snapshot.exists()) {
-          dispatch(AddArticleRejected());
-        } else {
-          articleRef
-            .set({
-              link: articleLink,
-              id: hash,
-              dateAdded: now.toLocaleString(),
-              completed: false,
-              fetching: true
-            })
-            .then(articleRef.child('projects').update(projectWithKey))
-            .then(() => {
-              dispatch(AddArticleFulfilled(articleLink, project));
-            })
-            .catch((error: string) => {
-              console.log(error);
-              dispatch(AddArticleRejected());
-            });
-        }
-      })
-      .then(() => {
-        if (project) {
-          const projects = database.ref('/userData/' + user + '/projects/');
-
-          // Gets dictionary data for project and updates project dicionary accordingly
-          fetch(
-            'https://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/' +
-              project +
-              '/json'
-          )
-            .then(function(response: any) {
-              return response.json();
-            })
-            .then(function(json: any) {
-              let dictionary: List<string> = fromJS([]);
-              const synonymGroups = fromJS(json).toList();
-              synonymGroups.forEach((t: any) => {
-                dictionary = dictionary.merge(t.get('syn'));
-              });
-              return dictionary;
-            })
-            .then(function(dictionary: any) {
-              projects.once('value').then(function(snapshot: any) {
-                const push = () =>
-                  projects.push({
-                    id: project,
-                    dictionary: dictionary.valueSeq().toJS()
-                  });
-                if (snapshot.val()) {
-                  const proj = fromJS(snapshot.val())
-                    .valueSeq()
-                    .map((t: Map<string, any>) => t.get('id'));
-                  if (!proj.includes(project)) {
-                    push();
-                  }
-                } else {
-                  push();
-                }
-              });
-            });
-        }
-      });
+    return articleRef.once('value').then(function(snapshot: any) {
+      // Check if article in database
+      if (snapshot.exists()) {
+        dispatch(AddArticleRejected());
+      } else {
+        articleRef
+          .set({
+            link: articleLink,
+            id: hash,
+            dateAdded: now.toLocaleString(),
+            completed: false,
+            fetching: true
+          })
+          .then(articleRef.child('projects').update(projectWithKey))
+          .then(() => {
+            dispatch(AddArticleFulfilled(articleLink, project));
+          })
+          .then(() => {
+            if (project) {
+              dispatch(AddArticleToProject(articleLink, project));
+            }
+          })
+          .catch((error: string) => {
+            console.log(error);
+            dispatch(AddArticleRejected());
+          });
+      }
+    });
   };
 }

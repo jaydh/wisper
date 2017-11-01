@@ -9,7 +9,6 @@ import LockArticleList from '../containers/actionDispatchers/LockArticleList';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 import { Glyphicon, Jumbotron, ListGroup, ButtonGroup } from 'react-bootstrap';
-
 const Rnd = require('react-rnd').default;
 
 interface Props {

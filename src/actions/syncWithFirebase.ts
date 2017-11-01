@@ -20,7 +20,10 @@ export interface DeleteArticleFromServer {
 
 export interface AddProject {
   type: 'ADD_PROJECT';
-  project: any;
+  project: {
+    id: string;
+    dictionary?: any;
+  };
 }
 
 export interface UpdateProject {

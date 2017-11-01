@@ -10,8 +10,10 @@ function addProject(
   projectState: Map<string, Set<string>>,
   action: AddProject
 ) {
-  return projectState.update(action.project.id, (t = Set([])) =>
-    t.union(action.project.dictionary)
+  return projectState.update(
+    action.project.id,
+    (t = Set([])) =>
+      action.project.dictionary ? t.union(action.project.dictionary) : Set([])
   );
 }
 
