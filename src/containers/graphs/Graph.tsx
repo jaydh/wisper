@@ -98,7 +98,7 @@ class Graph extends React.Component<Props> {
     const projectData = this.getProjectData();
     const projectCount = projectData.map((t: ProjectMeta) => t.count);
     const projectCompletedPercentage = projectData.map(
-      (t: ProjectMeta) => t.completed / t.count
+      (t: ProjectMeta) => Math.round(t.completed / t.count * 100) / 100
     );
     const borderColors = projectCount
       .valueSeq()

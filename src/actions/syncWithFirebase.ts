@@ -88,7 +88,12 @@ export interface DeleteDailyFromServer {
   daily: Daily;
 }
 
-export function addDailyFromServer(daily: Daily) {
+export interface UpdateDaily {
+  type: 'UPDATE_DAILY';
+  daily: Daily;
+}
+
+function addDailyFromServer(daily: Daily) {
   return {
     type: 'ADD_DAILY_FROM_SERVER',
     daily
@@ -98,6 +103,13 @@ export function addDailyFromServer(daily: Daily) {
 function deleteDailyFromServer(daily: Daily) {
   return {
     type: 'DELETE_DAILY_FROM_SERVER',
+    daily
+  };
+}
+
+function updateDaily(daily: Daily) {
+  return {
+    type: 'UPDATE_DAILY',
     daily
   };
 }
@@ -135,9 +147,11 @@ export function ListenToFirebase() {
     dailyRef.on('child_added', function(snapshot: any) {
       dispatch(addDailyFromServer(snapshot.val()));
     });
-
     dailyRef.on('child_removed', function(snapshot: any) {
       dispatch(deleteDailyFromServer(snapshot.val()));
+    });
+    dailyRef.on('child_changed', function(snapshot: any) {
+      dispatch(updateDaily(snapshot.val()));
     });
   };
 }

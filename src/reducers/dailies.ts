@@ -3,7 +3,8 @@ import { Daily } from '../constants/StoreState';
 import { fromJS, List, OrderedSet } from 'immutable';
 import {
   AddDailyFromServer,
-  DeleteDailyFromServer
+  DeleteDailyFromServer,
+  UpdateDaily
 } from '../actions/syncWithFirebase';
 import createReducer from './createReducer';
 
@@ -49,6 +50,13 @@ function deleteDailyFromServer(
   return dailyState.filter(t => (t ? t.id !== action.daily.id : false));
 }
 
+function updateDaily(dailyState: List<Daily>, action: UpdateDaily) {
+  return dailyState.set(
+    dailyState.findIndex((t: Daily) => action.daily.id === t.id),
+    action.daily
+  );
+}
+
 function completeDaily(
   dailyState: List<Daily>,
   action: CompleteDailyFulfilled
@@ -89,5 +97,6 @@ export default createReducer(List(), {
   ADD_DAILY_FULFILLED: addDaily,
   COMPLETE_DAILY_FULFILLED: completeDaily,
   ADD_DAILY_FROM_SERVER: addDailyFromServer,
-  DELETE_DAILY_FROM_SERVER: deleteDailyFromServer
+  DELETE_DAILY_FROM_SERVER: deleteDailyFromServer,
+  UPDATE_DAILY: updateDaily
 });
