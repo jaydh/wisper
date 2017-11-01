@@ -92,10 +92,7 @@ exports.addKeywordsFromMetadata = functions.database
 exports.getProjectSynonyms = functions.database
   .ref('/userData/{uID}/projects/{projectPushID}')
   .onCreate(event => {
-    console.log(event.params);
-    console.log(event.data.val());
     const project = event.data.val().id;
-    console.log(project);
     // Gets dictionary data for project and updates project dicionary accordingly
     return fetch(
       `https://words.bighugelabs.com/api/2/b0ccfcccd889eeb6a11c013493465013/${project}/json`
