@@ -23,7 +23,7 @@ class Sort extends React.Component<Props> {
             by date added (recent first)
           </MenuItem>
           <MenuItem
-            eventKey="1"
+            eventKey="2"
             onClick={() => {
               onClick('date-desc');
             }}
@@ -31,10 +31,10 @@ class Sort extends React.Component<Props> {
             by date added (recent last)
           </MenuItem>
 
-          <MenuItem eventKey="2" onClick={() => onClick('title')}>
+          <MenuItem eventKey="3" onClick={() => onClick('title')}>
             by title
           </MenuItem>
-          <MenuItem eventKey="3" onClick={() => onClick('dateRead')}>
+          <MenuItem eventKey="4" onClick={() => onClick('dateRead')}>
             by date read
           </MenuItem>
         </Dropdown.Menu>

@@ -72,10 +72,7 @@ class Article extends React.Component<Props, State> {
           <div className="articleInfo">
             {!article.fetching && article.metadata ? (
               <p>
-                {article.metadata.ogDescrption || article.metadata.description
-                  ? `Description: ${article.metadata.ogDescrption ||
-                      article.metadata.description}`
-                  : ''}
+                {article.metadata.ogDescrption || article.metadata.description}
                 <br />
                 {article.metadata.ogSiteName
                   ? `Domain: ${article.metadata.ogSiteName}`
