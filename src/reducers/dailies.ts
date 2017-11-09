@@ -7,14 +7,14 @@ import {
   UpdateDaily
 } from '../actions/syncWithFirebase';
 import createReducer from './createReducer';
-import * as moment from 'moment';
+import { isSameDay, subDays } from 'date-fns';
 
 function addDaily(dailyState: List<Daily>, action: any) {
   return dailyState.find((v: Daily) => action.id === v.id)
     ? dailyState
     : dailyState
         .push({
-          createdOn: moment(),
+          createdOn: new Date(),
           completed: false,
           completedOn: OrderedSet(),
           title: action.title,
@@ -31,7 +31,7 @@ function addDailyFromServer(
   if (action.daily.completedOn) {
     action.daily.completedOn = fromJS(action.daily.completedOn)
       .toSet()
-      .map((t: string) => moment(t))
+      .map((t: string) => new Date(t))
       .sort();
   }
   const entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
@@ -55,7 +55,7 @@ function updateDaily(dailyState: List<Daily>, action: UpdateDaily) {
   if (action.daily.completedOn) {
     action.daily.completedOn = fromJS(action.daily.completedOn)
       .toSet()
-      .map((t: string) => moment(t))
+      .map((t: string) => new Date(t))
       .sort();
   }
   return dailyState.set(
@@ -71,12 +71,21 @@ function completeDaily(
   return dailyState.map((t: Daily) => {
     let streakCount = 1;
     if (t.id === action.id) {
-      /* let streak = true;
       let completedStack = t.completedOn
-        ? t.completedOn.toList()
-        : List([moment()]);
-      let next = moment();
-*/
+        ? t.completedOn.sort().toList()
+        : List([Date()]);
+      let last = new Date();
+      let next = completedStack.last();
+      completedStack = completedStack.pop();
+      while (
+        (next && isSameDay(next, subDays(last, 1))) ||
+        isSameDay(next, last)
+      ) {
+        streakCount++;
+        last = next as Date;
+        next = completedStack.last();
+        completedStack = completedStack.pop();
+      }
       return {
         ...t,
         streakCount,

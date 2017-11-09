@@ -1,8 +1,6 @@
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import { fromJS, OrderedSet } from 'immutable';
-import { Moment } from 'moment';
-import * as moment from 'moment';
 
 export interface ArticleViewedRequested {
   type: 'ARTICLE_VIEWED_REQUESTED';
@@ -14,7 +12,7 @@ export interface ArticleViewedRejected {
 
 export interface ArticleViewedFulfilled {
   type: 'ARTICLE_VIEWED_FULFILLED';
-  date: Moment;
+  date: Date;
   id: string;
 }
 
@@ -33,7 +31,7 @@ function ArticleViewedRejected(): ArticleViewedRejected {
 function ArticleViewedFulfilled(id: string): ArticleViewedFulfilled {
   return {
     type: 'ARTICLE_VIEWED_FULFILLED',
-    date: moment(),
+    date: new Date(),
     id
   };
 }
@@ -48,16 +46,16 @@ export function ArticleViewed(id: string) {
     );
 
     dailyRef.once('value').then(function(snapshot: any) {
-      const now = moment();
-      const update: OrderedSet<Moment> = snapshot.val()
+      const now = new Date();
+      const update: OrderedSet<Date> = snapshot.val()
         ? fromJS(snapshot.val())
             .toOrderedSet()
-            .map((t: string) => moment(t))
+            .map((t: string) => new Date(t))
             .sort()
             .add(now)
         : OrderedSet([now]);
       dailyRef
-        .set(update.map((t: Moment) => t.toLocaleString()).toJS())
+        .set(update.map((t: Date) => t.toLocaleString()).toJS())
         .then(() => {
           dispatch(ArticleViewedFulfilled(id));
         })

@@ -2,8 +2,6 @@ import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import { fromJS, OrderedSet } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import { Moment } from 'moment';
-import * as moment from 'moment';
 
 export interface CompleteDailyRequested {
   type: 'COMPLETE_DAILY_REQUESTED';
@@ -15,7 +13,7 @@ export interface CompleteDailyRejected {
 
 export interface CompleteDailyFulfilled {
   type: 'COMPLETE_DAILY_FULFILLED';
-  date: Moment;
+  date: Date;
   id: string;
 }
 function CompleteDailyRequested(): CompleteDailyRequested {
@@ -32,7 +30,7 @@ function CompleteDailyRejected(): CompleteDailyRejected {
 
 function CompleteDailyFulfilled(
   id: string,
-  date: Moment
+  date: Date
 ): CompleteDailyFulfilled {
   return {
     type: 'COMPLETE_DAILY_FULFILLED',
@@ -42,7 +40,7 @@ function CompleteDailyFulfilled(
 }
 export default function completeDaily(
   id: string,
-  completionDate: Moment = moment()
+  completionDate: Date = new Date()
 ) {
   const user = auth().currentUser.uid;
   return (dispatch: Dispatch<any>, getState: Function) => {
@@ -57,15 +55,15 @@ export default function completeDaily(
     );
 
     return dailyRef.once('value').then(function(snapshot: any) {
-      const update: OrderedSet<Moment> = snapshot.val()
+      const update: OrderedSet<Date> = snapshot.val()
         ? fromJS(snapshot.val())
             .toOrderedSet()
-            .map((t: string) => moment(t))
+            .map((t: string) => new Date(t))
             .sort()
             .add(completionDate)
         : OrderedSet([completionDate]);
       return dailyRef
-        .set(update.map((t: Moment) => t.toLocaleString()).toJS())
+        .set(update.map((t: Date) => t.toLocaleString()).toJS())
         .then(() => {
           dispatch(CompleteDailyFulfilled(id, completionDate));
         })

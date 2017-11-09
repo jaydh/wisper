@@ -1,22 +1,21 @@
 import { List, Set } from 'immutable';
-import { Moment } from 'moment';
 export interface Article {
   id: string;
   link: string;
   metadata?: any;
   fetching?: boolean;
-  dateAdded: Moment;
-  dateRead?: Moment;
+  dateAdded: Date;
+  dateRead?: Date;
   projects?: Object;
-  viewedOn: Set<Moment>;
+  viewedOn: Set<Date>;
   completed: boolean;
 }
 
 export interface Daily {
   id: string;
   title: string;
-  createdOn: Moment;
-  completedOn: Set<Moment>;
+  createdOn: Date;
+  completedOn: Set<Date>;
   completed: boolean;
   streakCount: number;
 }

@@ -22,7 +22,6 @@ let store = createStore(
 );
 initFirebase();
 let persistor = persistStore(store);
-
 auth().onAuthStateChanged(function(user: any) {
   if (user) {
     if (user.isAnonymous) {
