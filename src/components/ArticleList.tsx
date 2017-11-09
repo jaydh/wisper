@@ -5,6 +5,7 @@ import ProjectSelector from '../containers/actionDispatchers/ProjectSelector';
 import ActiveSelector from '../containers/actionDispatchers/ActiveSelector';
 import Sort from '../containers/actionDispatchers/Sort';
 import DeleteArticleList from '../containers/actionDispatchers/DeleteArticleList';
+import MaximizedArticleList from '../containers/actionDispatchers/MaximizeArticleList';
 import LockArticleList from '../containers/actionDispatchers/LockArticleList';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
@@ -45,7 +46,12 @@ class ArticleList extends React.Component<Props> {
           }}
         >
           <LockArticleList id={id} />
-          {!locked && <DeleteArticleList id={id} />}
+          {!locked && (
+            <div>
+              <DeleteArticleList id={id} />
+              <MaximizedArticleList id={id} />
+            </div>
+          )}
           <AddArticle projectFilter={projectFilter} />
           <ButtonGroup>
             <ActiveSelector id={id} />

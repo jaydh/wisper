@@ -126,7 +126,6 @@ function mapStateToProps(state: any, ownProps: any) {
     sortedActiveArticles,
     projectFilter
   );
-
   return {
     articles: sortedActiveArticlesInProject,
     articlesInActivity,

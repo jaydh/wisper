@@ -90,8 +90,8 @@ function resizeArticleList(
     return list.id === action.id
       ? {
           ...list,
-          width: list.width + action.x,
-          height: list.height + action.y
+          width: list.width + action.x > 0 ? list.width + action.x : 0,
+          height: list.height + action.y > 0 ? list.height + action.y : 0
         }
       : list;
   });

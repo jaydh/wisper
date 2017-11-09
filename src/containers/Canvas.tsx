@@ -25,6 +25,7 @@ class Canvas extends React.Component<Props> {
         {articleLists.size !== 0 && (
           <Jumbotron
             className="canvas articlelist-canvas"
+            id="canvas"
             style={{ height: innerHeight }}
           >
             {articleLists.map((articleList: ArticleList) => {
