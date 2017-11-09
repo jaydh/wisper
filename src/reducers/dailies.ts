@@ -51,6 +51,12 @@ function deleteDailyFromServer(
 }
 
 function updateDaily(dailyState: List<Daily>, action: UpdateDaily) {
+  if (action.daily.completedOn) {
+    action.daily.completedOn = fromJS(action.daily.completedOn)
+      .toSet()
+      .map((t: string) => new Date(t))
+      .sort();
+  }
   return dailyState.set(
     dailyState.findIndex((t: Daily) => action.daily.id === t.id),
     action.daily

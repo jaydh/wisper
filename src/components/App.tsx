@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Logout from './Logout';
 import { PageHeader } from 'react-bootstrap';
-import 'whatwg-fetch';
 import Canvas from '../containers/Canvas';
 import Dailies from '../containers/Dailies';
 import LoginLoading from './LoginLoading';
@@ -23,7 +22,7 @@ class App extends React.Component<{}, State> {
   }
 
   // Gets repository information
-  componentWillMount() {
+  componentDidMount() {
     const that = this;
     fetch('https://api.github.com/repos/jaydh/wispy')
       .then(function(response: any) {
