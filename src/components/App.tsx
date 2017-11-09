@@ -39,7 +39,7 @@ class App extends React.Component<{}, State> {
     const gitDate = new Date(this.state.gitCommit);
     return (
       <div className="container-fluid">
-        <Menu />
+        {auth().currentUser && <Menu />}
         <PageHeader>wispy</PageHeader>
         {auth().currentUser ? (
           <div>
