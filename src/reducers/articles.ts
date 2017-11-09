@@ -10,8 +10,7 @@ import {
 import { Article as articleType } from '../constants/StoreState';
 import { fromJS, List, Set } from 'immutable';
 import createReducer from './createReducer';
-
-const now = new Date();
+import * as moment from 'moment';
 
 function addArticle(
   articleState: List<articleType>,
@@ -26,7 +25,7 @@ function addArticle(
     ? articleState.push({
         id: action.articleHash,
         link: action.articleLink,
-        dateAdded: now.toLocaleDateString(),
+        dateAdded: moment(),
         completed: false,
         fetching: true,
         projects: action.project,
@@ -48,7 +47,7 @@ function updateArticle(articleState: List<articleType>, action: UpdateArticle) {
   if (action.article.viewedOn) {
     action.article.viewedOn = fromJS(action.article.viewedOn)
       .toSet()
-      .map((t: string) => new Date(t))
+      .map((t: string) => moment(t))
       .sort();
   }
   return articleState.map(article => {
@@ -69,7 +68,7 @@ function addArticleFromServer(
   if (action.article.viewedOn) {
     action.article.viewedOn = fromJS(action.article.viewedOn)
       .toSet()
-      .map((t: string) => new Date(t))
+      .map((t: string) => moment(t))
       .sort();
   }
 
@@ -110,7 +109,7 @@ function toggleArticleRead(
             ...article,
             completed: action.update.completed,
             dateRead: action.update.dateRead,
-            lastViewed: now
+            lastViewed: moment()
           }
         : article;
     }

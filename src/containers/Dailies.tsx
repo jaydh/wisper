@@ -11,6 +11,7 @@ import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { List } from 'immutable';
 import DailyGraph from './graphs/DailyGraph';
+import * as moment from 'moment';
 
 interface Props {
   onComplete: (id: string) => void;
@@ -45,8 +46,7 @@ class Dailies extends React.Component<Props, State> {
             {dailies
               .filter((t: Daily) => {
                 return t.completedOn && !t.completedOn.isEmpty()
-                  ? t.completedOn.last().toDateString() !==
-                      new Date().toDateString()
+                  ? !moment(t.completedOn.last()).isSame(moment(), 'day')
                   : true;
               })
               .map((t: Daily) => {

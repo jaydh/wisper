@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Bubble } from 'react-chartjs-2';
 import { List } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-var moment = require('moment');
-moment().format();
+import { Moment } from 'moment';
+import * as moment from 'moment';
 
 const Colors = [
   '#7F7EFF',
@@ -38,10 +38,10 @@ class DailyGraph extends React.Component<Props> {
           return {
             data: t.completedOn
               ? t.completedOn
-                  .filter((p: Date) =>
-                    moment(p).isAfter(new moment().subtract(3, 'week'))
+                  .filter((p: Moment) =>
+                    p.isAfter(moment().subtract(3, 'week'))
                   )
-                  .map((p: Date) => {
+                  .map((p: Moment) => {
                     return {
                       t: p,
                       y: t.title
@@ -90,7 +90,7 @@ class DailyGraph extends React.Component<Props> {
             },
 
             time: {
-              max: new moment(),
+              max: moment(),
               round: 'day',
               unit: 'day',
               stepSize: 1,

@@ -58,12 +58,10 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
     case 'date-desc':
       return articles
         .sort((a, b) => {
-          const aa = new Date(a.dateAdded);
-          const bb = new Date(b.dateAdded);
-          if (aa < bb) {
+          if (a < b) {
             return -1;
           }
-          if (aa > bb) {
+          if (a > b) {
             return 1;
           }
           return 0;
@@ -72,12 +70,10 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
     case 'date-asc':
       return articles
         .sort((b, a) => {
-          const aa = new Date(a.dateAdded);
-          const bb = new Date(b.dateAdded);
-          if (aa < bb) {
+          if (a < b) {
             return -1;
           }
-          if (aa > bb) {
+          if (a > b) {
             return 1;
           }
           return 0;
@@ -102,8 +98,8 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
     case 'dateRead':
       return articles
         .sort((a, b) => {
-          const aa = a.dateRead ? new Date(a.dateRead) : new Date();
-          const bb = b.dateRead ? new Date(b.dateRead) : new Date();
+          const aa = a.dateRead ? a.dateRead : new Date();
+          const bb = b.dateRead ? b.dateRead : new Date();
           if (aa < bb) {
             return -1;
           }

@@ -7,13 +7,14 @@ import {
   UpdateDaily
 } from '../actions/syncWithFirebase';
 import createReducer from './createReducer';
+import * as moment from 'moment';
 
 function addDaily(dailyState: List<Daily>, action: any) {
   return dailyState.find((v: Daily) => action.id === v.id)
     ? dailyState
     : dailyState
         .push({
-          createdOn: new Date(),
+          createdOn: moment(),
           completed: false,
           completedOn: OrderedSet(),
           title: action.title,
@@ -30,7 +31,7 @@ function addDailyFromServer(
   if (action.daily.completedOn) {
     action.daily.completedOn = fromJS(action.daily.completedOn)
       .toSet()
-      .map((t: string) => new Date(t))
+      .map((t: string) => moment(t))
       .sort();
   }
   const entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
@@ -54,7 +55,7 @@ function updateDaily(dailyState: List<Daily>, action: UpdateDaily) {
   if (action.daily.completedOn) {
     action.daily.completedOn = fromJS(action.daily.completedOn)
       .toSet()
-      .map((t: string) => new Date(t))
+      .map((t: string) => moment(t))
       .sort();
   }
   return dailyState.set(
@@ -70,25 +71,12 @@ function completeDaily(
   return dailyState.map((t: Daily) => {
     let streakCount = 1;
     if (t.id === action.id) {
-      let streak = true;
+      /* let streak = true;
       let completedStack = t.completedOn
         ? t.completedOn.toList()
-        : List([new Date()]);
-      let next = new Date();
-      while (streak && completedStack.last()) {
-        let dayBefore = new Date(next.getTime());
-        dayBefore.setDate(next.getDate() - 1);
-        next = completedStack.last();
-        completedStack = completedStack.pop();
-        const last = next;
-        if (
-          next.getDate() !== dayBefore.getDate() ||
-          next.getDate() !== last.getDate()
-        ) {
-          streak = false;
-        }
-        streakCount++;
-      }
+        : List([moment()]);
+      let next = moment();
+*/
       return {
         ...t,
         streakCount,
