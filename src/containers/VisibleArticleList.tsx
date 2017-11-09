@@ -9,6 +9,7 @@ import {
   resizeArticleList,
   repositionArticleList
 } from '../actions/articleList';
+import { isBefore } from 'date-fns';
 
 function getArticlesWithProject(
   articles: List<articleType>,
@@ -57,27 +58,11 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
   switch (sort) {
     case 'date-desc':
       return articles
-        .sort((a, b) => {
-          if (a < b) {
-            return -1;
-          }
-          if (a > b) {
-            return 1;
-          }
-          return 0;
-        })
+        .sort((a, b) => (isBefore(a.dateAdded, b.dateAdded) ? -1 : 1))
         .toList();
     case 'date-asc':
       return articles
-        .sort((b, a) => {
-          if (a < b) {
-            return -1;
-          }
-          if (a > b) {
-            return 1;
-          }
-          return 0;
-        })
+        .sort((b, a) => (isBefore(b.dateAdded, a.dateAdded) ? 1 : -1))
         .toList();
 
     case 'title':
