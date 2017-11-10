@@ -36,7 +36,7 @@ class AddArticle extends React.Component<Props, State> {
     return (
       <form onSubmit={event => event.preventDefault()}>
         <FormGroup controlId="formBasicText" type="text">
-          <InputGroup bsSize="medium">
+          <InputGroup bsSize="small">
             <FormControl
               value={this.state.value}
               placeholder={

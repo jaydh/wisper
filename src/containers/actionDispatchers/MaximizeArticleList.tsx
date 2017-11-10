@@ -17,8 +17,6 @@ class DeleteArticleList extends React.Component<Props, {}> {
       <button
         type="button"
         onClick={() => onMaximizeClick()}
-        className="close"
-        aria-label="Close"
         style={{ position: 'absolute', top: '1em', right: '2.5em' }}
       >
         <Glyphicon glyph="resize-full" />

@@ -110,7 +110,7 @@ class AddArticle extends React.Component<Props, State> {
           type="text"
           validationState={this.getValidationState()}
         >
-          <InputGroup bsSize="medium">
+          <InputGroup bsSize="small">
             <InputGroup.Button>
               <Button bsStyle="submit" onClick={() => this.handleSubmit(false)}>
                 Submit
