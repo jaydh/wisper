@@ -69,9 +69,26 @@ export interface ToggleLockArticleList {
   id: string;
 }
 
-export function togglelockArticleList(id: string) {
+export function togglelockArticleList(id: string): ToggleLockArticleList {
   return {
     type: 'LOCK_ARTICLE_LIST',
     id
+  };
+}
+
+export interface SetArticleListSearch {
+  type: 'SET_ARTICLE_LIST_SEARCH';
+  id: string;
+  search: string;
+}
+
+export function setArticleListSearch(
+  id: string,
+  search: string
+): SetArticleListSearch {
+  return {
+    type: 'SET_ARTICLE_LIST_SEARCH',
+    id,
+    search
   };
 }

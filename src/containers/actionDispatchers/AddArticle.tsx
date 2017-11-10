@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import addArticle from '../../actions/articles/addArticle';
-import {
-  InputGroup,
-  Button,
-  FormGroup,
-  FormControl,
-  ControlLabel
-} from 'react-bootstrap';
+import { InputGroup, Button, FormGroup, FormControl } from 'react-bootstrap';
 import { Set, fromJS, Map } from 'immutable';
 import parseUri from '../../helpers/parseURI';
 
@@ -116,9 +110,7 @@ class AddArticle extends React.Component<Props, State> {
           type="text"
           validationState={this.getValidationState()}
         >
-          <ControlLabel>Add article</ControlLabel>
-
-          <InputGroup bsSize="large">
+          <InputGroup bsSize="medium">
             <InputGroup.Button>
               <Button bsStyle="submit" onClick={() => this.handleSubmit(false)}>
                 Submit

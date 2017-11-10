@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Article from './Article';
 import AddArticle from '../containers/actionDispatchers/AddArticle';
+import SetArticleListSearch from '../containers/actionDispatchers/SetArticleListSearch';
 import ProjectSelector from '../containers/actionDispatchers/ProjectSelector';
 import ActiveSelector from '../containers/actionDispatchers/ActiveSelector';
 import Sort from '../containers/actionDispatchers/Sort';
@@ -9,7 +10,15 @@ import MaximizedArticleList from '../containers/actionDispatchers/MaximizeArticl
 import LockArticleList from '../containers/actionDispatchers/LockArticleList';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
-import { Glyphicon, Jumbotron, ListGroup, ButtonGroup } from 'react-bootstrap';
+import {
+  Glyphicon,
+  Jumbotron,
+  ListGroup,
+  ButtonGroup,
+  Row,
+  Col,
+  Grid
+} from 'react-bootstrap';
 const Rnd = require('react-rnd').default;
 
 interface Props {
@@ -52,7 +61,16 @@ class ArticleList extends React.Component<Props> {
               <MaximizedArticleList id={id} />
             </div>
           )}
-          <AddArticle projectFilter={projectFilter} />
+          <Grid>
+            <Row>
+              <Col md={9}>
+                <AddArticle projectFilter={projectFilter} />
+              </Col>
+              <Col md={3}>
+                <SetArticleListSearch id={id} />
+              </Col>
+            </Row>
+          </Grid>
           <ButtonGroup>
             <ActiveSelector id={id} />
             <ProjectSelector id={id} articlesInActivity={articlesInActivity} />

@@ -31,6 +31,7 @@ export interface ArticleList {
   width: number;
   height: number;
   locked: boolean;
+  search?: string;
 }
 
 export interface StoreState {

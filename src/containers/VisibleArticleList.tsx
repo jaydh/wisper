@@ -10,6 +10,7 @@ import {
   repositionArticleList
 } from '../actions/articleList';
 import { isBefore } from 'date-fns';
+import * as Fuse from 'fuse.js';
 
 function getArticlesWithProject(
   articles: List<articleType>,
@@ -99,6 +100,26 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
   }
 }
 
+function getSearchedArticles(articles: List<articleType>, search: string) {
+  const options = {
+    shouldSort: false,
+    threshold: 0.3,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: ['link', 'metadata.title', 'metadata.description']
+  };
+  const fuse = new Fuse(articles.toJS(), options);
+  const idsInSearch = fromJS(fuse.search(search))
+    .valueSeq()
+    .map((t: any) => t.get('id'))
+    .valueSeq();
+  return articles
+    .filter((t: articleType) => idsInSearch.contains(t.id))
+    .toList();
+}
+
 function mapStateToProps(state: any, ownProps: any) {
   const articleList = state
     .get('articleLists')
@@ -106,13 +127,17 @@ function mapStateToProps(state: any, ownProps: any) {
   const articles = state.get('articles');
   const { visibilityFilter, projectFilter, sort } = articleList;
   const articlesInActivity = getVisibleArticles(articles, visibilityFilter);
-  const sortedActiveArticles = getSortedArticles(articlesInActivity, sort);
-  const sortedActiveArticlesInProject = getArticlesWithProject(
-    sortedActiveArticles,
+  const articleInActivityAndProject = getArticlesWithProject(
+    articlesInActivity,
     projectFilter
   );
+  const articlesinSearch = articleList.search
+    ? getSearchedArticles(articleInActivityAndProject, articleList.search)
+    : articleInActivityAndProject;
+  const final = getSortedArticles(articlesinSearch, sort);
+
   return {
-    articles: sortedActiveArticlesInProject,
+    articles: final,
     articlesInActivity,
     order: articleList.order,
     sort: articleList.sort,

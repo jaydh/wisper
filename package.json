@@ -26,6 +26,7 @@
     "date-fns": "^1.29.0",
     "firebase": "^4.2.0",
     "firebase-functions": "^0.6.1",
+    "fuse.js": "^3.2.0",
     "immutable": "^3.8.1",
     "jest": "^20.0.4",
     "jshashes": "^1.0.7",
