@@ -60,7 +60,6 @@ export default function addArticle(articleLink: string, project?: string) {
     const articleRef = database.ref(
       '/userData/' + user + '/' + 'articles/' + hash
     );
-    console.log(articleRef);
     /* If on a ArticleList has project filter, assuming intention is to add article with project of list. 
     Updating null value for firebase does nothing.*/
     let projectPushKey = articleRef.child('projects').push().key;
