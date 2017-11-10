@@ -108,7 +108,13 @@ function getSearchedArticles(articles: List<articleType>, search: string) {
     distance: 100,
     maxPatternLength: 32,
     minMatchCharLength: 1,
-    keys: ['link', 'metadata.title', 'metadata.description']
+    keys: [
+      'metadata.title',
+      'metadata.ogTitle',
+      'metadata.description',
+      'metadata.ogDescription',
+      'link'
+    ]
   };
   const fuse = new Fuse(articles.toJS(), options);
   const idsInSearch = fromJS(fuse.search(search))
