@@ -13,8 +13,8 @@ interface State {
 }
 
 class App extends React.Component<{}, State> {
-  constructor() {
-    super();
+  constructor(props: {}) {
+    super(props);
     this.state = {
       gitCommit: '',
       sidebarOpen: false
