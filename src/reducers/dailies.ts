@@ -81,7 +81,10 @@ function completeDaily(
         (next && isSameDay(next, subDays(last, 1))) ||
         isSameDay(next, last)
       ) {
-        streakCount++;
+        if (!isSameDay(next, last)) {
+          streakCount++;
+        }
+
         last = next as Date;
         next = completedStack.last();
         completedStack = completedStack.pop();
