@@ -29,7 +29,7 @@ class AddArticle extends React.Component<Props, State> {
     this.setState({
       value: e.target.value
     });
-    onChange(this.state.value);
+    onChange(e.target.value);
   }
 
   render() {

@@ -63,10 +63,10 @@ class ArticleList extends React.Component<Props> {
           )}
           <Grid>
             <Row>
-              <Col md={9}>
+              <Col sm={12} md={9}>
                 <AddArticle projectFilter={projectFilter} />
               </Col>
-              <Col md={3}>
+              <Col sm={12} md={3}>
                 <SetArticleListSearch id={id} />
               </Col>
             </Row>
