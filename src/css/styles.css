@@ -27,6 +27,7 @@ p {
 }
 a {
   font-size: 1.1em;
+  word-wrap:break-word  
 }
 .articleInfo {
   color: var(--blue);
