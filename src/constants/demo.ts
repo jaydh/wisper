@@ -1,6 +1,7 @@
 let Hashes = require('jshashes');
 let SHA1 = new Hashes.SHA1();
 import addArticle from '../actions/articles/addArticle';
+import { toggleArticleRead } from '../actions/articles/toggleArticleRead';
 import {
   addArticleList,
   repositionArticleList,
@@ -98,12 +99,79 @@ export default async function(store: any, persistor: any) {
       link:
         'https://www.polygon.com/2017/8/21/16177270/htc-vive-price-cut-599?utm_campaign=polygon&utm_content=chorus&utm_medium=social&utm_source=twitter',
       project: 'games'
+    },
+    {
+      link:
+        'https://techcrunch.com/2017/09/19/autonomous-drivings-godfather-and-tech-investors-say-the-world-is-ready-for-flying-cars/',
+      project: 'tech'
+    },
+    {
+      link:
+        'https://venturebeat.com/2017/09/24/moral-programming-will-define-the-future-of-autonomous-transportation/',
+      project: 'tech'
+    },
+    {
+      link:
+        'http://gas2.org/2017/09/23/tesla-developing-proprietary-chip-autonomous-driving-use/',
+      project: 'tech'
+    },
+    {
+      link:
+        'https://www.computerworld.com/article/3227826/mobile-wireless/the-latest-iphones-show-why-ai-is-the-new-electricity.html',
+      project: 'tech'
+    },
+    {
+      link:
+        'http://fortune.com/2017/09/24/futurist-ray-kurzweil-job-automation-loss/',
+      project: 'tech'
+    },
+    {
+      link:
+        'http://www.sciencemag.org/news/2016/06/undead-genes-come-alive-days-after-life-ends',
+      project: 'science'
+    },
+    {
+      link:
+        'http://www.sciencemag.org/news/2016/04/some-fairy-tales-may-be-6000-years-old',
+      project: 'science'
+    },
+    {
+      link:
+        'http://www.sciencemag.org/news/2016/08/greenland-shark-may-live-400-years-smashing-longevity-record',
+      project: 'science'
+    },
+    {
+      link:
+        'http://www.sciencemag.org/news/2016/06/plants-can-gamble-according-study',
+      project: 'science'
+    },
+    {
+      link:
+        'http://www.sciencemag.org/news/2016/10/alien-life-could-feed-cosmic-rays',
+      project: 'science'
+    },
+    {
+      link:
+        'http://www.sciencemag.org/news/2016/01/you-could-probably-have-outrun-t-rex',
+      project: 'science'
+    },
+    {
+      link:
+        'http://www.sciencemag.org/news/2016/08/mysterious-ice-buried-cold-war-military-base-may-be-unearthed-climate-change',
+      project: 'science'
+    },
+    {
+      link:
+        'http://www.sciencemag.org/news/2016/02/why-do-our-cells-power-plants-have-their-own-dna',
+      project: 'science'
     }
   ];
-  articles.forEach(
-    async (t: { link: string; project?: string }) =>
-      await store.dispatch(addArticle(t.link, t.project))
-  );
+  articles.forEach(async (t: { link: string; project?: string }) => {
+    await store.dispatch(addArticle(t.link, t.project));
+    if (Math.floor(Math.random() * 2) === 0) {
+      await store.dispatch(toggleArticleRead(SHA1.hex(t.link)));
+    }
+  });
 
   const dailies = [
     'Excercise',
