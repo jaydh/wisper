@@ -37,12 +37,17 @@ auth().onAuthStateChanged(function(user: any) {
   } else {
     persistor.purge();
   }
-  ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
-  );
+  try {
+    ReactDOM.render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      document.getElementById('root')
+    );
+  } catch (e) {
+    console.log(e);
+    persistor.purge();
+  }
 });
 
 registerServiceWorker();
