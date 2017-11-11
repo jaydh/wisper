@@ -27,7 +27,11 @@ p {
 }
 a {
   font-size: 1.1em;
+<<<<<<< HEAD
   word-wrap: break-word;
+=======
+  word-wrap:break-word  
+>>>>>>> cc7dbb41a813e0c8af5ed3d4fbd2f9a744f604e3
 }
 .articleInfo {
   color: var(--blue);
