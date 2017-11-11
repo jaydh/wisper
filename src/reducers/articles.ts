@@ -27,7 +27,6 @@ function addArticle(
         dateAdded: new Date(),
         completed: false,
         fetching: true,
-        projects: action.project,
         viewedOn: Set()
       })
     : articleState;

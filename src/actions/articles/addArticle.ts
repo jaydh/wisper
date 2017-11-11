@@ -60,11 +60,6 @@ export default function addArticle(articleLink: string, project?: string) {
     const articleRef = database.ref(
       '/userData/' + user + '/' + 'articles/' + hash
     );
-    /* If on a ArticleList has project filter, assuming intention is to add article with project of list. 
-    Updating null value for firebase does nothing.*/
-    let projectPushKey = articleRef.child('projects').push().key;
-    let projectWithKey = {};
-    projectWithKey[projectPushKey] = project ? project : null;
 
     return articleRef.once('value').then(function(snapshot: any) {
       // Check if article in database
@@ -79,9 +74,8 @@ export default function addArticle(articleLink: string, project?: string) {
             completed: false,
             fetching: true
           })
-          .then(articleRef.child('projects').update(projectWithKey))
           .then(() => {
-            dispatch(AddArticleFulfilled(articleLink, project));
+            dispatch(AddArticleFulfilled(articleLink));
           })
           .then(() => {
             if (project) {
