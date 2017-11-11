@@ -4,7 +4,7 @@ import {
   resizeArticleList,
   repositionArticleList
 } from '../../actions/articleList';
-import { Glyphicon } from 'react-bootstrap';
+import { Button, Glyphicon } from 'react-bootstrap';
 
 export interface Props {
   onMaximizeClick: () => void;
@@ -14,13 +14,9 @@ class DeleteArticleList extends React.Component<Props, {}> {
   render() {
     const { onMaximizeClick } = this.props;
     return (
-      <button
-        type="button"
-        onClick={() => onMaximizeClick()}
-        style={{ position: 'absolute', top: '1em', right: '2.5em' }}
-      >
+      <Button onClick={() => onMaximizeClick()} bsSize="small">
         <Glyphicon glyph="resize-full" />
-      </button>
+      </Button>
     );
   }
 }

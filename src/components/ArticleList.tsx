@@ -51,39 +51,55 @@ class ArticleList extends React.Component<Props> {
         <Jumbotron
           className="article-list-container"
           style={{
-            marginBottom: '0'
+            padding: '1em'
           }}
         >
-          <LockArticleList id={id} />
-          {!locked && (
-            <div>
-              <DeleteArticleList id={id} />
-              <MaximizedArticleList id={id} />
-            </div>
-          )}
           <Grid>
             <Row>
-              <Col sm={12} md={9}>
+              <Col xs={1} sm={1} md={1}>
+                <LockArticleList id={id} />
+              </Col>
+              <Col xs={2} sm={2} md={2} xsOffset={9} smOffset={9} mdOffset={9}>
+                {!locked && (
+                  <ButtonGroup style={{ float: 'right' }}>
+                    <MaximizedArticleList id={id} />
+                    <DeleteArticleList id={id} />
+                  </ButtonGroup>
+                )}
+              </Col>
+            </Row>
+            <div style={{ marginTop: '3em' }} />
+            <Row>
+              <Col sm={8} md={9}>
                 <AddArticle projectFilter={projectFilter} />
               </Col>
-              <Col sm={12} md={3}>
+              <Col sm={4} md={3}>
                 <SetArticleListSearch id={id} />
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <ButtonGroup>
+                  <ActiveSelector id={id} />
+                  <ProjectSelector
+                    id={id}
+                    articlesInActivity={articlesInActivity}
+                  />
+                  <Sort id={id} />
+                </ButtonGroup>
+              </Col>
+            </Row>
+            <Row>
+              <p style={{ float: 'right' }}>
+                <Glyphicon glyph="list-alt" /> {articles.size}
+              </p>
+              <ListGroup>
+                {articles.map((article: articleType) => {
+                  return <Article key={article.id} article={article} />;
+                })}
+              </ListGroup>
+            </Row>
           </Grid>
-          <ButtonGroup>
-            <ActiveSelector id={id} />
-            <ProjectSelector id={id} articlesInActivity={articlesInActivity} />
-            <Sort id={id} />
-          </ButtonGroup>
-          <p style={{ float: 'right' }}>
-            <Glyphicon glyph="list-alt" /> {articles.size}
-          </p>
-          <ListGroup>
-            {articles.map((article: articleType) => {
-              return <Article key={article.id} article={article} />;
-            })}
-          </ListGroup>
         </Jumbotron>
       </div>
     );

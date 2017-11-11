@@ -16,7 +16,6 @@ class LockArticleList extends React.Component<Props, {}> {
         onClick={() => onLockClick()}
         className="close"
         aria-label="Close"
-        style={{ position: 'absolute', top: '1.5em', left: '1.5em' }}
       >
         <Glyphicon glyph="lock" />
       </button>
