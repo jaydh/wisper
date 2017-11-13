@@ -113,8 +113,7 @@ function getSearchedArticles(articles: List<articleType>, search: string) {
       'metadata.ogTitle',
       'metadata.description',
       'metadata.ogDescription',
-      'link',
-      'projects'
+      'link'
     ]
   };
   const fuse = new Fuse(articles.toJS(), options);
