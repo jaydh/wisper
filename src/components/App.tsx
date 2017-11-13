@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Logout from './Logout';
 import { PageHeader } from 'react-bootstrap';
 import Canvas from '../containers/Canvas';
 import Dailies from '../containers/Dailies';
@@ -44,6 +45,7 @@ class App extends React.Component<{}, State> {
           <div>
             <Dailies />
             <Canvas />
+            <Logout />
           </div>
         ) : (
           <LoginLoading />

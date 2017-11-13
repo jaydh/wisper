@@ -2,7 +2,6 @@ import { push as Menu } from 'react-burger-menu';
 import addDaily from '../actions/dailies/addDaily';
 import { Form, FormGroup, FormControl } from 'react-bootstrap';
 import AddArticleList from '../containers/actionDispatchers/AddArticleList';
-import Logout from './Logout';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -81,8 +80,8 @@ class Hamburger extends React.Component<Props, State> {
             />
           </FormGroup>
         </Form>
+
         <AddArticleList />
-        <Logout />
       </Menu>
     );
   }
