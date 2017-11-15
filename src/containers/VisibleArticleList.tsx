@@ -113,10 +113,21 @@ function getSearchedArticles(articles: List<articleType>, search: string) {
       'metadata.ogTitle',
       'metadata.description',
       'metadata.ogDescription',
-      'link'
+      'link',
+      'projects'
     ]
   };
-  const fuse = new Fuse(articles.toJS(), options);
+  const fuse = new Fuse(
+    articles
+      .map((t: articleType) => {
+        const arrayedProjects = t.projects? fromJS(t.projects)
+          .valueSeq()
+          .toJS():null;
+        return { ...t, projects: arrayedProjects };
+      })
+      .toJS(),
+    options
+  );
   const idsInSearch = fromJS(fuse.search(search))
     .valueSeq()
     .map((t: any) => t.get('id'))
