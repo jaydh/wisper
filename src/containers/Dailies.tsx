@@ -11,6 +11,7 @@ import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { List } from 'immutable';
 import DailyGraph from './graphs/DailyGraph';
+import { isBefore, subDays } from 'date-fns';
 import * as moment from 'moment';
 
 interface Props {
@@ -59,9 +60,14 @@ class Dailies extends React.Component<Props, State> {
                     {t.streakCount > 4 && (
                       <b>
                         {t.streakCount}
-                        <Glyphicon glyph="fire" />
+                        <Glyphicon glyph="fire" />{' '}
                       </b>
-                    )}{' '}
+                    )}
+                    {isBefore(t.completedOn.last(), subDays(new Date(), 7)) && (
+                      <b>
+                        <Glyphicon glyph="warning-sign" />{' '}
+                      </b>
+                    )}
                     {t.title}
                   </Button>
                 );
