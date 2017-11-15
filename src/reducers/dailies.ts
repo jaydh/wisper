@@ -81,8 +81,10 @@ function completeDaily(
         (next && isSameDay(next, subDays(last, 1))) ||
         isSameDay(next, last)
       ) {
-        if (!isSameDay(next, last)) {
+        if (isSameDay(next, subDays(last, 1))) {
           streakCount++;
+        } else if (!isSameDay(next, last)) {
+          streakCount = 0;
         }
 
         last = next as Date;
