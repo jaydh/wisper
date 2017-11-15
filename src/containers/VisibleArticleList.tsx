@@ -113,6 +113,8 @@ function getSearchedArticles(articles: List<articleType>, search: string) {
       'metadata.ogTitle',
       'metadata.description',
       'metadata.ogDescription',
+      'metadata.siteName',
+      'metadata.ogSiteName',      
       'link',
       'projects'
     ]
@@ -120,9 +122,11 @@ function getSearchedArticles(articles: List<articleType>, search: string) {
   const fuse = new Fuse(
     articles
       .map((t: articleType) => {
-        const arrayedProjects = t.projects? fromJS(t.projects)
-          .valueSeq()
-          .toJS():null;
+        const arrayedProjects = t.projects
+          ? fromJS(t.projects)
+              .valueSeq()
+              .toJS()
+          : null;
         return { ...t, projects: arrayedProjects };
       })
       .toJS(),
