@@ -5,7 +5,7 @@ import { List } from 'immutable';
 import { Daily } from '../../constants/StoreState';
 import { isAfter, subWeeks } from 'date-fns';
 
-const Colors = [
+let Colors = List([
   '#7F7EFF',
   '#ED254E',
   '#7D4E57',
@@ -14,26 +14,50 @@ const Colors = [
   '#8D6A9F',
   '#00A9A5',
   '#C4F1BE',
-  '#F1DEDE',
   '#E36397',
   '#577399',
   '#1B998B'
-];
+]);
 
 interface Props {
   dailies: List<Daily>;
 }
 
-class DailyGraph extends React.Component<Props> {
-  render() {
-    const dynamicColors = function() {
-      return Colors[Math.floor(Math.random() * Colors.length)];
+interface State {
+  colors: List<string>;
+}
+class DailyGraph extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      colors: this.props.dailies
+        .map((t: any) => {
+          const color = this.dynamicColors();
+          return color;
+        })
+        .toList()
     };
+  }
+  dynamicColors = function() {
+    return Colors.get(Math.floor(Math.random() * Colors.size));
+  };
+
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState({
+      colors: nextProps.dailies
+        .map((t: any) => {
+          const color = this.dynamicColors();
+          return color;
+        })
+        .toList()
+    });
+  }
+  render() {
     const { dailies } = this.props;
     const data = {
       datasets: dailies
-        .map((t: Daily) => {
-          const color = dynamicColors();
+        .map((t: Daily, key: number) => {
+          const color = this.state.colors.get(key);
           return {
             data: t.completedOn
               ? t.completedOn
@@ -123,9 +147,7 @@ class DailyGraph extends React.Component<Props> {
     } as any;
 
     return (
-      <div>
         <Bubble data={data} options={options} width={100} height={200} />
-      </div>
     );
   }
 }
