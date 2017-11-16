@@ -109,10 +109,6 @@ a {
   border-width: 0 6px 6px 0;
 }
 
-.daily-canvas {
-  background: var(--canvas);
-}
-
 .canvas {
   background: var(--canvas);
 }

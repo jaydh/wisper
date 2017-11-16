@@ -146,7 +146,7 @@ class DailyGraph extends React.Component<Props, State> {
       }
     } as any;
 
-    return <Bubble data={data} options={options} width={100} height={200} />;
+    return <Bubble data={data} options={options} />;
   }
 }
 const mapStateToProps = (state: any, ownProps: any) => {

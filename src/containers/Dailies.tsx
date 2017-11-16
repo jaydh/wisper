@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Jumbotron, Button, ButtonGroup, Glyphicon } from 'react-bootstrap';
+import { Button, ButtonGroup, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { List } from 'immutable';
-import DailyGraph from './graphs/DailyGraph';
 import { isBefore, subDays } from 'date-fns';
 import * as moment from 'moment';
 
@@ -18,7 +17,6 @@ class Dailies extends React.Component<Props> {
   render() {
     const { onComplete, dailies } = this.props;
     return (
-      <Jumbotron className="daily-canvas">
         <ButtonGroup>
           {dailies
             .filter((t: Daily) => {
@@ -49,8 +47,6 @@ class Dailies extends React.Component<Props> {
               );
             })}
         </ButtonGroup>
-        <DailyGraph />
-      </Jumbotron>
     );
   }
 }

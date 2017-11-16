@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Polar, HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
 import { Article as articleType } from '../../constants/StoreState';
-import { Grid, Row } from 'react-bootstrap';
 import parseUri from '../../helpers/parseURI';
 
 const Colors = [
@@ -40,7 +39,76 @@ interface ProjectMeta {
   color: string;
 }
 
-class Graph extends React.Component<Props> {
+export class SourcesGraph extends React.Component<Props> {
+  getDomainData() {
+    const { articles } = this.props;
+    const domains = articles.map(
+      (article: articleType) =>
+        article.metadata
+          ? article.metadata.ogSiteName ||
+            article.metadata.siteName ||
+            parseUri(article.link).authority
+          : parseUri(article.link).authority
+    );
+    let domainCounts = Map<string, number>();
+    domains.map(
+      (x: string) =>
+        (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
+    );
+    return domainCounts.filter((t: number) => t > 1);
+  }
+
+  render() {
+    const domainCounts = this.getDomainData().sort(
+      (a: number, b: number) => (b > a ? 1 : -1)
+    );
+    const data = {
+      labels: domainCounts.keySeq().toJS(),
+
+      datasets: [
+        {
+          data: domainCounts.valueSeq().toJS(),
+          backgroundColor: domainCounts
+            .map(() => dynamicColors(fromJS(Colors)))
+            .valueSeq()
+            .toJS(),
+          borderColor: domainCounts
+            .valueSeq()
+            .map(() => '#f2b632')
+            .toJS(),
+          borderWidth: 1,
+          hoverBorderWidth: 3
+        }
+      ]
+    };
+    const options = {
+      title: {
+        display: true,
+        text: 'Sources'
+      },
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [
+          {
+            id: 'x-axis-0',
+            gridLines: {
+              display: false
+            },
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      }
+    } as any;
+
+    return <HorizontalBar data={data} options={options} />;
+  }
+}
+
+export class ProjectsGraph extends React.Component<Props> {
   getProjectData(): Map<string, object> {
     const { articles } = this.props;
     let thisColors = fromJS(Colors);
@@ -73,28 +141,7 @@ class Graph extends React.Component<Props> {
     return projectData;
   }
 
-  getDomainData() {
-    const { articles } = this.props;
-    const domains = articles.map(
-      (article: articleType) =>
-        article.metadata
-          ? article.metadata.ogSiteName ||
-            article.metadata.siteName ||
-            parseUri(article.link).authority
-          : parseUri(article.link).authority
-    );
-    let domainCounts = Map<string, number>();
-    domains.map(
-      (x: string) =>
-        (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
-    );
-    return domainCounts.filter((t: number) => t > 1);
-  }
-
   render() {
-    const domainCounts = this.getDomainData().sort(
-      (a: number, b: number) => (b > a ? 1 : -1)
-    );
     const projectData = this.getProjectData();
     const projectCount = projectData.map((t: ProjectMeta) => t.count);
     const projectCompletedPercentage = projectData.map(
@@ -116,23 +163,6 @@ class Graph extends React.Component<Props> {
             .toJS(),
           borderColor: borderColors,
           borderWidth: 1.5,
-          hoverBorderWidth: 3
-        }
-      ]
-    };
-
-    const data2 = {
-      labels: domainCounts.keySeq().toJS(),
-
-      datasets: [
-        {
-          data: domainCounts.valueSeq().toJS(),
-          backgroundColor: domainCounts
-            .map(() => dynamicColors(fromJS(Colors)))
-            .valueSeq()
-            .toJS(),
-          borderColor: borderColors,
-          borderWidth: 1,
           hoverBorderWidth: 3
         }
       ]
@@ -163,28 +193,6 @@ class Graph extends React.Component<Props> {
         position: 'right'
       }
     } as any;
-    const options2 = {
-      title: {
-        display: true,
-        text: 'Sources'
-      },
-      legend: {
-        display: false
-      },
-      scales: {
-        xAxes: [
-          {
-            id: 'x-axis-0',
-            gridLines: {
-              display: false
-            },
-            ticks: {
-              beginAtZero: true
-            }
-          }
-        ]
-      }
-    } as any;
     const options3 = {
       title: {
         display: true,
@@ -196,13 +204,10 @@ class Graph extends React.Component<Props> {
     };
 
     return (
-      <Grid>
-        <Row>
-          <HorizontalBar data={data2} options={options2} />
-          <Doughnut data={data} options={options} />
-          <Polar data={data3} options={options3} />
-        </Row>
-      </Grid>
+      <div>
+        <Doughnut data={data} options={options} />
+        <Polar data={data3} options={options3} />
+      </div>
     );
   }
 }
@@ -213,4 +218,4 @@ const mapStateToProps = (state: any, ownProps: any) => {
   };
 };
 
-export default connect(mapStateToProps)(Graph);
+export default connect(mapStateToProps)(ProjectsGraph);

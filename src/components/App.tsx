@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Canvas from '../containers/Canvas';
 import Dailies from '../containers/Dailies';
-import Graph from '../containers/graphs/Graph';
+import Analytics from '../containers/Analytics';
 import LoginLoading from './LoginLoading';
 import Logout from './Logout';
 import { PageHeader, NavItem, Nav } from 'react-bootstrap';
@@ -23,7 +23,7 @@ class App extends React.Component<{}, State> {
       gitCommit: '',
       sidebarOpen: false,
       show: 'all',
-      showKey: 1
+      showKey: 1,
     };
   }
 
@@ -56,45 +56,43 @@ class App extends React.Component<{}, State> {
               </NavItem>{' '}
               <NavItem
                 eventKey={2}
-                onClick={() => this.changeView('dailies', 2)}
-              >
-                Dailies
-              </NavItem>{' '}
-              <NavItem
-                eventKey={3}
-                onClick={() => this.changeView('articles', 3)}
+                onClick={() => this.changeView('articles', 2)}
               >
                 Articles
               </NavItem>
-              <NavItem eventKey={4} onClick={() => this.changeView('graph', 4)}>
+              <NavItem
+                eventKey={3}
+                onClick={() => this.changeView('analytics', 2)}
+              >
                 Analytics
               </NavItem>
             </Nav>
             <div
               style={{
                 position: 'absolute',
-                bottom: '2em'
+                bottom: '2em',
               }}
             >
               <Logout />
             </div>
           </Menu>
         )}
-        <PageHeader>wispy </PageHeader>
+        <PageHeader>wispy</PageHeader>
+        <div style={{ margin: '0 auto', textAlign: 'center' }}>
+          <Dailies />
+        </div>
         {auth().currentUser ? (
           <div>
             {(() => {
               switch (this.state.show) {
-                case 'dailies':
-                  return <Dailies />;
                 case 'articles':
                   return <Canvas />;
-                case 'graph':
-                  return <Graph />;
+                case 'analytics':
+                  return <Analytics />;
                 default:
                   return (
                     <div>
-                      <Dailies /> <Canvas /> <Graph />
+                      <Canvas /> <Analytics />
                     </div>
                   );
               }
@@ -121,31 +119,31 @@ const styles = {
     width: '36px',
     height: '30px',
     right: '36px',
-    top: '36px'
+    top: '36px',
   },
   bmBurgerBars: {
-    background: '#373a47'
+    background: '#373a47',
   },
   bmCrossButton: {
     height: '24px',
-    width: '24px'
+    width: '24px',
   },
   bmCross: {
-    background: '#bdc3c7'
+    background: '#bdc3c7',
   },
   bmMenu: {
     background: '#373a47',
     padding: '2.5em 1.5em 0',
-    fontSize: '1.15em'
+    fontSize: '1.15em',
   },
   bmMorphShape: {
-    fill: '#373a47'
+    fill: '#373a47',
   },
   bmItemList: {
     color: '#b8b7ad',
-    padding: '0.8em'
+    padding: '0.8em',
   },
   bmOverlay: {
-    background: 'rgba(0, 0, 0, 0.3)'
-  }
+    background: 'rgba(0, 0, 0, 0.3)',
+  },
 };

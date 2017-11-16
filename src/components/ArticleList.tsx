@@ -59,7 +59,7 @@ class ArticleList extends React.Component<Props> {
               <Col xs={1} sm={1} md={1}>
                 <LockArticleList id={id} />
               </Col>
-              <Col xs={2} sm={2} md={2} xsOffset={9} smOffset={9} mdOffset={9}>
+              <Col xs={2} sm={2} md={2}>
                 {!locked && (
                   <ButtonGroup style={{ float: 'right' }}>
                     <MaximizedArticleList id={id} />

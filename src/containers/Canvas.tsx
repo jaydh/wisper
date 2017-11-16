@@ -26,7 +26,7 @@ class Canvas extends React.Component<Props> {
         <Jumbotron
           className="canvas articlelist-canvas"
           id="canvas"
-          style={{ height: innerHeight * 2 }}
+          style={{ height: innerHeight }}
         >
           {articleLists.map((articleList: ArticleList) => {
             return (
@@ -44,13 +44,13 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     listenOnMount: () => {
       dispatch(ListenToFirebase());
-    }
+    },
   };
 };
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    articleLists: state.get('articleLists')
+    articleLists: state.get('articleLists'),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Canvas);
