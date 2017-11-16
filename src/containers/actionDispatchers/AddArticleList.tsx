@@ -6,12 +6,12 @@ export interface Props {
   onAddClick: () => void;
 }
 
-class DeleteArticleList extends React.Component<Props, {}> {
+class AddArticleList extends React.Component<Props, {}> {
   render() {
     const { onAddClick } = this.props;
     return (
       <Button bsStyle="addList" bsSize="large" onClick={() => onAddClick()}>
-        Add List
+        Add Articlelist
       </Button>
     );
   }
@@ -20,9 +20,9 @@ class DeleteArticleList extends React.Component<Props, {}> {
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onAddClick: () => {
-      dispatch(addArticleList(ownProps.id));
+      dispatch(addArticleList());
     }
   };
 };
 
-export default connect(null, mapDispatchToProps)(DeleteArticleList);
+export default connect(null, mapDispatchToProps)(AddArticleList);

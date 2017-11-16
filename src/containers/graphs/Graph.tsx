@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Polar, HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
 import { Article as articleType } from '../../constants/StoreState';
-import { Grid, Col, Row } from 'react-bootstrap';
+import { Grid, Row } from 'react-bootstrap';
 import parseUri from '../../helpers/parseURI';
 
 const Colors = [
@@ -197,17 +197,11 @@ class Graph extends React.Component<Props> {
 
     return (
       <Grid>
-        <Col md={6}>
+        <Row>
           <HorizontalBar data={data2} options={options2} />
-        </Col>
-        <Col md={6}>
-          <Row>
-            <Doughnut data={data} options={options} />
-          </Row>
-          <Row>
-            <Polar data={data3} options={options3} />
-          </Row>
-        </Col>
+          <Doughnut data={data} options={options} />
+          <Polar data={data3} options={options3} />
+        </Row>
       </Grid>
     );
   }

@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { ListenToFirebase } from '../actions/syncWithFirebase';
+import AddArticleList from '../containers/actionDispatchers/AddArticleList';
 import { Jumbotron } from 'react-bootstrap';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
 import VisibleArticleList from '../containers/VisibleArticleList';
-import Graph from './graphs/Graph';
 
 interface Props {
   listenOnMount: () => void;
-  AddArticleList: () => void;
+  addArticleList: () => void;
   articleLists: OrderedMap<string, ArticleList>;
 }
 
@@ -22,20 +22,19 @@ class Canvas extends React.Component<Props> {
     const { articleLists } = this.props;
     return (
       <div>
-        {articleLists.size !== 0 && (
-          <Jumbotron
-            className="canvas articlelist-canvas"
-            id="canvas"
-            style={{ height: innerHeight }}
-          >
-            {articleLists.map((articleList: ArticleList) => {
-              return (
-                <VisibleArticleList key={articleList.id} id={articleList.id} />
-              );
-            })}
-          </Jumbotron>
-        )}
-        <Graph />
+        <AddArticleList />
+        <Jumbotron
+          className="canvas articlelist-canvas"
+          id="canvas"
+          style={{ height: innerHeight * 2 }}
+        >
+          {articleLists.map((articleList: ArticleList) => {
+            return (
+              <VisibleArticleList key={articleList.id} id={articleList.id} />
+            );
+          })}
+        </Jumbotron>
+        )
       </div>
     );
   }
