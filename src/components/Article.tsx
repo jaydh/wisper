@@ -7,10 +7,11 @@ import DeleteArticle from '../containers/actionDispatchers/DeleteArticle';
 import ToggleArticle from '../containers/actionDispatchers/ToggleArticle';
 import {
   Glyphicon,
-  Button,
-  ButtonGroup,
   Collapse,
-  ListGroupItem
+  ListGroupItem,
+  Grid,
+  Col,
+  ButtonGroup
 } from 'react-bootstrap';
 
 interface Props {
@@ -33,68 +34,88 @@ class Article extends React.Component<Props, State> {
     const { onArticleView, article } = this.props;
 
     return (
-      <ListGroupItem>
-        <ButtonGroup
-          style={{
-            position: 'absolute',
-            right: '1em',
-            width: '5em',
-            height: '5em'
-          }}
-        >
-          <ToggleArticle id={article.id} />
-          <Button
-            bsStyle="more"
-            onClick={() =>
-              this.setState({ isMenuOpen: !this.state.isMenuOpen })}
-          >
-            <Glyphicon glyph="menu-hamburger" />
-          </Button>
-        </ButtonGroup>
-
-        {article.fetching && <Glyphicon glyph="refresh" />}
-        <a
-          className="article-link"
-          href={article.link}
-          target="_blank"
-          style={{ display: 'inline-block', width: '70%' }}
-          onClick={() => {
-            onArticleView(article.id);
-          }}
-        >
-          {article.metadata &&
-          (article.metadata.title || article.metadata.ogTitle)
-            ? article.metadata.ogTitle || article.metadata.title
-            : article.link}
-        </a>
-
-        <Collapse in={this.state.isMenuOpen}>
-          <div className="articleInfo">
-            {!article.fetching && article.metadata ? (
+      <ListGroupItem
+        onMouseOver={() => this.setState({ isMenuOpen: true })}
+        onMouseLeave={() => this.setState({ isMenuOpen: false })}
+      >
+        <Grid>
+          <Col md={1}>
+            {article.fetching && (
               <p>
+                <Glyphicon glyph="refresh" />Fetching metadata
+              </p>
+            )}
+            {article.metadata && article.metadata.images ? (
+              <div>
+                <img
+                  src={article.metadata.images[0]}
+                  height="70em"
+                  style={{
+                    position: 'absolute',
+                    clip: 'rect(0px,60px,200px,0px)',
+                    textAlign: 'center'
+                  }}
+                />
+                <br />
+              </div>
+            ) : (
+              ''
+            )}
+          </Col>
+          <Col md={10}>
+            <a
+              className="article-link"
+              href={article.link}
+              target="_blank"
+              style={{
+                fontSize: '1.7em',
+                display: 'inline-block',
+                width: '70%'
+              }}
+              onClick={() => {
+                onArticleView(article.id);
+              }}
+            >
+              {article.metadata &&
+              (article.metadata.title || article.metadata.ogTitle)
+                ? article.metadata.ogTitle || article.metadata.title
+                : article.link}
+            </a>
+            {!article.fetching && article.metadata ? (
+              <p style={{ fontSize: '1em' }}>
+                {article.metadata.ogSiteName ? article.metadata.ogSiteName : ''}
                 {article.metadata.ogDescrption || article.metadata.description}
                 <br />
-                {article.metadata.ogSiteName
-                  ? `Domain: ${article.metadata.ogSiteName}`
-                  : ''}
               </p>
             ) : (
-              'Fetching metadata'
+              ''
             )}
-            <p>
-              Date added: {article.dateAdded} <br />
-              {article.viewedOn
-                ? `Last viewed on ${article.viewedOn
-                    .last()
-                    .toLocaleString()} - viewed ${article.viewedOn
-                    .size} time(s)`
-                : ''}
-              {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
-            </p>
-            <AddArticleToProject id={article.id} />
-            <DeleteArticle id={article.id} />
-          </div>
-        </Collapse>
+
+            <Collapse in={this.state.isMenuOpen}>
+              <div>
+                <p>
+                  Date added: {article.dateAdded} <br />
+                  {article.viewedOn
+                    ? `Last viewed on ${article.viewedOn
+                        .last()
+                        .toLocaleString()} - viewed ${article.viewedOn
+                        .size} time(s)`
+                    : ''}
+                  {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
+                </p>
+                <AddArticleToProject id={article.id} />
+              </div>
+            </Collapse>
+          </Col>
+          <Col md={1}>
+            {this.state.isMenuOpen && (
+              <ButtonGroup>
+                <ToggleArticle id={article.id} />
+                <DeleteArticle id={article.id} />
+              </ButtonGroup>
+            )}
+          </Col>
+        </Grid>
       </ListGroupItem>
     );
   }

@@ -22,23 +22,12 @@ h2 {
   color: var(--link);
 }
 p {
-  font-size: 1.3em;
+  font-size: 0.7em;
   color: black;
 }
 a {
   font-size: 1.1em;
   word-wrap: break-word;
-}
-.articleInfo {
-  color: var(--blue);
-  font-size: 1.5em;
-}
-.modal-container {
-  position: relative;
-}
-.modal-container .modal,
-.modal-container .modal-backdrop {
-  position: absolute;
 }
 
 .container-fluid {
@@ -47,8 +36,6 @@ a {
 
 .btn-more {
   background-color: var(--blue);
-  height: 2.5em;
-  width: 2.5em;
 }
 
 .btn-submit {
