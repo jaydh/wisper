@@ -9,7 +9,7 @@ import {
 import createReducer from './createReducer';
 import { isSameDay, subDays } from 'date-fns';
 
-function processDaily(daily: any) {
+function processDaily(daily: any): Daily {
   for (const x in daily) {
     if (!Object.hasOwnProperty(x)) {
       daily[x] = fromJS(daily[x]);
