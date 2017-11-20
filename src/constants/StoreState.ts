@@ -6,7 +6,7 @@ export interface Article {
   fetching?: boolean;
   dateAdded: Date;
   dateRead?: Date;
-  projects?: Object;
+  projects: Set<String>;
   viewedOn: Set<Date>;
   completed: boolean;
 }
