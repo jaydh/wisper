@@ -11,6 +11,23 @@ import { Article as articleType } from '../constants/StoreState';
 import { fromJS, List, Set } from 'immutable';
 import createReducer from './createReducer';
 
+function processArticle(article: any): articleType {
+  for (const x in article) {
+    if (!Object.hasOwnProperty(x)) {
+      article[x] = fromJS(article[x]);
+    }
+  }
+  article.projects = article.projects ? article.projects.valueSeq() : Set();
+  article.viewedOn = article.viewedOn
+    ? fromJS(article.viewedOn)
+        .toSet()
+        .map((t: string) => new Date(t))
+        .sort()
+    : Set;
+
+  return article;
+}
+
 function addArticle(
   articleState: List<articleType>,
   action: AddArticleFulfilled
@@ -27,7 +44,8 @@ function addArticle(
         dateAdded: new Date(),
         completed: false,
         fetching: true,
-        viewedOn: Set()
+        viewedOn: Set(),
+        projects: Set()
       })
     : articleState;
 }
@@ -42,15 +60,9 @@ function deleteArticle(
 }
 
 function updateArticle(articleState: List<articleType>, action: UpdateArticle) {
-  if (action.article.viewedOn) {
-    action.article.viewedOn = fromJS(action.article.viewedOn)
-      .toSet()
-      .map((t: string) => new Date(t))
-      .sort();
-  }
   return articleState.map(article => {
     return article && article.id === action.article.id
-      ? action.article
+      ? processArticle(action.article)
       : article;
   });
 }
@@ -63,14 +75,10 @@ function addArticleFromServer(
     articleState.filter(article => {
       return article ? action.article.id === article.id : false;
     }).size === 0;
-  if (action.article.viewedOn) {
-    action.article.viewedOn = fromJS(action.article.viewedOn)
-      .toSet()
-      .map((t: string) => new Date(t))
-      .sort();
-  }
 
-  return check ? articleState.push(action.article) : articleState;
+  return check
+    ? articleState.push(processArticle(action.article))
+    : articleState;
 }
 
 function deleteArticleFromServer(
