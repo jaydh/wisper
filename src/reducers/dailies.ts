@@ -9,6 +9,42 @@ import {
 import createReducer from './createReducer';
 import { isSameDay, subDays } from 'date-fns';
 
+function processDaily(daily: any) {
+  for (const x in daily) {
+    if (!Object.hasOwnProperty(x)) {
+      daily[x] = fromJS(daily[x]);
+    }
+  }
+  if (daily.completedOn) {
+    daily.completedOn = daily.completedOn
+      .map((t: string) => new Date(t))
+      .sort();
+
+    let streakCount = 1;
+    let completedStack = daily.completedOn
+      ? daily.completedOn.sort().toList()
+      : List([Date()]);
+    let last = new Date();
+    let next = completedStack.last();
+    completedStack = completedStack.pop();
+    while (
+      (next && isSameDay(next, subDays(last, 1))) ||
+      isSameDay(next, last)
+    ) {
+      if (isSameDay(next, subDays(last, 1))) {
+        streakCount++;
+      } else if (!isSameDay(next, last)) {
+        streakCount = 0;
+      }
+      last = next as Date;
+      next = completedStack.last();
+      completedStack = completedStack.pop();
+    }
+    daily.streakCount = streakCount;
+  }
+  return daily;
+}
+
 function addDaily(dailyState: List<Daily>, action: any) {
   return dailyState.find((v: Daily) => action.id === v.id)
     ? dailyState
@@ -28,13 +64,8 @@ function addDailyFromServer(
   dailyState: List<Daily>,
   action: AddDailyFromServer
 ) {
-  if (action.daily.completedOn) {
-    action.daily.completedOn = fromJS(action.daily.completedOn)
-      .toSet()
-      .map((t: string) => new Date(t))
-      .sort();
-  }
-  const entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
+  let entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
+  action.daily = processDaily(action.daily);
   return entry
     ? dailyState
         .set(entry[0], action.daily)
@@ -52,12 +83,7 @@ function deleteDailyFromServer(
 }
 
 function updateDaily(dailyState: List<Daily>, action: UpdateDaily) {
-  if (action.daily.completedOn) {
-    action.daily.completedOn = fromJS(action.daily.completedOn)
-      .toSet()
-      .map((t: string) => new Date(t))
-      .sort();
-  }
+  action.daily = processDaily(action.daily);
   return dailyState.set(
     dailyState.findIndex((t: Daily) => action.daily.id === t.id),
     action.daily
@@ -68,37 +94,15 @@ function completeDaily(
   dailyState: List<Daily>,
   action: CompleteDailyFulfilled
 ) {
-  return dailyState.map((t: Daily) => {
-    let streakCount = 1;
-    if (t.id === action.id) {
-      let completedStack = t.completedOn
-        ? t.completedOn.sort().toList()
-        : List([Date()]);
-      let last = new Date();
-      let next = completedStack.last();
-      completedStack = completedStack.pop();
-      while (
-        (next && isSameDay(next, subDays(last, 1))) ||
-        isSameDay(next, last)
-      ) {
-        if (isSameDay(next, subDays(last, 1))) {
-          streakCount++;
-        } else if (!isSameDay(next, last)) {
-          streakCount = 0;
-        }
-
-        last = next as Date;
-        next = completedStack.last();
-        completedStack = completedStack.pop();
-      }
-      return {
-        ...t,
-        streakCount,
-        completedOn: t.completedOn.add(action.date).sort()
-      };
-    }
-    return t;
-  });
+  return dailyState.map(
+    (t: Daily) =>
+      t.id === action.id
+        ? {
+            ...t,
+            completedOn: t.completedOn.add(action.date).sort()
+          }
+        : t
+  );
 }
 
 export default createReducer(List(), {
