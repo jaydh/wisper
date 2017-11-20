@@ -23,8 +23,7 @@ function processArticle(article: any): articleType {
         .toSet()
         .map((t: string) => new Date(t))
         .sort()
-    : Set;
-
+    : Set();
   return article;
 }
 
@@ -71,14 +70,13 @@ function addArticleFromServer(
   articleState: List<articleType>,
   action: AddArticleFromServer
 ) {
-  let check =
-    articleState.filter(article => {
-      return article ? action.article.id === article.id : false;
-    }).size === 0;
+  let entry = articleState.findEntry(
+    (v: articleType) => action.article.id === v.id
+  );
 
-  return check
-    ? articleState.push(processArticle(action.article))
-    : articleState;
+  return entry
+    ? articleState.set(entry[0], processArticle(action.article))
+    : articleState.push(processArticle(action.article));
 }
 
 function deleteArticleFromServer(
