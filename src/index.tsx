@@ -22,32 +22,32 @@ let store = createStore(
 );
 initFirebase();
 let persistor = persistStore(store);
-auth().onAuthStateChanged(function(user: any) {
-  if (user) {
-    if (user.isAnonymous) {
-      database
-        .ref('/userData/' + user.uid)
-        .once('value')
-        .then(function(snapshot: any) {
-          if (!snapshot.val()) {
-            demo(store, persistor);
-          }
-        });
+try {
+  auth().onAuthStateChanged(function(user: any) {
+    if (user) {
+      if (user.isAnonymous) {
+        database
+          .ref('/userData/' + user.uid)
+          .once('value')
+          .then(function(snapshot: any) {
+            if (!snapshot.val()) {
+              demo(store, persistor);
+            }
+          });
+      }
+    } else {
+      persistor.purge();
     }
-  } else {
-    persistor.purge();
-  }
-  try {
     ReactDOM.render(
       <Provider store={store}>
         <App />
       </Provider>,
       document.getElementById('root')
     );
-  } catch (e) {
-    console.log(e);
-    persistor.purge();
-  }
-});
+  });
+} catch (e) {
+  console.log(e);
+  persistor.purge();
+}
 
 registerServiceWorker();
