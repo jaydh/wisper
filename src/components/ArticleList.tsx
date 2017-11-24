@@ -51,17 +51,17 @@ class ArticleList extends React.Component<Props> {
         <Jumbotron
           className="article-list-container"
           style={{
-            padding: '1em'
+            padding: '2rem'
           }}
         >
           <Grid>
             <Row>
-              <Col xs={1} sm={1} md={1}>
+              <Col sm={1} md={1}>
                 <LockArticleList id={id} />
               </Col>
-              <Col xs={2} sm={2} md={2}>
+              <Col sm={2} md={2} smOffset={9} mdOffset={9}>
                 {!locked && (
-                  <ButtonGroup style={{ float: 'right' }}>
+                  <ButtonGroup>
                     <MaximizedArticleList id={id} />
                     <DeleteArticleList id={id} />
                   </ButtonGroup>
@@ -70,10 +70,10 @@ class ArticleList extends React.Component<Props> {
             </Row>
             <div style={{ marginTop: '3em' }} />
             <Row>
-              <Col sm={8} md={9}>
+              <Col style={{ float: 'left' }}>
                 <AddArticle projectFilter={projectFilter} />
               </Col>
-              <Col sm={4} md={3}>
+              <Col style={{ float: 'right' }}>
                 <SetArticleListSearch id={id} />
               </Col>
             </Row>
@@ -95,7 +95,7 @@ class ArticleList extends React.Component<Props> {
               </p>
               <ListGroup>
                 {articles.map((article: articleType) => {
-                  return <Article key={article.id} article={article} />;
+                  return <Article key={id + article.id} article={article} />;
                 })}
               </ListGroup>
             </Row>
