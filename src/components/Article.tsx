@@ -38,10 +38,9 @@ class Article extends React.Component<Props, State> {
       <ListGroupItem
         onMouseOver={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
       >
         <Grid>
-          <Col xs={3} sm={3} md={2} lg={2}>
+          <Col xs={10} sm={10} md={2} lg={2}>
             {article.metadata && article.metadata.has('images') ? (
               <Image
                 src={article.metadata.get('images').get(0)}
@@ -50,13 +49,22 @@ class Article extends React.Component<Props, State> {
               />
             ) : (
               <Image
-                src="http://proflikesubstance.scientopia.org/wp-content/uploads/sites/23/2011/02/Box.jpg"
+                data-src="http://proflikesubstance.scientopia.org/wp-content/uploads/sites/23/2011/02/Box.jpg"
                 responsive={true}
                 thumbnail={true}
               />
             )}
           </Col>
-          <Col xs={8} sm={8} md={9} lg={9}>
+          <Col xs={1} sm={1} md={1} lg={1}>
+            {this.state.isMenuOpen && (
+              <ButtonGroup>
+                <ToggleArticle id={article.id} />
+                <DeleteArticle id={article.id} />
+              </ButtonGroup>
+            )}
+          </Col>
+
+          <Col xs={12} sm={12} md={9} lg={9}>
             {article.fetching && (
               <p>
                 <Glyphicon glyph="refresh" />Fetching metadata
@@ -114,14 +122,6 @@ class Article extends React.Component<Props, State> {
                 <AddArticleToProject id={article.id} />
               </div>
             </Collapse>
-          </Col>
-          <Col xs={1} sm={1} md={1} lg={1}>
-            {this.state.isMenuOpen && (
-              <ButtonGroup>
-                <ToggleArticle id={article.id} />
-                <DeleteArticle id={article.id} />
-              </ButtonGroup>
-            )}
           </Col>
         </Grid>
       </ListGroupItem>
