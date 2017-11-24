@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Scatter } from 'react-chartjs-2';
 import { List } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import { isAfter, subWeeks } from 'date-fns';
+import { isAfter, subWeeks, differenceInCalendarDays } from 'date-fns';
 
 let Colors = List([
   '#7F7EFF',
@@ -16,7 +16,7 @@ let Colors = List([
   '#C4F1BE',
   '#E36397',
   '#577399',
-  '#1B998B',
+  '#1B998B'
 ]);
 
 interface Props {
@@ -35,7 +35,7 @@ class DailyGraph extends React.Component<Props, State> {
           const color = this.dynamicColors();
           return color;
         })
-        .toList(),
+        .toList()
     };
   }
   dynamicColors = function() {
@@ -49,7 +49,7 @@ class DailyGraph extends React.Component<Props, State> {
           const color = this.dynamicColors();
           return color;
         })
-        .toList(),
+        .toList()
     });
   }
   render() {
@@ -65,7 +65,7 @@ class DailyGraph extends React.Component<Props, State> {
                   .map((p: Date) => {
                     return {
                       t: p,
-                      y: t.title,
+                      y: t.title
                     };
                   })
                   .toJS()
@@ -76,18 +76,25 @@ class DailyGraph extends React.Component<Props, State> {
             label:
               t.title +
               ' ' +
-              (
-                t.completedOn.filter((p: Date) =>
-                  isAfter(p, subWeeks(new Date(), 3)),
-                ).size /
-                27 *
-                100
-              ).toFixed(0) +
-              '%',
+              (isAfter(subWeeks(new Date(), 3), t.completedOn.first())
+                ? (t.completedOn.filter((p: Date) =>
+                    isAfter(p, subWeeks(new Date(), 3))
+                  ).size /
+                    21 *
+                    100
+                  ).toFixed(0)
+                : (t.completedOn.size /
+                    differenceInCalendarDays(
+                      new Date(),
+                      t.completedOn.first()
+                    ) *
+                    100
+                  ).toFixed(0)) +
+              '%'
           };
         })
         .sort()
-        .toJS(),
+        .toJS()
     };
     const options = {
       maintainAspectRatio: false,
@@ -97,28 +104,28 @@ class DailyGraph extends React.Component<Props, State> {
             type: 'category',
             ticks: {
               source: 'labels',
-              fontColor: '#ffffff',
+              fontColor: '#ffffff'
             },
             labels: dailies.map((t: Daily) => t.title).toJS(),
             gridLines: {
               display: true,
               drawBorder: false,
-              color: '#f2b632',
-            },
-          },
+              color: '#f2b632'
+            }
+          }
         ],
         xAxes: [
           {
             type: 'time',
             gridLines: {
               display: true,
-              color: '#f2b632',
+              color: '#f2b632'
             },
             ticks: {
               callback: function(tick: any, index: any, array: any) {
                 return index % 7 ? '' : tick;
               },
-              fontColor: '#ffffff',
+              fontColor: '#ffffff'
             },
 
             time: {
@@ -135,27 +142,27 @@ class DailyGraph extends React.Component<Props, State> {
                 week: 'MMM DD',
                 month: 'MMM DD',
                 quarter: 'MMM DD',
-                year: 'MMM DD',
-              },
-            },
-          },
-        ],
+                year: 'MMM DD'
+              }
+            }
+          }
+        ]
       },
       title: {
         display: true,
-        text: 'Dailies completed',
+        text: 'Dailies completed'
       },
       legend: {
         display: true,
-        position: 'right',
+        position: 'right'
       },
       tooltips: {
         callbacks: {
           label: function(t: any, d: any) {
             return '(Date:' + t.xLabel + ')';
-          },
-        },
-      },
+          }
+        }
+      }
     } as any;
 
     return <Scatter data={data} options={options} />;
@@ -163,7 +170,7 @@ class DailyGraph extends React.Component<Props, State> {
 }
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    dailies: state.get('dailies'),
+    dailies: state.get('dailies')
   };
 };
 
