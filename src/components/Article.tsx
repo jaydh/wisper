@@ -6,12 +6,13 @@ import AddArticleToProject from '../containers/actionDispatchers/AddArticleToPro
 import DeleteArticle from '../containers/actionDispatchers/DeleteArticle';
 import ToggleArticle from '../containers/actionDispatchers/ToggleArticle';
 import {
+  Image,
   Glyphicon,
   Collapse,
   ListGroupItem,
   Grid,
   Col,
-  ButtonGroup
+  ButtonGroup,
 } from 'react-bootstrap';
 
 interface Props {
@@ -26,7 +27,7 @@ class Article extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isMenuOpen: false
+      isMenuOpen: false,
     };
   }
 
@@ -37,55 +38,51 @@ class Article extends React.Component<Props, State> {
       <ListGroupItem
         onMouseOver={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
+        onClick={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
       >
         <Grid>
-          <Col md={1}>
+          <Col xs={3} sm={3} md={2} lg={2}>
+            {article.metadata && article.metadata.has('images') ? (
+              <Image
+                src={article.metadata.get('images').get(0)}
+                responsive={true}
+                thumbnail={true}
+              />
+            ) : (
+              <Image
+                src="http://proflikesubstance.scientopia.org/wp-content/uploads/sites/23/2011/02/Box.jpg"
+                responsive={true}
+                thumbnail={true}
+              />
+            )}
+          </Col>
+          <Col xs={8} sm={8} md={9} lg={9}>
             {article.fetching && (
               <p>
                 <Glyphicon glyph="refresh" />Fetching metadata
               </p>
             )}
-            {article.metadata && article.metadata.images ? (
-              <div>
-                <img
-                  src={article.metadata.images[0]}
-                  height="70em"
-                  style={{
-                    position: 'absolute',
-                    clip: 'rect(0px,60px,200px,0px)',
-                    textAlign: 'center'
-                  }}
-                />
-                <br />
-              </div>
-            ) : (
-              ''
-            )}
-          </Col>
-          <Col md={10}>
             <a
               className="article-link"
               href={article.link}
               target="_blank"
               style={{
-                fontSize: '1.7em',
-                display: 'inline-block',
-                width: '70%'
+                fontSize: '1.6rem',
               }}
               onClick={() => {
                 onArticleView(article.id);
               }}
             >
-              {article.metadata &&
-              (article.metadata.title || article.metadata.ogTitle)
-                ? article.metadata.ogTitle || article.metadata.title
+              {article.metadata
+                ? article.metadata.get('ogTitle') ||
+                  article.metadata.get('title')
                 : article.link}
             </a>
             {!article.fetching && article.metadata ? (
-              <p style={{ fontSize: '1em' }}>
-                {article.metadata.ogSiteName ? article.metadata.ogSiteName : ''}
-                {article.metadata.ogDescrption || article.metadata.description}
-                <br />
+              <p style={{ fontSize: '1.2rem' }}>
+                {article.metadata.get('ogSiteName')}
+                {article.metadata.get('ogDescrption') ||
+                  article.metadata.get('description')}
               </p>
             ) : (
               ''
@@ -95,19 +92,30 @@ class Article extends React.Component<Props, State> {
               <div>
                 <p>
                   Date added: {article.dateAdded} <br />
-                  {article.viewedOn
+                  {!article.viewedOn.isEmpty()
                     ? `Last viewed on ${article.viewedOn
                         .last()
-                        .toLocaleString()} - viewed ${article.viewedOn
-                        .size} time(s)`
+                        .toLocaleString()} - viewed ${
+                        article.viewedOn.size
+                      } time(s)`
                     : ''}
+                  <br />
                   {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
+                  <br />
                 </p>
+                {article.projects ? (
+                  <p>
+                    Projects:{' '}
+                    {article.projects.valueSeq().map((t: string) => t + ' ')}
+                  </p>
+                ) : (
+                  ''
+                )}
                 <AddArticleToProject id={article.id} />
               </div>
             </Collapse>
           </Col>
-          <Col md={1}>
+          <Col xs={1} sm={1} md={1} lg={1}>
             {this.state.isMenuOpen && (
               <ButtonGroup>
                 <ToggleArticle id={article.id} />
@@ -128,7 +136,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     onArticleView: (articleID: string) => {
       dispatch(ArticleViewed(articleID));
-    }
+    },
   };
 };
 
