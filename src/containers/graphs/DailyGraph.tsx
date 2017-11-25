@@ -75,21 +75,27 @@ class DailyGraph extends React.Component<Props, State> {
             radius: 8,
             label:
               t.title +
-              ' ' +
-              (isAfter(subWeeks(new Date(), 3), t.completedOn.first())
-                ? (t.completedOn.filter((p: Date) =>
-                    isAfter(p, subWeeks(new Date(), 3))
-                  ).size /
-                    21 *
-                    100
-                  ).toFixed(0)
-                : (t.completedOn.size /
-                    differenceInCalendarDays(
-                      new Date(),
-                      t.completedOn.first()
-                    ) *
-                    100
-                  ).toFixed(0)) +
+              ': ' +
+              (t.completedOn
+                ? isAfter(subWeeks(new Date(), 3), t.completedOn.first())
+                  ? (
+                      (t.completedOn.filter((p: Date) =>
+                        isAfter(p, subWeeks(new Date(), 3))
+                      ).size -
+                        1) /
+                      21 *
+                      100
+                    ).toFixed(0)
+                  : (
+                      t.completedOn.size /
+                      (differenceInCalendarDays(
+                        new Date(),
+                        t.completedOn.first()
+                      ) +
+                        1) *
+                      100
+                    ).toFixed(0)
+                : '0') +
               '%'
           };
         })
