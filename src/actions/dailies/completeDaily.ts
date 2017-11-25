@@ -58,8 +58,8 @@ export default function completeDaily(
     return dailyRef.once('value').then(function(snapshot: any) {
       let update = snapshot.val()
         ? fromJS(snapshot.val())
-            .filter((t: Date) => t)
             .map((t: string) => parse(t))
+            .filter((t: Date) => !isNaN(t.getTime()))
             .toList()
             .push(completionDate)
             .sort()
