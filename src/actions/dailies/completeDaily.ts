@@ -1,7 +1,8 @@
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
-import { fromJS, OrderedSet } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import { Daily } from '../../constants/StoreState';
+import { parse, isSameDay } from 'date-fns';
 
 export interface CompleteDailyRequested {
   type: 'COMPLETE_DAILY_REQUESTED';
@@ -55,15 +56,30 @@ export default function completeDaily(
     );
 
     return dailyRef.once('value').then(function(snapshot: any) {
-      const update: OrderedSet<Date> = snapshot.val()
+      let update = snapshot.val()
         ? fromJS(snapshot.val())
-            .toOrderedSet()
-            .map((t: string) => new Date(t))
+            .filter((t: Date) => t)
+            .map((t: string) => parse(t))
+            .toList()
+            .push(completionDate)
             .sort()
-            .add(completionDate)
-        : OrderedSet([completionDate]);
+            .toMap()
+        : Map({ 0: completionDate });
+      // Remove dupes
+      update.forEach((V: Date, K: number) => {
+        if (isSameDay(V, update.get(K + 1))) {
+          update = update.remove(K);
+        }
+      });
+
       return dailyRef
-        .set(update.map((t: Date) => t.toLocaleString()).toJS())
+        .set(
+          update
+            .toSet()
+            .sort()
+            .map((t: Date) => t.getTime())
+            .toJS()
+        )
         .then(() => {
           dispatch(CompleteDailyFulfilled(id, completionDate));
         })
