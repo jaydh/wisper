@@ -15,7 +15,7 @@ export interface Daily {
   id: string;
   title: string;
   createdOn: Date;
-  completedOn: Set<Date>;
+  completedOn: List<Date>;
   completed: boolean;
   streakCount: number;
 }

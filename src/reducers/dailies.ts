@@ -1,13 +1,13 @@
 import { CompleteDailyFulfilled } from './../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
-import { fromJS, List, OrderedSet } from 'immutable';
+import { fromJS, List } from 'immutable';
 import {
   AddDailyFromServer,
   DeleteDailyFromServer,
   UpdateDaily
 } from '../actions/syncWithFirebase';
 import createReducer from './createReducer';
-import { isSameDay, subDays } from 'date-fns';
+import { parse, isSameDay, subDays } from 'date-fns';
 
 function processDaily(daily: any): Daily {
   for (const x in daily) {
@@ -15,11 +15,20 @@ function processDaily(daily: any): Daily {
       daily[x] = fromJS(daily[x]);
     }
   }
+
   if (daily.completedOn) {
     daily.completedOn = daily.completedOn
-      .map((t: string) => new Date(t))
-      .sort();
+      .filter((t: any) => t)
+      .map((t: string) => parse(t))
+      .sort()
+      .toMap();
 
+    daily.completedOn.forEach((V: Date, K: number) => {
+      if (isSameDay(V, daily.completedOn.get(K + 1))) {
+        daily.completedOn = daily.completedOn.remove(K + 1);
+      }
+    });
+    daily.completedOn = daily.completedOn.toList().sort();
     let streakCount = 1;
     let completedStack = daily.completedOn
       ? daily.completedOn.sort().toList()
@@ -52,7 +61,7 @@ function addDaily(dailyState: List<Daily>, action: any) {
         .push({
           createdOn: new Date(),
           completed: false,
-          completedOn: OrderedSet(),
+          completedOn: List(),
           title: action.title,
           id: action.id,
           streakCount: 0
@@ -99,7 +108,7 @@ function completeDaily(
       t.id === action.id
         ? {
             ...t,
-            completedOn: t.completedOn.add(action.date).sort()
+            completedOn: t.completedOn.push(action.date).sort()
           }
         : t
   );
