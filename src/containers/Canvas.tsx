@@ -5,13 +5,26 @@ import { Jumbotron } from 'react-bootstrap';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
 import VisibleArticleList from '../containers/VisibleArticleList';
+import {
+  pullFromFirebase,
+  ListenToFirebase
+} from '../actions/syncWithFirebase';
 
 interface Props {
+  pullOnMount: () => void;
+  listenAfterMount: () => void;
   addArticleList: () => void;
   articleLists: OrderedMap<string, ArticleList>;
 }
 
 class Canvas extends React.Component<Props> {
+  componentWillMount() {
+    this.props.pullOnMount();
+  }
+
+  componentDidMount() {
+    this.props.listenAfterMount();
+  }
   render() {
     const { articleLists } = this.props;
     return (
@@ -39,4 +52,16 @@ const mapStateToProps = (state: any, ownProps: any) => {
     articleLists: state.get('articleLists')
   };
 };
-export default connect(mapStateToProps)(Canvas);
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    pullOnMount: () => {
+      dispatch(pullFromFirebase);
+    },
+    listenAfterMount: () => {
+      dispatch(ListenToFirebase());
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Canvas);

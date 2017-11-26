@@ -8,16 +8,6 @@ import { PageHeader, NavItem, Nav } from 'react-bootstrap';
 import { auth } from '../firebase';
 import '!!style-loader!css-loader!../css/styles.css';
 import { push as Menu } from 'react-burger-menu';
-import { connect } from 'react-redux';
-import {
-  pullFromFirebase,
-  ListenToFirebase
-} from '../actions/syncWithFirebase';
-
-interface Props {
-  pullOnMount: () => void;
-  listenAfterMount: () => void;
-}
 
 interface State {
   gitCommit: string;
@@ -26,8 +16,8 @@ interface State {
   showKey: number;
 }
 
-class App extends React.Component<Props, State> {
-  constructor(props: Props) {
+class App extends React.Component<{}, State> {
+  constructor(props: {}) {
     super(props);
     this.state = {
       gitCommit: '',
@@ -37,14 +27,8 @@ class App extends React.Component<Props, State> {
     };
   }
 
-  componentWillMount() {
-    this.props.pullOnMount();
-  }
-
   // Gets repository information
   componentDidMount() {
-    this.props.listenAfterMount();
-
     const that = this;
     fetch('https://api.github.com/repos/jaydh/wispy')
       .then(function(response: any) {
@@ -127,18 +111,7 @@ class App extends React.Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    pullOnMount: () => {
-      dispatch(pullFromFirebase);
-    },
-    listenAfterMount: () => {
-      dispatch(ListenToFirebase());
-    }
-  };
-};
-
-export default connect(null, mapDispatchToProps)(App);
+export default App;
 
 const styles = {
   bmBurgerButton: {
