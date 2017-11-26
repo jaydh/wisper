@@ -12,8 +12,9 @@ import {
   ListGroupItem,
   Grid,
   Col,
-  ButtonGroup,
+  ButtonGroup
 } from 'react-bootstrap';
+import LazyLoad from 'react-lazyload';
 
 interface Props {
   onArticleView: (t: string) => void;
@@ -27,7 +28,7 @@ class Article extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isMenuOpen: false,
+      isMenuOpen: false
     };
   }
 
@@ -39,91 +40,89 @@ class Article extends React.Component<Props, State> {
         onMouseOver={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
       >
-        <Grid>
-          <Col xs={10} sm={10} md={2} lg={2}>
-            {article.metadata && article.metadata.has('images') ? (
-              <Image
-                src={article.metadata.get('images').get(0)}
-                responsive={true}
-                thumbnail={true}
-              />
-            ) : (
-              <Image
-                data-src="http://proflikesubstance.scientopia.org/wp-content/uploads/sites/23/2011/02/Box.jpg"
-                responsive={true}
-                thumbnail={true}
-              />
-            )}
-          </Col>
-          <Col xs={1} sm={1} md={1} lg={1}>
-            {this.state.isMenuOpen && (
-              <ButtonGroup>
-                <ToggleArticle id={article.id} />
-                <DeleteArticle id={article.id} />
-              </ButtonGroup>
-            )}
-          </Col>
+        <LazyLoad height="200" once={true} overflow={true}>
+          <Grid>
+            <Col xs={10} sm={10} md={2} lg={2} style={{ position: 'relative' }}>
+              {article.metadata && article.metadata.has('images') ? (
+                <Image
+                  src={article.metadata.get('images').get(0)}
+                  responsive={true}
+                  thumbnail={true}
+                />
+              ) : (
+                ''
+              )}
+            </Col>
+            <Col xs={1} sm={1} md={1} lg={1}>
+              {this.state.isMenuOpen && (
+                <ButtonGroup>
+                  <ToggleArticle id={article.id} />
+                  <DeleteArticle id={article.id} />
+                </ButtonGroup>
+              )}
+            </Col>
 
-          <Col xs={12} sm={12} md={9} lg={9}>
-            {article.fetching && (
-              <p>
-                <Glyphicon glyph="refresh" />Fetching metadata
-              </p>
-            )}
-            <a
-              className="article-link"
-              href={article.link}
-              target="_blank"
-              style={{
-                fontSize: '1.6rem',
-              }}
-              onClick={() => {
-                onArticleView(article.id);
-              }}
-            >
-              {article.metadata
-                ? article.metadata.get('ogTitle') ||
-                  article.metadata.get('title')
-                : article.link}
-            </a>
-            {!article.fetching && article.metadata ? (
-              <p style={{ fontSize: '1.2rem' }}>
-                {article.metadata.get('ogSiteName')}
-                {article.metadata.get('ogDescrption') ||
-                  article.metadata.get('description')}
-              </p>
-            ) : (
-              ''
-            )}
-
-            <Collapse in={this.state.isMenuOpen}>
-              <div>
+            <Col xs={12} sm={12} md={9} lg={9}>
+              {article.fetching && (
                 <p>
-                  Date added: {article.dateAdded} <br />
-                  {!article.viewedOn.isEmpty()
-                    ? `Last viewed on ${article.viewedOn
-                        .last()
-                        .toLocaleString()} - viewed ${
-                        article.viewedOn.size
-                      } time(s)`
-                    : ''}
-                  <br />
-                  {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
-                  <br />
+                  <Glyphicon glyph="refresh" />Fetching metadata
                 </p>
-                {article.projects ? (
+              )}
+              <a
+                className="article-link"
+                href={article.link}
+                target="_blank"
+                style={{
+                  fontSize: '1.6rem'
+                }}
+                onClick={() => {
+                  onArticleView(article.id);
+                }}
+              >
+                {article.metadata
+                  ? article.metadata.get('ogTitle') ||
+                    article.metadata.get('title')
+                  : article.link}
+              </a>
+              {!article.fetching && article.metadata ? (
+                <p style={{ fontSize: '1.2rem' }}>
+                  {article.metadata.get('ogSiteName')}
+                  {article.metadata.get('ogDescrption') ||
+                    article.metadata.get('description')}
+                </p>
+              ) : (
+                ''
+              )}
+
+              <Collapse in={this.state.isMenuOpen}>
+                <div>
                   <p>
-                    Projects:{' '}
-                    {article.projects.valueSeq().map((t: string) => t + ' ')}
+                    Date added: {article.dateAdded} <br />
+                    {!article.viewedOn.isEmpty()
+                      ? `Last viewed on ${article.viewedOn
+                          .last()
+                          .toLocaleString()} - viewed ${
+                          article.viewedOn.size
+                        } time(s)`
+                      : ''}
+                    <br />
+                    {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
+                    <br />
                   </p>
-                ) : (
-                  ''
-                )}
-                <AddArticleToProject id={article.id} />
-              </div>
-            </Collapse>
-          </Col>
-        </Grid>
+                  {article.projects ? (
+                    <p>
+                      Projects:{' '}
+                      {article.projects.valueSeq().map((t: string) => t + ' ')}
+                    </p>
+                  ) : (
+                    ''
+                  )}
+                  <AddArticleToProject id={article.id} />
+                </div>
+              </Collapse>
+            </Col>
+          </Grid>
+        </LazyLoad>
       </ListGroupItem>
     );
   }
@@ -136,7 +135,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     onArticleView: (articleID: string) => {
       dispatch(ArticleViewed(articleID));
-    },
+    }
   };
 };
 
