@@ -56,7 +56,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     pullOnMount: () => {
-      dispatch(pullFromFirebase);
+      dispatch(pullFromFirebase());
     },
     listenAfterMount: () => {
       dispatch(ListenToFirebase());
