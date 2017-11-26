@@ -22,23 +22,40 @@ interface Props {
 }
 interface State {
   isMenuOpen: boolean;
+  hoverable: boolean;
 }
 
 class Article extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isMenuOpen: false
+      isMenuOpen: false,
+      hoverable: false
     };
   }
 
   render() {
     const { onArticleView, article } = this.props;
+    const hasTitle = article.metadata
+      ? article.metadata.has('title') || article.metadata.has('oGtitle')
+      : false;
+    const hasDescription = article.metadata
+      ? article.metadata.has('description') ||
+        article.metadata.has('ogDescrption')
+      : false;
+    const hasSiteName = article.metadata
+      ? article.metadata.has('siteName') || article.metadata.has('ogSiteName')
+      : false;
 
     return (
       <ListGroupItem
-        onMouseOver={() => this.setState({ isMenuOpen: true })}
+        onMouseOver={() => this.setState({ hoverable: true, isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
+        onClick={() =>
+          !this.state.hoverable
+            ? this.setState({ isMenuOpen: !this.state.isMenuOpen })
+            : null
+        }
       >
         <LazyLoad height="200" once={true} overflow={true}>
           <Grid>
@@ -79,35 +96,44 @@ class Article extends React.Component<Props, State> {
                   onArticleView(article.id);
                 }}
               >
-                {article.metadata
+                {hasTitle
                   ? article.metadata.get('ogTitle') ||
                     article.metadata.get('title')
                   : article.link}
               </a>
-              {!article.fetching && article.metadata ? (
-                <p style={{ fontSize: '1.2rem' }}>
-                  {article.metadata.get('ogSiteName')}
-                  {article.metadata.get('ogDescrption') ||
-                    article.metadata.get('description')}
-                </p>
-              ) : (
-                ''
-              )}
-
+              <p style={{ fontSize: '1.2rem' }}>
+                {hasSiteName
+                  ? article.metadata.get('siteName') ||
+                    article.metadata.get('ogSiteName')
+                  : ''}
+                {hasSiteName && hasDescription ? '- ' : ''}
+                {hasDescription
+                  ? article.metadata.get('ogDescrption') ||
+                    article.metadata.get('description')
+                  : ''}
+              </p>
               <Collapse in={this.state.isMenuOpen}>
                 <div>
                   <p>
                     Date added: {article.dateAdded} <br />
-                    {!article.viewedOn.isEmpty()
-                      ? `Last viewed on ${article.viewedOn
+                    {!article.viewedOn.isEmpty() ? (
+                      <small>
+                        `Last viewed on ${article.viewedOn
                           .last()
-                          .toLocaleString()} - viewed ${
-                          article.viewedOn.size
-                        } time(s)`
-                      : ''}
-                    <br />
-                    {article.dateRead ? 'Date Read: ' + article.dateRead : ' '}
-                    <br />
+                          .toLocaleString()}{' '}
+                        - viewed ${article.viewedOn.size} time(s)`<br />
+                      </small>
+                    ) : (
+                      ''
+                    )}
+                    {article.dateRead ? (
+                      <small>
+                        {'Date Read: ' + article.dateRead}
+                        <br />
+                      </small>
+                    ) : (
+                      ' '
+                    )}
                   </p>
                   {article.projects ? (
                     <p>
