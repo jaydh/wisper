@@ -49,12 +49,14 @@ class Article extends React.Component<Props, State> {
 
     return (
       <ListGroupItem
-        onMouseOver={() => this.setState({ hoverable: true, isMenuOpen: true })}
+        onMouseEnter={() =>
+          this.setState({ hoverable: true, isMenuOpen: true })
+        }
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
         onClick={() =>
           !this.state.hoverable
             ? this.setState({ isMenuOpen: !this.state.isMenuOpen })
-            : null
+            : (window.open(article.link), onArticleView(article.id))
         }
       >
         <LazyLoad height="200" once={true} overflow={true}>
@@ -118,10 +120,11 @@ class Article extends React.Component<Props, State> {
                     Date added: {article.dateAdded} <br />
                     {!article.viewedOn.isEmpty() ? (
                       <small>
-                        `Last viewed on ${article.viewedOn
+                        {`Last viewed on ${article.viewedOn
                           .last()
                           .toLocaleString()}{' '}
-                        - viewed ${article.viewedOn.size} time(s)`<br />
+                        - viewed ${article.viewedOn.size} time(s)`}
+                        <br />
                       </small>
                     ) : (
                       ''
