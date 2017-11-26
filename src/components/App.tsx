@@ -8,6 +8,16 @@ import { PageHeader, NavItem, Nav } from 'react-bootstrap';
 import { auth } from '../firebase';
 import '!!style-loader!css-loader!../css/styles.css';
 import { push as Menu } from 'react-burger-menu';
+import { connect } from 'react-redux';
+import {
+  pullFromFirebase,
+  ListenToFirebase
+} from '../actions/syncWithFirebase';
+
+interface Props {
+  pullOnMount: () => void;
+  listenAfterMount: () => void;
+}
 
 interface State {
   gitCommit: string;
@@ -16,19 +26,25 @@ interface State {
   showKey: number;
 }
 
-class App extends React.Component<{}, State> {
-  constructor(props: {}) {
+class App extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       gitCommit: '',
       sidebarOpen: false,
       show: 'all',
-      showKey: 1,
+      showKey: 1
     };
+  }
+
+  componentWillMount() {
+    this.props.pullOnMount();
   }
 
   // Gets repository information
   componentDidMount() {
+    this.props.listenAfterMount();
+
     const that = this;
     fetch('https://api.github.com/repos/jaydh/wispy')
       .then(function(response: any) {
@@ -70,7 +86,7 @@ class App extends React.Component<{}, State> {
             <div
               style={{
                 position: 'absolute',
-                bottom: '2em',
+                bottom: '2em'
               }}
             >
               <Logout />
@@ -111,7 +127,18 @@ class App extends React.Component<{}, State> {
   }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    pullOnMount: () => {
+      dispatch(pullFromFirebase);
+    },
+    listenAfterMount: () => {
+      dispatch(ListenToFirebase());
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(App);
 
 const styles = {
   bmBurgerButton: {
@@ -119,31 +146,31 @@ const styles = {
     width: '36px',
     height: '30px',
     right: '36px',
-    top: '36px',
+    top: '36px'
   },
   bmBurgerBars: {
-    background: '#373a47',
+    background: '#373a47'
   },
   bmCrossButton: {
     height: '24px',
-    width: '24px',
+    width: '24px'
   },
   bmCross: {
-    background: '#bdc3c7',
+    background: '#bdc3c7'
   },
   bmMenu: {
     background: '#373a47',
     padding: '2.5em 1.5em 0',
-    fontSize: '1.15em',
+    fontSize: '1.15em'
   },
   bmMorphShape: {
-    fill: '#373a47',
+    fill: '#373a47'
   },
   bmItemList: {
     color: '#b8b7ad',
-    padding: '0.8em',
+    padding: '0.8em'
   },
   bmOverlay: {
-    background: 'rgba(0, 0, 0, 0.3)',
-  },
+    background: 'rgba(0, 0, 0, 0.3)'
+  }
 };

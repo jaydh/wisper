@@ -114,43 +114,53 @@ function updateDaily(daily: Daily) {
   };
 }
 
+export function pullFromFirebase() {
+  const user = auth().currentUser.uid;
+  const articleRef = database.ref('/userData/' + user + '/articles/');
+  const projectRef = database.ref('/userData/' + user + '/projects/');
+  const dailyRef = database.ref('/userData/' + user + '/dailies/');
+
+  return async (dispatch: Dispatch<any>) => {
+    await articleRef.on('child_added', function(snap: any) {
+      dispatch(addArticleFromServer(snap.val()));
+    });
+
+    await projectRef.on('child_added', function(snapshot: any) {
+      dispatch(addProject(snapshot.val()));
+    });
+
+    await dailyRef.on('child_added', function(snapshot: any) {
+      dispatch(addDailyFromServer(snapshot.val()));
+    });
+  };
+}
+
 export function ListenToFirebase() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
   const projectRef = database.ref('/userData/' + user + '/projects/');
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
 
-  return (dispatch: Dispatch<any>) => {
-    projectRef.on('child_changed', function(snapshot: any) {
+  return async (dispatch: Dispatch<any>) => {
+    await projectRef.on('child_changed', function(snapshot: any) {
       dispatch(updateProject(snapshot.val()));
     });
 
-    projectRef.on('child_added', function(snapshot: any) {
-      dispatch(addProject(snapshot.val()));
-    });
-
-    projectRef.on('child_removed', function(snapshot: any) {
+    await projectRef.on('child_removed', function(snapshot: any) {
       dispatch(deleteProject(snapshot.val()));
     });
-    articleRef.on('child_changed', function(snapshot: any) {
+    await articleRef.on('child_changed', function(snapshot: any) {
       dispatch(updateArticle(snapshot.val()));
     });
 
-    articleRef.on('child_added', function(snap: any) {
-      dispatch(addArticleFromServer(snap.val()));
-    });
-
-    articleRef.on('child_removed', function(snap: any) {
+    await articleRef.on('child_removed', function(snap: any) {
       dispatch(deleteArticleFromServer(snap.val()));
     });
 
-    dailyRef.on('child_added', function(snapshot: any) {
-      dispatch(addDailyFromServer(snapshot.val()));
-    });
-    dailyRef.on('child_removed', function(snapshot: any) {
+    await dailyRef.on('child_removed', function(snapshot: any) {
       dispatch(deleteDailyFromServer(snapshot.val()));
     });
-    dailyRef.on('child_changed', function(snapshot: any) {
+    await dailyRef.on('child_changed', function(snapshot: any) {
       dispatch(updateDaily(snapshot.val()));
     });
   };
