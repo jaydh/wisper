@@ -158,6 +158,8 @@ class OuterArticleList extends React.Component<Props> {
             float: 'right'
           }
         }}
+        resizableGrid={[25, 25]}
+        dragGrid={[25, 25]}
         onResizeStop={(
           e: MouseEvent | TouchEvent,
           dir: any,
