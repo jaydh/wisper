@@ -191,7 +191,7 @@ export class ProjectsGraph extends React.Component<Props> {
       },
       legend: {
         display: true,
-        position: 'right'
+        position: window.innerWidth > 992 ? 'right' : 'bottom'
       }
     } as any;
     const options3 = {

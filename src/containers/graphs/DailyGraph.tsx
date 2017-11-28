@@ -79,9 +79,9 @@ class DailyGraph extends React.Component<Props, State> {
               (t.completedOn
                 ? isAfter(subWeeks(new Date(), 3), t.completedOn.first())
                   ? (
-                      (t.completedOn.filter((p: Date) =>
+                      t.completedOn.filter((p: Date) =>
                         isAfter(p, subWeeks(new Date(), 3))
-                      ).size) /
+                      ).size /
                       21 *
                       100
                     ).toFixed(0)
@@ -159,7 +159,7 @@ class DailyGraph extends React.Component<Props, State> {
       },
       legend: {
         display: true,
-        position: 'right'
+        position: window.innerWidth > 992 ? 'right' : 'bottom'
       },
       tooltips: {
         callbacks: {

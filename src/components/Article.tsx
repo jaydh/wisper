@@ -58,9 +58,15 @@ class Article extends React.Component<Props, State> {
           this.setState({ isMenuOpen: !this.state.isMenuOpen })
         }
       >
-        <LazyLoad height="200" once={true} overflow={!compact}>
+        <LazyLoad
+          height="200"
+          once={true}
+          overflow={!compact}
+          offset={400}
+          debounce={true}
+        >
           <Grid>
-            <Col xs={10} sm={10} md={2} lg={2} style={{ position: 'relative' }}>
+            <Col xs={10} sm={10} md={2} lg={2}>
               {article.metadata && article.metadata.has('images') ? (
                 <Image
                   src={article.metadata.get('images').get(0)}
@@ -71,7 +77,7 @@ class Article extends React.Component<Props, State> {
                 ''
               )}
             </Col>
-            <Col xs={1} sm={1} md={1} lg={1}>
+            <Col xs={2} sm={2} md={1} lg={1} mdOffset={9} lgOffset={9}>
               {this.state.isMenuOpen && (
                 <ButtonGroup>
                   <ToggleArticle id={article.id} />
