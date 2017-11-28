@@ -206,10 +206,10 @@ export class ProjectsGraph extends React.Component<Props> {
 
     return (
       <Row>
-        <Col xs={6} sm={6} md={6} lg={6}>
+        <Col xs={12} sm={12} md={6} lg={6}>
           <Doughnut data={data} options={options} />
         </Col>
-        <Col xs={6} sm={6} md={6} lg={6}>
+        <Col xs={12} sm={12} md={6} lg={6}>
           <Polar data={data3} options={options3} />
         </Col>
       </Row>
