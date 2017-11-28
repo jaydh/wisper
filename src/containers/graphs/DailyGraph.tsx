@@ -81,8 +81,7 @@ class DailyGraph extends React.Component<Props, State> {
                   ? (
                       (t.completedOn.filter((p: Date) =>
                         isAfter(p, subWeeks(new Date(), 3))
-                      ).size -
-                        1) /
+                      ).size) /
                       21 *
                       100
                     ).toFixed(0)
