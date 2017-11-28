@@ -19,7 +19,6 @@ import {
   Col,
   Grid
 } from 'react-bootstrap';
-const Rnd = require('react-rnd').default;
 
 interface Props {
   articles: List<articleType>;
@@ -33,6 +32,7 @@ interface Props {
   width: number;
   height: number;
   locked: boolean;
+  uiView: string;
   onResize: (x: number, y: number) => void;
   onReposition: (x: number, y: number) => void;
 }
@@ -44,8 +44,11 @@ class ArticleList extends React.Component<Props> {
       id,
       projectFilter,
       articlesInActivity,
-      locked
+      locked,
+      uiView
     } = this.props;
+    const compact = uiView === 'Compact';
+
     return (
       <div>
         <Jumbotron
@@ -55,19 +58,21 @@ class ArticleList extends React.Component<Props> {
           }}
         >
           <Grid>
-            <Row>
-              <Col sm={1} md={1}>
-                <LockArticleList id={id} />
-              </Col>
-              <Col sm={2} md={2} smOffset={9} mdOffset={9}>
-                {!locked && (
-                  <ButtonGroup>
-                    <MaximizedArticleList id={id} />
-                    <DeleteArticleList id={id} />
-                  </ButtonGroup>
-                )}
-              </Col>
-            </Row>
+            {!compact && (
+              <Row>
+                <Col sm={1} md={1}>
+                  <LockArticleList id={id} />
+                </Col>
+                <Col sm={2} md={2} smOffset={9} mdOffset={9}>
+                  {!locked && (
+                    <ButtonGroup>
+                      <MaximizedArticleList id={id} />
+                      <DeleteArticleList id={id} />
+                    </ButtonGroup>
+                  )}
+                </Col>
+              </Row>
+            )}
             <div style={{ marginTop: '3em' }} />
             <Row>
               <Col style={{ float: 'left' }}>
@@ -95,7 +100,13 @@ class ArticleList extends React.Component<Props> {
               </p>
               <ListGroup>
                 {articles.map((article: articleType) => {
-                  return <Article key={id + article.id} article={article} />;
+                  return (
+                    <Article
+                      key={id + article.id}
+                      article={article}
+                      compact={compact}
+                    />
+                  );
                 })}
               </ListGroup>
             </Row>
@@ -106,77 +117,4 @@ class ArticleList extends React.Component<Props> {
   }
 }
 
-class OuterArticleList extends React.Component<Props> {
-  render() {
-    const {
-      order,
-      xPosition,
-      yPosition,
-      width,
-      height,
-      onResize,
-      onReposition,
-      locked
-    } = this.props;
-    return (
-      <Rnd
-        className="resizable-container"
-        style={{
-          cursor: 'auto',
-          overflowY: 'auto',
-          WebkitOverflowScrolling: 'touch'
-        }}
-        default={{
-          x: xPosition,
-          y: yPosition,
-          width: width,
-          height: height
-        }}
-        z={order}
-        bounds=".articlelist-canvas"
-        dragHandlerClassName=".drag"
-        enableResizing={{
-          top: false,
-          right: false,
-          bottom: false,
-          left: false,
-          topRight: false,
-          bottomRight: !locked,
-          bottomLeft: false,
-          topLeft: false
-        }}
-        disableDragging={locked}
-        resizeHandlerClasses={{
-          bottomRight: 'resize'
-        }}
-        resizeHandlerStyles={{
-          bottomRight: {
-            zIndex: '100',
-            position: '-webkit-sticky',
-            bottom: '1em',
-            right: '1em',
-            float: 'right'
-          }
-        }}
-        resizableGrid={[25, 25]}
-        dragGrid={[25, 25]}
-        onResizeStop={(
-          e: MouseEvent | TouchEvent,
-          dir: any,
-          refToElement: any,
-          delta: any,
-          position: Position
-        ) => {
-          onResize(delta.width, delta.height);
-        }}
-        onDragStop={(e: MouseEvent | TouchEvent, data: any) => {
-          onReposition(data.lastX, data.lastY);
-        }}
-      >
-        {!locked && <i className="drag" />}
-        <ArticleList {...this.props} />
-      </Rnd>
-    );
-  }
-}
-export default OuterArticleList;
+export default ArticleList;

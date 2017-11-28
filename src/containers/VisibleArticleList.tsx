@@ -5,10 +5,6 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import {
-  resizeArticleList,
-  repositionArticleList
-} from '../actions/articleList';
 import { isBefore } from 'date-fns';
 import * as Fuse from 'fuse.js';
 
@@ -114,7 +110,7 @@ function getSearchedArticles(articles: List<articleType>, search: string) {
       'metadata.description',
       'metadata.ogDescription',
       'metadata.siteName',
-      'metadata.ogSiteName',      
+      'metadata.ogSiteName',
       'link',
       'projects'
     ]
@@ -167,23 +163,9 @@ function mapStateToProps(state: any, ownProps: any) {
     yPosition: articleList.yPosition,
     height: articleList.height,
     width: articleList.width,
-    locked: articleList.locked
+    locked: articleList.locked,
+    uiView: state.get('ui').view
   };
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: any) => {
-  return {
-    onResize: (x: number, y: number) => {
-      dispatch(resizeArticleList(ownProps.id, x, y));
-    },
-    onReposition: (x: number, y: number) => {
-      dispatch(repositionArticleList(ownProps.id, x, y));
-    }
-  };
-};
-
-const VisibleArticleList = connect(mapStateToProps, mapDispatchToProps)(
-  ArticleList
-);
-
-export default VisibleArticleList;
+export default connect(mapStateToProps)(ArticleList);
