@@ -53,10 +53,8 @@ class Article extends React.Component<Props, State> {
           this.setState({ hoverable: true, isMenuOpen: true })
         }
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        onClick={() =>
-          !this.state.hoverable
-            ? this.setState({ isMenuOpen: !this.state.isMenuOpen })
-            : (window.open(article.link), onArticleView(article.id))
+        onTouchStart={() =>
+          this.setState({ isMenuOpen: !this.state.isMenuOpen })
         }
       >
         <LazyLoad height="200" once={true} overflow={true}>
@@ -80,7 +78,6 @@ class Article extends React.Component<Props, State> {
                 </ButtonGroup>
               )}
             </Col>
-
             <Col xs={12} sm={12} md={9} lg={9}>
               {article.fetching && (
                 <p>
