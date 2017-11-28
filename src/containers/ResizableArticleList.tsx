@@ -1,4 +1,3 @@
-const Rnd = require('react-rnd').default;
 import * as React from 'react';
 import ArticleList from './VisibleArticleList';
 import {
@@ -7,6 +6,7 @@ import {
 } from '../actions/articleList';
 import { connect } from 'react-redux';
 import { ArticleList as ArticleListType } from '../constants/StoreState';
+import Rnd from 'react-rnd';
 
 interface Props {
   order: number;
