@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import addArticleToProject from '../../actions/articles/addArticleToProject';
-import { Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Article as articleType } from '../../constants/StoreState';
 
 export interface Props {
@@ -29,9 +29,7 @@ class AddArticleToProject extends React.Component<Props, {}> {
             input = node;
           }}
         />
-        <button type="submit" className="btn">
-          Add Article to Project
-        </button>
+        <Button>Add Article to Project</Button>
       </Form>
     );
   }

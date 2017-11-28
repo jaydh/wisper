@@ -30,7 +30,7 @@ a {
   word-wrap: break-word;
 }
 
-.container-fluid {
+.app-container {
   background-color: var(--main-background);
 }
 

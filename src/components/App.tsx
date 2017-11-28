@@ -47,7 +47,7 @@ class App extends React.Component<{}, State> {
   }
   render() {
     return (
-      <div className="container-fluid">
+      <div className="container-fluid app-container">
         {auth().currentUser && (
           <Menu bsStyle={'pills'} styles={styles} right={true}>
             <Nav activeKey={this.state.showKey}>
