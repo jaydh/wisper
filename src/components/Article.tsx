@@ -19,6 +19,7 @@ import LazyLoad from 'react-lazyload';
 interface Props {
   onArticleView: (t: string) => void;
   article: articleType;
+  compact: boolean;
 }
 interface State {
   isMenuOpen: boolean;
@@ -35,7 +36,7 @@ class Article extends React.Component<Props, State> {
   }
 
   render() {
-    const { onArticleView, article } = this.props;
+    const { onArticleView, article, compact } = this.props;
     const hasTitle = article.metadata
       ? article.metadata.has('title') || article.metadata.has('oGtitle')
       : false;
@@ -57,7 +58,7 @@ class Article extends React.Component<Props, State> {
           this.setState({ isMenuOpen: !this.state.isMenuOpen })
         }
       >
-        <LazyLoad height="200" once={true} overflow={true}>
+        <LazyLoad height="200" once={true} overflow={!compact}>
           <Grid>
             <Col xs={10} sm={10} md={2} lg={2} style={{ position: 'relative' }}>
               {article.metadata && article.metadata.has('images') ? (
@@ -119,7 +120,7 @@ class Article extends React.Component<Props, State> {
                       <small>
                         {`Last viewed on ${article.viewedOn
                           .last()
-                          .toLocaleString()}{' '}
+                          .toLocaleString()}
                         - viewed ${article.viewedOn.size} time(s)`}
                         <br />
                       </small>
