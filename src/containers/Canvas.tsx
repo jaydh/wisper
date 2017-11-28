@@ -4,7 +4,7 @@ import AddArticleList from '../containers/actionDispatchers/AddArticleList';
 import { Jumbotron } from 'react-bootstrap';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
-import VisibleArticleList from '../containers/VisibleArticleList';
+import ResizableArticleList from '../containers/ResizableArticleList';
 import {
   pullFromFirebase,
   ListenToFirebase
@@ -35,11 +35,16 @@ class Canvas extends React.Component<Props> {
           id="canvas"
           style={{ height: innerHeight }}
         >
-          {articleLists.map((articleList: ArticleList) => {
-            return (
-              <VisibleArticleList key={articleList.id} id={articleList.id} />
-            );
-          })}
+          {articleLists
+            .filter((t: ArticleList) => t.id !== '0')
+            .map((articleList: ArticleList) => {
+              return (
+                <ResizableArticleList
+                  key={articleList.id}
+                  id={articleList.id}
+                />
+              );
+            })}
         </Jumbotron>
         )
       </div>

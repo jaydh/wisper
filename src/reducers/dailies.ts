@@ -8,6 +8,7 @@ import {
 } from '../actions/syncWithFirebase';
 import createReducer from './createReducer';
 import { parse, isSameDay, subDays } from 'date-fns';
+import { AddDailyFulfilled } from '../actions/dailies/addDaily';
 
 function processDaily(daily: any): Daily {
   for (const x in daily) {
@@ -54,8 +55,8 @@ function processDaily(daily: any): Daily {
   return daily;
 }
 
-function addDaily(dailyState: List<Daily>, action: any) {
-  return dailyState.find((v: Daily) => action.id === v.id)
+function addDaily(dailyState: List<Daily>, action: AddDailyFulfilled) {
+  return dailyState.find((v: Daily) => action.title === v.title)
     ? dailyState
     : dailyState
         .push({

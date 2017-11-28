@@ -4,6 +4,7 @@ import { Polar, HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
 import { Article as articleType } from '../../constants/StoreState';
 import parseUri from '../../helpers/parseURI';
+import { Row, Col } from 'react-bootstrap';
 
 const Colors = [
   '#7F7EFF',
@@ -204,10 +205,14 @@ export class ProjectsGraph extends React.Component<Props> {
     };
 
     return (
-      <div>
-        <Doughnut data={data} options={options} />
-        <Polar data={data3} options={options3} />
-      </div>
+      <Row>
+        <Col xs={6} sm={6} md={6} lg={6}>
+          <Doughnut data={data} options={options} />
+        </Col>
+        <Col xs={6} sm={6} md={6} lg={6}>
+          <Polar data={data3} options={options3} />
+        </Col>
+      </Row>
     );
   }
 }

@@ -1,29 +1,34 @@
 import * as React from 'react';
 import Canvas from '../containers/Canvas';
 import Dailies from '../containers/Dailies';
+import DailyGraph from '../containers/graphs/DailyGraph';
 import Analytics from '../containers/Analytics';
 import LoginLoading from './LoginLoading';
-import Logout from './Logout';
-import { PageHeader, NavItem, Nav } from 'react-bootstrap';
+import { PageHeader } from 'react-bootstrap';
 import { auth } from '../firebase';
+import Menu from '../containers/Menu';
+import { connect } from 'react-redux';
+import { ArticleList as ArticleListType } from '../constants/StoreState';
+import { List } from 'immutable';
+import { addArticleList } from '../actions/articleList';
+import ArticleList from '../containers/VisibleArticleList';
 import '!!style-loader!css-loader!../css/styles.css';
-import { push as Menu } from 'react-burger-menu';
+
+interface Props {
+  uiView: string;
+  articleLists: List<ArticleListType>;
+  createArticleList: (id: string) => void;
+}
 
 interface State {
   gitCommit: string;
-  sidebarOpen: boolean;
-  show: string;
-  showKey: number;
 }
 
-class App extends React.Component<{}, State> {
-  constructor(props: {}) {
+class App extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
-      gitCommit: '',
-      sidebarOpen: false,
-      show: 'all',
-      showKey: 1
+      gitCommit: ''
     };
   }
 
@@ -42,57 +47,44 @@ class App extends React.Component<{}, State> {
       });
   }
 
-  changeView(show: string, showKey: number) {
-    this.setState({ show, showKey });
-  }
   render() {
     return (
       <div className="container-fluid app-container">
-        {auth().currentUser && (
-          <Menu bsStyle={'pills'} styles={styles} right={true}>
-            <Nav activeKey={this.state.showKey}>
-              <NavItem eventKey={1} onClick={() => this.changeView('all', 1)}>
-                All
-              </NavItem>{' '}
-              <NavItem
-                eventKey={2}
-                onClick={() => this.changeView('articles', 2)}
-              >
-                Articles
-              </NavItem>
-              <NavItem
-                eventKey={3}
-                onClick={() => this.changeView('analytics', 2)}
-              >
-                Analytics
-              </NavItem>
-            </Nav>
-            <div
-              style={{
-                position: 'absolute',
-                bottom: '2em'
-              }}
-            >
-              <Logout />
-            </div>
-          </Menu>
-        )}
+        {auth().currentUser && <Menu />}
         <PageHeader>wispy</PageHeader>
-        <div style={{ margin: '0 auto', textAlign: 'center' }}>
-          <Dailies />
-        </div>
         {auth().currentUser ? (
           <div>
             {(() => {
-              switch (this.state.show) {
-                case 'articles':
+              switch (this.props.uiView) {
+                case 'Compact':
+                  if (this.props.articleLists.size === 0) {
+                    this.props.createArticleList('0');
+                  }
+                  return (
+                    <ArticleList id={this.props.articleLists.first().id} />
+                  );
+                case 'Canvas':
                   return <Canvas />;
-                case 'analytics':
+                case 'Analytics':
                   return <Analytics />;
+                case 'Dailies':
+                  return (
+                    <div>
+                      <Dailies />
+                      <DailyGraph />
+                    </div>
+                  );
+                case 'Canvase':
+                  return <Canvas />;
                 default:
                   return (
                     <div>
-                      <Canvas /> <Analytics />
+                      <Dailies />
+                      <Canvas />
+                      <Analytics />
+                      <div style={{ height: '50rem' }}>
+                        <DailyGraph />
+                      </div>
                     </div>
                   );
               }
@@ -111,39 +103,17 @@ class App extends React.Component<{}, State> {
   }
 }
 
-export default App;
-
-const styles = {
-  bmBurgerButton: {
-    position: 'absolute',
-    width: '36px',
-    height: '30px',
-    right: '36px',
-    top: '36px'
-  },
-  bmBurgerBars: {
-    background: '#373a47'
-  },
-  bmCrossButton: {
-    height: '24px',
-    width: '24px'
-  },
-  bmCross: {
-    background: '#bdc3c7'
-  },
-  bmMenu: {
-    background: '#373a47',
-    padding: '2.5em 1.5em 0',
-    fontSize: '1.15em'
-  },
-  bmMorphShape: {
-    fill: '#373a47'
-  },
-  bmItemList: {
-    color: '#b8b7ad',
-    padding: '0.8em'
-  },
-  bmOverlay: {
-    background: 'rgba(0, 0, 0, 0.3)'
-  }
+const mapStateToProps = (state: any) => {
+  return {
+    articleLists: state.get('articleLists'),
+    uiView: state.get('ui').view
+  };
 };
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    createArticleList: (id: string) => dispatch(addArticleList(id))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

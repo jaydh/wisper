@@ -17,37 +17,39 @@ class Dailies extends React.Component<Props> {
   render() {
     const { onComplete, dailies } = this.props;
     return (
-      <ButtonGroup>
-        {dailies
-          .filter((t: Daily) => {
-            return t.completedOn && !t.completedOn.isEmpty()
-              ? !moment(t.completedOn.last()).isSame(moment(), 'day')
-              : true;
-          })
-          .map((t: Daily) => {
-            return (
-              <Button
-                bsStyle="daily"
-                key={t.id}
-                onClick={() => onComplete(t.id)}
-              >
-                {t.streakCount > 4 && (
-                  <b>
-                    {t.streakCount}
-                    <Glyphicon glyph="fire" />{' '}
-                  </b>
-                )}
-                {t.completedOn &&
-                  isBefore(t.completedOn.last(), subDays(new Date(), 7)) && (
+      <div style={{ margin: '0 auto', textAlign: 'center' }}>
+        <ButtonGroup>
+          {dailies
+            .filter((t: Daily) => {
+              return t.completedOn && !t.completedOn.isEmpty()
+                ? !moment(t.completedOn.last()).isSame(moment(), 'day')
+                : true;
+            })
+            .map((t: Daily) => {
+              return (
+                <Button
+                  bsStyle="daily"
+                  key={t.id}
+                  onClick={() => onComplete(t.id)}
+                >
+                  {t.streakCount > 4 && (
                     <b>
-                      <Glyphicon glyph="warning-sign" />{' '}
+                      {t.streakCount}
+                      <Glyphicon glyph="fire" />{' '}
                     </b>
                   )}
-                {t.title}
-              </Button>
-            );
-          })}
-      </ButtonGroup>
+                  {t.completedOn &&
+                    isBefore(t.completedOn.last(), subDays(new Date(), 7)) && (
+                      <b>
+                        <Glyphicon glyph="warning-sign" />{' '}
+                      </b>
+                    )}
+                  {t.title}
+                </Button>
+              );
+            })}
+        </ButtonGroup>
+      </div>
     );
   }
 }
