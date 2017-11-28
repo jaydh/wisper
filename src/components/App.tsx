@@ -12,6 +12,7 @@ import { ArticleList as ArticleListType } from '../constants/StoreState';
 import { List } from 'immutable';
 import { addArticleList } from '../actions/articleList';
 import ArticleList from '../containers/VisibleArticleList';
+import GitInfo from './GitInfo';
 import '!!style-loader!css-loader!../css/styles.css';
 
 interface Props {
@@ -20,33 +21,7 @@ interface Props {
   createArticleList: (id: string) => void;
 }
 
-interface State {
-  gitCommit: string;
-}
-
-class App extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      gitCommit: ''
-    };
-  }
-
-  // Gets repository information
-  componentDidMount() {
-    const that = this;
-    fetch('https://api.github.com/repos/jaydh/wispy')
-      .then(function(response: any) {
-        return response.json();
-      })
-      .then(function(json: any) {
-        that.setState({ gitCommit: json.pushed_at });
-      })
-      .catch(function(ex: any) {
-        console.log('parsing failed', ex);
-      });
-  }
-
+class App extends React.Component<Props> {
   render() {
     return (
       <div className="container-fluid app-container">
@@ -89,15 +64,11 @@ class App extends React.Component<Props, State> {
                   );
               }
             })()}
+            <GitInfo />
           </div>
         ) : (
           <LoginLoading />
         )}
-        <h2 style={{ fontSize: '1em' }}>
-          Under active development; Last updated:{' '}
-          {new Date(this.state.gitCommit).toLocaleString()} <br />
-          Source: <a>{'https://github.com/jaydh/wispy'}</a>
-        </h2>
       </div>
     );
   }
