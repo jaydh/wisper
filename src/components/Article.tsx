@@ -54,7 +54,7 @@ class Article extends React.Component<Props, State> {
           this.setState({ hoverable: true, isMenuOpen: true })
         }
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        onTouchStart={() =>
+        onTouchEnd={() =>
           this.setState({ isMenuOpen: !this.state.isMenuOpen })
         }
       >
