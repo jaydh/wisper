@@ -13,6 +13,7 @@ import bootstrap from './bootstrap';
 import demo from './constants/demo';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import './css/styles.css';
 bootstrap();
 
 let store = createStore(
