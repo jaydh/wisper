@@ -48,9 +48,8 @@ class AppRoutes extends React.Component<Props> {
             <Dailies />
             <Canvas />
             <Analytics />
-            <div style={{ height: '50rem' }}>
-              <DailyGraph />
-            </div>
+            <DailyGraph />
+            <DailyCompletionGraph />
           </div>
         );
     }
