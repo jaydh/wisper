@@ -1,23 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Scatter } from 'react-chartjs-2';
-import { List } from 'immutable';
+import { Line } from 'react-chartjs-2';
+import { Map, List } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import { isAfter, subWeeks, differenceInCalendarDays } from 'date-fns';
-
-let Colors = List([
-  '#7F7EFF',
-  '#ED254E',
-  '#7D4E57',
-  '#EF798A',
-  '#CCFBFE',
-  '#8D6A9F',
-  '#00A9A5',
-  '#C4F1BE',
-  '#E36397',
-  '#577399',
-  '#1B998B'
-]);
+import { endOfDay, subDays, isSameDay, isAfter, subWeeks } from 'date-fns';
 
 interface Props {
   dailies: List<Daily>;
@@ -25,43 +11,167 @@ interface Props {
 
 interface State {
   colors: List<string>;
+  colorMap: Map<string, string>;
 }
 class DailyGraph extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    let colors = List([
+      '#7F7EFF',
+      '#ED254E',
+      '#7D4E57',
+      '#EF798A',
+      '#CCFBFE',
+      '#8D6A9F',
+      '#00A9A5',
+      '#C4F1BE',
+      '#E36397',
+      '#577399',
+      '#1B998B'
+    ])
+      .sortBy(Math.random)
+      .toList();
+    let colorMap: Map<string, string> = Map();
+    props.dailies.forEach((t: Daily) => {
+      const index = Math.floor(Math.random() * colors.size);
+      const color = colors.get(index);
+      colors = colors.remove(index);
+      colorMap = colorMap.set(t.title, color);
+    });
+
     this.state = {
-      colors: this.props.dailies
-        .map((t: any) => {
-          const color = this.dynamicColors();
-          return color;
-        })
-        .toList()
+      colors: colors,
+      colorMap: colorMap
     };
   }
-  dynamicColors = function() {
-    return Colors.get(Math.floor(Math.random() * Colors.size));
-  };
-
-  componentWillReceiveProps(nextProps: Props) {
-    this.setState({
-      colors: nextProps.dailies
-        .map((t: any) => {
-          const color = this.dynamicColors();
-          return color;
-        })
-        .toList()
-    });
+  dynamicColors() {
+    const index = Math.floor(Math.random() * this.state.colors.size);
+    const color = this.state.colors.get(index);
+    const newCo = this.state.colors.remove(index);
+    this.setState({ colors: newCo });
+    return color;
   }
+  componentWillReceiveProps(nextProps: Props) {
+    if (
+      !this.props.dailies
+        .map((t: Daily) => t.title)
+        .equals(nextProps.dailies.map((t: Daily) => t.title))
+    ) {
+      let newColorMap: Map<string, string> = Map();
+      nextProps.dailies.forEach((t: Daily) => {
+        newColorMap = newColorMap.set(t.title, this.dynamicColors());
+      });
+      this.setState({ colorMap: newColorMap });
+    }
+  }
+
   render() {
-    const { dailies } = this.props;
+    let { dailies } = this.props;
+    const cutOff = endOfDay(subWeeks(new Date(), 4));
+    const onStreak = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
+
+    let dotDailies: Map<string, List<Date>> = Map();
+    dailies.forEach(
+      (t: Daily) => (dotDailies = dotDailies.set(t.title, List()))
+    );
+
+    const lineDailies = dailies
+      .map((t: any) => {
+        let datasets: List<List<Date>> = List();
+        let index = 0;
+        t.completedOn.forEach((p: Date) => {
+          if (!datasets.get(index)) {
+            datasets = datasets.set(index, List());
+          }
+          const next = t.completedOn.get(t.completedOn.indexOf(p) + 1);
+          if (onStreak(p, next)) {
+            datasets = datasets.set(
+              index,
+              datasets
+                .get(index)
+                .push(p)
+                .push(next)
+            );
+          } else {
+            index++;
+            dotDailies = dotDailies.set(
+              t.title,
+              dotDailies.get(t.title).push(p)
+            );
+          }
+        });
+        return datasets.map((d: List<Date>) => {
+          return { label: t.title, data: d };
+        });
+      })
+      .flatten();
+    /*const dotDailies = dailies.map((t: Daily) => {
+      return {
+        ...t,
+        completedOn: t.completedOn.filter(
+          (p: Date) =>
+            !onStreak(p, t.completedOn.get(t.completedOn.indexOf(p) - 1))
+        )
+      };
+    });*/
+    const data = {
+      datasets: lineDailies
+        .map((t: any, key: number) => {
+          const cutOffData = t.data
+            ? t.data.filter((p: Date) => isAfter(p, cutOff))
+            : List();
+          const color = this.state.colorMap.get(t.label);
+          return {
+            type: 'line',
+            backgroundColor: color,
+            borderColor: color,
+            borderWidth: 6,
+            fill: false,
+            data: cutOffData
+              .map((p: Date) => {
+                return {
+                  x: p,
+                  y: t.label
+                };
+              })
+              .toJS()
+          };
+        })
+        .toJS()
+        .concat(
+          dotDailies
+            .map((value: List<Date>, key: string) => {
+              const cutOffData = value.filter((p: Date) => isAfter(p, cutOff));
+              const color = this.state.colorMap.get(key);
+              return {
+                type: 'bubble',
+                backgroundColor: color,
+                borderColor: color,
+                borderWidth: 6,
+                fill: false,
+                data: cutOffData
+                  .map((p: Date) => {
+                    return {
+                      x: p,
+                      y: key
+                    };
+                  })
+                  .toJS()
+              };
+            })
+            .toList()
+            .toJS()
+        )
+    };
+    /*
     const data = {
       datasets: dailies
         .map((t: Daily, key: number) => {
           const color = this.state.colors.get(key);
+          const points = t.completedOn.filter((p: Date) => isAfter(p, cutOff));
           return {
             data: t.completedOn
-              ? t.completedOn
-                  .filter((p: Date) => isAfter(p, subWeeks(new Date(), 4)))
+              ? points
                   .map((p: Date) => {
                     return {
                       t: p,
@@ -71,50 +181,38 @@ class DailyGraph extends React.Component<Props, State> {
                   .toJS()
               : [],
             backgroundColor: color,
-            pointStyle: 'rectRot',
-            radius: 8,
-            label:
-              t.title +
-              ': ' +
-              (t.completedOn
-                ? isAfter(subWeeks(new Date(), 3), t.completedOn.first())
-                  ? (
-                      t.completedOn.filter((p: Date) =>
-                        isAfter(p, subWeeks(new Date(), 3))
-                      ).size /
-                      21 *
-                      100
-                    ).toFixed(0)
-                  : (
-                      t.completedOn.size /
-                      (differenceInCalendarDays(
-                        new Date(),
-                        t.completedOn.first()
-                      ) +
-                        1) *
-                      100
-                    ).toFixed(0)
-                : '0') +
-              '%'
+            borderColor: color,
+            pointStyle: points
+              .map(
+                (p: Date) =>
+                  onStreak(p, t.completedOn.get(t.completedOn.indexOf(p) - 1))
+                    ? 'line'
+                    : 'circle'
+              )
+              .toJS(),
+            borderWidth: 10,
+            radius: points
+              .map(
+                (p: Date) =>
+                  onStreak(p, t.completedOn.get(t.completedOn.indexOf(p) - 1))
+                    ? 5
+                    : 5
+              )
+              .toJS(),
+            label: t.title
           };
         })
         .sort()
         .toJS()
-    };
+    };*/
     const options = {
-      maintainAspectRatio: false,
       scales: {
         yAxes: [
           {
             type: 'category',
-            ticks: {
-              source: 'labels',
-              fontColor: '#ffffff'
-            },
             labels: dailies.map((t: Daily) => t.title).toJS(),
             gridLines: {
               display: true,
-              drawBorder: false,
               color: '#f2b632'
             }
           }
@@ -122,6 +220,7 @@ class DailyGraph extends React.Component<Props, State> {
         xAxes: [
           {
             type: 'time',
+            id: 'streak',
             gridLines: {
               display: true,
               color: '#f2b632'
@@ -129,8 +228,7 @@ class DailyGraph extends React.Component<Props, State> {
             ticks: {
               callback: function(tick: any, index: any, array: any) {
                 return index % 7 ? '' : tick;
-              },
-              fontColor: '#ffffff'
+              }
             },
 
             time: {
@@ -157,20 +255,19 @@ class DailyGraph extends React.Component<Props, State> {
         display: true,
         text: 'Dailies completed'
       },
-      legend: {
-        display: true,
-        position: window.innerWidth > 992 ? 'right' : 'bottom'
-      },
       tooltips: {
         callbacks: {
           label: function(t: any, d: any) {
             return '(Date:' + t.xLabel + ')';
           }
         }
+      },
+      legend: {
+        display: false
       }
     } as any;
 
-    return <Scatter data={data} options={options} />;
+    return <Line data={data} options={options} />;
   }
 }
 const mapStateToProps = (state: any, ownProps: any) => {
