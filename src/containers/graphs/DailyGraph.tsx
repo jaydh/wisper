@@ -114,6 +114,7 @@ class DailyGraph extends React.Component<Props, State> {
           const color = this.state.colorMap.get(t.label);
           return {
             type: 'line',
+            label: t.label + key,
             backgroundColor: color,
             borderColor: color,
             borderWidth: 6,
@@ -136,6 +137,7 @@ class DailyGraph extends React.Component<Props, State> {
               const color = this.state.colorMap.get(key);
               return {
                 type: 'bubble',
+                label: key + value.size,
                 backgroundColor: color,
                 borderColor: color,
                 borderWidth: 6,
@@ -154,7 +156,6 @@ class DailyGraph extends React.Component<Props, State> {
             .toJS()
         )
     };
-    
     const options = {
       scales: {
         yAxes: [
