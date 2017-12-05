@@ -114,6 +114,29 @@ function updateDaily(daily: Daily) {
   };
 }
 
+function fetchingArticlesRequested() {
+  return {
+    type: 'FETCHING_ARTICLES_REQUESTED'
+  };
+}
+
+function fetchingDailiesRequested() {
+  return {
+    type: 'FETCHING_DAILIES_REQUESTED'
+  };
+}
+function fetchingArticlesCompleted() {
+  return {
+    type: 'FETCHING_ARTICLES_COMPLETED'
+  };
+}
+
+function fetchingDailiesCompleted() {
+  return {
+    type: 'FETCHING_DAILIES_COMPLETED'
+  };
+}
+
 export function pullFromFirebase() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
@@ -121,17 +144,21 @@ export function pullFromFirebase() {
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
 
   return async (dispatch: Dispatch<any>) => {
+    dispatch(fetchingArticlesRequested());
     await articleRef.on('child_added', function(snap: any) {
       dispatch(addArticleFromServer(snap.val()));
     });
+    dispatch(fetchingArticlesCompleted());
 
     await projectRef.on('child_added', function(snapshot: any) {
       dispatch(addProject(snapshot.val()));
     });
 
+    dispatch(fetchingDailiesRequested());
     await dailyRef.on('child_added', function(snapshot: any) {
       dispatch(addDailyFromServer(snapshot.val()));
     });
+    dispatch(fetchingDailiesCompleted());
   };
 }
 
