@@ -105,15 +105,6 @@ class DailyGraph extends React.Component<Props, State> {
         });
       })
       .flatten();
-    /*const dotDailies = dailies.map((t: Daily) => {
-      return {
-        ...t,
-        completedOn: t.completedOn.filter(
-          (p: Date) =>
-            !onStreak(p, t.completedOn.get(t.completedOn.indexOf(p) - 1))
-        )
-      };
-    });*/
     const data = {
       datasets: lineDailies
         .map((t: any, key: number) => {
@@ -163,48 +154,7 @@ class DailyGraph extends React.Component<Props, State> {
             .toJS()
         )
     };
-    /*
-    const data = {
-      datasets: dailies
-        .map((t: Daily, key: number) => {
-          const color = this.state.colors.get(key);
-          const points = t.completedOn.filter((p: Date) => isAfter(p, cutOff));
-          return {
-            data: t.completedOn
-              ? points
-                  .map((p: Date) => {
-                    return {
-                      t: p,
-                      y: t.title
-                    };
-                  })
-                  .toJS()
-              : [],
-            backgroundColor: color,
-            borderColor: color,
-            pointStyle: points
-              .map(
-                (p: Date) =>
-                  onStreak(p, t.completedOn.get(t.completedOn.indexOf(p) - 1))
-                    ? 'line'
-                    : 'circle'
-              )
-              .toJS(),
-            borderWidth: 10,
-            radius: points
-              .map(
-                (p: Date) =>
-                  onStreak(p, t.completedOn.get(t.completedOn.indexOf(p) - 1))
-                    ? 5
-                    : 5
-              )
-              .toJS(),
-            label: t.title
-          };
-        })
-        .sort()
-        .toJS()
-    };*/
+    
     const options = {
       scales: {
         yAxes: [
