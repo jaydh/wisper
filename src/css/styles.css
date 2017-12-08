@@ -17,6 +17,12 @@
   --pink: #c85e7c;
   --darkRed: #b33508;
   --text: #c5dca0;
+
+  --primary-0: #60a5f3;
+  --primary-1: #f3f8fe;
+  --primary-2: #9cc7f6;
+  --primary-3: #2988f2;
+  --primary-4: #0373f0;
 }
 h2 {
   color: var(--link);
@@ -31,7 +37,7 @@ a {
 }
 
 .app-container {
-  background-color: var(--main-background);
+  background-color: var(--primary-1);
 }
 
 .btn-more {
@@ -93,19 +99,19 @@ a {
 }
 
 .canvas {
-  background: var(--canvas);
+  background: var(--primary-2);
 }
 
 .list-group-item {
-  background-color: var(--link);
+  background-color: var(--primary-1);
 }
 
 .article-list-container {
-  background: var(--articleList);
+  background: var(--primary-0);
 }
 
 .page-header {
-  color: var(--blue);
+  color: var(--primary-2);
 }
 
 .glyphicon-refresh {
