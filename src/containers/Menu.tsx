@@ -7,10 +7,10 @@ import { connect } from 'react-redux';
 const styles = {
   bmBurgerButton: {
     position: 'absolute',
-    width: '36px',
-    height: '30px',
-    right: '36px',
-    top: '36px'
+    width: '26px',
+    height: '20px',
+    right: '26px',
+    top: '26px'
   },
   bmBurgerBars: {
     background: '#373a47'
@@ -46,7 +46,7 @@ interface Props {
 class Menu extends React.Component<Props> {
   render() {
     return (
-      <BurgerMenu bsStyle={'pills'} styles={styles} right={true}>
+      <BurgerMenu bsStyle={'pills'} styles={styles} right={true} width={'20%'}>
         <Nav>
           <NavItem onClick={() => this.props.onSetUIView('Full')}>
             Full View
