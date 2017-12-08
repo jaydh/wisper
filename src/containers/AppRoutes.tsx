@@ -24,11 +24,8 @@ interface Props {
   createArticleList: (id: string) => void;
 }
 class AppRoutes extends React.Component<Props> {
-  componentWillMount() {
-    this.props.pullOnMount();
-  }
-
   componentDidMount() {
+    this.props.pullOnMount();
     this.props.listenAfterMount();
   }
   render() {
@@ -54,9 +51,7 @@ class AppRoutes extends React.Component<Props> {
               if (this.props.articleLists.size === 0) {
                 this.props.createArticleList('0');
               }
-              return (
-                <VisibleArticleList id={this.props.articleLists.first().id} />
-              );
+              return <VisibleArticleList id={'0'} />;
             case 'Canvas':
               return <Canvas />;
             case 'Analytics':
