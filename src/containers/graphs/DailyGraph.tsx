@@ -116,6 +116,7 @@ class DailyGraph extends React.Component<Props, State> {
             backgroundColor: color,
             borderColor: color,
             borderWidth: 6,
+            pointRadius: 0,
             fill: false,
             data: cutOffData
               .map((p: Date) => {
