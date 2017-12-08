@@ -83,7 +83,7 @@ class ArticleList extends React.Component<Props> {
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col xs={10} sm={9} md={6} lg={6}>
                 <ButtonGroup>
                   <ActiveSelector id={id} />
                   <ProjectSelector
@@ -93,11 +93,19 @@ class ArticleList extends React.Component<Props> {
                   <Sort id={id} />
                 </ButtonGroup>
               </Col>
+              <Col
+                xs={2}
+                smOffset={1}
+                sm={2}
+                mdOffset={5}
+                md={1}
+                lgOffset={5}
+                lg={1}
+              >
+                <Glyphicon glyph="list-alt" /> {articles.size}
+              </Col>
             </Row>
             <Row>
-              <p style={{ float: 'right' }}>
-                <Glyphicon glyph="list-alt" /> {articles.size}
-              </p>
               <ListGroup>
                 {articles.map((article: articleType) => {
                   return (

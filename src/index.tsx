@@ -9,6 +9,7 @@ import thunk from 'redux-thunk';
 const { persistStore, autoRehydrate } = require('redux-persist-immutable');
 import { initFirebase, auth, database } from './firebase';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { enableBatching } from 'redux-batched-actions';
 import bootstrap from './bootstrap';
 import demo from './constants/demo';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -17,7 +18,7 @@ import './css/styles.css';
 bootstrap();
 
 let store = createStore(
-  appReducer,
+  enableBatching(appReducer),
   composeWithDevTools(applyMiddleware(thunk)),
   autoRehydrate()
 );
