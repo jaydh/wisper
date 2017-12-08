@@ -21,10 +21,8 @@ class DailyGraph extends React.Component<Props, State> {
       '#ED254E',
       '#7D4E57',
       '#EF798A',
-      '#CCFBFE',
       '#8D6A9F',
       '#00A9A5',
-      '#C4F1BE',
       '#E36397',
       '#577399',
       '#1B998B'
