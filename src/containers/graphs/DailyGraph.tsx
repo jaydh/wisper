@@ -114,6 +114,7 @@ class DailyGraph extends React.Component<Props, State> {
             type: 'line',
             label: t.label + key,
             backgroundColor: color,
+            pointWidth: 0,
             borderColor: color,
             borderWidth: 6,
             pointRadius: 0,
