@@ -29,6 +29,10 @@ a {
   font-size: 1.1em;
   word-wrap: break-word;
 }
+.input-group .form-control,
+.input-group-btn .btn {
+  z-index: inherit !important;
+}
 
 .app-container {
   background-color: var(--main-background);
