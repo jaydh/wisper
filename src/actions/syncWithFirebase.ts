@@ -1,8 +1,7 @@
 import { auth, database } from '../firebase';
-// import * as constants from '../constants/actionTypes';
 import { Dispatch } from 'react-redux';
 import { Article as articleType, Daily } from '../constants/StoreState';
-
+import { batchActions } from 'redux-batched-actions';
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
   article: articleType;
@@ -43,7 +42,9 @@ function updateArticle(article: articleType) {
   };
 }
 
-export function addArticleFromServer(article: articleType) {
+export function addArticleFromServer(
+  article: articleType
+): AddArticleFromServer {
   return {
     type: 'ADD_ARTICLE_FROM_SERVER',
     article
@@ -144,25 +145,31 @@ export function pullFromFirebase() {
 
   return async (dispatch: Dispatch<any>) => {
     dispatch(fetchingDailiesRequested());
-    await dailyRef.once('value', function(snap: any) {
-      const dailies = snap.val();
-      for (let daily in dailies) {
-        if (dailies.hasOwnProperty(daily)) {
-          dispatch(addDailyFromServer(dailies[daily]));
-        }
-      }
-    });
-    dispatch(fetchingDailiesCompleted());
     dispatch(fetchingArticlesRequested());
-    await articleRef.once('value', function(snap: any) {
-      const articles = snap.val();
-      for (let article in articles) {
-        if (articles.hasOwnProperty(article)) {
-          dispatch(addArticleFromServer(articles[article]));
+    return Promise.all([
+      dailyRef.once('value').then(function(snap: any) {
+        const dailies = snap.val();
+        let batch: any[] = [];
+        for (let daily in dailies) {
+          if (dailies.hasOwnProperty(daily)) {
+            batch.push(dispatch(addDailyFromServer(dailies[daily])));
+          }
         }
-      }
-    });
-    dispatch(fetchingArticlesCompleted());
+        dispatch(batchActions(batch));
+        dispatch(fetchingDailiesCompleted());
+      }),
+      articleRef.once('value').then(function(snap: any) {
+        const articles = snap.val();
+        let batch: any[] = [];
+        for (let article in articles) {
+          if (articles.hasOwnProperty(article)) {
+            batch.push(addArticleFromServer(articles[article]));
+          }
+        }
+        dispatch(batchActions(batch));
+        dispatch(fetchingArticlesCompleted());
+      })
+    ]);
   };
 }
 
@@ -173,35 +180,31 @@ export function ListenToFirebase() {
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
 
   return async (dispatch: Dispatch<any>) => {
-    await projectRef.on('child_added', function(snapshot: any) {
+    projectRef.on('child_added', function(snapshot: any) {
       dispatch(addProject(snapshot.val()));
     });
-    await projectRef.on('child_changed', function(snapshot: any) {
+    projectRef.on('child_changed', function(snapshot: any) {
       dispatch(updateProject(snapshot.val()));
     });
-
-    await projectRef.on('child_removed', function(snapshot: any) {
+    projectRef.on('child_removed', function(snapshot: any) {
       dispatch(deleteProject(snapshot.val()));
     });
-    await articleRef.on('child_added', function(snap: any) {
+    articleRef.on('child_added', function(snap: any) {
       dispatch(addArticleFromServer(snap.val()));
     });
-    await articleRef.on('child_changed', function(snapshot: any) {
+    articleRef.on('child_changed', function(snapshot: any) {
       dispatch(updateArticle(snapshot.val()));
     });
-
-    await articleRef.on('child_removed', function(snap: any) {
+    articleRef.on('child_removed', function(snap: any) {
       dispatch(deleteArticleFromServer(snap.val()));
     });
-
-    await dailyRef.on('child_added', function(snapshot: any) {
+    dailyRef.on('child_added', function(snapshot: any) {
       dispatch(addDailyFromServer(snapshot.val()));
     });
-
-    await dailyRef.on('child_removed', function(snapshot: any) {
+    dailyRef.on('child_removed', function(snapshot: any) {
       dispatch(deleteDailyFromServer(snapshot.val()));
     });
-    await dailyRef.on('child_changed', function(snapshot: any) {
+    dailyRef.on('child_changed', function(snapshot: any) {
       dispatch(updateDaily(snapshot.val()));
     });
   };
