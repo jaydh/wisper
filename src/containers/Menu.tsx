@@ -46,7 +46,12 @@ interface Props {
 class Menu extends React.Component<Props> {
   render() {
     return (
-      <BurgerMenu bsStyle={'pills'} styles={styles} right={true} width={'20%'}>
+      <BurgerMenu
+        bsStyle={'pills'}
+        styles={styles}
+        right={true}
+        width={'20rem'}
+      >
         <Nav>
           <NavItem onClick={() => this.props.onSetUIView('Full')}>
             Full View
