@@ -140,25 +140,29 @@ function fetchingDailiesCompleted() {
 export function pullFromFirebase() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
-  const projectRef = database.ref('/userData/' + user + '/projects/');
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
 
   return async (dispatch: Dispatch<any>) => {
-    dispatch(fetchingArticlesRequested());
-    await articleRef.on('child_added', function(snap: any) {
-      dispatch(addArticleFromServer(snap.val()));
-    });
-    dispatch(fetchingArticlesCompleted());
-
-    await projectRef.on('child_added', function(snapshot: any) {
-      dispatch(addProject(snapshot.val()));
-    });
-
     dispatch(fetchingDailiesRequested());
-    await dailyRef.on('child_added', function(snapshot: any) {
-      dispatch(addDailyFromServer(snapshot.val()));
+    await dailyRef.once('value', function(snap: any) {
+      const dailies = snap.val();
+      for (let daily in dailies) {
+        if (dailies.hasOwnProperty(daily)) {
+          dispatch(addDailyFromServer(dailies[daily]));
+        }
+      }
     });
     dispatch(fetchingDailiesCompleted());
+    dispatch(fetchingArticlesRequested());
+    await articleRef.once('value', function(snap: any) {
+      const articles = snap.val();
+      for (let article in articles) {
+        if (articles.hasOwnProperty(article)) {
+          dispatch(addArticleFromServer(articles[article]));
+        }
+      }
+    });
+    dispatch(fetchingArticlesCompleted());
   };
 }
 
@@ -169,6 +173,9 @@ export function ListenToFirebase() {
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
 
   return async (dispatch: Dispatch<any>) => {
+    await projectRef.on('child_added', function(snapshot: any) {
+      dispatch(addProject(snapshot.val()));
+    });
     await projectRef.on('child_changed', function(snapshot: any) {
       dispatch(updateProject(snapshot.val()));
     });
@@ -176,12 +183,19 @@ export function ListenToFirebase() {
     await projectRef.on('child_removed', function(snapshot: any) {
       dispatch(deleteProject(snapshot.val()));
     });
+    await articleRef.on('child_added', function(snap: any) {
+      dispatch(addArticleFromServer(snap.val()));
+    });
     await articleRef.on('child_changed', function(snapshot: any) {
       dispatch(updateArticle(snapshot.val()));
     });
 
     await articleRef.on('child_removed', function(snap: any) {
       dispatch(deleteArticleFromServer(snap.val()));
+    });
+
+    await dailyRef.on('child_added', function(snapshot: any) {
+      dispatch(addDailyFromServer(snapshot.val()));
     });
 
     await dailyRef.on('child_removed', function(snapshot: any) {

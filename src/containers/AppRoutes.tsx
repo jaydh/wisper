@@ -5,7 +5,7 @@ import DailyGraph from '../containers/graphs/DailyGraph';
 import DailyCompletionGraph from '../containers/graphs/DailyCompletionGraphs';
 import Analytics from '../containers/Analytics';
 import VisibleArticleList from '../containers/VisibleArticleList';
-import { Grid, Row } from 'react-bootstrap';
+import { Grid, Row, Glyphicon } from 'react-bootstrap';
 import { addArticleList } from '../actions/articleList';
 import { connect } from 'react-redux';
 import { ArticleList as ArticleListType } from '../constants/StoreState';
@@ -34,6 +34,20 @@ class AppRoutes extends React.Component<Props> {
   render() {
     return (
       <div>
+        {(this.props.fetchingArticles || this.props.fetchingDailies) && (
+          <p
+            style={{
+              zIndex: 100,
+              position: 'fixed',
+              bottom: '0.5em',
+              right: '0.5em'
+            }}
+          >
+            <Glyphicon glyph="refresh" />{' '}
+            {this.props.fetchingArticles ? 'Updating Articles ' : ''}
+            {this.props.fetchingDailies ? 'Updating Dailies ' : ''}
+          </p>
+        )}
         {(() => {
           switch (this.props.uiView) {
             case 'Compact':

@@ -24,7 +24,7 @@ function fetchingDailiesCompleted(uiState: UIState, action: any): UIState {
   return { ...uiState, fetchingDailies: false };
 }
 export default createReducer(
-  { view: 'Full' },
+  { view: 'Full', fetchingArticles: true, fetchingDailies: true },
   {
     SET_UI_VIEW: setUIView,
     FETCHING_ARTICLES_REQUESTED: fetchingArticlesRequested,
