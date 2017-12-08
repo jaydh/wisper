@@ -33,7 +33,6 @@ class Canvas extends React.Component<Props> {
               );
             })}
         </Jumbotron>
-        )
       </div>
     );
   }
