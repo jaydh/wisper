@@ -8,7 +8,10 @@ import VisibleArticleList from '../containers/VisibleArticleList';
 import { Grid, Row, Glyphicon } from 'react-bootstrap';
 import { addArticleList } from '../actions/articleList';
 import { connect } from 'react-redux';
-import { ArticleList as ArticleListType } from '../constants/StoreState';
+import {
+  ArticleList as ArticleListType,
+  ArticleList
+} from '../constants/StoreState';
 import { List } from 'immutable';
 import {
   pullFromFirebase,
@@ -26,7 +29,7 @@ interface Props {
 class AppRoutes extends React.Component<Props> {
   componentDidMount() {
     this.props.pullOnMount();
-    this.props.listenAfterMount();
+    setTimeout(() => this.props.listenAfterMount(), 2000);
   }
   render() {
     return (
@@ -48,10 +51,14 @@ class AppRoutes extends React.Component<Props> {
         {(() => {
           switch (this.props.uiView) {
             case 'Compact':
-              if (this.props.articleLists.size === 0) {
-                this.props.createArticleList('0');
+              if (
+                !this.props.articleLists.find(
+                  (t: ArticleList) => t.id === 'compactAL'
+                )
+              ) {
+                this.props.createArticleList('compactAL');
               }
-              return <VisibleArticleList id={'0'} />;
+              return <VisibleArticleList id={'compactAL'} />;
             case 'Canvas':
               return <Canvas />;
             case 'Analytics':
