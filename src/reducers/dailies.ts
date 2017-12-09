@@ -51,6 +51,8 @@ function processDaily(daily: any): Daily {
       completedStack = completedStack.pop();
     }
     daily.streakCount = streakCount;
+  } else {
+    daily.completedOn = List();
   }
   return daily;
 }
