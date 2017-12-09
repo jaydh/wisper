@@ -54,9 +54,7 @@ class Article extends React.Component<Props, State> {
           this.setState({ hoverable: true, isMenuOpen: true })
         }
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        onTouchEnd={() =>
-          this.setState({ isMenuOpen: !this.state.isMenuOpen })
-        }
+        onTouchEnd={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
       >
         <LazyLoad
           height="200"
@@ -121,7 +119,7 @@ class Article extends React.Component<Props, State> {
               <Collapse in={this.state.isMenuOpen}>
                 <div>
                   <p>
-                    Date added: {article.dateAdded} <br />
+                    Date added: {article.dateAdded.toLocaleDateString()} <br />
                     {!article.viewedOn.isEmpty() ? (
                       <small>
                         {`Last viewed on ${article.viewedOn
@@ -135,7 +133,7 @@ class Article extends React.Component<Props, State> {
                     )}
                     {article.dateRead ? (
                       <small>
-                        {'Date Read: ' + article.dateRead}
+                        {'Date Read: ' + article.dateRead.toLocaleDateString()}
                         <br />
                       </small>
                     ) : (
