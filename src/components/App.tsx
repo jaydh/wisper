@@ -1,6 +1,5 @@
 import * as React from 'react';
 import LoginLoading from './LoginLoading';
-import { PageHeader } from 'react-bootstrap';
 import { auth } from '../firebase';
 import Menu from '../containers/Menu';
 import GitInfo from './GitInfo';
@@ -11,10 +10,9 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="container-fluid app-container">
-        {auth().currentUser && <Menu />}
-        <PageHeader>wispy</PageHeader>
         {auth().currentUser ? (
           <div>
+            <Menu />
             <AppRoutes />
             <GitInfo />
           </div>
