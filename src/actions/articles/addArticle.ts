@@ -53,7 +53,7 @@ export default function addArticle(articleLink: string, project?: string) {
   const user = auth().currentUser.uid;
   const now = moment();
 
-  return (dispatch: Dispatch<any>) => {
+  return async (dispatch: Dispatch<any>) => {
     dispatch(AddArticleRequested());
 
     const hash = SHA1.hex(articleLink);
