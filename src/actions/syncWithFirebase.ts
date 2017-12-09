@@ -152,10 +152,10 @@ export function pullFromFirebase() {
         let batch: any[] = [];
         for (let daily in dailies) {
           if (dailies.hasOwnProperty(daily)) {
-            batch.push(dispatch(addDailyFromServer(dailies[daily])));
+            batch.push(addDailyFromServer(dailies[daily]));
           }
         }
-        dispatch(batchActions(batch));
+        dispatch(batchActions(batch, 'ADD_BATCH_DAILIES_FROM_SERVER'));
         dispatch(fetchingDailiesCompleted());
       }),
       articleRef.once('value').then(function(snap: any) {
@@ -166,7 +166,7 @@ export function pullFromFirebase() {
             batch.push(addArticleFromServer(articles[article]));
           }
         }
-        dispatch(batchActions(batch));
+        dispatch(batchActions(batch, 'ADD_BATCH_ARTICLES_FROM_SERVER'));
         dispatch(fetchingArticlesCompleted());
       })
     ]);
