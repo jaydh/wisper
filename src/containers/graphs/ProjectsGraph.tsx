@@ -13,6 +13,11 @@ interface Props {
 interface State {
   colors: List<string>;
   colorMap: Map<string, string>;
+  projectData: Map<string, ProjectMeta>;
+  projectCountData: any;
+  projectCountOptions: any;
+  projectCompletionData: any;
+  projectCompletionOptions: any;
 }
 
 interface ProjectMeta {
@@ -44,9 +49,42 @@ export class ProjectsGraph extends React.Component<Props, State> {
       colorMap = colorMap.set(t, color);
     });
 
+    const projectCountOptions = {
+      title: {
+        display: true,
+        text: 'Project Count Distribution'
+      },
+      legend: {
+        display: true,
+        position: window.innerWidth > 992 ? 'right' : 'bottom'
+      }
+    } as any;
+    const projectCompletionOptions = {
+      title: {
+        display: true,
+        text: 'Project Completed Percentage'
+      },
+      legend: {
+        display: false
+      }
+    };
     this.state = {
       colors: colors,
-      colorMap: colorMap
+      colorMap: colorMap,
+      projectData: this.getProjectData(props.articles),
+      projectCountData: {},
+      projectCountOptions,
+      projectCompletionData: {},
+      projectCompletionOptions
+    };
+    this.state = {
+      colors: colors,
+      colorMap: colorMap,
+      projectData: this.getProjectData(props.articles),
+      projectCountData: this.getProjectCountData(),
+      projectCountOptions,
+      projectCompletionData: this.getProjectCompletionData(),
+      projectCompletionOptions
     };
   }
 
@@ -59,20 +97,32 @@ export class ProjectsGraph extends React.Component<Props, State> {
   componentWillReceiveProps(nextProps: Props) {
     const projects = this.props.projects.keySeq();
     const nextProjects = nextProps.projects.keySeq();
-    if (!nextProjects.equals(projects)) {
-      let newColorMap: Map<string, string> = Map();
+    if (
+      !nextProjects.equals(projects) ||
+      !nextProps.articles.equals(this.props.articles)
+    ) {
+      let newColorMap: Map<string, string> = Map({ NONE: '' });
       nextProjects.forEach((t: string) => {
         newColorMap = newColorMap.set(t, this.dynamicColors());
       });
-      this.setState({ colorMap: newColorMap });
+      this.setState(
+        {
+          projectData: this.getProjectData(nextProps.articles),
+          colorMap: newColorMap
+        },
+        () =>
+          this.setState({
+            projectCompletionData: this.getProjectCompletionData(),
+            projectCountData: this.getProjectCountData()
+          })
+      );
     }
   }
 
-  getProjectData(): Map<string, object> {
-    const { articles } = this.props;
+  getProjectData(articles: List<articleType>): Map<string, ProjectMeta> {
     let projectData = Map<string, ProjectMeta>();
     articles.forEach((article: articleType) => {
-      const keys = article.projects
+      const keys = !article.projects.isEmpty()
         ? fromJS(article.projects).valueSeq()
         : fromJS(['NONE']);
       keys.forEach(
@@ -94,27 +144,24 @@ export class ProjectsGraph extends React.Component<Props, State> {
           ))
       );
     });
-
     return projectData;
   }
 
-  render() {
-    const projectData = this.getProjectData();
-    const projectCount = projectData.map((t: ProjectMeta) => t.count);
-    const projectCompletedPercentage = projectData.map(
-      (t: ProjectMeta) => Math.round(t.completed / t.count * 100) / 100
+  getProjectCountData() {
+    const projectCount = this.state.projectData.map(
+      (t: ProjectMeta) => t.count
     );
     const borderColors = projectCount
       .valueSeq()
       .map(() => '#f2b632')
       .toJS();
-    const data = {
+    return {
       labels: projectCount.keySeq().toJS(),
 
       datasets: [
         {
           data: projectCount.valueSeq().toJS(),
-          backgroundColor: projectData
+          backgroundColor: this.state.projectData
             .map((t: ProjectMeta, key: string) => this.state.colorMap.get(key))
             .valueSeq()
             .toJS(),
@@ -124,13 +171,23 @@ export class ProjectsGraph extends React.Component<Props, State> {
         }
       ]
     };
+  }
 
-    const data3 = {
+  getProjectCompletionData() {
+    const projectCompletedPercentage = this.state.projectData.map(
+      (t: ProjectMeta) => Math.round(t.completed / t.count * 100) / 100
+    );
+    const borderColors = this.state.projectData
+      .valueSeq()
+      .map(() => '#f2b632')
+      .toJS();
+
+    return {
       labels: projectCompletedPercentage.keySeq().toJS(),
       datasets: [
         {
           data: projectCompletedPercentage.valueSeq().toJS(),
-          backgroundColor: projectData
+          backgroundColor: this.state.projectData
             .map((t: ProjectMeta, key: string) => this.state.colorMap.get(key))
             .valueSeq()
             .toJS(),
@@ -140,35 +197,28 @@ export class ProjectsGraph extends React.Component<Props, State> {
         }
       ]
     };
-    const options = {
-      title: {
-        display: true,
-        text: 'Project Count Distribution'
-      },
-      legend: {
-        display: true,
-        position: window.innerWidth > 992 ? 'right' : 'bottom'
-      }
-    } as any;
-    const options3 = {
-      title: {
-        display: true,
-        text: 'Project Completed Percentage'
-      },
-      legend: {
-        display: false
-      }
-    };
+  }
 
+  render() {
     return (
-      <Row>
-        <Col xs={12} sm={12} md={6} lg={6}>
-          <Doughnut data={data} options={options} />
-        </Col>
-        <Col xs={12} sm={12} md={6} lg={6}>
-          <Polar data={data3} options={options3} />
-        </Col>
-      </Row>
+      <div>
+        {!this.state.projectData.isEmpty() && (
+          <Row>
+            <Col xs={12} sm={12} md={6} lg={6}>
+              <Doughnut
+                data={this.state.projectCountData}
+                options={this.state.projectCountOptions}
+              />
+            </Col>
+            <Col xs={12} sm={12} md={6} lg={6}>
+              <Polar
+                data={this.state.projectCompletionData}
+                options={this.state.projectCompletionOptions}
+              />
+            </Col>
+          </Row>
+        )}
+      </div>
     );
   }
 }

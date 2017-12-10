@@ -12,6 +12,8 @@ interface Props {
 interface State {
   colors: List<string>;
   colorMap: Map<string, string>;
+  data: any;
+  options: any;
 }
 class DailyGraph extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -39,7 +41,15 @@ class DailyGraph extends React.Component<Props, State> {
 
     this.state = {
       colors: colors,
-      colorMap: colorMap
+      colorMap: colorMap,
+      data: {},
+      options: {}
+    };
+    this.state = {
+      colors: colors,
+      colorMap: colorMap,
+      data: this.getData(props.dailies),
+      options: this.getOptions(props.dailies)
     };
   }
   dynamicColors() {
@@ -61,10 +71,15 @@ class DailyGraph extends React.Component<Props, State> {
       });
       this.setState({ colorMap: newColorMap });
     }
+    if (!this.props.dailies.equals(nextProps.dailies)) {
+      this.setState({
+        data: this.getData(nextProps.dailies),
+        options: this.getOptions(nextProps.dailies)
+      });
+    }
   }
 
-  render() {
-    let { dailies } = this.props;
+  getData(dailies: List<Daily>) {
     const cutOff = endOfDay(subWeeks(new Date(), 4));
     const onStreak = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
 
@@ -103,7 +118,8 @@ class DailyGraph extends React.Component<Props, State> {
         });
       })
       .flatten();
-    const data = {
+
+    return {
       datasets: lineDailies
         .map((t: any, key: number) => {
           const cutOffData = t.data
@@ -156,7 +172,10 @@ class DailyGraph extends React.Component<Props, State> {
             .toJS()
         )
     };
-    const options = {
+  }
+
+  getOptions(dailies: List<Daily>) {
+    return {
       scales: {
         yAxes: [
           {
@@ -217,8 +236,16 @@ class DailyGraph extends React.Component<Props, State> {
         display: false
       }
     } as any;
+  }
 
-    return <Line data={data} options={options} />;
+  render() {
+    return (
+      <div>
+        {!this.props.dailies.isEmpty() && (
+          <Line data={this.state.data} options={this.state.options} />
+        )}
+      </div>
+    );
   }
 }
 const mapStateToProps = (state: any, ownProps: any) => {

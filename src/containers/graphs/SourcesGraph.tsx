@@ -149,7 +149,13 @@ export class SourcesGraph extends React.Component<Props, State> {
       }
     } as any;
 
-    return <HorizontalBar data={data} options={options} />;
+    return (
+      <div>
+        {!domainCounts.isEmpty() && (
+          <HorizontalBar data={data} options={options} />
+        )}
+      </div>
+    );
   }
 }
 
