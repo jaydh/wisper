@@ -38,7 +38,7 @@ try {
           });
       }
     } else {
-      persistor.purge();
+      store.dispatch({ type: 'USER_LOGOUT' });
     }
     ReactDOM.render(
       <Provider store={store}>

@@ -12,4 +12,13 @@ const appReducer = combineReducers({
   dailies,
   ui
 });
-export default appReducer;
+
+const rootReducer = (state, action) => {
+  if (action.type === 'USER_LOGOUT') {
+    state = undefined;
+  }
+
+  return appReducer(state, action);
+};
+
+export default rootReducer;
