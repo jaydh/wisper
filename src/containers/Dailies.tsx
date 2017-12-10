@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import completeDaily from '../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { List } from 'immutable';
-import { isBefore, subDays } from 'date-fns';
-import * as moment from 'moment';
+import { isBefore, subDays, isSameDay } from 'date-fns';
 
 interface Props {
   onComplete: (id: string) => void;
@@ -22,7 +21,7 @@ class Dailies extends React.Component<Props> {
           {dailies
             .filter((t: Daily) => {
               return t.completedOn && !t.completedOn.isEmpty()
-                ? !moment(t.completedOn.last()).isSame(moment(), 'day')
+                ? !isSameDay(t.completedOn.last(), new Date())
                 : true;
             })
             .map((t: Daily) => {
