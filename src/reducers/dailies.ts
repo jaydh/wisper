@@ -117,10 +117,24 @@ function completeDaily(
   );
 }
 
+function addFetchedDailies(dailyState: List<Daily>, action: any) {
+  let newDailyState = dailyState;
+  for (let dailyKey in action.dailies) {
+    if (action.dailies.hasOwnProperty(dailyKey)) {
+      const daily = action.dailies[dailyKey];
+      const entry = newDailyState.findEntry((v: Daily) => daily.id === v.id);
+      newDailyState = entry
+        ? newDailyState.set(entry[0], processDaily(daily))
+        : newDailyState.push(processDaily(daily));
+    }
+  }
+  return newDailyState;
+}
 export default createReducer(List(), {
   ADD_DAILY_FULFILLED: addDaily,
   COMPLETE_DAILY_FULFILLED: completeDaily,
   ADD_DAILY_FROM_SERVER: addDailyFromServer,
   DELETE_DAILY_FROM_SERVER: deleteDailyFromServer,
-  UPDATE_DAILY: updateDaily
+  UPDATE_DAILY: updateDaily,
+  ADD_FETCHED_DAILIES: addFetchedDailies
 });

@@ -123,6 +123,22 @@ function toggleArticleRead(
   });
 }
 
+function addFetchedArticles(articleState: List<articleType>, action: any) {
+  let newArticleState = articleState;
+  for (let articleKey in action.articles) {
+    if (action.articles.hasOwnProperty(articleKey)) {
+      const article = action.articles[articleKey];
+      const entry = newArticleState.findEntry(
+        (v: articleType) => article.id === v.id
+      );
+      newArticleState = entry
+        ? newArticleState.set(entry[0], processArticle(article))
+        : newArticleState.push(processArticle(article));
+    }
+  }
+  return newArticleState;
+}
+
 const articles = createReducer(List(), {
   ADD_ARTICLE_FULFILLED: addArticle,
   DELETE_ARTICLE_FULFILLED: deleteArticle,
@@ -130,7 +146,8 @@ const articles = createReducer(List(), {
   UPDATE_ARTICLE: updateArticle,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,
-  ARTICLE_VIEWED_FULFILLED: articleViewed
+  ARTICLE_VIEWED_FULFILLED: articleViewed,
+  ADD_FETCHED_ARTICLES: addFetchedArticles
 });
 
 export default articles;

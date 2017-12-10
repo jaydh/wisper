@@ -1,7 +1,7 @@
 import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
 import { Article as articleType, Daily } from '../constants/StoreState';
-import { batchActions } from 'redux-batched-actions';
+
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
   article: articleType;
@@ -138,6 +138,20 @@ function fetchingDailiesCompleted() {
   };
 }
 
+function addFetchedArticles(articles: any) {
+  return {
+    type: 'ADD_FETCHED_ARTICLES',
+    articles
+  };
+}
+
+function addFetchedDailies(dailies: any) {
+  return {
+    type: 'ADD_FETCHED_DAILIES',
+    dailies
+  };
+}
+
 export function pullFromFirebase() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
@@ -148,25 +162,11 @@ export function pullFromFirebase() {
     dispatch(fetchingArticlesRequested());
     return Promise.all([
       dailyRef.once('value').then(function(snap: any) {
-        const dailies = snap.val();
-        let batch: any[] = [];
-        for (let daily in dailies) {
-          if (dailies.hasOwnProperty(daily)) {
-            batch.push(addDailyFromServer(dailies[daily]));
-          }
-        }
-        dispatch(batchActions(batch, 'ADD_BATCH_DAILIES_FROM_SERVER'));
+        dispatch(addFetchedDailies(snap.val()));
         dispatch(fetchingDailiesCompleted());
       }),
       articleRef.once('value').then(function(snap: any) {
-        const articles = snap.val();
-        let batch: any[] = [];
-        for (let article in articles) {
-          if (articles.hasOwnProperty(article)) {
-            batch.push(addArticleFromServer(articles[article]));
-          }
-        }
-        dispatch(batchActions(batch, 'ADD_BATCH_ARTICLES_FROM_SERVER'));
+        dispatch(addFetchedArticles(snap.val()));
         dispatch(fetchingArticlesCompleted());
       })
     ]);
