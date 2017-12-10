@@ -48,8 +48,11 @@ try {
     );
   });
 } catch (e) {
-  store.dispatch({ type: 'USER_LOGOUT' });  
   console.log(e);
+} finally {
+  store.dispatch({ type: 'USER_LOGOUT' });
+  persistor.purge();
+
 }
 
 registerServiceWorker();
