@@ -1,38 +1,89 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { HorizontalBar } from 'react-chartjs-2';
-import { Map, List, fromJS } from 'immutable';
+import { Map, List } from 'immutable';
 import { Article as articleType } from '../../constants/StoreState';
 import parseUri from '../../helpers/parseURI';
-
-const Colors = [
-  '#7F7EFF',
-  '#706677',
-  '#ED254E',
-  '#7D4E57',
-  '#EF798A',
-  '#CCFBFE',
-  '#8D6A9F',
-  '#00A9A5',
-  '#C4F1BE',
-  '#F1DEDE',
-  '#E36397',
-  '#577399',
-  '#1B998B'
-];
-
-const dynamicColors = function(thisColors: any) {
-  const index = Math.floor(Math.random() * thisColors.size);
-  const val = thisColors.get(index);
-  thisColors = thisColors.delete(index);
-  return val;
-};
 
 interface Props {
   articles: List<articleType>;
 }
 
-export class SourcesGraph extends React.Component<Props> {
+interface State {
+  colors: List<string>;
+  colorMap: Map<string, string>;
+}
+
+export class SourcesGraph extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    let colors = List([
+      '#7F7EFF',
+      '#ED254E',
+      '#7D4E57',
+      '#EF798A',
+      '#8D6A9F',
+      '#00A9A5',
+      '#E36397',
+      '#577399',
+      '#1B998B'
+    ])
+      .sortBy(Math.random)
+      .toList();
+
+    let colorMap: Map<string, string> = Map();
+    props.articles
+      .map(
+        (article: articleType) =>
+          article.metadata
+            ? article.metadata.ogSiteName ||
+              article.metadata.siteName ||
+              parseUri(article.link).authority
+            : parseUri(article.link).authority
+      )
+      .forEach((t: string) => {
+        const index = Math.floor(Math.random() * colors.size);
+        const color = colors.get(index);
+        colorMap = colorMap.set(t, color);
+      });
+
+    this.state = {
+      colors: colors,
+      colorMap: colorMap
+    };
+  }
+  dynamicColors() {
+    const index = Math.floor(Math.random() * this.state.colors.size);
+    const color = this.state.colors.get(index);
+    return color;
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const domains = this.props.articles.map(
+      (article: articleType) =>
+        article.metadata
+          ? article.metadata.ogSiteName ||
+            article.metadata.siteName ||
+            parseUri(article.link).authority
+          : parseUri(article.link).authority
+    );
+    const nextDomains = nextProps.articles.map(
+      (article: articleType) =>
+        article.metadata
+          ? article.metadata.ogSiteName ||
+            article.metadata.siteName ||
+            parseUri(article.link).authority
+          : parseUri(article.link).authority
+    );
+    if (!nextDomains.equals(domains)) {
+      let newColorMap: Map<string, string> = Map();
+      nextDomains.forEach((t: string) => {
+        newColorMap = newColorMap.set(t, this.dynamicColors());
+      });
+      this.setState({ colorMap: newColorMap });
+    }
+  }
+
   getDomainData() {
     const { articles } = this.props;
     const domains = articles.map(
@@ -55,6 +106,7 @@ export class SourcesGraph extends React.Component<Props> {
     const domainCounts = this.getDomainData().sort(
       (a: number, b: number) => (b > a ? 1 : -1)
     );
+
     const data = {
       labels: domainCounts.keySeq().toJS(),
 
@@ -62,7 +114,7 @@ export class SourcesGraph extends React.Component<Props> {
         {
           data: domainCounts.valueSeq().toJS(),
           backgroundColor: domainCounts
-            .map(() => dynamicColors(fromJS(Colors)))
+            .map((value: number, key: string) => this.state.colorMap.get(key))
             .valueSeq()
             .toJS(),
           borderColor: domainCounts

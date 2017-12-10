@@ -1,118 +1,75 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Polar, HorizontalBar, Doughnut } from 'react-chartjs-2';
+import { Polar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
 import { Article as articleType } from '../../constants/StoreState';
-import parseUri from '../../helpers/parseURI';
 import { Row, Col } from 'react-bootstrap';
-
-const Colors = [
-  '#7F7EFF',
-  '#706677',
-  '#ED254E',
-  '#7D4E57',
-  '#EF798A',
-  '#CCFBFE',
-  '#8D6A9F',
-  '#00A9A5',
-  '#C4F1BE',
-  '#F1DEDE',
-  '#E36397',
-  '#577399',
-  '#1B998B'
-];
-
-const dynamicColors = function(thisColors: any) {
-  const index = Math.floor(Math.random() * thisColors.size);
-  const val = thisColors.get(index);
-  thisColors = thisColors.delete(index);
-  return val;
-};
 
 interface Props {
   articles: List<articleType>;
-  projects: List<String>;
+  projects: Map<string, List<string>>;
+}
+
+interface State {
+  colors: List<string>;
+  colorMap: Map<string, string>;
 }
 
 interface ProjectMeta {
   count: number;
   completed: number;
-  color: string;
 }
 
-export class SourcesGraph extends React.Component<Props> {
-  getDomainData() {
-    const { articles } = this.props;
-    const domains = articles.map(
-      (article: articleType) =>
-        article.metadata
-          ? article.metadata.ogSiteName ||
-            article.metadata.siteName ||
-            parseUri(article.link).authority
-          : parseUri(article.link).authority
-    );
-    let domainCounts = Map<string, number>();
-    domains.map(
-      (x: string) =>
-        (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
-    );
-    return domainCounts.filter((t: number) => t > 1);
-  }
+export class ProjectsGraph extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    let colors = List([
+      '#7F7EFF',
+      '#ED254E',
+      '#7D4E57',
+      '#EF798A',
+      '#8D6A9F',
+      '#00A9A5',
+      '#E36397',
+      '#577399',
+      '#1B998B'
+    ])
+      .sortBy(Math.random)
+      .toList();
 
-  render() {
-    const domainCounts = this.getDomainData().sort(
-      (a: number, b: number) => (b > a ? 1 : -1)
-    );
-    const data = {
-      labels: domainCounts.keySeq().toJS(),
+    let colorMap: Map<string, string> = Map();
+    props.projects.keySeq().forEach((t: string) => {
+      const index = Math.floor(Math.random() * colors.size);
+      const color = colors.get(index);
+      colorMap = colorMap.set(t, color);
+    });
 
-      datasets: [
-        {
-          data: domainCounts.valueSeq().toJS(),
-          backgroundColor: domainCounts
-            .map(() => dynamicColors(fromJS(Colors)))
-            .valueSeq()
-            .toJS(),
-          borderColor: domainCounts
-            .valueSeq()
-            .map(() => '#f2b632')
-            .toJS(),
-          borderWidth: 1,
-          hoverBorderWidth: 3
-        }
-      ]
+    this.state = {
+      colors: colors,
+      colorMap: colorMap
     };
-    const options = {
-      title: {
-        display: true,
-        text: 'Sources'
-      },
-      legend: {
-        display: false
-      },
-      scales: {
-        xAxes: [
-          {
-            id: 'x-axis-0',
-            gridLines: {
-              display: false
-            },
-            ticks: {
-              beginAtZero: true
-            }
-          }
-        ]
-      }
-    } as any;
-
-    return <HorizontalBar data={data} options={options} />;
   }
-}
 
-export class ProjectsGraph extends React.Component<Props> {
+  dynamicColors() {
+    const index = Math.floor(Math.random() * this.state.colors.size);
+    const color = this.state.colors.get(index);
+    return color;
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const projects = this.props.projects.keySeq();
+    const nextProjects = nextProps.projects.keySeq();
+    if (!nextProjects.equals(projects)) {
+      let newColorMap: Map<string, string> = Map();
+      nextProjects.forEach((t: string) => {
+        newColorMap = newColorMap.set(t, this.dynamicColors());
+      });
+      this.setState({ colorMap: newColorMap });
+    }
+  }
+
   getProjectData(): Map<string, object> {
     const { articles } = this.props;
-    let thisColors = fromJS(Colors);
     let projectData = Map<string, ProjectMeta>();
     articles.forEach((article: articleType) => {
       const keys = article.projects
@@ -125,8 +82,7 @@ export class ProjectsGraph extends React.Component<Props> {
             (
               meta: ProjectMeta = {
                 count: 0,
-                completed: 0,
-                color: dynamicColors(thisColors)
+                completed: 0
               }
             ) => {
               return {
@@ -159,7 +115,7 @@ export class ProjectsGraph extends React.Component<Props> {
         {
           data: projectCount.valueSeq().toJS(),
           backgroundColor: projectData
-            .map((t: ProjectMeta) => t.color)
+            .map((t: ProjectMeta, key: string) => this.state.colorMap.get(key))
             .valueSeq()
             .toJS(),
           borderColor: borderColors,
@@ -175,7 +131,7 @@ export class ProjectsGraph extends React.Component<Props> {
         {
           data: projectCompletedPercentage.valueSeq().toJS(),
           backgroundColor: projectData
-            .map((t: ProjectMeta) => t.color)
+            .map((t: ProjectMeta, key: string) => this.state.colorMap.get(key))
             .valueSeq()
             .toJS(),
           borderColor: borderColors,

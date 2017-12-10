@@ -29,11 +29,11 @@ class DailyGraph extends React.Component<Props, State> {
     ])
       .sortBy(Math.random)
       .toList();
+
     let colorMap: Map<string, string> = Map();
     props.dailies.forEach((t: Daily) => {
       const index = Math.floor(Math.random() * colors.size);
       const color = colors.get(index);
-      colors = colors.remove(index);
       colorMap = colorMap.set(t.title, color);
     });
 
