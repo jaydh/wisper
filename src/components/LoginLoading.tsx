@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { auth, provider } from '../firebase';
-import { Button } from 'react-bootstrap';
+import { Well, Button } from 'react-bootstrap';
 export default class LoginLoading extends React.Component {
   render() {
     return (
       <div className="container-fluid login">
-        <div className="well" style={{ maxWidth: 400, margin: 'auto' }}>
+        <Well style={{ maxWidth: '40rem', margin: 'auto' }}>
           <Button
             bsStyle="daily"
             bsSize="large"
@@ -14,7 +14,6 @@ export default class LoginLoading extends React.Component {
           >
             Authenticate with Google{' '}
           </Button>
-
           <Button
             bsStyle="daily"
             bsSize="large"
@@ -23,7 +22,16 @@ export default class LoginLoading extends React.Component {
           >
             Demo{' '}
           </Button>
-        </div>
+          <br />
+          <p>
+            Wispy uses Google authentication to identify users and doesn't
+            request any user data from Google
+            <br />
+            The demo is a demonstration of Wispy that dynamically simulates user
+            data. Actions are triggered in real time and the data is persistent
+            and fully tied to each demo account.
+          </p>
+        </Well>
       </div>
     );
   }
