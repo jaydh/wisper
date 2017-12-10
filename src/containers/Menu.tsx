@@ -26,7 +26,7 @@ class Menu extends React.Component<Props> {
         case 'Full':
           return 5;
         default:
-          return 1;
+          return 0;
       }
     })();
     return (
@@ -66,10 +66,16 @@ class Menu extends React.Component<Props> {
               onClick={() => this.props.onSetUIView('Full')}
             >
               Full View
-            </NavItem>{' '}
+            </NavItem>
           </Nav>
           <Nav pullRight={true}>
-            <NavDropdown title={this.props.user} id="user-dropdown">
+            <NavDropdown
+              title={this.props.user ? this.props.user : 'Demo'}
+              id="user-dropdown"
+            >
+              <MenuItem onClick={() => this.props.onSetUIView('User')}>
+                User menu
+              </MenuItem>
               <MenuItem onClick={() => logout()}> Logout</MenuItem>
             </NavDropdown>
           </Nav>

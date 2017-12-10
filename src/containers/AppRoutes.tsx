@@ -4,6 +4,7 @@ import Dailies from '../containers/Dailies';
 import DailyAnalytics from '../components/DailyAnalytics';
 import ArticleAnalytics from '../components/ArticleAnalytics';
 import VisibleArticleList from '../containers/VisibleArticleList';
+import UserPage from '../components/UserPage';
 import { Glyphicon } from 'react-bootstrap';
 import { addArticleList } from '../actions/articleList';
 import { connect } from 'react-redux';
@@ -69,6 +70,8 @@ class AppRoutes extends React.Component<Props> {
                   <DailyAnalytics />
                 </div>
               );
+            case 'User':
+              return <UserPage />;
             default:
               return (
                 <div>
