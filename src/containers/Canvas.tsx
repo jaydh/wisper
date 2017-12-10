@@ -23,7 +23,7 @@ class Canvas extends React.Component<Props> {
           style={{ height: innerHeight }}
         >
           {articleLists
-            .filter((t: ArticleList) => t.id !== '0')
+            .filter((t: ArticleList) => t.id !== 'compactAL')
             .map((articleList: ArticleList) => {
               return (
                 <ResizableArticleList
