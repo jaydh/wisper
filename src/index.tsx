@@ -52,7 +52,6 @@ try {
 } finally {
   store.dispatch({ type: 'USER_LOGOUT' });
   persistor.purge();
-
 }
 
 registerServiceWorker();
