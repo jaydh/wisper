@@ -1,8 +1,8 @@
 import * as React from 'react';
-import ProjectsGraphs from './graphs/ProjectsGraph';
-import SourcesGraphs from './graphs/SourcesGraph';
+import ProjectsGraphs from '../containers/graphs/ProjectsGraph';
+import SourcesGraphs from '../containers/graphs/SourcesGraph';
 import { Grid, Row } from 'react-bootstrap';
-class Analytics extends React.Component {
+class ArticleAnalytics extends React.Component {
   render() {
     return (
       <Grid>
@@ -15,4 +15,4 @@ class Analytics extends React.Component {
   }
 }
 
-export default Analytics;
+export default ArticleAnalytics;

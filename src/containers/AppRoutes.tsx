@@ -1,11 +1,10 @@
 import * as React from 'react';
 import Canvas from '../containers/Canvas';
 import Dailies from '../containers/Dailies';
-import DailyGraph from '../containers/graphs/DailyGraph';
-import DailyCompletionGraph from '../containers/graphs/DailyCompletionGraphs';
-import Analytics from '../containers/Analytics';
+import DailyAnalytics from '../components/DailyAnalytics';
+import ArticleAnalytics from '../components/ArticleAnalytics';
 import VisibleArticleList from '../containers/VisibleArticleList';
-import { Grid, Row, Glyphicon } from 'react-bootstrap';
+import { Glyphicon } from 'react-bootstrap';
 import { addArticleList } from '../actions/articleList';
 import { connect } from 'react-redux';
 import {
@@ -62,29 +61,21 @@ class AppRoutes extends React.Component<Props> {
             case 'Canvas':
               return <Canvas />;
             case 'Analytics':
-              return <Analytics />;
+              return <ArticleAnalytics />;
             case 'Dailies':
               return (
-                <Grid>
-                  <Row>
-                    <Dailies />
-                  </Row>
-                  <DailyGraph />
-                  <Row>
-                    <DailyCompletionGraph />
-                  </Row>
-                </Grid>
+                <div>
+                  <Dailies />
+                  <DailyAnalytics />
+                </div>
               );
-            case 'Canvase':
-              return <Canvas />;
             default:
               return (
                 <div>
                   <Dailies />
                   <Canvas />
-                  <Analytics />
-                  <DailyGraph />
-                  <DailyCompletionGraph />
+                  <ArticleAnalytics />
+                  <DailyAnalytics />
                 </div>
               );
           }
