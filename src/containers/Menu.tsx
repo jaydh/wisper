@@ -1,13 +1,16 @@
 import * as React from 'react';
-import Logout from '../components/Logout';
 import setUIView from '../actions/setUIView';
-import { NavDropdown, Navbar, NavItem, Nav } from 'react-bootstrap';
+import { MenuItem, NavDropdown, Navbar, NavItem, Nav } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import logout from '../helpers/firebaseLogout';
 interface Props {
   onSetUIView: (t: string) => void;
   view: string;
+  user: string;
 }
-
+interface OwnProps {
+  user: string;
+}
 class Menu extends React.Component<Props> {
   render() {
     const active = (() => {
@@ -66,8 +69,8 @@ class Menu extends React.Component<Props> {
             </NavItem>{' '}
           </Nav>
           <Nav pullRight={true}>
-            <NavDropdown id="user-dropdown">
-              <Logout />
+            <NavDropdown title={this.props.user} id="user-dropdown">
+              <MenuItem onClick={() => logout()}> Logout</MenuItem>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
@@ -84,7 +87,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: any, ownProps: OwnProps) => {
   return {
     view: state.get('ui').view
   };

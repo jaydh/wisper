@@ -12,7 +12,7 @@ export default class App extends React.Component {
       <div className="container-fluid app-container">
         {auth().currentUser ? (
           <div>
-            <Menu />
+            <Menu user={auth().currentUser.displayName} />
             <AppRoutes />
             <GitInfo />
           </div>
