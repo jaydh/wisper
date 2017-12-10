@@ -160,6 +160,7 @@ export class ProjectsGraph extends React.Component<Props, State> {
 
       datasets: [
         {
+          label: 'project count',
           data: projectCount.valueSeq().toJS(),
           backgroundColor: this.state.projectData
             .map((t: ProjectMeta, key: string) => this.state.colorMap.get(key))
@@ -186,6 +187,7 @@ export class ProjectsGraph extends React.Component<Props, State> {
       labels: projectCompletedPercentage.keySeq().toJS(),
       datasets: [
         {
+          label: 'project completion',
           data: projectCompletedPercentage.valueSeq().toJS(),
           backgroundColor: this.state.projectData
             .map((t: ProjectMeta, key: string) => this.state.colorMap.get(key))

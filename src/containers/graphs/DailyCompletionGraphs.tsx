@@ -52,6 +52,7 @@ class DailyGraph extends React.Component<Props, State> {
       const data = {
         datasets: [
           {
+            label: t.title + recent ? ' recent' : ' overall',
             data: [completionPercentage, 100 - completionPercentage],
             backgroundColor: ['#60a5f3', '#FFFFFF']
           }

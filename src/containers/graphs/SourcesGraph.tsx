@@ -112,6 +112,7 @@ export class SourcesGraph extends React.Component<Props, State> {
 
       datasets: [
         {
+          label: 'sources',
           data: domainCounts.valueSeq().toJS(),
           backgroundColor: domainCounts
             .map((value: number, key: string) => this.state.colorMap.get(key))
