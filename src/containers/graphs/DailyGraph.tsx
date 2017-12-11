@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Line } from 'react-chartjs-2';
-import { Map, List } from 'immutable';
+import { Map, List, Set } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import { endOfDay, subDays, isSameDay, isAfter, subWeeks } from 'date-fns';
+import {
+  endOfDay,
+  addDays,
+  subDays,
+  isSameDay,
+  isAfter,
+  subWeeks
+} from 'date-fns';
 
 interface Props {
   dailies: List<Daily>;
@@ -81,65 +88,80 @@ class DailyGraph extends React.Component<Props, State> {
 
   getData(dailies: List<Daily>) {
     const cutOff = endOfDay(subWeeks(new Date(), 4));
-    const onStreak = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
+    const isDayAfter = (a: Date, b: Date) => isSameDay(a, addDays(b, 1));
+    const isDayBefore = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
 
     let dotDailies: Map<string, List<Date>> = Map();
     dailies.forEach(
       (t: Daily) => (dotDailies = dotDailies.set(t.title, List()))
     );
+    let lineDailies: List<{ daily: string; dataset: Set<Date> }> = List();
 
-    const lineDailies = dailies
-      .map((t: any) => {
-        let datasets: List<List<Date>> = List();
-        let index = 0;
-        t.completedOn.forEach((p: Date) => {
-          if (!datasets.get(index)) {
-            datasets = datasets.set(index, List());
+    dailies.forEach((t: Daily) => {
+      let dataset: Set<Date> = Set();
+
+      const iter = t.completedOn
+        .filter((d: Date) => isAfter(d, subDays(cutOff, 1)))
+        .sort()
+        .values();
+      let before = iter.next();
+      let current = iter.next();
+      let next = iter.next();
+      while (!next.done) {
+        if (isDayAfter(next.value, current.value)) {
+          dataset = dataset.add(current.value);
+        } else if (isDayBefore(before.value, current.value)) {
+          dataset = dataset.add(current.value);
+          lineDailies = lineDailies.push({ daily: t.title, dataset });
+          dataset = dataset.clear();
+        } else {
+          if (!(dataset.size === 0)) {
+            lineDailies = lineDailies.push({ daily: t.title, dataset });
+            dataset = dataset.clear();
           }
-          const next = t.completedOn.get(t.completedOn.indexOf(p) + 1);
-          if (onStreak(p, next)) {
-            datasets = datasets.set(
-              index,
-              datasets
-                .get(index)
-                .push(p)
-                .push(next)
-            );
-          } else {
-            index++;
+
+          dotDailies = dotDailies.set(
+            t.title,
+            dotDailies.get(t.title).push(current.value)
+          );
+        }
+        before = current;
+        current = next;
+        next = iter.next();
+        if (next.done) {
+          if (!isDayBefore(before.value, current.value)) {
             dotDailies = dotDailies.set(
               t.title,
-              dotDailies.get(t.title).push(p)
+              dotDailies.get(t.title).push(current.value)
             );
+          } else {
+            dataset = dataset.add(current.value);
           }
-        });
-        return datasets.map((d: List<Date>) => {
-          return { label: t.title, data: d };
-        });
-      })
-      .flatten();
+          lineDailies = lineDailies.push({
+            daily: t.title,
+            dataset: dataset
+          });
+        }
+      }
+    });
 
     return {
       datasets: lineDailies
-        .map((t: any, key: number) => {
-          const cutOffData = t.data
-            ? t.data.filter((p: Date) => isAfter(p, cutOff))
-            : List();
-          const color = this.state.colorMap.get(t.label);
+        .map((t: { daily: string; dataset: Set<Date> }, key: number) => {
+          const color = this.state.colorMap.get(t.daily);
           return {
             type: 'line',
-            label: t.label + key,
+            label: t.daily + key,
             backgroundColor: color,
-            pointWidth: 0,
             borderColor: color,
             borderWidth: 6,
             pointRadius: 0,
             fill: false,
-            data: cutOffData
+            data: t.dataset
               .map((p: Date) => {
                 return {
                   x: p,
-                  y: t.label
+                  y: t.daily
                 };
               })
               .toJS()
@@ -149,7 +171,6 @@ class DailyGraph extends React.Component<Props, State> {
         .concat(
           dotDailies
             .map((value: List<Date>, key: string) => {
-              const cutOffData = value.filter((p: Date) => isAfter(p, cutOff));
               const color = this.state.colorMap.get(key);
               return {
                 type: 'bubble',
@@ -158,7 +179,7 @@ class DailyGraph extends React.Component<Props, State> {
                 borderColor: color,
                 borderWidth: 6,
                 fill: false,
-                data: cutOffData
+                data: value
                   .map((p: Date) => {
                     return {
                       x: p,
@@ -180,7 +201,9 @@ class DailyGraph extends React.Component<Props, State> {
         yAxes: [
           {
             type: 'category',
-            labels: dailies.map((t: Daily) => t.title).toJS(),
+            labels: [' ']
+              .concat(dailies.map((t: Daily) => t.title).toJS())
+              .concat([' ']),
             gridLines: {
               display: true,
               color: '#f2b632'
