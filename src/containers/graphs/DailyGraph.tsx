@@ -76,12 +76,18 @@ class DailyGraph extends React.Component<Props, State> {
       nextProps.dailies.forEach((t: Daily) => {
         newColorMap = newColorMap.set(t.title, this.dynamicColors());
       });
-      this.setState({ colorMap: newColorMap });
-    }
-    if (!this.props.dailies.equals(nextProps.dailies)) {
       this.setState({
-        data: this.getData(nextProps.dailies),
+        colorMap: newColorMap,
         options: this.getOptions(nextProps.dailies)
+      });
+    }
+    if (
+      !this.props.dailies
+        .map((t: Daily) => t.completedOn)
+        .equals(nextProps.dailies.map((t: Daily) => t.completedOn))
+    ) {
+      this.setState({
+        data: this.getData(nextProps.dailies)
       });
     }
   }
@@ -104,8 +110,8 @@ class DailyGraph extends React.Component<Props, State> {
         .filter((d: Date) => isAfter(d, subDays(cutOff, 1)))
         .sort()
         .values();
-      let before = iter.next();
       let current = iter.next();
+      let before = current;
       let next = iter.next();
       while (!next.done) {
         if (isDayAfter(next.value, current.value)) {
@@ -262,6 +268,33 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   render() {
+    /*const cutOff = endOfDay(subWeeks(new Date(), 4));
+    const data2 = {
+      datasets: this.props.dailies
+        .map((t: Daily, key: number) => {
+          const color = this.state.colorMap.get(key.toLocaleString());
+          return {
+            type: 'bubble',
+            label: t.title + t.completedOn.size,
+            backgroundColor: color,
+            borderColor: color,
+            borderWidth: 6,
+            fill: false,
+            data: t.completedOn
+              .filter((d: Date) => isAfter(d, subDays(cutOff, 1)))
+              .map((p: Date) => {
+                return {
+                  x: p,
+                  y: t.title
+                };
+              })
+              .toJS()
+          };
+        })
+        .toList()
+        .toJS()
+    };*/
+
     return (
       <div>
         {!this.props.dailies.isEmpty() && (
