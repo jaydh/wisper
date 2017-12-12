@@ -24,8 +24,9 @@ function processArticle(article: any): articleType {
         .map((t: string) => new Date(t))
         .sort()
     : Set();
-  article.dateAdded = new Date(article.dateAdded);
-  article.dateRead = new Date(article.dateRead);
+  article.dateAdded = article.dateAdded ? new Date(article.dateAdded) : null;
+  article.dateRead = article.dateRead ? new Date(article.dateRead) : null;
+
   return article;
 }
 

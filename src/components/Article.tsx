@@ -119,7 +119,14 @@ class Article extends React.Component<Props, State> {
               <Collapse in={this.state.isMenuOpen}>
                 <div>
                   <p>
-                    Date added: {article.dateAdded.toLocaleDateString()} <br />
+                    {article.dateAdded ? (
+                      <small>
+                        Date added: {article.dateAdded.toLocaleDateString()}{' '}
+                        <br />
+                      </small>
+                    ) : (
+                      ''
+                    )}
                     {!article.viewedOn.isEmpty() ? (
                       <small>
                         {`Last viewed on ${article.viewedOn
