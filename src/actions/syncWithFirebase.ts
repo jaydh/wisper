@@ -190,22 +190,34 @@ export function ListenToFirebase() {
       dispatch(deleteProject(snapshot.val()));
     });
     articleRef.on('child_added', function(snap: any) {
+      dispatch(fetchingArticlesRequested());
       dispatch(addArticleFromServer(snap.val()));
+      dispatch(fetchingArticlesCompleted());
     });
     articleRef.on('child_changed', function(snapshot: any) {
+      dispatch(fetchingArticlesRequested());
       dispatch(updateArticle(snapshot.val()));
+      dispatch(fetchingArticlesCompleted());
     });
     articleRef.on('child_removed', function(snap: any) {
+      dispatch(fetchingArticlesRequested());      
       dispatch(deleteArticleFromServer(snap.val()));
+      dispatch(fetchingArticlesCompleted());
     });
     dailyRef.on('child_added', function(snapshot: any) {
+      dispatch(fetchingDailiesRequested());      
       dispatch(addDailyFromServer(snapshot.val()));
+      dispatch(fetchingDailiesCompleted());      
     });
     dailyRef.on('child_removed', function(snapshot: any) {
+      dispatch(fetchingDailiesRequested());            
       dispatch(deleteDailyFromServer(snapshot.val()));
+      dispatch(fetchingDailiesCompleted());            
     });
     dailyRef.on('child_changed', function(snapshot: any) {
+      dispatch(fetchingDailiesRequested());                  
       dispatch(updateDaily(snapshot.val()));
+      dispatch(fetchingDailiesCompleted());                  
     });
   };
 }
