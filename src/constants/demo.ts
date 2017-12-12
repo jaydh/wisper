@@ -12,10 +12,12 @@ import { setProjectFilter } from '../actions/projectFilter';
 import { setVisibilityFilter } from '../actions/visibilityFilter';
 import addDaily from '../actions/dailies/addDaily';
 import completeDaily from '../actions/dailies/completeDaily';
+import { demoStart, demoComplete } from '../actions/demo';
 import { subDays } from 'date-fns';
 
 export default async function(store: any, persistor: any) {
-  await persistor.purge();
+  store.dispatch({ type: 'USER_LOGOUT' });
+  store.dispatch(demoStart());
   store.dispatch(addArticleList('0'));
   store.dispatch(addArticleList('1'));
   store.dispatch(setVisibilityFilter('All', '0'));
@@ -177,18 +179,23 @@ export default async function(store: any, persistor: any) {
     'Excercise',
     'Check the garbage',
     'Water plants',
-    'Take out Trash'
+    'Read',
+    'Go for a walk',
+    'Practice piano',
+    'Read the news'
   ];
   const ids = dailies.map((t: string) => SHA1.hex(t));
   dailies.forEach(async (t: string) => await store.dispatch(addDaily(t)));
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 20; j++) {
+  ids.forEach(async (t: string) => {
+    for (let j = 0; j < 30; j++) {
       await store.dispatch(
-        completeDaily(ids[i], subDays(new Date(), Math.random() * (27 - 1) + 1))
+        completeDaily(t, subDays(new Date(), Math.random() * (50 - 1) + 1))
       );
     }
-  }
+  });
+
   for (let i = 1; i < 10; i++) {
     await store.dispatch(completeDaily(ids[0], subDays(new Date(), i)));
   }
+  store.dispatch(demoComplete());
 }

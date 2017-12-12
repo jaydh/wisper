@@ -21,6 +21,8 @@ interface Props {
   uiView: string;
   fetchingArticles: boolean;
   fetchingDailies: boolean;
+  demoStart: boolean;
+  demoComplete: boolean;
   articleLists: List<ArticleListType>;
   pullOnMount: () => void;
   listenAfterMount: () => void;
@@ -34,7 +36,9 @@ class AppRoutes extends React.Component<Props> {
   render() {
     return (
       <div>
-        {(this.props.fetchingArticles || this.props.fetchingDailies) && (
+        {(this.props.fetchingArticles ||
+          this.props.fetchingDailies ||
+          (this.props.demoStart && !this.props.demoComplete)) && (
           <p
             style={{
               zIndex: 100,
@@ -44,8 +48,11 @@ class AppRoutes extends React.Component<Props> {
             }}
           >
             <Glyphicon glyph="refresh" />{' '}
-            {this.props.fetchingArticles ? 'Updating Articles ' : ''}
-            {this.props.fetchingDailies ? 'Updating Dailies ' : ''}
+            {this.props.fetchingArticles ? 'Updating Articles' : ''}{' '}
+            {this.props.fetchingDailies ? 'Updating Dailies' : ''}{' '}
+            {this.props.demoStart && !this.props.demoComplete
+              ? 'Populating data'
+              : ''}{' '}
           </p>
         )}
         {(() => {
@@ -93,7 +100,9 @@ const mapStateToProps = (state: any) => {
     articleLists: state.get('articleLists'),
     uiView: state.get('ui').view,
     fetchingArticles: state.get('ui').fetchingArticles,
-    fetchingDailies: state.get('ui').fetchingDailies
+    fetchingDailies: state.get('ui').fetchingDailies,
+    demoStart: state.get('ui').demoStart,
+    demoComplete: state.get('ui').demoComplete
   };
 };
 
