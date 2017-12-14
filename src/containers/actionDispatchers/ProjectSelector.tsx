@@ -26,7 +26,7 @@ class ProjectSelector extends React.Component<Props> {
     const options = ['All', ...projects.toJS(), 'None'];
     return (
       <Dropdown id="bg-nested-dropdown">
-        <Dropdown.Toggle className="filter" noCaret={true}>
+        <Dropdown.Toggle className="filter">
           {currentProject}
         </Dropdown.Toggle>
         <Dropdown.Menu className="filter-dropdown ">
