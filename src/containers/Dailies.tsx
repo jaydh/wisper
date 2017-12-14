@@ -2,34 +2,44 @@ import * as React from 'react';
 import { Button, ButtonGroup, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import completeDaily from '../actions/dailies/completeDaily';
-import { Daily } from '../constants/StoreState';
+import Daily from '../components/Daily';
+import { Daily as DailyType } from '../constants/StoreState';
 import { List } from 'immutable';
 import { isBefore, subDays, isSameDay } from 'date-fns';
 
 interface Props {
   onComplete: (id: string) => void;
   AddDaily: (daily: string) => void;
-  dailies: List<Daily>;
+  dailies: List<DailyType>;
 }
 
-class Dailies extends React.Component<Props> {
+interface State {
+  expand: boolean;
+}
+
+class Dailies extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { expand: false };
+  }
   render() {
     const { onComplete, dailies } = this.props;
     return (
       <div style={{ margin: '0 auto', textAlign: 'center' }}>
         <ButtonGroup>
           {dailies
-            .filter((t: Daily) => {
+            .filter((t: DailyType) => {
               return t.completedOn && !t.completedOn.isEmpty()
                 ? !isSameDay(t.completedOn.last(), new Date())
                 : true;
             })
-            .map((t: Daily) => {
+            .map((t: DailyType) => {
               return (
-                <Button
-                  bsStyle="daily"
+                <Daily
                   key={t.id}
-                  onClick={() => onComplete(t.id)}
+                  daily={t}
+                  expand={this.state.expand}
+                  onComplete={() => onComplete(t.id)}
                 >
                   {t.streakCount > 4 && (
                     <b>
@@ -44,9 +54,18 @@ class Dailies extends React.Component<Props> {
                       </b>
                     )}
                   {t.title}
-                </Button>
+                </Daily>
               );
             })}
+          <Button
+            onClick={() =>
+              this.state.expand
+                ? this.setState({ expand: false })
+                : this.setState({ expand: true })
+            }
+          >
+            <Glyphicon glyph={this.state.expand ? 'minus' : 'plus'} />
+          </Button>
         </ButtonGroup>
       </div>
     );

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { addArticleList } from '../../actions/articleList';
-import { Button } from 'react-bootstrap';
+import { Button, Glyphicon } from 'react-bootstrap';
 export interface Props {
   onAddClick: () => void;
 }
@@ -11,7 +11,7 @@ class AddArticleList extends React.Component<Props, {}> {
     const { onAddClick } = this.props;
     return (
       <Button bsStyle="addList" bsSize="large" onClick={() => onAddClick()}>
-        Add Articlelist
+        <Glyphicon glyph="plus" /> Articlelist
       </Button>
     );
   }
