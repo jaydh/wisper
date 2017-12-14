@@ -58,10 +58,8 @@ class Article extends React.Component<Props, State> {
       >
         <LazyLoad
           height="300"
-          once={true}
           offset={400}
-          debounce={true}
-          overflow={true}
+          overflow={false}
         >
           <Grid>
             {(!compact || this.state.isMenuOpen) && (

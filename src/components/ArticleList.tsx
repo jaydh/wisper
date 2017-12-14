@@ -20,6 +20,7 @@ import {
   Col,
   Grid
 } from 'react-bootstrap';
+import { forceCheck } from 'react-lazyload';
 
 interface Props {
   articles: List<articleType>;
@@ -40,6 +41,9 @@ interface Props {
 }
 
 class ArticleList extends React.Component<Props> {
+  componentDidUpdate() {
+    forceCheck();
+  }
   render() {
     const {
       articles,
