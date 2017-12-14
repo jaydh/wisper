@@ -92,3 +92,20 @@ export function setArticleListSearch(
     search
   };
 }
+
+export interface SetArticleListView {
+  type: 'SET_ARTICLE_LIST_VIEW';
+  id: string;
+  view: string;
+}
+
+export function setArticleListView(
+  id: string,
+  view: string
+): SetArticleListView {
+  return {
+    type: 'SET_ARTICLE_LIST_VIEW',
+    id,
+    view
+  };
+}

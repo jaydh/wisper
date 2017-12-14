@@ -7,7 +7,8 @@ import {
   ResizeArticleList,
   RepositionArticleList,
   ToggleLockArticleList,
-  SetArticleListSearch
+  SetArticleListSearch,
+  SetArticleListView
 } from '../actions/articleList';
 import { SetVisbilityFilter } from '../actions/visibilityFilter';
 import { SetProjectFilter } from '../actions/projectFilter';
@@ -34,11 +35,13 @@ function addArticleList(
     sort: 'date-asc',
     visibilityFilter: 'Active',
     projectFilter: 'All',
+    view: 'full',
     xPosition: 0,
     yPosition: 0,
     width: innerWidth * 0.5,
     height: innerHeight * 0.8,
-    locked: false
+    locked: false,
+    search: ''
   });
 }
 
@@ -141,6 +144,20 @@ function setArticleListSearch(
   });
 }
 
+function setArticleListView(
+  articleListState: OrderedSet<ArticleList>,
+  action: SetArticleListView
+) {
+  return articleListState.map((list: ArticleList) => {
+    return list.id === action.id
+      ? {
+          ...list,
+          view: action.view
+        }
+      : list;
+  });
+}
+
 const articleLists = createReducer(OrderedSet<ArticleList>(), {
   ADD_ARTICLE_LIST: addArticleList,
   DELETE_ARTICLE_LIST: deleteArticleList,
@@ -150,6 +167,7 @@ const articleLists = createReducer(OrderedSet<ArticleList>(), {
   RESIZE_ARTICLE_LIST: resizeArticleList,
   REPOSITION_ARTICLE_LIST: repositionArticleList,
   LOCK_ARTICLE_LIST: toggleLockArticleList,
-  SET_ARTICLE_LIST_SEARCH: setArticleListSearch
+  SET_ARTICLE_LIST_SEARCH: setArticleListSearch,
+  SET_ARTICLE_LIST_VIEW: setArticleListView
 });
 export default articleLists;

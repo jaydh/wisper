@@ -164,7 +164,8 @@ function mapStateToProps(state: any, ownProps: any) {
     height: articleList.height,
     width: articleList.width,
     locked: articleList.locked,
-    uiView: state.get('ui').view
+    uiView: state.get('ui').view,
+    articleListView: articleList.view
   };
 }
 

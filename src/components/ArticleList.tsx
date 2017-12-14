@@ -8,6 +8,7 @@ import Sort from '../containers/actionDispatchers/Sort';
 import DeleteArticleList from '../containers/actionDispatchers/DeleteArticleList';
 import MaximizedArticleList from '../containers/actionDispatchers/MaximizeArticleList';
 import LockArticleList from '../containers/actionDispatchers/LockArticleList';
+import SetArticleListView from '../containers/actionDispatchers/SetArticleListView';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 import {
@@ -33,6 +34,7 @@ interface Props {
   height: number;
   locked: boolean;
   uiView: string;
+  articleListView: string;
   onResize: (x: number, y: number) => void;
   onReposition: (x: number, y: number) => void;
 }
@@ -45,9 +47,9 @@ class ArticleList extends React.Component<Props> {
       projectFilter,
       articlesInActivity,
       locked,
-      uiView
+      uiView,
+      articleListView
     } = this.props;
-    const compact = uiView === 'Compact';
 
     return (
       <div>
@@ -58,7 +60,7 @@ class ArticleList extends React.Component<Props> {
           }}
         >
           <Grid>
-            {!compact && (
+            {!(uiView === 'Compact') && (
               <Row>
                 <Col sm={1} md={1}>
                   <LockArticleList id={id} />
@@ -91,6 +93,7 @@ class ArticleList extends React.Component<Props> {
                     articlesInActivity={articlesInActivity}
                   />
                   <Sort id={id} />
+                  <SetArticleListView id={id} />
                 </ButtonGroup>
               </Col>
               <Col
@@ -112,7 +115,7 @@ class ArticleList extends React.Component<Props> {
                     <Article
                       key={id + article.id}
                       article={article}
-                      compact={compact}
+                      compact={articleListView === 'compact'}
                     />
                   );
                 })}

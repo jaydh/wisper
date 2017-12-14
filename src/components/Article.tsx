@@ -57,24 +57,26 @@ class Article extends React.Component<Props, State> {
         onTouchEnd={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
       >
         <LazyLoad
-          height="200"
+          height="300"
           once={true}
-          overflow={!compact}
           offset={400}
           debounce={true}
+          overflow={true}
         >
           <Grid>
-            <Col xs={10} sm={10} md={2} lg={2}>
-              {article.metadata && article.metadata.has('images') ? (
-                <Image
-                  src={article.metadata.get('images').get(0)}
-                  responsive={true}
-                  thumbnail={true}
-                />
-              ) : (
-                ''
-              )}
-            </Col>
+            {(!compact || this.state.isMenuOpen) && (
+              <Col xs={10} sm={10} md={2} lg={2}>
+                {article.metadata && article.metadata.has('images') ? (
+                  <Image
+                    src={article.metadata.get('images').get(0)}
+                    responsive={true}
+                    thumbnail={true}
+                  />
+                ) : (
+                  ''
+                )}
+              </Col>
+            )}
             <Col xs={2} sm={2} md={1} lg={1} mdOffset={9} lgOffset={9}>
               {this.state.isMenuOpen && (
                 <ButtonGroup>
@@ -105,7 +107,17 @@ class Article extends React.Component<Props, State> {
                     article.metadata.get('title')
                   : article.link}
               </a>
-              <p style={{ fontSize: '1.2rem' }}>
+              <p
+                style={
+                  this.state.isMenuOpen
+                    ? {
+                        fontSize: '1.2rem'
+                      }
+                    : {
+                        fontSize: '1.2rem'
+                      }
+                }
+              >
                 {hasSiteName
                   ? article.metadata.get('siteName') ||
                     article.metadata.get('ogSiteName')
