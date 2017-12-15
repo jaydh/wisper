@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Glyphicon, Collapse } from 'react-bootstrap';
+import { Button, Glyphicon, Collapse, ButtonGroup } from 'react-bootstrap';
 import { Daily as DailyType } from '../constants/StoreState';
 import { isBefore, subDays, differenceInCalendarDays } from 'date-fns';
 
@@ -20,43 +20,45 @@ export default class Daily extends React.Component<Props, State> {
   }
   render() {
     const { onComplete, daily, expand } = this.props;
-    console.log(expand);
     return (
-      <Button
-        bsStyle="daily"
-        onClick={() => onComplete()}
-        onMouseEnter={() =>
-          !expand ? this.setState({ showDetails: true }) : null
-        }
-        onMouseLeave={() =>
-          !expand ? this.setState({ showDetails: false }) : null
-        }
-      >
-        {daily.streakCount > 4 && (
-          <b>
-            {daily.streakCount}
-            <Glyphicon glyph="fire" />{' '}
-          </b>
-        )}
-        {daily.completedOn &&
-          isBefore(daily.completedOn.last(), subDays(new Date(), 7)) && (
+      <ButtonGroup bsSize="small">
+        <Button bsStyle="daily" onClick={() => onComplete()}>
+          {daily.streakCount > 4 && (
             <b>
-              <Glyphicon glyph="warning-sign" />{' '}
+              {daily.streakCount}
+              <Glyphicon glyph="fire" />{' '}
             </b>
           )}
-        {daily.title}
-        <Collapse in={this.state.showDetails || this.props.expand}>
-          <p>
-            Completed {daily.completedOn.size} times <br />
-            Started{' '}
-            {differenceInCalendarDays(
-              new Date(),
-              daily.completedOn.first()
-            )}{' '}
-            days ago
-          </p>
-        </Collapse>
-      </Button>
+          {daily.completedOn &&
+            isBefore(daily.completedOn.last(), subDays(new Date(), 7)) && (
+              <b>
+                <Glyphicon glyph="warning-sign" />{' '}
+              </b>
+            )}
+          {daily.title}
+          <Collapse in={this.state.showDetails || expand}>
+            <p>
+              Completed {daily.completedOn.size} times <br />
+              Started{' '}
+              {differenceInCalendarDays(
+                new Date(),
+                daily.completedOn.first()
+              )}{' '}
+              days ago
+            </p>
+          </Collapse>
+        </Button>
+        <Button
+          bsStyle="daily"
+          onClick={() =>
+            this.state.showDetails || expand
+              ? this.setState({ showDetails: false })
+              : this.setState({ showDetails: true })
+          }
+        >
+          <Glyphicon glyph="stats" />
+        </Button>
+      </ButtonGroup>
     );
   }
 }

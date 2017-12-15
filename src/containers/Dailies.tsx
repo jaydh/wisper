@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, ButtonGroup, Glyphicon } from 'react-bootstrap';
+import { Button, Glyphicon, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import completeDaily from '../actions/dailies/completeDaily';
 import Daily from '../components/Daily';
@@ -25,49 +25,48 @@ class Dailies extends React.Component<Props, State> {
   render() {
     const { onComplete, dailies } = this.props;
     return (
-      <div style={{ margin: '0 auto', textAlign: 'center' }}>
-        <ButtonGroup>
-          {dailies
-            .filter((t: DailyType) => {
-              return t.completedOn && !t.completedOn.isEmpty()
-                ? !isSameDay(t.completedOn.last(), new Date())
-                : true;
-            })
-            .map((t: DailyType) => {
-              return (
-                <Daily
-                  key={t.id}
-                  daily={t}
-                  expand={this.state.expand}
-                  onComplete={() => onComplete(t.id)}
-                >
-                  {t.streakCount > 4 && (
+      <ButtonToolbar>
+        {dailies
+          .filter((t: DailyType) => {
+            return t.completedOn && !t.completedOn.isEmpty()
+              ? !isSameDay(t.completedOn.last(), new Date())
+              : true;
+          })
+          .map((t: DailyType) => {
+            return (
+              <Daily
+                key={t.id}
+                daily={t}
+                expand={this.state.expand}
+                onComplete={() => onComplete(t.id)}
+              >
+                {t.streakCount > 4 && (
+                  <b>
+                    {t.streakCount}
+                    <Glyphicon glyph="fire" />{' '}
+                  </b>
+                )}
+                {t.completedOn &&
+                  isBefore(t.completedOn.last(), subDays(new Date(), 7)) && (
                     <b>
-                      {t.streakCount}
-                      <Glyphicon glyph="fire" />{' '}
+                      <Glyphicon glyph="warning-sign" />{' '}
                     </b>
                   )}
-                  {t.completedOn &&
-                    isBefore(t.completedOn.last(), subDays(new Date(), 7)) && (
-                      <b>
-                        <Glyphicon glyph="warning-sign" />{' '}
-                      </b>
-                    )}
-                  {t.title}
-                </Daily>
-              );
-            })}
-          <Button
-            onClick={() =>
-              this.state.expand
-                ? this.setState({ expand: false })
-                : this.setState({ expand: true })
-            }
-          >
-            <Glyphicon glyph={this.state.expand ? 'minus' : 'plus'} />
-          </Button>
-        </ButtonGroup>
-      </div>
+                {t.title}
+              </Daily>
+            );
+          })}
+        <Button
+          bsSize="xsmall"
+          onClick={() =>
+            this.state.expand
+              ? this.setState({ expand: false })
+              : this.setState({ expand: true })
+          }
+        >
+          <Glyphicon glyph={this.state.expand ? 'minus' : 'plus'} />
+        </Button>
+      </ButtonToolbar>
     );
   }
 }
