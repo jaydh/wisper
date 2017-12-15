@@ -52,45 +52,90 @@ function getVisibleArticles(
 }
 
 function getSortedArticles(articles: List<articleType>, sort: string) {
+  const sortByDate = (reverse?: boolean) =>
+    reverse
+      ? articles
+          .sort((b, a) => (isBefore(a.dateAdded, b.dateAdded) ? -1 : 1))
+          .toList()
+      : articles
+          .sort((a, b) => (isBefore(a.dateAdded, b.dateAdded) ? -1 : 1))
+          .toList();
+  const sortByTitle = (reverse?: boolean) =>
+    reverse
+      ? articles
+          .sort((a, b) => {
+            const aa =
+              a.metadata &&
+              (a.metadata.has('title') || a.metadata.has('ogTitle'))
+                ? a.metadata.get('title') || a.metadata.get('ogTitle')
+                : a.link;
+
+            const bb =
+              b.metadata &&
+              (b.metadata.has('title') || b.metadata.has('ogTitle'))
+                ? b.metadata.get('title') || b.metadata.get('ogTitle')
+                : b.link;
+            return aa.localeCompare(bb);
+          })
+          .toList()
+      : articles
+          .sort((b, a) => {
+            const aa =
+              a.metadata &&
+              (a.metadata.has('title') || a.metadata.has('ogTitle'))
+                ? a.metadata.get('title') || a.metadata.get('ogTitle')
+                : a.link;
+
+            const bb =
+              b.metadata &&
+              (b.metadata.has('title') || b.metadata.has('ogTitle'))
+                ? b.metadata.get('title') || b.metadata.get('ogTitle')
+                : b.link;
+            return aa.localeCompare(bb);
+          })
+          .toList();
+  const sortByRead = (reverse?: boolean) =>
+    reverse
+      ? articles
+          .sort((a, b) => {
+            const aa = a.dateRead ? a.dateRead : new Date();
+            const bb = b.dateRead ? b.dateRead : new Date();
+            if (aa < bb) {
+              return -1;
+            }
+            if (aa > bb) {
+              return 1;
+            }
+            return 0;
+          })
+          .toList()
+      : articles
+          .sort((b, a) => {
+            const aa = a.dateRead ? a.dateRead : new Date();
+            const bb = b.dateRead ? b.dateRead : new Date();
+            if (aa < bb) {
+              return -1;
+            }
+            if (aa > bb) {
+              return 1;
+            }
+            return 0;
+          })
+          .toList();
+
   switch (sort) {
     case 'date-desc':
-      return articles
-        .sort((a, b) => (isBefore(a.dateAdded, b.dateAdded) ? -1 : 1))
-        .toList();
+      return sortByDate();
     case 'date-asc':
-      return articles
-        .sort((b, a) => (isBefore(b.dateAdded, a.dateAdded) ? 1 : -1))
-        .toList();
-
+      return sortByDate(true);
     case 'title':
-      return articles
-        .sort((a, b) => {
-          const aa =
-            a.metadata && (a.metadata.title || a.metadata.ogTitle)
-              ? a.metadata.ogTitle || a.metadata.title
-              : a.link;
-
-          const bb =
-            b.metadata && (b.metadata.title || b.metadata.ogTitle)
-              ? b.metadata.ogTitle || b.metadata.title
-              : b.link;
-          return aa.localeCompare(bb);
-        })
-        .toList();
+      return sortByTitle();
+    case 'title-reverse':
+      return sortByTitle(true);
     case 'dateRead':
-      return articles
-        .sort((a, b) => {
-          const aa = a.dateRead ? a.dateRead : new Date();
-          const bb = b.dateRead ? b.dateRead : new Date();
-          if (aa < bb) {
-            return -1;
-          }
-          if (aa > bb) {
-            return 1;
-          }
-          return 0;
-        })
-        .toList();
+      return sortByRead();
+    case 'dateRead-reverse':
+      return sortByRead(true);
     default:
       return articles;
   }
