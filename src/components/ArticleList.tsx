@@ -78,7 +78,7 @@ class ArticleList extends React.Component<Props> {
           </Col>
         </Row>
         <Row>
-          <Col xs={6} sm={5} md={6} lg={6}>
+          <Col xs={12} sm={5} md={6} lg={6}>
             <ButtonGroup bsStyle="filters">
               <ActiveSelector id={id} />
               <ProjectSelector
@@ -91,7 +91,7 @@ class ArticleList extends React.Component<Props> {
             <Glyphicon glyph="list-alt" /> {articles.size}
           </Col>
           <Col
-            xs={6}
+            xs={12}
             smOffset={3}
             sm={4}
             mdOffset={3}
