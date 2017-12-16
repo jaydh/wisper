@@ -14,6 +14,7 @@ class SetArticleListView extends React.Component<Props, {}> {
     return (
       <Button
         type="button"
+        bsStyle="filter"
         onClick={() =>
           this.props.currentView === 'compact'
             ? this.props.onClick('full')

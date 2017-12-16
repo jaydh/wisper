@@ -1,4 +1,4 @@
-import { DropdownButton, Button, Jumbotron } from 'react-bootstrap';
+import { Button, Jumbotron, Navbar } from 'react-bootstrap';
 const { bootstrapUtils } = require('react-bootstrap/lib/utils');
 
 export default () => {
@@ -10,5 +10,6 @@ export default () => {
   bootstrapUtils.addStyle(Button, 'logout');
   bootstrapUtils.addStyle(Button, 'daily');
   bootstrapUtils.addStyle(Jumbotron, 'canvas');
-  bootstrapUtils.addStyle(DropdownButton, 'filter');
+  bootstrapUtils.addStyle(Button, 'filter');
+  bootstrapUtils.addStyle(Navbar, 'nav');
 };

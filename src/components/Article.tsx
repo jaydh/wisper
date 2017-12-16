@@ -48,6 +48,8 @@ class Article extends React.Component<Props, State> {
       ? article.metadata.has('siteName') || article.metadata.has('ogSiteName')
       : false;
 
+    const showImage = !compact || this.state.isMenuOpen;
+
     return (
       <ListGroupItem
         onMouseEnter={() =>
@@ -56,14 +58,10 @@ class Article extends React.Component<Props, State> {
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
         onTouchEnd={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
       >
-        <LazyLoad
-          height="300"
-          offset={400}
-          overflow={false}
-        >
+        <LazyLoad height="300" offset={400} overflow={false}>
           <Grid>
-            {(!compact || this.state.isMenuOpen) && (
-              <Col xs={10} sm={10} md={2} lg={2}>
+            {showImage && (
+              <Col xs={2} sm={2} md={2} lg={2}>
                 {article.metadata && article.metadata.has('images') ? (
                   <Image
                     src={article.metadata.get('images').get(0)}
@@ -75,15 +73,12 @@ class Article extends React.Component<Props, State> {
                 )}
               </Col>
             )}
-            <Col xs={2} sm={2} md={1} lg={1} mdOffset={9} lgOffset={9}>
-              {this.state.isMenuOpen && (
-                <ButtonGroup>
-                  <ToggleArticle id={article.id} />
-                  <DeleteArticle id={article.id} />
-                </ButtonGroup>
-              )}
-            </Col>
-            <Col xs={12} sm={12} md={9} lg={9}>
+            <Col
+              xs={showImage ? 8 : 10}
+              sm={showImage ? 8 : 10}
+              md={showImage ? 9 : 11}
+              lg={showImage ? 9 : 11}
+            >
               {article.fetching && (
                 <p>
                   <Glyphicon glyph="refresh" />Fetching metadata
@@ -168,6 +163,14 @@ class Article extends React.Component<Props, State> {
                   <AddArticleToProject id={article.id} />
                 </div>
               </Collapse>
+            </Col>
+            <Col xs={2} sm={2} md={1} lg={1} mdOffset={9} lgOffset={9}>
+              {this.state.isMenuOpen && (
+                <ButtonGroup>
+                  <ToggleArticle id={article.id} />
+                  <DeleteArticle id={article.id} />
+                </ButtonGroup>
+              )}
             </Col>
           </Grid>
         </LazyLoad>

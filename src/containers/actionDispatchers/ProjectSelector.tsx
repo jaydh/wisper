@@ -26,19 +26,17 @@ class ProjectSelector extends React.Component<Props> {
     const options = ['All', ...projects.toJS(), 'None'];
     return (
       <Dropdown id="bg-nested-dropdown">
-        <Dropdown.Toggle className="filter">
-          {currentProject}
-        </Dropdown.Toggle>
-        <Dropdown.Menu className="filter-dropdown ">
+        <Dropdown.Toggle>{currentProject}</Dropdown.Toggle>
+        <Dropdown.Menu>
           {options.map(project => {
             return (
               <MenuItem
-                eventKey={String(project)}
+                id={String(project)}
                 key={String(project)}
                 onClick={() => onClick(String(project))}
               >
-                {project}{' '}
-                <div style={{ float: 'right' }}>
+                {project}
+                <div style={{ display: 'inline-block', float: 'right' }}>
                   {articlesInActivity
                     .filter((t: articleType) => {
                       switch (project) {

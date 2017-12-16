@@ -90,7 +90,7 @@ class ArticleList extends React.Component<Props> {
             </Row>
             <Row>
               <Col xs={10} sm={9} md={6} lg={6}>
-                <ButtonGroup>
+                <ButtonGroup bsStyle="filters">
                   <ActiveSelector id={id} />
                   <ProjectSelector
                     id={id}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import AddArticleList from '../containers/actionDispatchers/AddArticleList';
-import { Jumbotron } from 'react-bootstrap';
+import { Grid, Col, Jumbotron } from 'react-bootstrap';
 import { OrderedMap } from 'immutable';
 import { ArticleList } from '../constants/StoreState';
 import ResizableArticleList from '../containers/ResizableArticleList';
@@ -15,8 +15,10 @@ class Canvas extends React.Component<Props> {
   render() {
     const { articleLists } = this.props;
     return (
-      <div>
-        <AddArticleList />
+      <Grid>
+        <Col xsOffset={11} smOffset={11} mdOffset={11} lgOffset={11}>
+          <AddArticleList />
+        </Col>
         <Jumbotron
           className="canvas articlelist-canvas"
           id="canvas"
@@ -33,7 +35,7 @@ class Canvas extends React.Component<Props> {
               );
             })}
         </Jumbotron>
-      </div>
+      </Grid>
     );
   }
 }

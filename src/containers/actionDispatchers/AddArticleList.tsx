@@ -10,7 +10,7 @@ class AddArticleList extends React.Component<Props, {}> {
   render() {
     const { onAddClick } = this.props;
     return (
-      <Button bsStyle="addList" bsSize="large" onClick={() => onAddClick()}>
+      <Button bsStyle="addList" onClick={() => onAddClick()}>
         <Glyphicon glyph="plus" /> Articlelist
       </Button>
     );
