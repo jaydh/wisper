@@ -43,9 +43,6 @@ class AddArticle extends React.Component<Props, State> {
       <Form inline={true} onSubmit={event => event.preventDefault()}>
         <FormGroup controlId="formBasicText" type="text">
           <InputGroup bsSize="small">
-            <InputGroup.Addon>
-              <Glyphicon glyph="search" />
-            </InputGroup.Addon>
             <FormControl
               value={this.state.value}
               placeholder={
@@ -53,6 +50,9 @@ class AddArticle extends React.Component<Props, State> {
               }
               onChange={event => this.handleChange(event)}
             />
+            <InputGroup.Addon>
+              <Glyphicon glyph="search" />
+            </InputGroup.Addon>
           </InputGroup>
           <FormControl.Feedback />
         </FormGroup>

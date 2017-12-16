@@ -110,7 +110,7 @@ class AddArticle extends React.Component<Props, State> {
           type="text"
           validationState={this.getValidationState()}
         >
-          <InputGroup bsSize="small">
+          <InputGroup bsSize="large">
             <InputGroup.Button>
               <Button bsStyle="submit" onClick={() => this.handleSubmit(false)}>
                 Submit
@@ -127,7 +127,7 @@ class AddArticle extends React.Component<Props, State> {
         {this.getValidationState() === 'success' &&
           (projectFilter === 'All' || projectFilter === 'None') &&
           this.state.suggestion && (
-            <Button bsSize="large" onClick={() => this.handleSubmit(true)}>
+            <Button onClick={() => this.handleSubmit(true)}>
               Add to {this.state.suggestion} project?
             </Button>
           )}
