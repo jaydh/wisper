@@ -4,12 +4,9 @@ import { Line } from 'react-chartjs-2';
 import { Map, List, Set } from 'immutable';
 import { Daily } from '../../constants/StoreState';
 import {
-  endOfDay,
   addDays,
   subDays,
   isSameDay,
-  isAfter,
-  subWeeks
 } from 'date-fns';
 
 interface Props {
@@ -93,7 +90,6 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   getData(dailies: List<Daily>) {
-    const cutOff = endOfDay(subWeeks(new Date(), 4));
     const isDayAfter = (a: Date, b: Date) => isSameDay(a, addDays(b, 1));
     const isDayBefore = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
 
@@ -107,7 +103,6 @@ class DailyGraph extends React.Component<Props, State> {
       let dataset: Set<Date> = Set();
 
       const iter = t.completedOn
-        .filter((d: Date) => isAfter(d, subDays(cutOff, 1)))
         .sort()
         .values();
       let current = iter.next();
@@ -163,6 +158,7 @@ class DailyGraph extends React.Component<Props, State> {
             borderWidth: 6,
             pointRadius: 0,
             fill: false,
+            pointHoverRadius: 2,
             data: t.dataset
               .map((p: Date) => {
                 return {
@@ -209,21 +205,13 @@ class DailyGraph extends React.Component<Props, State> {
             type: 'category',
             labels: [' ']
               .concat(dailies.map((t: Daily) => t.title).toJS())
-              .concat([' ']),
-            gridLines: {
-              display: true,
-              color: '#f2b632'
-            }
+              .concat([' '])
           }
         ],
         xAxes: [
           {
             type: 'time',
             id: 'streak',
-            gridLines: {
-              display: true,
-              color: '#f2b632'
-            },
             ticks: {
               callback: function(tick: any, index: any, array: any) {
                 return index % 7 ? '' : tick;
@@ -257,12 +245,16 @@ class DailyGraph extends React.Component<Props, State> {
       tooltips: {
         callbacks: {
           label: function(t: any, d: any) {
-            return '(Date:' + t.xLabel + ')';
+            return '(Streak:' + d.datasets[t.datasetIndex].data.length + ')';
           }
         }
       },
       legend: {
         display: false
+      },
+      hover: {
+        intersect: false,
+        mode: 'dataset'
       }
     } as any;
   }
@@ -297,6 +289,7 @@ class DailyGraph extends React.Component<Props, State> {
 
     return (
       <div>
+        {' '}
         {!this.props.dailies.isEmpty() && (
           <Line data={this.state.data} options={this.state.options} />
         )}
