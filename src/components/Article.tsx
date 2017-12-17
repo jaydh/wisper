@@ -61,7 +61,7 @@ class Article extends React.Component<Props, State> {
         <LazyLoad height="300" offset={400} overflow={false}>
           <Grid>
             {showImage && (
-              <Col xs={2} sm={2} md={2} lg={2}>
+              <Col xs={4} sm={4} md={2} lg={2}>
                 {article.metadata && article.metadata.has('images') ? (
                   <Image
                     src={article.metadata.get('images').get(0)}

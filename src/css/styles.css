@@ -2,7 +2,7 @@
   --primary: #2e6171;
   --secondary: #556f7a;
   --tertiatry: #798086;
-  --fourary: #86bbd8;
+  --fourary: #deecef;
   --fivary: #eec584;
 }
 h2 {
@@ -21,6 +21,10 @@ a {
   z-index: inherit !important;
 }
 
+.well-daily-graph {
+  background-color: var(--fourary) !important;
+}
+
 .btn-daily {
   background-color: var(--fourary);
 }
@@ -34,7 +38,7 @@ a {
   background-color: var(--fourary);
 }
 .list-group-item {
-  background-color: var(--primary);
+  background-color: var(--fourary);
 }
 
 .btn-group-filters {
