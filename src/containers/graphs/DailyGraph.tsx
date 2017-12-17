@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Map, List, Set } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import {
-  addDays,
-  subDays,
-  isSameDay,
-} from 'date-fns';
+import { addDays, subDays, isSameDay } from 'date-fns';
 
 interface Props {
   dailies: List<Daily>;
@@ -102,9 +98,7 @@ class DailyGraph extends React.Component<Props, State> {
     dailies.forEach((t: Daily) => {
       let dataset: Set<Date> = Set();
 
-      const iter = t.completedOn
-        .sort()
-        .values();
+      const iter = t.completedOn.sort().values();
       let current = iter.next();
       let before = current;
       let next = iter.next();
@@ -245,7 +239,9 @@ class DailyGraph extends React.Component<Props, State> {
       tooltips: {
         callbacks: {
           label: function(t: any, d: any) {
-            return '(Streak:' + d.datasets[t.datasetIndex].data.length + ')';
+            const type = d.datasets[t.datasetIndex].type;
+            const streak = d.datasets[t.datasetIndex].data.length;
+            return type === 'line' ? '(Streak: ' + streak + ')' : null;
           }
         }
       },
