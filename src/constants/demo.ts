@@ -168,13 +168,15 @@ export default async function(store: any, persistor: any) {
       project: 'science'
     }
   ];
-  articles.forEach(async (t: { link: string; project?: string }) => {
-    await store.dispatch(addArticle(t.link, t.project));
-    if (Math.floor(Math.random() * 2) === 0) {
-      await store.dispatch(toggleArticleRead(SHA1.hex(t.link)));
-    }
-  });
 
+  await Promise.all(
+    articles.map(async (t: { link: string; project?: string }) => {
+      await store.dispatch(addArticle(t.link, t.project));
+      if (Math.floor(Math.random() * 2) === 0) {
+        await store.dispatch(toggleArticleRead(SHA1.hex(t.link)));
+      }
+    })
+  );
   const dailies = [
     'Excercise',
     'Check the garbage',
@@ -185,17 +187,15 @@ export default async function(store: any, persistor: any) {
     'Read the news'
   ];
   const ids = dailies.map((t: string) => SHA1.hex(t));
-  dailies.forEach(async (t: string) => await store.dispatch(addDaily(t)));
-  ids.forEach(async (t: string) => {
-    for (let j = 0; j < 30; j++) {
-      await store.dispatch(
-        completeDaily(t, subDays(new Date(), Math.random() * (50 - 1) + 1))
-      );
-    }
-  });
+  await dailies.forEach(async (t: string) => await store.dispatch(addDaily(t)));
+  await Promise.all(
+    ids.map(async (t: string) => {
+      for (let j = 0; j < 100; j++) {
+        await store.dispatch(completeDaily(t, subDays(new Date(), j)));
+        Math.floor(Math.random() * (10 - 1) + 1) > 6 ? j++ : (j = j);
+      }
+    })
+  );
 
-  for (let i = 1; i < 10; i++) {
-    await store.dispatch(completeDaily(ids[0], subDays(new Date(), i)));
-  }
   store.dispatch(demoComplete());
 }
