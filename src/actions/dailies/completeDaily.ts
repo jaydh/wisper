@@ -1,8 +1,8 @@
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import { Map, fromJS } from 'immutable';
-import { Daily } from '../../constants/StoreState';
 import { parse, isSameDay } from 'date-fns';
+import { ListenForDailyUpdates } from '../syncWithFirebase';
 
 export interface CompleteDailyRequested {
   type: 'COMPLETE_DAILY_REQUESTED';
@@ -44,56 +44,48 @@ export default function completeDaily(
   completionDate: Date = new Date()
 ) {
   const user = auth().currentUser.uid;
-  return (dispatch: Dispatch<any>, getState: Function) => {
-    dispatch(CompleteDailyRequested());
-
+  return async (dispatch: Dispatch<any>, getState: Function) => {
     const dailyRef = database.ref(
       '/userData/' + user + '/dailies/' + id + '/completedOn'
     );
 
-    const streakRef = database.ref(
-      '/userData/' + user + '/dailies/' + id + '/streakCount'
-    );
-
-    return dailyRef.once('value').then(function(snapshot: any) {
-      let update = snapshot.val()
-        ? fromJS(snapshot.val())
-            .map((t: string) => parse(t))
-            .filter((t: Date) => !isNaN(t.getTime()))
-            .toList()
-            .push(completionDate)
-            .sort()
-            .toMap()
-        : Map({ 0: completionDate });
-      // Remove dupes
-      update.forEach((V: Date, K: number) => {
-        if (isSameDay(V, update.get(K + 1))) {
-          update = update.remove(K);
-        }
-      });
-
-      return dailyRef
-        .set(
+    dispatch(CompleteDailyRequested());
+    // Turn off listener for changes in dailes on server
+    dailyRef.parent.parent.off('child_changed');
+    return dailyRef
+      .once('value')
+      .then(function(snapshot: any) {
+        let update = snapshot.val()
+          ? fromJS(snapshot.val())
+              .map((t: string) => parse(t))
+              .filter((t: Date) => !isNaN(t.getTime()))
+              .toList()
+              .push(completionDate)
+              .sort()
+              .toMap()
+          : Map({ 0: completionDate });
+        // Remove dupes
+        update.forEach((V: Date, K: number) => {
+          if (isSameDay(V, update.get(K + 1))) {
+            update = update.remove(K);
+          }
+        });
+        return update;
+      })
+      .then(update =>
+        dailyRef.set(
           update
             .toSet()
             .sort()
             .map((t: Date) => t.getTime())
             .toJS()
         )
-        .then(() => {
-          dispatch(CompleteDailyFulfilled(id, completionDate));
-        })
-        .then(() => {
-          streakRef.set(
-            getState()
-              .get('dailies')
-              .find((t: Daily) => id === t.id).streakCount
-          );
-        })
-        .catch((error: string) => {
-          console.log(error);
-          dispatch(CompleteDailyRejected());
-        });
-    });
+      )
+      .then(() => dispatch(CompleteDailyFulfilled(id, completionDate)))
+      .then(() => dispatch(ListenForDailyUpdates()))
+      .catch((error: string) => {
+        console.log(error);
+        dispatch(CompleteDailyRejected());
+      });
   };
 }
