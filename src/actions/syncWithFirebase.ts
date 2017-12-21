@@ -203,8 +203,8 @@ export function ListenToFirebase() {
   const projectRef = database.ref('/userData/' + user + '/projects/');
   const articleRef = database.ref('/userData/' + user + '/articles/');
   return (dispatch: Dispatch<any>) => {
-    ListenForDailyUpdates();
-    ListenForArticleUpdates();
+    dispatch(ListenForDailyUpdates());
+    dispatch(ListenForArticleUpdates());
 
     projectRef.on('child_added', function(snapshot: any) {
       dispatch(addProject(snapshot.val()));
