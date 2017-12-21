@@ -39,25 +39,25 @@ class AppRoutes extends React.Component<Props> {
         {(this.props.fetchingArticles ||
           this.props.fetchingDailies ||
           (this.props.demoStart && !this.props.demoComplete)) && (
-          <p
-            style={{
-              zIndex: 100,
-              position: 'fixed',
-              bottom: '0.5em',
-              right: '0.5em'
-            }}
-          >
-            <Glyphicon glyph="refresh" />{' '}
-            {this.props.fetchingArticles ? 'Updating Articles' : ''}{' '}
-            {this.props.fetchingDailies ? 'Updating Dailies' : ''}{' '}
-            {this.props.demoStart && !this.props.demoComplete
-              ? 'Populating data'
-              : ''}{' '}
-          </p>
-        )}
+            <p
+              style={{
+                zIndex: 100,
+                position: 'fixed',
+                bottom: '0.5em',
+                right: '0.5em'
+              }}
+            >
+              <Glyphicon glyph="refresh" />{' '}
+              {this.props.fetchingArticles ? 'Updating Articles' : ''}{' '}
+              {this.props.fetchingDailies ? 'Updating Dailies' : ''}{' '}
+              {this.props.demoStart && !this.props.demoComplete
+                ? 'Populating data'
+                : ''}{' '}
+            </p>
+          )}
         {(() => {
           switch (this.props.uiView) {
-            case 'Compact':
+            case 'compact':
               if (
                 !this.props.articleLists.find(
                   (t: ArticleList) => t.id === 'compactAL'
@@ -66,11 +66,11 @@ class AppRoutes extends React.Component<Props> {
                 this.props.createArticleList('compactAL');
               }
               return <VisibleArticleList id={'compactAL'} />;
-            case 'Canvas':
+            case 'canvas':
               return <Canvas />;
-            case 'Analytics':
+            case 'analytics':
               return <ArticleAnalytics />;
-            case 'Dailies':
+            case 'dailies':
               return (
                 <div>
                   <Dailies />

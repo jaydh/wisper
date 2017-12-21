@@ -15,13 +15,13 @@ class Menu extends React.Component<Props> {
   render() {
     const active = (() => {
       switch (this.props.view) {
-        case 'Dailies':
+        case 'dailies':
           return 1;
-        case 'Compact':
+        case 'compact':
           return 2;
-        case 'Canvas':
+        case 'canvas':
           return 3;
-        case 'Analytics':
+        case 'analytics':
           return 4;
         case 'Full':
           return 5;
@@ -39,31 +39,31 @@ class Menu extends React.Component<Props> {
           <Nav bsStyle={'tabs'} activeKey={active}>
             <NavItem
               eventKey={1}
-              onClick={() => this.props.onSetUIView('Dailies')}
+              onClick={() => this.props.onSetUIView('dailies')}
             >
               Dailies{' '}
             </NavItem>
             <NavItem
               eventKey={2}
-              onClick={() => this.props.onSetUIView('Compact')}
+              onClick={() => this.props.onSetUIView('compact')}
             >
               Compact{' '}
             </NavItem>
             <NavItem
               eventKey={3}
-              onClick={() => this.props.onSetUIView('Canvas')}
+              onClick={() => this.props.onSetUIView('canvas')}
             >
               Canvas{' '}
             </NavItem>
             <NavItem
               eventKey={4}
-              onClick={() => this.props.onSetUIView('Analytics')}
+              onClick={() => this.props.onSetUIView('analytics')}
             >
               Analytics{' '}
             </NavItem>
             <NavItem
               eventKey={5}
-              onClick={() => this.props.onSetUIView('Full')}
+              onClick={() => this.props.onSetUIView('full')}
             >
               Full View
             </NavItem>
