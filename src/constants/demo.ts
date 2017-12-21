@@ -16,7 +16,7 @@ import demoDailyCompletion from '../actions/demo/demoDailyCompletion';
 import SetUIView from '../actions/setUIView';
 import { List } from 'immutable';
 
-export default async function(store: any, persistor: any) {
+export default async function (store: any, persistor: any) {
   store.dispatch({ type: 'USER_LOGOUT' });
   store.dispatch(demoStart());
   store.dispatch(SetUIView('dailies'));
@@ -171,11 +171,11 @@ export default async function(store: any, persistor: any) {
     }
   ];
 
-  await Promise.all(
+  Promise.all(
     articles.map(async (t: { link: string; project?: string }) => {
       await store.dispatch(addArticle(t.link, t.project));
       if (Math.floor(Math.random() * 2) === 0) {
-        await store.dispatch(toggleArticleRead(SHA1.hex(t.link)));
+        store.dispatch(toggleArticleRead(SHA1.hex(t.link)));
       }
     })
   );
