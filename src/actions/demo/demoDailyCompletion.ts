@@ -56,15 +56,15 @@ export default function demoDailyCompletion(ids: List<string>) {
 
     return Promise.all(
       ids
-        .map((id: string) => {
+        .map((id: string, key: number) => {
           const dailyRef = database.ref(
             '/userData/' + user + '/dailies/' + id + '/completedOn'
           );
 
           let completedOn: List<Date> = List();
-          for (let j = 0; j < 100; j++) {
+          for (let j = 1; j < 50; j++) {
             completedOn = completedOn.push(subDays(new Date(), j));
-            Math.floor(Math.random() * (10 - 1) + 1) > 6 ? j++ : (j = j);
+            Math.floor(Math.random() * (10 - 1) + 1) > key + 1 ? j++ : (j = j);
           }
 
           // Turn off listener for changes in dailes on server
