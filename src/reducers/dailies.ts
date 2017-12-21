@@ -9,6 +9,7 @@ import {
 import createReducer from './createReducer';
 import { parse, isSameDay, subDays } from 'date-fns';
 import { AddDailyFulfilled } from '../actions/dailies/addDaily';
+import { DemoDailyCompletionBatch } from '../actions/demo/demoDailyCompletion';
 
 function processDaily(daily: any): Daily {
   for (const x in daily) {
@@ -130,11 +131,25 @@ function addFetchedDailies(dailyState: List<Daily>, action: any) {
   }
   return newDailyState;
 }
+
+function demoDailyCompletionBatch(
+  dailyState: List<Daily>,
+  action: DemoDailyCompletionBatch
+) {
+  return dailyState.map(
+    (t: Daily) =>
+      t.id === action.id
+        ? { ...t, completedOn: t.completedOn.merge(action.completedOn) }
+        : t
+  );
+}
+
 export default createReducer(List(), {
   ADD_DAILY_FULFILLED: addDaily,
   COMPLETE_DAILY_FULFILLED: completeDaily,
   ADD_DAILY_FROM_SERVER: addDailyFromServer,
   DELETE_DAILY_FROM_SERVER: deleteDailyFromServer,
   UPDATE_DAILY: updateDaily,
-  ADD_FETCHED_DAILIES: addFetchedDailies
+  ADD_FETCHED_DAILIES: addFetchedDailies,
+  DEMO_DAILY_COMPLETION_BATCH: demoDailyCompletionBatch
 });

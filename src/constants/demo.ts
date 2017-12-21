@@ -11,13 +11,15 @@ import setSortFilter from '../actions/setSortFilter';
 import { setProjectFilter } from '../actions/projectFilter';
 import { setVisibilityFilter } from '../actions/visibilityFilter';
 import addDaily from '../actions/dailies/addDaily';
-import completeDaily from '../actions/dailies/completeDaily';
 import { demoStart, demoComplete } from '../actions/demo';
-import { subDays } from 'date-fns';
+import demoDailyCompletion from '../actions/demo/demoDailyCompletion';
+import SetUIView from '../actions/setUIView';
+import { List } from 'immutable';
 
 export default async function(store: any, persistor: any) {
   store.dispatch({ type: 'USER_LOGOUT' });
   store.dispatch(demoStart());
+  store.dispatch(SetUIView('dailies'));
   store.dispatch(addArticleList('0'));
   store.dispatch(addArticleList('1'));
   store.dispatch(setVisibilityFilter('All', '0'));
@@ -177,7 +179,7 @@ export default async function(store: any, persistor: any) {
       }
     })
   );
-  const dailies = [
+  const dailies = List([
     'Excercise',
     'Check the garbage',
     'Water plants',
@@ -185,17 +187,14 @@ export default async function(store: any, persistor: any) {
     'Go for a walk',
     'Practice piano',
     'Read the news'
-  ];
-  const ids = dailies.map((t: string) => SHA1.hex(t));
-  await dailies.forEach(async (t: string) => await store.dispatch(addDaily(t)));
+  ]);
+  const ids = dailies.map((t: string) => SHA1.hex(t)).toList();
   await Promise.all(
-    ids.map(async (t: string) => {
-      for (let j = 0; j < 100; j++) {
-        await store.dispatch(completeDaily(t, subDays(new Date(), j)));
-        Math.floor(Math.random() * (10 - 1) + 1) > 6 ? j++ : (j = j);
-      }
-    })
+    dailies
+      .map(async (t: string) => await store.dispatch(addDaily(t)))
+      .toArray()
   );
-
+  await store.dispatch(demoDailyCompletion(ids));
+  store.dispatch(SetUIView('dailies'));
   store.dispatch(demoComplete());
 }
