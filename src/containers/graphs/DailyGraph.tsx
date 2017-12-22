@@ -3,17 +3,18 @@ import { connect } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Map, List, Set } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import { addDays, subDays, isSameDay } from 'date-fns';
+import { addDays, subDays, isSameDay, isBefore, isAfter } from 'date-fns';
+import SetDailyGraphSpan from '../actionDispatchers/SetDailyGraphSpan';
 
 interface Props {
   dailies: List<Daily>;
+  graphMin: Date;
+  graphMax: Date;
 }
 
 interface State {
   colors: List<string>;
   colorMap: Map<string, string>;
-  data: any;
-  options: any;
 }
 class DailyGraph extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -41,15 +42,7 @@ class DailyGraph extends React.Component<Props, State> {
 
     this.state = {
       colors: colors,
-      colorMap: colorMap,
-      data: {},
-      options: {}
-    };
-    this.state = {
-      colors: colors,
-      colorMap: colorMap,
-      data: this.getData(props.dailies),
-      options: this.getOptions(props.dailies)
+      colorMap: colorMap
     };
   }
   dynamicColors() {
@@ -70,25 +63,15 @@ class DailyGraph extends React.Component<Props, State> {
         newColorMap = newColorMap.set(t.title, this.dynamicColors());
       });
       this.setState({
-        colorMap: newColorMap,
-        options: this.getOptions(nextProps.dailies)
-      });
-    }
-    if (
-      !this.props.dailies
-        .map((t: Daily) => t.completedOn)
-        .equals(nextProps.dailies.map((t: Daily) => t.completedOn))
-    ) {
-      this.setState({
-        data: this.getData(nextProps.dailies)
+        colorMap: newColorMap
       });
     }
   }
 
-  getData(dailies: List<Daily>) {
+  getData() {
+    const { dailies } = this.props;
     const isDayAfter = (a: Date, b: Date) => isSameDay(a, addDays(b, 1));
     const isDayBefore = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
-
     let dotDailies: Map<string, List<Date>> = Map();
     dailies.forEach(
       (t: Daily) => (dotDailies = dotDailies.set(t.title, List()))
@@ -154,6 +137,11 @@ class DailyGraph extends React.Component<Props, State> {
             fill: false,
             pointHoverRadius: 2,
             data: t.dataset
+              .filter(
+                (p: Date) =>
+                  isBefore(p, this.props.graphMax) &&
+                  isAfter(p, this.props.graphMin)
+              )
               .map((p: Date) => {
                 return {
                   x: p,
@@ -176,6 +164,11 @@ class DailyGraph extends React.Component<Props, State> {
                 borderWidth: 6,
                 fill: false,
                 data: value
+                  .filter(
+                    (p: Date) =>
+                      isBefore(p, this.props.graphMax) &&
+                      isAfter(p, this.props.graphMin)
+                  )
                   .map((p: Date) => {
                     return {
                       x: p,
@@ -191,7 +184,8 @@ class DailyGraph extends React.Component<Props, State> {
     };
   }
 
-  getOptions(dailies: List<Daily>) {
+  getOptions() {
+    const { dailies } = this.props;
     return {
       scales: {
         yAxes: [
@@ -213,7 +207,8 @@ class DailyGraph extends React.Component<Props, State> {
             },
 
             time: {
-              max: new Date(),
+              max: this.props.graphMax,
+              min: this.props.graphMin,
               round: 'day',
               unit: 'day',
               stepSize: 1,
@@ -256,38 +251,13 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   render() {
-    /*const cutOff = endOfDay(subWeeks(new Date(), 4));
-    const data2 = {
-      datasets: this.props.dailies
-        .map((t: Daily, key: number) => {
-          const color = this.state.colorMap.get(key.toLocaleString());
-          return {
-            type: 'bubble',
-            label: t.title + t.completedOn.size,
-            backgroundColor: color,
-            borderColor: color,
-            borderWidth: 6,
-            fill: false,
-            data: t.completedOn
-              .filter((d: Date) => isAfter(d, subDays(cutOff, 1)))
-              .map((p: Date) => {
-                return {
-                  x: p,
-                  y: t.title
-                };
-              })
-              .toJS()
-          };
-        })
-        .toList()
-        .toJS()
-    };*/
-
     return (
       <div>
-        {' '}
         {!this.props.dailies.isEmpty() && (
-          <Line data={this.state.data} options={this.state.options} />
+          <div style={{ textAlign: 'center' }}>
+            <Line data={this.getData()} options={this.getOptions()} />
+            <SetDailyGraphSpan />
+          </div>
         )}
       </div>
     );
@@ -295,7 +265,9 @@ class DailyGraph extends React.Component<Props, State> {
 }
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    dailies: state.get('dailies')
+    dailies: state.get('dailies'),
+    graphMin: state.get('ui').dailyGraphMin,
+    graphMax: state.get('ui').dailyGraphMax
   };
 };
 
