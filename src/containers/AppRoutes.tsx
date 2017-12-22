@@ -28,11 +28,25 @@ interface Props {
   listenAfterMount: () => void;
   createArticleList: (id: string) => void;
 }
-class AppRoutes extends React.Component<Props> {
+
+interface State {
+  timeout?: any;
+}
+
+class AppRoutes extends React.Component<Props, State> {
   componentDidMount() {
     this.props.pullOnMount();
-    this.props.listenAfterMount();
+    this.setState({
+      timeout: setTimeout(() => this.props.listenAfterMount(), 5000)
+    });
   }
+
+  componentWillUnmount() {
+    if (this.state.timeout) {
+      clearTimeout(this.state.timeout);
+    }
+  }
+
   render() {
     return (
       <div>
