@@ -263,10 +263,10 @@ class DailyGraph extends React.Component<Props, State> {
     } as any;
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextProps: Props) {
     if (
-      this.props.fetching ||
-      (this.props.demoStart && !this.props.demoComplete)
+      nextProps.fetching ||
+      (nextProps.demoStart && !nextProps.demoComplete)
     ) {
       return false;
     }
