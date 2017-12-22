@@ -76,15 +76,19 @@ function addArticleFromServer(
   let entry = articleState.findEntry(
     (v: articleType) => action.article.id === v.id
   );
+  action.article = processArticle(action.article);
   if (entry) {
-    if (fromJS(entry[1]).equals(fromJS(processArticle(action.article)))) {
+    if (
+      entry[1].projects.equals(action.article.projects).projects &&
+      entry[1].viewedOn.equals(action.article.viewedOn)
+    ) {
       return articleState;
     }
   }
 
   return entry
-    ? articleState.set(entry[0], processArticle(action.article))
-    : articleState.push(processArticle(action.article));
+    ? articleState.set(entry[0], action.article)
+    : articleState.push(action.article);
 }
 
 function deleteArticleFromServer(
