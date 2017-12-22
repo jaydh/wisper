@@ -43,31 +43,32 @@ function AddDailyFulfilled(title: string): AddDailyFulfilled {
 export default function addDaily(daily: string) {
   const user = auth().currentUser.uid;
 
-  return (dispatch: Dispatch<any>) => {
+  return async (dispatch: Dispatch<any>) => {
     dispatch(AddDailyRequested());
 
     const hash = SHA1.hex(daily);
     const dailyRef = database.ref('/userData/' + user + '/dailies/' + hash);
     dailyRef.parent.off();
 
-    return dailyRef.once('value').then(function(snapshot: any) {
-      // Check if article in database
-      if (snapshot.exists()) {
-        dispatch(AddDailyRejected());
-      } else {
-        dailyRef
-          .set({
+    return dailyRef
+      .once('value')
+      .then((snapshot: any) => {
+        // Check if article in database
+        if (snapshot.exists()) {
+          dispatch(AddDailyRejected());
+        } else {
+          dailyRef.set({
             title: daily,
             id: hash
-          })
-          .then(() => {
-            dispatch(AddDailyFulfilled(daily));
-          })
-          .catch((error: string) => {
-            console.log(error);
-            dispatch(AddDailyRejected());
           });
-      }
-    });
+        }
+      })
+      .then(() => {
+        dispatch(AddDailyFulfilled(daily));
+      })
+      .catch((error: string) => {
+        console.log(error);
+        dispatch(AddDailyRejected());
+      });
   };
 }
