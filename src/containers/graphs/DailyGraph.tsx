@@ -196,12 +196,6 @@ class DailyGraph extends React.Component<Props, State> {
 
   getOptions() {
     const { dailies, graphMax, graphMin } = this.props;
-    console.log(
-      'a',
-      graphMax.toLocaleDateString(),
-      graphMin.toLocaleDateString(),
-      differenceInCalendarDays(graphMax, graphMin) / 4
-    );
     return {
       scales: {
         yAxes: [
