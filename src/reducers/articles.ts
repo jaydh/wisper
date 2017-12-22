@@ -76,6 +76,11 @@ function addArticleFromServer(
   let entry = articleState.findEntry(
     (v: articleType) => action.article.id === v.id
   );
+  if (entry) {
+    if (fromJS(entry[1]).equals(fromJS(processArticle(action.article)))) {
+      return articleState;
+    }
+  }
 
   return entry
     ? articleState.set(entry[0], processArticle(action.article))

@@ -79,6 +79,11 @@ function addDailyFromServer(
 ) {
   let entry = dailyState.findEntry((v: Daily) => action.daily.id === v.id);
   action.daily = processDaily(action.daily);
+  if (entry) {
+    if (entry[1].completedOn.equals(action.daily.completedOn)) {
+      return dailyState;
+    }
+  }
   return entry
     ? dailyState
         .set(entry[0], action.daily)
