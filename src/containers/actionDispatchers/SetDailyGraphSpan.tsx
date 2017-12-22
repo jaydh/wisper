@@ -37,28 +37,16 @@ class SetDailyGraphSpan extends React.Component<Props> {
     const startDate = currentMin ? currentMin : choices.last();
     return (
       <Nav justified={true} bsStyle="tabs" bsSize="xsmall">
-        <NavItem
-          bsStyle="daily"
-          onClick={() => onSubmit(subWeeks(new Date(), 1), new Date())}
-        >
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), new Date())}>
           Week
         </NavItem>
-        <NavItem
-          bsStyle="daily"
-          onClick={() => onSubmit(subWeeks(new Date(), 2), new Date())}
-        >
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 2), new Date())}>
           2 Weeks
         </NavItem>
-        <NavItem
-          bsStyle="daily"
-          onClick={() => onSubmit(subWeeks(new Date(), 4), new Date())}
-        >
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 4), new Date())}>
           Month
         </NavItem>
-        <NavItem
-          bsStyle="daily"
-          onClick={() => onSubmit(choices.last(), new Date())}
-        >
+        <NavItem onClick={() => onSubmit(choices.last(), new Date())}>
           Full
         </NavItem>
         <NavDropdown
