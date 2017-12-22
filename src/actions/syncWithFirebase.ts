@@ -178,9 +178,7 @@ export function ListenForDailyUpdates() {
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
   return (dispatch: Dispatch<any>) => {
     dailyRef.on('child_changed', function(snapshot: any) {
-      dispatch(fetchingDailiesRequested());
       dispatch(updateDaily(snapshot.val()));
-      dispatch(fetchingDailiesCompleted());
     });
   };
 }
@@ -190,9 +188,7 @@ export function ListenForArticleUpdates() {
   const articleRef = database.ref('/userData/' + user + '/articles/');
   return (dispatch: Dispatch<any>) => {
     articleRef.on('child_changed', function(snapshot: any) {
-      dispatch(fetchingArticlesRequested());
       dispatch(updateArticle(snapshot.val()));
-      dispatch(fetchingArticlesCompleted());
     });
   };
 }
@@ -216,24 +212,16 @@ export function ListenToFirebase() {
       dispatch(deleteProject(snapshot.val()));
     });
     articleRef.on('child_added', function(snap: any) {
-      dispatch(fetchingArticlesRequested());
       dispatch(addArticleFromServer(snap.val()));
-      dispatch(fetchingArticlesCompleted());
     });
     articleRef.on('child_removed', function(snap: any) {
-      dispatch(fetchingArticlesRequested());
       dispatch(deleteArticleFromServer(snap.val()));
-      dispatch(fetchingArticlesCompleted());
     });
     dailyRef.on('child_added', function(snapshot: any) {
-      dispatch(fetchingDailiesRequested());
       dispatch(addDailyFromServer(snapshot.val()));
-      dispatch(fetchingDailiesCompleted());
     });
     dailyRef.on('child_removed', function(snapshot: any) {
-      dispatch(fetchingDailiesRequested());
       dispatch(deleteDailyFromServer(snapshot.val()));
-      dispatch(fetchingDailiesCompleted());
     });
   };
 }
