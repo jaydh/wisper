@@ -21,12 +21,13 @@ interface Props {
 
 interface State {
   expand: boolean;
+  showCompleted: boolean;
 }
 
 class Dailies extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { expand: false };
+    this.state = { expand: false, showCompleted: false };
   }
   render() {
     const { onComplete, dailies } = this.props;
@@ -37,7 +38,8 @@ class Dailies extends React.Component<Props, State> {
             {dailies
               .filter((t: DailyType) => {
                 return t.completedOn && !t.completedOn.isEmpty()
-                  ? !isSameDay(t.completedOn.last(), new Date())
+                  ? this.state.showCompleted ||
+                      !isSameDay(t.completedOn.last(), new Date())
                   : true;
               })
               .map((t: DailyType) => {
@@ -83,6 +85,18 @@ class Dailies extends React.Component<Props, State> {
                   glyph={this.state.expand ? 'minus-sign' : 'plus-sign'}
                 />
               </Button>
+              <Button
+                bsSize="xsmall"
+                bsStyle="daily"
+                active={true}
+                onClick={() =>
+                  this.state.showCompleted
+                    ? this.setState({ showCompleted: false })
+                    : this.setState({ showCompleted: true })
+                }
+              >
+                <Glyphicon glyph={'check'} />
+              </Button>
             </ButtonGroup>
           </div>
         </ButtonToolbar>
@@ -93,7 +107,7 @@ class Dailies extends React.Component<Props, State> {
 
 const mapStateToProps = (state: any) => {
   return {
-    dailies: state.get('dailies')
+    dailies: state.get('dailies'),
   };
 };
 
