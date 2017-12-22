@@ -34,20 +34,19 @@ class SetDailyGraphSpan extends React.Component<Props> {
   render() {
     const { onSubmit, currentMax, currentMin } = this.props;
     const choices = this.getChoices();
+    const startDate = currentMin
+      ? currentMin.toLocaleDateString()
+      : choices.first().toLocaleDateString();
     return (
       <ButtonGroup>
         <DropdownButton
-          bsSize="small"
-          title={
-            currentMin
-              ? currentMin.toLocaleDateString()
-              : choices.first().toLocaleDateString()
-          }
+          bsSize="xsmall"
+          title={'Start Date: ' + startDate}
           id="daily-graph-min-selector"
         >
           {choices
             .filter((t: Date) => isBefore(t, currentMax))
-            .map((t: Date) => (
+            .map((t: Date, key: number) => (
               <MenuItem
                 key={'daily-graph-min' + t.toLocaleDateString()}
                 onClick={() => onSubmit(t, currentMax)}
@@ -57,8 +56,8 @@ class SetDailyGraphSpan extends React.Component<Props> {
             ))}
         </DropdownButton>
         <DropdownButton
-          bsSize="small"
-          title={currentMax.toLocaleDateString()}
+          bsSize="xsmall"
+          title={'End Date: ' + currentMax.toLocaleDateString()}
           id="daily-graph-max-selector"
         >
           {choices
