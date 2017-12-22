@@ -79,7 +79,7 @@ function addArticleFromServer(
   action.article = processArticle(action.article);
   if (entry) {
     if (
-      entry[1].projects.equals(action.article.projects).projects &&
+      entry[1].projects.equals(action.article.projects) &&
       entry[1].viewedOn.equals(action.article.viewedOn)
     ) {
       return articleState;
