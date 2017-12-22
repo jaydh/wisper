@@ -1,4 +1,4 @@
-import { SetUIView } from '../actions/setUIView';
+import { SetUIView } from '../actions/ui/setUIView';
 import createReducer from './createReducer';
 
 interface UIState {
@@ -7,6 +7,8 @@ interface UIState {
   fetchingDailies: boolean;
   demoStart: boolean;
   demoComplete: boolean;
+  dailyGraphMin: Date;
+  dailyGraphMax: Date;
 }
 
 function setUIView(uiState: UIState, action: SetUIView): UIState {
@@ -31,13 +33,19 @@ function demoStart(uiState: UIState, action: any): UIState {
 function demoComplete(uiState: UIState, action: any): UIState {
   return { ...uiState, demoComplete: true };
 }
+
+function setDailyGraphSpan(uiState: UIState, action: any): UIState {
+  return { ...uiState, dailyGraphMin: action.min, dailyGraphMax: action.max };
+}
 export default createReducer(
   {
     view: 'Full',
     fetchingArticles: false,
     fetchingDailies: false,
     demoComplete: null,
-    demoStart: null
+    demoStart: null,
+    dailyGraphMin: null,
+    dailyGraphMax: new Date()
   },
   {
     SET_UI_VIEW: setUIView,
@@ -46,6 +54,7 @@ export default createReducer(
     FETCHING_DAILIES_REQUESTED: fetchingDailiesRequested,
     FETCHING_DAILIES_COMPLETED: fetchingDailiesCompleted,
     DEMO_START: demoStart,
-    DEMO_COMPLETE: demoComplete
+    DEMO_COMPLETE: demoComplete,
+    SET_DAILY_GRAPH_SPAN: setDailyGraphSpan
   }
 );
