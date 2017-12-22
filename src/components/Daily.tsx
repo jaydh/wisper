@@ -51,6 +51,7 @@ export default class Daily extends React.Component<Props, State> {
                 ? 'Last Completed: ' +
                   daily.completedOn.last().toLocaleDateString()
                 : ''}
+              <br />
               Completed {daily.completedOn.size} times <br />
               Started{' '}
               {differenceInCalendarDays(
