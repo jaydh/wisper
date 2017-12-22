@@ -141,12 +141,13 @@ function demoDailyCompletionBatch(
   dailyState: List<Daily>,
   action: DemoDailyCompletionBatch
 ) {
-  return dailyState.map(
-    (t: Daily) =>
-      t.id === action.id
-        ? { ...t, completedOn: t.completedOn.merge(action.completedOn) }
-        : t
-  );
+  return dailyState
+    .map((t: Daily) => {
+      return t.id === action.id
+        ? { ...t, completedOn: t.completedOn.concat(action.completedOn).sort() }
+        : t;
+    })
+    .map((t: Daily) => processDaily(t));
 }
 
 export default createReducer(List(), {
