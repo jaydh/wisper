@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  Well,
-  Button,
-  Glyphicon,
-  ButtonToolbar,
-  ButtonGroup
-} from 'react-bootstrap';
+import { Well, Button, Glyphicon, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import completeDaily from '../actions/dailies/completeDaily';
 import Daily from '../components/Daily';
@@ -33,7 +27,7 @@ class Dailies extends React.Component<Props, State> {
     const { onComplete, dailies } = this.props;
     return (
       <Well>
-        <ButtonToolbar>
+        <div style={{ textAlign: 'center' }}>
           <ButtonGroup bsStyle="dailies">
             {dailies
               .filter((t: DailyType) => {
@@ -70,36 +64,34 @@ class Dailies extends React.Component<Props, State> {
                 );
               })}
           </ButtonGroup>
-          <div style={{ float: 'right' }}>
-            <ButtonGroup>
-              <Button
-                bsSize="xsmall"
-                bsStyle="daily"
-                onClick={() =>
-                  this.state.expand
-                    ? this.setState({ expand: false })
-                    : this.setState({ expand: true })
-                }
-              >
-                <Glyphicon
-                  glyph={this.state.expand ? 'minus-sign' : 'plus-sign'}
-                />
-              </Button>
-              <Button
-                bsSize="xsmall"
-                bsStyle="daily"
-                active={true}
-                onClick={() =>
-                  this.state.showCompleted
-                    ? this.setState({ showCompleted: false })
-                    : this.setState({ showCompleted: true })
-                }
-              >
-                <Glyphicon glyph={'check'} />
-              </Button>
-            </ButtonGroup>
-          </div>
-        </ButtonToolbar>
+          <ButtonGroup style={{ float: 'right' }}>
+            <Button
+              bsSize="xsmall"
+              bsStyle="daily"
+              onClick={() =>
+                this.state.expand
+                  ? this.setState({ expand: false })
+                  : this.setState({ expand: true })
+              }
+            >
+              <Glyphicon
+                glyph={this.state.expand ? 'minus-sign' : 'plus-sign'}
+              />
+            </Button>
+            <Button
+              bsSize="xsmall"
+              bsStyle="daily"
+              active={true}
+              onClick={() =>
+                this.state.showCompleted
+                  ? this.setState({ showCompleted: false })
+                  : this.setState({ showCompleted: true })
+              }
+            >
+              <Glyphicon glyph={'check'} />
+            </Button>
+          </ButtonGroup>
+        </div>
       </Well>
     );
   }
@@ -107,7 +99,7 @@ class Dailies extends React.Component<Props, State> {
 
 const mapStateToProps = (state: any) => {
   return {
-    dailies: state.get('dailies'),
+    dailies: state.get('dailies')
   };
 };
 
