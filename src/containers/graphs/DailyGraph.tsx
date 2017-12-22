@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Map, List, Set } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import { addDays, subDays, isSameDay, isBefore, isAfter } from 'date-fns';
+import {
+  differenceInCalendarDays,
+  addDays,
+  subDays,
+  isSameDay,
+  isBefore,
+  isAfter
+} from 'date-fns';
 import SetDailyGraphSpan from '../actionDispatchers/SetDailyGraphSpan';
 
 interface Props {
@@ -188,7 +195,13 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   getOptions() {
-    const { dailies } = this.props;
+    const { dailies, graphMax, graphMin } = this.props;
+    console.log(
+      'a',
+      graphMax.toLocaleDateString(),
+      graphMin.toLocaleDateString(),
+      differenceInCalendarDays(graphMax, graphMin) / 4
+    );
     return {
       scales: {
         yAxes: [
@@ -205,7 +218,10 @@ class DailyGraph extends React.Component<Props, State> {
             id: 'streak',
             ticks: {
               callback: function(tick: any, index: any, array: any) {
-                return index % 7 ? '' : tick;
+                return index %
+                  Math.round(differenceInCalendarDays(graphMax, graphMin) / 5)
+                  ? ''
+                  : tick;
               }
             },
 
@@ -268,7 +284,11 @@ class DailyGraph extends React.Component<Props, State> {
       <div>
         {!this.props.dailies.isEmpty() && (
           <div>
-            <Line data={this.getData()} options={this.getOptions()} />
+            <Line
+              data={this.getData()}
+              options={this.getOptions()}
+              redraw={true}
+            />
             <SetDailyGraphSpan />
           </div>
         )}
