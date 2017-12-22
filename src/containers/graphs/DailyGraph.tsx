@@ -10,6 +10,8 @@ interface Props {
   dailies: List<Daily>;
   graphMin: Date;
   graphMax: Date;
+  demoStart: boolean;
+  demoComplete: boolean;
 }
 
 interface State {
@@ -253,12 +255,13 @@ class DailyGraph extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        {!this.props.dailies.isEmpty() && (
-          <div style={{ textAlign: 'center' }}>
-            <Line data={this.getData()} options={this.getOptions()} />
-            <SetDailyGraphSpan />
-          </div>
-        )}
+        {!this.props.dailies.isEmpty() &&
+          !(this.props.demoStart && !this.props.demoComplete) && (
+            <div style={{ textAlign: 'center' }}>
+              <Line data={this.getData()} options={this.getOptions()} />
+              <SetDailyGraphSpan />
+            </div>
+          )}
       </div>
     );
   }
@@ -267,7 +270,9 @@ const mapStateToProps = (state: any, ownProps: any) => {
   return {
     dailies: state.get('dailies'),
     graphMin: state.get('ui').dailyGraphMin,
-    graphMax: state.get('ui').dailyGraphMax
+    graphMax: state.get('ui').dailyGraphMax,
+    demoStart: state.get('ui').demoStart,
+    demoComplete: state.get('ui').demoComplete
   };
 };
 
