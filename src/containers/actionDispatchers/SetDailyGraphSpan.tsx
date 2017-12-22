@@ -1,10 +1,10 @@
 import setDailyGraphSpan from '../../actions/ui/setDailyGraphSpan';
 import { connect } from 'react-redux';
-import { ButtonGroup, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
 import * as React from 'react';
 import { Daily } from '../../constants/StoreState';
 import { List } from 'immutable';
-import { isBefore, isAfter, subDays, addDays } from 'date-fns';
+import { isBefore, isAfter, subDays, subWeeks } from 'date-fns';
 
 interface Props {
   onSubmit: (min: Date, max: Date) => void;
@@ -34,14 +34,35 @@ class SetDailyGraphSpan extends React.Component<Props> {
   render() {
     const { onSubmit, currentMax, currentMin } = this.props;
     const choices = this.getChoices();
-    const startDate = currentMin
-      ? currentMin.toLocaleDateString()
-      : choices.first().toLocaleDateString();
+    const startDate = currentMin ? currentMin : choices.last();
     return (
-      <ButtonGroup>
-        <DropdownButton
-          bsSize="xsmall"
-          title={'Start Date: ' + startDate}
+      <Nav justified={true} bsStyle="tabs" bsSize="xsmall">
+        <NavItem
+          bsStyle="daily"
+          onClick={() => onSubmit(subWeeks(new Date(), 1), new Date())}
+        >
+          Week
+        </NavItem>
+        <NavItem
+          bsStyle="daily"
+          onClick={() => onSubmit(subWeeks(new Date(), 2), new Date())}
+        >
+          2 Weeks
+        </NavItem>
+        <NavItem
+          bsStyle="daily"
+          onClick={() => onSubmit(subWeeks(new Date(), 4), new Date())}
+        >
+          Month
+        </NavItem>
+        <NavItem
+          bsStyle="daily"
+          onClick={() => onSubmit(choices.last(), new Date())}
+        >
+          Full
+        </NavItem>
+        <NavDropdown
+          title={'Start Date: ' + startDate.toLocaleDateString()}
           id="daily-graph-min-selector"
         >
           {choices
@@ -54,9 +75,8 @@ class SetDailyGraphSpan extends React.Component<Props> {
                 {t.toLocaleDateString()}
               </MenuItem>
             ))}
-        </DropdownButton>
-        <DropdownButton
-          bsSize="xsmall"
+        </NavDropdown>
+        <NavDropdown
           title={'End Date: ' + currentMax.toLocaleDateString()}
           id="daily-graph-max-selector"
         >
@@ -65,13 +85,13 @@ class SetDailyGraphSpan extends React.Component<Props> {
             .map((t: Date) => (
               <MenuItem
                 key={'daily-graph-max' + t.toLocaleDateString()}
-                onClick={() => onSubmit(currentMin, addDays(t, 1))}
+                onClick={() => onSubmit(currentMin, t)}
               >
                 {t.toLocaleDateString()}
               </MenuItem>
             ))}
-        </DropdownButton>
-      </ButtonGroup>
+        </NavDropdown>
+      </Nav>
     );
   }
 }

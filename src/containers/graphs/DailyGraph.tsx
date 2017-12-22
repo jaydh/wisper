@@ -267,7 +267,7 @@ class DailyGraph extends React.Component<Props, State> {
     return (
       <div>
         {!this.props.dailies.isEmpty() && (
-          <div style={{ textAlign: 'center' }}>
+          <div>
             <Line data={this.getData()} options={this.getOptions()} />
             <SetDailyGraphSpan />
           </div>
