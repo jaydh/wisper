@@ -15,31 +15,10 @@ interface Props {
   dailies: List<Daily>;
 }
 
-interface State {
-  recentCompletion: any;
-  overallCompletion: any;
-}
-
-class DailyGraph extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      recentCompletion: this.getCompletionData(props.dailies, true),
-      overallCompletion: this.getCompletionData(props.dailies, false)
-    };
-  }
-
-  componentWillReceiveProps(nextProps: Props) {
-    if (!nextProps.dailies.equals(this.props.dailies)) {
-      this.setState({
-        recentCompletion: this.getCompletionData(nextProps.dailies, true),
-        overallCompletion: this.getCompletionData(nextProps.dailies, false)
-      });
-    }
-  }
-
-  getCompletionData(dailies: List<Daily>, recent: boolean) {
-    return dailies.map((t: Daily, key: number) => {
+class DailyGraph extends React.Component<Props> {
+ 
+  getCompletionData(recent: boolean) {
+    return this.props.dailies.map((t: Daily, key: number) => {
       const cutOff = endOfDay(subWeeks(new Date(), 4));
       const completionPercentage =
         recent && !isAfter(t.completedOn.first(), cutOff)
@@ -84,6 +63,9 @@ class DailyGraph extends React.Component<Props, State> {
 
   render() {
     const { dailies } = this.props;
+    const recentCompletion = this.getCompletionData(true) as any;
+    const overallCompletion = this.getCompletionData(false) as any;
+
     return (
       <div>
         {!dailies.isEmpty() && (
@@ -96,7 +78,7 @@ class DailyGraph extends React.Component<Props, State> {
               </Col>
             </Row>
             <Row>
-              {this.state.recentCompletion.map((value: any, key: string) => (
+              {recentCompletion.map((value: any, key: string) => (
                 <Col key={key} xs={6} sm={4} md={3} lg={2}>
                   <Doughnut key={key} data={value[0]} options={value[1]} />
                 </Col>
@@ -110,7 +92,7 @@ class DailyGraph extends React.Component<Props, State> {
               </Col>
             </Row>
             <Row>
-              {this.state.overallCompletion.map((value: any, key: string) => (
+              {overallCompletion.map((value: any, key: string) => (
                 <Col key={key} xs={6} sm={4} md={3} lg={2}>
                   <Doughnut key={key} data={value[0]} options={value[1]} />
                 </Col>
