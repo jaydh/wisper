@@ -62,7 +62,7 @@ export default function demoDailyCompletion(ids: List<string>) {
           );
 
           let completedOn: List<Date> = List();
-          for (let j = 1; j < 100; j++) {
+          for (let j = 1; j < 150; j++) {
             completedOn = completedOn.push(subDays(new Date(), j));
             Math.floor(Math.random() < 0.1 * (key + 1) ? j++ : (j = j));
           }
