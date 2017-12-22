@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { setProjectFilter } from '../../actions/projectFilter';
+import { setProjectFilter } from '../../actions/ui/projectFilter';
 import { connect } from 'react-redux';
 import { List, fromJS } from 'immutable';
 import { Dropdown, MenuItem } from 'react-bootstrap';

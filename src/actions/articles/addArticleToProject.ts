@@ -1,28 +1,28 @@
-import * as constants from '../../constants/actionTypes';
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import { fromJS } from 'immutable';
+
 export interface AddArticleToProjectRequested {
-  type: constants.ADD_ARTICLE_TO_PROJECT_REQUESTED;
+  type: 'ADD_ARTICLE_TO_PROJECT_REQUESTED';
 }
 export interface AddArticleToProjectFulfilled {
-  type: constants.ADD_ARTICLE_TO_PROJECT_FULFILLED;
+  type: 'ADD_ARTICLE_TO_PROJECT_FULFILLED';
   article: string;
   project: string;
 }
 export interface AddArticleToProjectRejected {
-  type: constants.ADD_ARTICLE_TO_PROJECT_REJECTED;
+  type: 'ADD_ARTICLE_TO_PROJECT_REJECTED';
 }
 
 function AddArticleToProjectRequested(): AddArticleToProjectRequested {
   return {
-    type: constants.ADD_ARTICLE_TO_PROJECT_REQUESTED
+    type: 'ADD_ARTICLE_TO_PROJECT_REQUESTED'
   };
 }
 
 function AddArticleToProjectRejected(): AddArticleToProjectRejected {
   return {
-    type: constants.ADD_ARTICLE_TO_PROJECT_REJECTED
+    type: 'ADD_ARTICLE_TO_PROJECT_REJECTED'
   };
 }
 
@@ -31,7 +31,7 @@ function AddArticleToProjectFulfilled(
   project: string
 ): AddArticleToProjectFulfilled {
   return {
-    type: constants.ADD_ARTICLE_TO_PROJECT_FULFILLED,
+    type: 'ADD_ARTICLE_TO_PROJECT_FULFILLED',
     article,
     project
   };
@@ -50,7 +50,7 @@ export default function addArticleToProject(
     const projects = database.ref('/userData/' + user + '/projects/');
 
     projectRef
-      .once('value', function(snapshot: any) {
+      .once('value', function (snapshot: any) {
         projectRef
           .push(project)
           .then(() => {
@@ -62,7 +62,7 @@ export default function addArticleToProject(
           });
       })
       .then(() => {
-        projects.once('value').then(function(snapshot: any) {
+        projects.once('value').then(function (snapshot: any) {
           const push = () =>
             projects.push({
               id: project

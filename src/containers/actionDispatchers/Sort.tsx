@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dropdown, MenuItem, Glyphicon } from 'react-bootstrap';
-import setSortFilter from '../../actions/setSortFilter';
+import setSortFilter from '../../actions/ui/setSortFilter';
 import { connect } from 'react-redux';
 import { ArticleList } from '../../constants/StoreState';
 

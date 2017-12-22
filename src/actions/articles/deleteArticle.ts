@@ -1,33 +1,32 @@
-import * as constants from '../../constants/actionTypes';
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 
 export interface DeleteArticleRequested {
-  type: constants.DELETE_ARTICLE_REQUESTED;
+  type: 'DELETE_ARTICLE_REQUESTED';
 }
 export interface DeleteArticleFulfilled {
-  type: constants.DELETE_ARTICLE_FULFILLED;
+  type: 'DELETE_ARTICLE_FULFILLED';
   id: string;
 }
 export interface DeleteArticleRejected {
-  type: constants.DELETE_ARTICLE_REJECTED;
+  type: 'DELETE_ARTICLE_REJECTED';
 }
 
 function deleteArticleRequested(): DeleteArticleRequested {
   return {
-    type: constants.DELETE_ARTICLE_REQUESTED
+    type: 'DELETE_ARTICLE_REQUESTED'
   };
 }
 
 function deleteArticleRejected(): DeleteArticleRejected {
   return {
-    type: constants.DELETE_ARTICLE_REJECTED
+    type: 'DELETE_ARTICLE_REJECTED'
   };
 }
 
 function deleteArticleFulfilled(id: string): DeleteArticleFulfilled {
   return {
-    type: constants.DELETE_ARTICLE_FULFILLED,
+    type: 'DELETE_ARTICLE_FULFILLED',
     id: id
   };
 }

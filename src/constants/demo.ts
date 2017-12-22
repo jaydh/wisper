@@ -6,14 +6,14 @@ import {
   addArticleList,
   repositionArticleList,
   resizeArticleList
-} from '../actions/articleList';
-import setSortFilter from '../actions/setSortFilter';
-import { setProjectFilter } from '../actions/projectFilter';
-import { setVisibilityFilter } from '../actions/visibilityFilter';
+} from '../actions/ui/articleList';
+import setSortFilter from '../actions/ui/setSortFilter';
+import { setProjectFilter } from '../actions/ui/projectFilter';
+import { setVisibilityFilter } from '../actions/ui/visibilityFilter';
 import addDaily from '../actions/dailies/addDaily';
-import { demoStart, demoComplete } from '../actions/demo';
+import { demoStart, demoComplete } from '../actions/demo/demo';
 import demoDailyCompletion from '../actions/demo/demoDailyCompletion';
-import SetUIView from '../actions/setUIView';
+import SetUIView from '../actions/ui/setUIView';
 import { List } from 'immutable';
 
 export default async function (store: any, persistor: any) {

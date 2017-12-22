@@ -6,7 +6,7 @@ import ArticleAnalytics from '../components/ArticleAnalytics';
 import VisibleArticleList from '../containers/VisibleArticleList';
 import UserPage from '../components/UserPage';
 import { Glyphicon } from 'react-bootstrap';
-import { addArticleList } from '../actions/articleList';
+import { addArticleList } from '../actions/ui/articleList';
 import { connect } from 'react-redux';
 import {
   ArticleList as ArticleListType,
@@ -31,7 +31,7 @@ interface Props {
 class AppRoutes extends React.Component<Props> {
   componentDidMount() {
     this.props.pullOnMount();
-    setTimeout(() => this.props.listenAfterMount(), 2000);
+    this.props.listenAfterMount();
   }
   render() {
     return (
@@ -39,22 +39,22 @@ class AppRoutes extends React.Component<Props> {
         {(this.props.fetchingArticles ||
           this.props.fetchingDailies ||
           (this.props.demoStart && !this.props.demoComplete)) && (
-            <p
-              style={{
-                zIndex: 100,
-                position: 'fixed',
-                bottom: '0.5em',
-                right: '0.5em'
-              }}
-            >
-              <Glyphicon glyph="refresh" />{' '}
-              {this.props.fetchingArticles ? 'Updating Articles' : ''}{' '}
-              {this.props.fetchingDailies ? 'Updating Dailies' : ''}{' '}
-              {this.props.demoStart && !this.props.demoComplete
-                ? 'Populating data'
-                : ''}{' '}
-            </p>
-          )}
+          <p
+            style={{
+              zIndex: 100,
+              position: 'fixed',
+              bottom: '0.5em',
+              right: '0.5em'
+            }}
+          >
+            <Glyphicon glyph="refresh" />{' '}
+            {this.props.fetchingArticles ? 'Updating Articles' : ''}{' '}
+            {this.props.fetchingDailies ? 'Updating Dailies' : ''}{' '}
+            {this.props.demoStart && !this.props.demoComplete
+              ? 'Populating data'
+              : ''}{' '}
+          </p>
+        )}
         {(() => {
           switch (this.props.uiView) {
             case 'compact':

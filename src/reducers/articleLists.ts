@@ -9,10 +9,10 @@ import {
   ToggleLockArticleList,
   SetArticleListSearch,
   SetArticleListView
-} from '../actions/articleList';
-import { SetVisbilityFilter } from '../actions/visibilityFilter';
-import { SetProjectFilter } from '../actions/projectFilter';
-import { SetSortFilter } from '../actions/setSortFilter';
+} from '../actions/ui/articleList';
+import { SetVisbilityFilter } from '../actions/ui/visibilityFilter';
+import { SetProjectFilter } from '../actions/ui/projectFilter';
+import { SetSortFilter } from '../actions/ui/setSortFilter';
 
 function addArticleList(
   articleListState: OrderedSet<ArticleList>,

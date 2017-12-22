@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { setArticleListView } from '../../actions/articleList';
+import { setArticleListView } from '../../actions/ui/articleList';
 import { Button, Glyphicon } from 'react-bootstrap';
 import { ArticleList } from '../../constants/StoreState';
 

@@ -1,29 +1,28 @@
-import * as constants from '../../constants/actionTypes';
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 const now = new Date();
 
 export interface ToggleArticleReadRequested {
-  type: constants.TOGGLE_ARTICLE_READ_REQUESTED;
+  type: 'TOGGLE_ARTICLE_READ_REQUESTED';
 }
 export interface ToggleArticleReadFulfilled {
-  type: constants.TOGGLE_ARTICLE_READ_FULFILLED;
+  type: 'TOGGLE_ARTICLE_READ_FULFILLED';
   articleHash: string;
   update: { completed: boolean; dateRead: string };
 }
 export interface ToggleArticleReadRejected {
-  type: constants.TOGGLE_ARTICLE_READ_REJECTED;
+  type: 'TOGGLE_ARTICLE_READ_REJECTED';
 }
 
 function ToggleArticleReadRequested(): ToggleArticleReadRequested {
   return {
-    type: constants.TOGGLE_ARTICLE_READ_REQUESTED
+    type: 'TOGGLE_ARTICLE_READ_REQUESTED'
   };
 }
 
 function ToggleArticleReadRejected(): ToggleArticleReadRejected {
   return {
-    type: constants.TOGGLE_ARTICLE_READ_REJECTED
+    type: 'TOGGLE_ARTICLE_READ_REJECTED'
   };
 }
 
@@ -32,7 +31,7 @@ function ToggleArticleReadFulfilled(
   update: { completed: boolean; dateRead: string }
 ): ToggleArticleReadFulfilled {
   return {
-    type: constants.TOGGLE_ARTICLE_READ_FULFILLED,
+    type: 'TOGGLE_ARTICLE_READ_FULFILLED',
     articleHash: articleHash,
     update: update
   };
@@ -47,7 +46,7 @@ export function toggleArticleRead(articleHash: string) {
       '/userData/' + user + '/' + 'articles/' + articleHash
     );
     // Check if article in database
-    articleRef.once('value', function(snapshot: any) {
+    articleRef.once('value', function (snapshot: any) {
       if (!snapshot.exists()) {
         alert('Article does not exist in database');
       } else {

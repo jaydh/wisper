@@ -1,4 +1,3 @@
-import * as constants from '../../constants/actionTypes';
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import AddArticleToProject from './addArticleToProject';
@@ -7,16 +6,16 @@ let Hashes = require('jshashes');
 var SHA1 = new Hashes.SHA1();
 
 export interface AddArticleRequested {
-  type: constants.ADD_ARTICLE_REQUESTED;
+  type: 'ADD_ARTICLE_REQUESTED';
 }
 export interface AddArticleFulfilled {
-  type: constants.ADD_ARTICLE_FULFILLED;
+  type: 'ADD_ARTICLE_FULFILLED';
   articleLink: string;
   articleHash: string;
   project?: string;
 }
 export interface AddArticleRejected {
-  type: constants.ADD_ARTICLE_REJECTED;
+  type: 'ADD_ARTICLE_REJECTED';
 }
 
 export interface AddArticle {
@@ -27,13 +26,13 @@ export interface AddArticle {
 
 function AddArticleRequested(): AddArticleRequested {
   return {
-    type: constants.ADD_ARTICLE_REQUESTED
+    type: 'ADD_ARTICLE_REQUESTED'
   };
 }
 
 function AddArticleRejected(): AddArticleRejected {
   return {
-    type: constants.ADD_ARTICLE_REJECTED
+    type: 'ADD_ARTICLE_REJECTED'
   };
 }
 
@@ -42,7 +41,7 @@ function AddArticleFulfilled(
   project?: string
 ): AddArticleFulfilled {
   return {
-    type: constants.ADD_ARTICLE_FULFILLED,
+    type: 'ADD_ARTICLE_FULFILLED',
     articleLink: articleLink,
     articleHash: SHA1.hex(articleLink),
     project: project

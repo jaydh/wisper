@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import * as React from 'react';
-import { setVisibilityFilter } from '../../actions/visibilityFilter';
+import { setVisibilityFilter } from '../../actions/ui/visibilityFilter';
 import { Button } from 'react-bootstrap';
 import { ArticleList as ArticleListType } from '../../constants/StoreState';
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { setArticleListSearch } from '../../actions/articleList';
+import { setArticleListSearch } from '../../actions/ui/articleList';
 import {
   Form,
   InputGroup,

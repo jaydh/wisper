@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { deleteArticleList } from '../../actions/articleList';
+import { deleteArticleList } from '../../actions/ui/articleList';
 import { Button, Glyphicon } from 'react-bootstrap';
 
 export interface Props {

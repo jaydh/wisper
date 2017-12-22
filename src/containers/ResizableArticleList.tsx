@@ -3,7 +3,7 @@ import ArticleList from './VisibleArticleList';
 import {
   resizeArticleList,
   repositionArticleList
-} from '../actions/articleList';
+} from '../actions/ui/articleList';
 import { connect } from 'react-redux';
 import { ArticleList as ArticleListType } from '../constants/StoreState';
 import Rnd from 'react-rnd';

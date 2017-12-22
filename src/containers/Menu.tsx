@@ -1,5 +1,5 @@
 import * as React from 'react';
-import setUIView from '../actions/setUIView';
+import setUIView from '../actions/ui/setUIView';
 import { MenuItem, NavDropdown, Navbar, NavItem, Nav } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import logout from '../helpers/firebaseLogout';

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
   resizeArticleList,
   repositionArticleList
-} from '../../actions/articleList';
+} from '../../actions/ui/articleList';
 import { Button, Glyphicon } from 'react-bootstrap';
 
 export interface Props {
