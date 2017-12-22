@@ -33,7 +33,7 @@ class AppRoutes extends React.Component<Props, State> {
   componentDidMount() {
     this.props.pullOnMount();
     this.setState({
-      timeout: setTimeout(() => this.props.listenAfterMount(), 5000)
+      timeout: setTimeout(() => this.props.listenAfterMount(), 2000)
     });
   }
 
@@ -86,9 +86,9 @@ class AppRoutes extends React.Component<Props, State> {
               return (
                 <div>
                   <Dailies />
+                  <DailyAnalytics />
                   <Canvas />
                   <ArticleAnalytics />
-                  <DailyAnalytics />
                 </div>
               );
           }
