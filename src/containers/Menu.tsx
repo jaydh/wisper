@@ -47,7 +47,7 @@ class Menu extends React.Component<Props> {
               eventKey={2}
               onClick={() => this.props.onSetUIView('compact')}
             >
-              Compact{' '}
+              Articles{' '}
             </NavItem>
             <NavItem
               eventKey={3}

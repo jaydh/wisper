@@ -6,12 +6,8 @@ import ArticleAnalytics from '../components/ArticleAnalytics';
 import VisibleArticleList from '../containers/VisibleArticleList';
 import UserPage from '../components/UserPage';
 import { Glyphicon } from 'react-bootstrap';
-import { addArticleList } from '../actions/ui/articleList';
 import { connect } from 'react-redux';
-import {
-  ArticleList as ArticleListType,
-  ArticleList
-} from '../constants/StoreState';
+import { ArticleList as ArticleListType } from '../constants/StoreState';
 import { List } from 'immutable';
 import {
   pullFromFirebase,
@@ -72,13 +68,6 @@ class AppRoutes extends React.Component<Props, State> {
         {(() => {
           switch (this.props.uiView) {
             case 'compact':
-              if (
-                !this.props.articleLists.find(
-                  (t: ArticleList) => t.id === 'compactAL'
-                )
-              ) {
-                this.props.createArticleList('compactAL');
-              }
               return <VisibleArticleList id={'compactAL'} />;
             case 'canvas':
               return <Canvas />;
@@ -122,7 +111,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    createArticleList: (id: string) => dispatch(addArticleList(id)),
     pullOnMount: () => {
       dispatch(pullFromFirebase());
     },

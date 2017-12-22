@@ -56,7 +56,7 @@ class ArticleList extends React.Component<Props> {
 
     return (
       <Grid>
-        {!(uiView === 'Compact') && (
+        {!(uiView === 'compact') && (
           <Row>
             <Col sm={1} md={1}>
               <LockArticleList id={id} />

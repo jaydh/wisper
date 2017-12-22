@@ -158,16 +158,34 @@ function setArticleListView(
   });
 }
 
-const articleLists = createReducer(OrderedSet<ArticleList>(), {
-  ADD_ARTICLE_LIST: addArticleList,
-  DELETE_ARTICLE_LIST: deleteArticleList,
-  SET_VISIBILITY_FILTER: setVisibilityFilter,
-  SET_PROJECT_FILTER: setProjectFilter,
-  SET_SORT_FILTER: setSortFilter,
-  RESIZE_ARTICLE_LIST: resizeArticleList,
-  REPOSITION_ARTICLE_LIST: repositionArticleList,
-  LOCK_ARTICLE_LIST: toggleLockArticleList,
-  SET_ARTICLE_LIST_SEARCH: setArticleListSearch,
-  SET_ARTICLE_LIST_VIEW: setArticleListView
-});
+const articleLists = createReducer(
+  OrderedSet<ArticleList>([
+    {
+      id: 'compactAL',
+      order: 1,
+      sort: 'date-asc',
+      visibilityFilter: 'Active',
+      projectFilter: 'All',
+      view: 'full',
+      xPosition: 0,
+      yPosition: 0,
+      width: innerWidth * 0.5,
+      height: innerHeight * 0.8,
+      locked: false,
+      search: ''
+    }
+  ]),
+  {
+    ADD_ARTICLE_LIST: addArticleList,
+    DELETE_ARTICLE_LIST: deleteArticleList,
+    SET_VISIBILITY_FILTER: setVisibilityFilter,
+    SET_PROJECT_FILTER: setProjectFilter,
+    SET_SORT_FILTER: setSortFilter,
+    RESIZE_ARTICLE_LIST: resizeArticleList,
+    REPOSITION_ARTICLE_LIST: repositionArticleList,
+    LOCK_ARTICLE_LIST: toggleLockArticleList,
+    SET_ARTICLE_LIST_SEARCH: setArticleListSearch,
+    SET_ARTICLE_LIST_VIEW: setArticleListView
+  }
+);
 export default articleLists;
