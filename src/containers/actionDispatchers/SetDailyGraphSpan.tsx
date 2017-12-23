@@ -10,20 +10,17 @@ interface Props {
   onSubmit: (min: Date, max: Date) => void;
   currentMax: Date;
   currentMin: Date;
-  dailyMins: List<Date>;
+  absMin: Date;
 }
 
 class SetDailyGraphSpan extends React.Component<Props> {
+  componentWillMount() {
+    this.props.onSubmit(this.props.absMin, this.props.currentMax);
+  }
   getChoices() {
-    let absMin = this.props.dailyMins.get(0);
-    this.props.dailyMins.forEach((t: Date) => {
-      if (isBefore(t, absMin)) {
-        absMin = t;
-      }
-    });
     let choices: List<Date> = List();
     let iter = new Date();
-    while (!isBefore(iter, absMin)) {
+    while (!isBefore(iter, this.props.absMin)) {
       choices = choices.push(iter);
       iter = subDays(iter, 7);
     }
@@ -35,6 +32,7 @@ class SetDailyGraphSpan extends React.Component<Props> {
     const { onSubmit, currentMax, currentMin } = this.props;
     const choices = this.getChoices();
     const startDate = currentMin ? currentMin : choices.last();
+    
     return (
       <Nav justified={true} bsStyle="tabs" bsSize="xsmall">
         <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), new Date())}>
@@ -88,10 +86,10 @@ const mapStateToProps = (state: any) => {
   return {
     currentMax: state.get('ui').dailyGraphMax,
     currentMin: state.get('ui').dailyGraphMin,
-    dailyMins: state
+    absMin: state
       .get('dailies')
       .map((t: Daily) => t.completedOn.first())
-      .toList()
+      .min()
   };
 };
 
