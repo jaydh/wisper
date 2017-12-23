@@ -39,7 +39,7 @@ function setDailyGraphSpan(uiState: UIState, action: any): UIState {
 }
 export default createReducer(
   {
-    view: 'Full',
+    view: 'dailies',
     fetchingArticles: false,
     fetchingDailies: false,
     demoComplete: null,

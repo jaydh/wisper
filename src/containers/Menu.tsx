@@ -55,12 +55,6 @@ class Menu extends React.Component<Props> {
             >
               Analytics{' '}
             </NavItem>
-            <NavItem
-              eventKey={5}
-              onClick={() => this.props.onSetUIView('full')}
-            >
-              Full View
-            </NavItem>
           </Nav>
           <Nav pullRight={true}>
             <NavDropdown

@@ -87,8 +87,6 @@ class AppRoutes extends React.Component<Props, State> {
                 <div>
                   <Dailies />
                   <DailyAnalytics />
-                  <Canvas />
-                  <ArticleAnalytics />
                 </div>
               );
           }
