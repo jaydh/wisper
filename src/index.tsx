@@ -51,7 +51,6 @@ try {
   store.dispatch({ type: 'USER_LOGOUT' });
   persistor.purge();
   console.log(e);
-  location.reload();
 }
 
 registerServiceWorker();
