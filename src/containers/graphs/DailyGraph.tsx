@@ -150,7 +150,7 @@ class DailyGraph extends React.Component<Props, State> {
               .filter(
                 (p: Date) =>
                   isBefore(p, addDays(this.props.graphMax, 1)) &&
-                  isAfter(p, this.props.graphMin)
+                  isAfter(p, subDays(this.props.graphMin, 1))
               )
               .map((p: Date) => {
                 return {
@@ -177,7 +177,7 @@ class DailyGraph extends React.Component<Props, State> {
                   .filter(
                     (p: Date) =>
                       isBefore(p, addDays(this.props.graphMax, 1)) &&
-                      isAfter(p, this.props.graphMin)
+                      isAfter(p, subDays(this.props.graphMin, 1))
                   )
                   .map((p: Date) => {
                     return {
