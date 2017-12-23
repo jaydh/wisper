@@ -50,12 +50,6 @@ class Menu extends React.Component<Props> {
               Articles{' '}
             </NavItem>
             <NavItem
-              eventKey={3}
-              onClick={() => this.props.onSetUIView('canvas')}
-            >
-              Canvas{' '}
-            </NavItem>
-            <NavItem
               eventKey={4}
               onClick={() => this.props.onSetUIView('analytics')}
             >
