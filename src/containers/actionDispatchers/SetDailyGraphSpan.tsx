@@ -14,9 +14,6 @@ interface Props {
 }
 
 class SetDailyGraphSpan extends React.Component<Props> {
-  componentWillMount() {
-    this.props.onSubmit(this.props.absMin, this.props.currentMax);
-  }
   getChoices() {
     let choices: List<Date> = List();
     let iter = new Date();
@@ -32,20 +29,21 @@ class SetDailyGraphSpan extends React.Component<Props> {
     const { onSubmit, currentMax, currentMin } = this.props;
     const choices = this.getChoices();
     const startDate = currentMin ? currentMin : choices.last();
-    
+    const endDate = currentMax ? currentMax : new Date();
+
     return (
       <Nav justified={true} bsStyle="tabs" bsSize="xsmall">
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), new Date())}>
-          Week
-        </NavItem>
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 2), new Date())}>
-          2 Weeks
+        <NavItem onClick={() => onSubmit(this.props.absMin, new Date())}>
+          Full
         </NavItem>
         <NavItem onClick={() => onSubmit(subWeeks(new Date(), 4), new Date())}>
           Month
         </NavItem>
-        <NavItem onClick={() => onSubmit(choices.last(), new Date())}>
-          Full
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 2), new Date())}>
+          2 Weeks
+        </NavItem>
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), new Date())}>
+          Week
         </NavItem>
         <NavDropdown
           title={'Start Date: ' + startDate.toLocaleDateString()}
@@ -63,7 +61,7 @@ class SetDailyGraphSpan extends React.Component<Props> {
             ))}
         </NavDropdown>
         <NavDropdown
-          title={'End Date: ' + currentMax.toLocaleDateString()}
+          title={'End Date: ' + endDate.toLocaleDateString()}
           id="daily-graph-max-selector"
         >
           {choices

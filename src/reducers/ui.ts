@@ -44,8 +44,8 @@ export default createReducer(
     fetchingDailies: false,
     demoComplete: null,
     demoStart: null,
-    dailyGraphMin: new Date(),
-    dailyGraphMax: new Date()
+    dailyGraphMin: null,
+    dailyGraphMax: null
   },
   {
     SET_UI_VIEW: setUIView,

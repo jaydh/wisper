@@ -3,14 +3,7 @@ import { connect } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Map, List, Set } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import {
-  differenceInCalendarDays,
-  addDays,
-  subDays,
-  isSameDay,
-  isBefore,
-  isAfter
-} from 'date-fns';
+import { addDays, subDays, isSameDay, isBefore, isAfter } from 'date-fns';
 import SetDailyGraphSpan from '../actionDispatchers/SetDailyGraphSpan';
 
 interface Props {
@@ -20,6 +13,7 @@ interface Props {
   demoStart: boolean;
   demoComplete: boolean;
   fetching: boolean;
+  absMin: Date;
 }
 
 interface State {
@@ -90,6 +84,11 @@ class DailyGraph extends React.Component<Props, State> {
 
   getData() {
     const { dailies } = this.props;
+    const graphMax = this.props.graphMax ? this.props.graphMax : new Date();
+    const graphMin = this.props.graphMin
+      ? this.props.graphMin
+      : this.props.absMin;
+
     const isDayAfter = (a: Date, b: Date) => isSameDay(a, addDays(b, 1));
     const isDayBefore = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
     let dotDailies: Map<string, List<Date>> = Map();
@@ -159,8 +158,8 @@ class DailyGraph extends React.Component<Props, State> {
             data: t.dataset
               .filter(
                 (p: Date) =>
-                  isBefore(p, addDays(this.props.graphMax, 1)) &&
-                  isAfter(p, subDays(this.props.graphMin, 1))
+                  isBefore(p, addDays(graphMax, 1)) &&
+                  isAfter(p, subDays(graphMin, 1))
               )
               .map((p: Date) => {
                 return {
@@ -186,8 +185,8 @@ class DailyGraph extends React.Component<Props, State> {
                 data: value
                   .filter(
                     (p: Date) =>
-                      isBefore(p, addDays(this.props.graphMax, 1)) &&
-                      isAfter(p, subDays(this.props.graphMin, 1))
+                      isBefore(p, addDays(graphMax, 1)) &&
+                      isAfter(p, subDays(graphMin, 1))
                   )
                   .map((p: Date) => {
                     return {
@@ -205,7 +204,11 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   getOptions() {
-    const { dailies, graphMax, graphMin } = this.props;
+    const { dailies } = this.props;
+    const graphMax = this.props.graphMax ? this.props.graphMax : new Date();
+    const graphMin = this.props.graphMin
+      ? this.props.graphMin
+      : this.props.absMin;
     return {
       scales: {
         yAxes: [
@@ -221,17 +224,14 @@ class DailyGraph extends React.Component<Props, State> {
             type: 'time',
             id: 'streak',
             ticks: {
-              callback: function(tick: any, index: any, array: any) {
-                return index %
-                  Math.round(differenceInCalendarDays(graphMax, graphMin) / 5)
-                  ? ''
-                  : tick;
+              callback: (tick: any, index: any, array: any) => {
+                return index % Math.round(array.length / 5) ? '' : tick;
               }
             },
 
             time: {
-              max: this.props.graphMax,
-              min: this.props.graphMin,
+              max: graphMax,
+              min: graphMin,
               round: 'day',
               unit: 'day',
               stepSize: 1,
@@ -293,7 +293,11 @@ const mapStateToProps = (state: any, ownProps: any) => {
     graphMax: state.get('ui').dailyGraphMax,
     demoStart: state.get('ui').demoStart,
     demoComplete: state.get('ui').demoComplete,
-    fetching: state.get('ui').fetchingDailies
+    fetching: state.get('ui').fetchingDailies,
+    absMin: state
+      .get('dailies')
+      .map((t: Daily) => t.completedOn.first())
+      .min()
   };
 };
 
