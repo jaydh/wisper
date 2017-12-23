@@ -44,7 +44,7 @@ export default createReducer(
     fetchingDailies: false,
     demoComplete: null,
     demoStart: null,
-    dailyGraphMin: null,
+    dailyGraphMin: new Date(),
     dailyGraphMax: new Date()
   },
   {
