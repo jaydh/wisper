@@ -78,6 +78,16 @@ class DailyGraph extends React.Component<Props, State> {
     }
   }
 
+  shouldComponentUpdate(nextProps: Props) {
+    if (
+      nextProps.fetching ||
+      (nextProps.demoStart && !nextProps.demoComplete)
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   getData() {
     const { dailies } = this.props;
     const isDayAfter = (a: Date, b: Date) => isSameDay(a, addDays(b, 1));
@@ -263,26 +273,12 @@ class DailyGraph extends React.Component<Props, State> {
     } as any;
   }
 
-  shouldComponentUpdate(nextProps: Props) {
-    if (
-      nextProps.fetching ||
-      (nextProps.demoStart && !nextProps.demoComplete)
-    ) {
-      return false;
-    }
-    return true;
-  }
-
   render() {
     return (
       <div>
         {!this.props.dailies.isEmpty() && (
           <div>
-            <Line
-              data={this.getData()}
-              options={this.getOptions()}
-              redraw={true}
-            />
+            <Line data={this.getData()} options={this.getOptions()} />
             <SetDailyGraphSpan />
           </div>
         )}
