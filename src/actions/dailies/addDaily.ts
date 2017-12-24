@@ -1,5 +1,7 @@
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
+import { Daily } from '../../constants/StoreState';
+import { List } from 'immutable';
 let Hashes = require('jshashes');
 let SHA1 = new Hashes.SHA1();
 
@@ -46,8 +48,16 @@ export default function addDaily(daily: string) {
   return async (dispatch: Dispatch<any>) => {
     dispatch(AddDailyRequested());
 
-    const hash = SHA1.hex(daily);
+    const hash: string = SHA1.hex(daily);
     const dailyRef = database.ref('/userData/' + user + '/dailies/' + hash);
+    const set: Daily = {
+      id: hash,
+      title: daily,
+      createdOn: new Date(),
+      completedOn: List(),
+      completed: false,
+      streakCount: 0
+    };
     dailyRef.parent.off();
 
     return dailyRef
@@ -57,10 +67,7 @@ export default function addDaily(daily: string) {
         if (snapshot.exists()) {
           dispatch(AddDailyRejected());
         } else {
-          dailyRef.set({
-            title: daily,
-            id: hash
-          });
+          dailyRef.set(set);
         }
       })
       .then(() => {
