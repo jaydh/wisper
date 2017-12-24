@@ -54,8 +54,8 @@ export default function addDaily(daily: string) {
       id: hash,
       title: daily,
       createdOn: new Date(),
-      completedOn: List(),
-      completed: false,
+      completedOn: List().toJS(),
+      finalized: false,
       streakCount: 0
     };
     dailyRef.parent.off();
