@@ -55,6 +55,7 @@ function processDaily(daily: any): Daily {
   } else {
     daily.completedOn = List();
   }
+  daily.completed = daily.completed ? daily.completed : false;
   return daily;
 }
 
