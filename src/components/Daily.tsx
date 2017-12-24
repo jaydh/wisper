@@ -7,6 +7,7 @@ import {
   subDays,
   differenceInCalendarDays
 } from 'date-fns';
+import FinalizeDaily from '../containers/actionDispatchers/FinalizeDaily';
 
 interface Props {
   onComplete: () => void;
@@ -45,8 +46,22 @@ export default class Daily extends React.Component<Props, State> {
               </b>
             )}
           {daily.title}
-          <Collapse in={this.state.showDetails || expand}>
+        </Button>
+        <Button
+          bsStyle="daily"
+          active={this.state.showDetails}
+          onClick={() =>
+            this.state.showDetails || expand
+              ? this.setState({ showDetails: false })
+              : this.setState({ showDetails: true })
+          }
+        >
+          <Glyphicon glyph="stats" />
+        </Button>
+        <Collapse in={this.state.showDetails || expand}>
+          <div>
             <p>
+              <br />
               {daily.completedOn.last()
                 ? 'Last Completed: ' +
                   daily.completedOn.last().toLocaleDateString()
@@ -60,19 +75,9 @@ export default class Daily extends React.Component<Props, State> {
               )}{' '}
               days ago
             </p>
-          </Collapse>
-        </Button>
-        <Button
-          bsStyle="daily"
-          active={this.state.showDetails}
-          onClick={() =>
-            this.state.showDetails || expand
-              ? this.setState({ showDetails: false })
-              : this.setState({ showDetails: true })
-          }
-        >
-          <Glyphicon glyph="stats" />
-        </Button>
+            <FinalizeDaily id={daily.id} />
+          </div>
+        </Collapse>
       </ButtonGroup>
     );
   }

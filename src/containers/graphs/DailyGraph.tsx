@@ -83,7 +83,7 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   getData() {
-    const { dailies } = this.props;
+    const dailies = this.props.dailies.filter((t: Daily) => !t.finalized);
     const graphMax = this.props.graphMax ? this.props.graphMax : new Date();
     const graphMin = this.props.graphMin
       ? this.props.graphMin
@@ -200,7 +200,7 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   getOptions() {
-    const { dailies } = this.props;
+    const dailies = this.props.dailies.filter((t: Daily) => !t.finalized);
     const graphMax = this.props.graphMax ? this.props.graphMax : new Date();
     const graphMin = this.props.graphMin
       ? this.props.graphMin

@@ -6,6 +6,7 @@ import {
   DeleteDailyFromServer,
   UpdateDaily
 } from '../actions/syncWithFirebase';
+import { FinalizeDailyFulfilled } from '../actions/dailies/finalizeDaily';
 import createReducer from './createReducer';
 import { parse, isSameDay, subDays } from 'date-fns';
 import { AddDailyFulfilled } from '../actions/dailies/addDaily';
@@ -55,7 +56,7 @@ function processDaily(daily: any): Daily {
   } else {
     daily.completedOn = List();
   }
-  daily.completed = daily.completed ? daily.completed : false;
+  daily.finalized = daily.finalized ? daily.finalized : false;
   return daily;
 }
 
@@ -65,7 +66,7 @@ function addDaily(dailyState: List<Daily>, action: AddDailyFulfilled) {
     : dailyState
         .push({
           createdOn: new Date(),
-          completed: false,
+          finalized: false,
           completedOn: List(),
           title: action.title,
           id: action.id,
@@ -151,6 +152,15 @@ function demoDailyCompletionBatch(
     .map((t: Daily) => processDaily(t));
 }
 
+function finalizeDaily(
+  dailyState: List<Daily>,
+  action: FinalizeDailyFulfilled
+) {
+  return dailyState.map(
+    (t: Daily) => (t.id === action.id ? { ...t, finalized: true } : t)
+  );
+}
+
 export default createReducer(List(), {
   ADD_DAILY_FULFILLED: addDaily,
   COMPLETE_DAILY_FULFILLED: completeDaily,
@@ -158,5 +168,6 @@ export default createReducer(List(), {
   DELETE_DAILY_FROM_SERVER: deleteDailyFromServer,
   UPDATE_DAILY: updateDaily,
   ADD_FETCHED_DAILIES: addFetchedDailies,
+  FINALIZE_DAILY_FULFILLED: finalizeDaily,
   DEMO_DAILY_COMPLETION_BATCH: demoDailyCompletionBatch
 });

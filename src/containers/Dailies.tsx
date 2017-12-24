@@ -30,6 +30,7 @@ class Dailies extends React.Component<Props, State> {
         <div style={{ textAlign: 'center' }}>
           <ButtonGroup bsStyle="dailies">
             {dailies
+              .filter((t: DailyType) => !t.finalized)
               .filter((t: DailyType) => {
                 return t.completedOn && !t.completedOn.isEmpty()
                   ? this.state.showCompleted ||
