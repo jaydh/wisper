@@ -71,7 +71,7 @@ class Article extends React.Component<Props, State> {
           })
         }
       >
-        <LazyLoad height="300" offset={400} overflow={false}>
+        <LazyLoad height="300" offset={600} overflow={false}>
           <Grid>
             {showImage && (
               <Col xs={4} sm={4} md={2} lg={2}>
