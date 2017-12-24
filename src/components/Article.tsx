@@ -24,6 +24,7 @@ interface Props {
 interface State {
   isMenuOpen: boolean;
   hoverable: boolean;
+  scrolling: boolean;
 }
 
 class Article extends React.Component<Props, State> {
@@ -31,7 +32,8 @@ class Article extends React.Component<Props, State> {
     super(props);
     this.state = {
       isMenuOpen: false,
-      hoverable: false
+      hoverable: false,
+      scrolling: false
     };
   }
 
@@ -56,7 +58,18 @@ class Article extends React.Component<Props, State> {
           this.setState({ hoverable: true, isMenuOpen: true })
         }
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        onTouchEnd={() => this.setState({ isMenuOpen: !this.state.isMenuOpen })}
+        onScroll={() => this.setState({ scrolling: true, isMenuOpen: false })}
+        onTouchMove={() =>
+          this.setState({ scrolling: true, isMenuOpen: false })
+        }
+        onTouchEnd={() =>
+          this.setState({
+            isMenuOpen: this.state.scrolling
+              ? this.state.isMenuOpen
+              : !this.state.isMenuOpen,
+            scrolling: false
+          })
+        }
       >
         <LazyLoad height="300" offset={400} overflow={false}>
           <Grid>
