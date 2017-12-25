@@ -1,4 +1,5 @@
 import * as React from 'react';
+import setDailyGraphSpan from '../../actions/ui/setDailyGraphSpan';
 import { connect } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Map, List, Set } from 'immutable';
@@ -9,7 +10,9 @@ import {
   isSameDay,
   isBefore,
   isAfter,
-  parse
+  parse,
+  startOfDay,
+  endOfDay
 } from 'date-fns';
 import SetDailyGraphSpan from '../actionDispatchers/SetDailyGraphSpan';
 
@@ -21,6 +24,7 @@ interface Props {
   demoComplete: boolean;
   fetching: boolean;
   absMin: Date;
+  onPointClick: (min: Date, max: Date) => void;
 }
 
 interface State {
@@ -225,7 +229,14 @@ class DailyGraph extends React.Component<Props, State> {
             type: 'time',
             ticks: {
               callback: (tick: any, index: any, array: any) => {
-                if (isSameDay(graphMin, graphMax) && array[index]) {
+                if (
+                  array[0] &&
+                  isSameDay(
+                    parse(array[0].value),
+                    parse(array[array.length - 1].value)
+                  ) &&
+                  array[index]
+                ) {
                   return parse(array[index].value).toLocaleTimeString();
                 }
                 return index % Math.round(array.length / 5) ? '' : tick;
@@ -272,6 +283,18 @@ class DailyGraph extends React.Component<Props, State> {
       hover: {
         intersect: false,
         mode: 'dataset'
+      },
+      onClick: (event: any, array: any) => {
+        const ref = this.refs.dailyGraph as any;
+        const instance = ref.chart_instance.getElementAtEvent(event);
+        if (instance[0]) {
+          const dataset = ref.chart_instance.getDatasetMeta(
+            instance[0]._datasetIndex
+          ).controller._data;
+          const dataPoint = dataset[instance[0]._index];
+          const date = parse(dataPoint.x);
+          this.props.onPointClick(startOfDay(date), endOfDay(date));
+        }
       }
     } as any;
   }
@@ -281,7 +304,11 @@ class DailyGraph extends React.Component<Props, State> {
       <div>
         {!this.props.dailies.isEmpty() && (
           <div>
-            <Line data={this.getData()} options={this.getOptions()} />
+            <Line
+              data={this.getData()}
+              options={this.getOptions()}
+              ref="dailyGraph"
+            />
             <SetDailyGraphSpan />
           </div>
         )}
@@ -304,4 +331,12 @@ const mapStateToProps = (state: any, ownProps: any) => {
   };
 };
 
-export default connect(mapStateToProps)(DailyGraph);
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    onPointClick: (min: Date, max: Date) => {
+      dispatch(setDailyGraphSpan(min, max));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DailyGraph);
