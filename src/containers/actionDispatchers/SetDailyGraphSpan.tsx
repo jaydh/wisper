@@ -4,7 +4,7 @@ import { Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
 import * as React from 'react';
 import { Daily } from '../../constants/StoreState';
 import { List } from 'immutable';
-import { isBefore, isAfter, subDays, subWeeks } from 'date-fns';
+import { isBefore, isAfter, subDays, subWeeks, addDays } from 'date-fns';
 
 interface Props {
   onSubmit: (min: Date, max: Date) => void;
@@ -33,18 +33,19 @@ class SetDailyGraphSpan extends React.Component<Props> {
 
     return (
       <Nav justified={true} bsStyle="tabs" bsSize="xsmall">
-        <NavItem onClick={() => onSubmit(this.props.absMin, new Date())}>
-          Full
-        </NavItem>
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 4), new Date())}>
-          Month
-        </NavItem>
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 2), new Date())}>
-          2 Weeks
-        </NavItem>
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), new Date())}>
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), absMax)}>
           Week
         </NavItem>
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 2), absMax)}>
+          2 Weeks
+        </NavItem>
+        <NavItem onClick={() => onSubmit(this.props.absMin, absMax)}>
+          Full
+        </NavItem>
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 4), absMax)}>
+          Month
+        </NavItem>
+
         <NavDropdown
           title={'Start Date: ' + startDate.toLocaleDateString()}
           id="daily-graph-min-selector"
