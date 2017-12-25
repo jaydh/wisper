@@ -47,10 +47,6 @@ class SetDailyGraphSpan extends React.Component<Props> {
         <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), absMax)}>
           Week
         </NavItem>
-
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), absMax)}>
-          Week
-        </NavItem>
         <NavItem onClick={() => onSubmit(subWeeks(new Date(), 2), absMax)}>
           2 Weeks
         </NavItem>
