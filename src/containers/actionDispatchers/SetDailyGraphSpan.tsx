@@ -4,7 +4,14 @@ import { Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
 import * as React from 'react';
 import { Daily } from '../../constants/StoreState';
 import { List } from 'immutable';
-import { isBefore, isAfter, subDays, subWeeks, addDays } from 'date-fns';
+import {
+  isBefore,
+  isAfter,
+  subDays,
+  subWeeks,
+  startOfDay,
+  endOfDay
+} from 'date-fns';
 
 interface Props {
   onSubmit: (min: Date, max: Date) => void;
@@ -28,11 +35,19 @@ class SetDailyGraphSpan extends React.Component<Props> {
   render() {
     const { onSubmit, currentMax, currentMin } = this.props;
     const choices = this.getChoices();
+    const absMax = new Date();
     const startDate = currentMin ? currentMin : choices.last();
     const endDate = currentMax ? currentMax : new Date();
 
     return (
       <Nav justified={true} bsStyle="tabs" bsSize="xsmall">
+        <NavItem onClick={() => onSubmit(startOfDay(absMax), endOfDay(absMax))}>
+          Today
+        </NavItem>
+        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), absMax)}>
+          Week
+        </NavItem>
+
         <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), absMax)}>
           Week
         </NavItem>

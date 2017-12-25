@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Map, List, Set } from 'immutable';
 import { Daily } from '../../constants/StoreState';
-import { addDays, subDays, isSameDay, isBefore, isAfter } from 'date-fns';
+import {
+  addDays,
+  subDays,
+  isSameDay,
+  isBefore,
+  isAfter,
+  parse
+} from 'date-fns';
 import SetDailyGraphSpan from '../actionDispatchers/SetDailyGraphSpan';
 
 interface Props {
@@ -88,7 +95,6 @@ class DailyGraph extends React.Component<Props, State> {
     const graphMin = this.props.graphMin
       ? this.props.graphMin
       : this.props.absMin;
-
     const isDayAfter = (a: Date, b: Date) => isSameDay(a, addDays(b, 1));
     const isDayBefore = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
     let dotDailies: Map<string, List<Date>> = Map();
@@ -147,7 +153,7 @@ class DailyGraph extends React.Component<Props, State> {
         .map((t: { daily: string; dataset: Set<Date> }, key: number) => {
           const color = this.state.colorMap.get(t.daily);
           return {
-            type: 'line',
+            type: isSameDay(graphMax, graphMin) ? 'bubble' : 'line',
             label: t.daily + ' line graph ' + key,
             backgroundColor: color,
             borderColor: color,
@@ -158,8 +164,7 @@ class DailyGraph extends React.Component<Props, State> {
             data: t.dataset
               .filter(
                 (p: Date) =>
-                  isBefore(p, addDays(graphMax, 1)) &&
-                  isAfter(p, subDays(graphMin, 1))
+                  isBefore(p, addDays(graphMax, 1)) && isAfter(p, graphMin)
               )
               .map((p: Date) => {
                 return {
@@ -212,17 +217,17 @@ class DailyGraph extends React.Component<Props, State> {
         yAxes: [
           {
             type: 'category',
-            labels: [' ']
-              .concat(dailies.map((t: Daily) => t.title).toJS())
-              .concat([' '])
+            labels: dailies.map((t: Daily) => t.title).toJS()
           }
         ],
         xAxes: [
           {
             type: 'time',
-            id: 'streak',
             ticks: {
               callback: (tick: any, index: any, array: any) => {
+                if (isSameDay(graphMin, graphMax) && array[index]) {
+                  return parse(array[index].value).toLocaleTimeString();
+                }
                 return index % Math.round(array.length / 5) ? '' : tick;
               }
             },
@@ -230,8 +235,8 @@ class DailyGraph extends React.Component<Props, State> {
             time: {
               max: graphMax,
               min: graphMin,
-              round: 'day',
-              unit: 'day',
+              round: isSameDay(graphMin, graphMax) ? 'minute' : 'day',
+              unit: isSameDay(graphMin, graphMax) ? 'hour' : 'day',
               stepSize: 1,
               displayFormats: {
                 millisecond: 'MMM DD',
