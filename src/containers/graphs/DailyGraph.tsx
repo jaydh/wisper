@@ -95,10 +95,12 @@ class DailyGraph extends React.Component<Props, State> {
 
   getData() {
     const dailies = this.props.dailies.filter((t: Daily) => !t.finalized);
-    const graphMax = this.props.graphMax ? this.props.graphMax : new Date();
+    const graphMax = this.props.graphMax
+      ? endOfDay(this.props.graphMax)
+      : endOfDay(new Date());
     const graphMin = this.props.graphMin
-      ? this.props.graphMin
-      : this.props.absMin;
+      ? endOfDay(this.props.graphMin)
+      : endOfDay(this.props.absMin);
     const isDayAfter = (a: Date, b: Date) => isSameDay(a, addDays(b, 1));
     const isDayBefore = (a: Date, b: Date) => isSameDay(a, subDays(b, 1));
     let dotDailies: Map<string, List<Date>> = Map();
@@ -168,7 +170,8 @@ class DailyGraph extends React.Component<Props, State> {
             data: t.dataset
               .filter(
                 (p: Date) =>
-                  isBefore(p, addDays(graphMax, 1)) && isAfter(p, graphMin)
+                  isBefore(p, addDays(graphMax, 1)) &&
+                  isAfter(p, subDays(graphMin, 1))
               )
               .map((p: Date) => {
                 return {
@@ -193,7 +196,9 @@ class DailyGraph extends React.Component<Props, State> {
                 fill: false,
                 data: value
                   .filter(
-                    (p: Date) => isBefore(p, graphMax) && isAfter(p, graphMin)
+                    (p: Date) =>
+                      isBefore(p, addDays(graphMax, 1)) &&
+                      isAfter(p, subDays(graphMin, 1))
                   )
                   .map((p: Date) => {
                     return {
@@ -267,7 +272,12 @@ class DailyGraph extends React.Component<Props, State> {
       },
       title: {
         display: true,
-        text: 'Dailies completed'
+        text:
+          'Dailies completed (' +
+          graphMin.toLocaleDateString() +
+          ' - ' +
+          graphMax.toLocaleDateString() +
+          ')'
       },
       tooltips: {
         callbacks: {
