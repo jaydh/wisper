@@ -50,13 +50,12 @@ class SetDailyGraphSpan extends React.Component<Props> {
         <NavItem onClick={() => onSubmit(subWeeks(new Date(), 2), absMax)}>
           2 Weeks
         </NavItem>
-        <NavItem onClick={() => onSubmit(this.props.absMin, absMax)}>
-          Full
-        </NavItem>
         <NavItem onClick={() => onSubmit(subWeeks(new Date(), 4), absMax)}>
           Month
         </NavItem>
-
+        <NavItem onClick={() => onSubmit(this.props.absMin, absMax)}>
+          Full
+        </NavItem>
         <NavDropdown
           title={'Start Date: ' + startDate.toLocaleDateString()}
           id="daily-graph-min-selector"
