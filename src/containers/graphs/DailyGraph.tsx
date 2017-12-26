@@ -230,14 +230,15 @@ class DailyGraph extends React.Component<Props, State> {
             ticks: {
               callback: (tick: any, index: any, array: any) => {
                 if (
-                  array[0] &&
+                  array[index] &&
                   isSameDay(
                     parse(array[0].value),
                     parse(array[array.length - 1].value)
-                  ) &&
-                  array[index]
+                  )
                 ) {
-                  return parse(array[index].value).toLocaleTimeString();
+                  return index % Math.round(array.length / 6) === 0
+                    ? parse(array[index].value).toLocaleTimeString()
+                    : '';
                 }
                 return index % Math.round(array.length / 5) ? '' : tick;
               }
@@ -283,18 +284,6 @@ class DailyGraph extends React.Component<Props, State> {
       hover: {
         intersect: false,
         mode: 'dataset'
-      },
-      onClick: (event: any, array: any) => {
-        const ref = this.refs.dailyGraph as any;
-        const instance = ref.chart_instance.getElementAtEvent(event);
-        if (instance[0]) {
-          const dataset = ref.chart_instance.getDatasetMeta(
-            instance[0]._datasetIndex
-          ).controller._data;
-          const dataPoint = dataset[instance[0]._index];
-          const date = parse(dataPoint.x);
-          this.props.onPointClick(startOfDay(date), endOfDay(date));
-        }
       }
     } as any;
   }
@@ -307,7 +296,18 @@ class DailyGraph extends React.Component<Props, State> {
             <Line
               data={this.getData()}
               options={this.getOptions()}
-              ref="dailyGraph"
+              getElementAtEvent={(e: any) => {
+                if (e[0]) {
+                  const event = e[0];
+                  const dataPoint =
+                    e[0]._chart.chart.controller.config.data.datasets[
+                      event._datasetIndex
+                    ].data[event._index].x;
+
+                  const date = parse(dataPoint);
+                  this.props.onPointClick(startOfDay(date), endOfDay(date));
+                }
+              }}
             />
             <SetDailyGraphSpan />
           </div>
