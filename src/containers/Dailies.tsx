@@ -69,6 +69,7 @@ class Dailies extends React.Component<Props, State> {
             <Button
               bsSize="xsmall"
               bsStyle="daily"
+              active={this.state.expand}
               onClick={() =>
                 this.state.expand
                   ? this.setState({ expand: false })
@@ -82,7 +83,7 @@ class Dailies extends React.Component<Props, State> {
             <Button
               bsSize="xsmall"
               bsStyle="daily"
-              active={true}
+              active={this.state.showCompleted}
               onClick={() =>
                 this.state.showCompleted
                   ? this.setState({ showCompleted: false })
