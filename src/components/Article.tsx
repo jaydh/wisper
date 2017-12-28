@@ -12,7 +12,8 @@ import {
   ListGroupItem,
   Grid,
   Col,
-  ButtonGroup
+  ButtonGroup,
+  Row
 } from 'react-bootstrap';
 import LazyLoad from 'react-lazyload';
 
@@ -20,20 +21,17 @@ interface Props {
   onArticleView: (t: string) => void;
   article: articleType;
   compact: boolean;
+  scrolling: boolean;
 }
 interface State {
   isMenuOpen: boolean;
-  hoverable: boolean;
-  scrolling: boolean;
 }
 
 class Article extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isMenuOpen: false,
-      hoverable: false,
-      scrolling: false
+      isMenuOpen: false
     };
   }
 
@@ -54,22 +52,8 @@ class Article extends React.Component<Props, State> {
 
     return (
       <ListGroupItem
-        onMouseEnter={() =>
-          this.setState({ hoverable: true, isMenuOpen: true })
-        }
+        onMouseEnter={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        onScroll={() => this.setState({ scrolling: true, isMenuOpen: false })}
-        onTouchMove={() =>
-          this.setState({ scrolling: true, isMenuOpen: false })
-        }
-        onTouchEnd={() =>
-          this.setState({
-            isMenuOpen: this.state.scrolling
-              ? this.state.isMenuOpen
-              : !this.state.isMenuOpen,
-            scrolling: false
-          })
-        }
       >
         <LazyLoad height="300" offset={600} overflow={false}>
           <Grid>
@@ -87,56 +71,72 @@ class Article extends React.Component<Props, State> {
               </Col>
             )}
             <Col
-              xs={showImage ? 8 : 10}
-              sm={showImage ? 8 : 10}
-              md={showImage ? 9 : 11}
-              lg={showImage ? 9 : 11}
+              xs={showImage ? 8 : 12}
+              sm={showImage ? 8 : 12}
+              md={showImage ? 10 : 12}
+              lg={showImage ? 10 : 12}
             >
-              {article.fetching && (
-                <p>
-                  <Glyphicon glyph="refresh" />Fetching metadata
-                </p>
-              )}
-              <a
-                className="article-link"
-                href={article.link}
-                target="_blank"
-                style={{
-                  fontSize: '1.6rem'
-                }}
-                onClick={() => {
-                  onArticleView(article.id);
-                }}
-              >
-                {hasTitle
-                  ? article.metadata.get('ogTitle') ||
-                    article.metadata.get('title')
-                  : article.link}
-              </a>
-              <p
-                style={
-                  this.state.isMenuOpen
-                    ? {
-                        fontSize: '1.2rem'
-                      }
-                    : {
-                        fontSize: '1.2rem'
-                      }
-                }
-              >
-                {hasSiteName
-                  ? article.metadata.get('siteName') ||
-                    article.metadata.get('ogSiteName')
-                  : ''}
-                {hasSiteName && hasDescription ? '- ' : ''}
-                {hasDescription
-                  ? article.metadata.get('ogDescrption') ||
-                    article.metadata.get('description')
-                  : ''}
-              </p>
-              <Collapse in={this.state.isMenuOpen}>
-                <div>
-                  <p>
+              <Row>
+                <Col
+                  xs={10}
+                  sm={10}
+                  md={10}
+                  lg={10}
+                  onTouchEnd={() =>
+                    this.setState({
+                      isMenuOpen: this.props.scrolling
+                        ? this.state.isMenuOpen
+                        : !this.state.isMenuOpen
+                    })
+                  }
+                >
+                  {article.fetching && (
+                    <p>
+                      <Glyphicon glyph="refresh" />Fetching metadata
+                    </p>
+                  )}
+                  <a
+                    className="article-link"
+                    href={article.link}
+                    target="_blank"
+                    style={{
+                      fontSize: '1.6rem'
+                    }}
+                    onClick={() => {
+                      onArticleView(article.id);
+                    }}
+                  >
+                    {hasTitle
+                      ? article.metadata.get('ogTitle') ||
+                        article.metadata.get('title')
+                      : article.link}
+                  </a>
+                </Col>
+                <Col xs={2} sm={2} md={2} lg={2}>
+                  {this.state.isMenuOpen && (
+                    <ButtonGroup>
+                      <ToggleArticle id={article.id} />
+                      <DeleteArticle id={article.id} />
+                    </ButtonGroup>
+                  )}
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} sm={12} md={12} lg={12}>
+                  {hasSiteName
+                    ? article.metadata.get('siteName') ||
+                      article.metadata.get('ogSiteName')
+                    : ''}
+                  {hasSiteName && hasDescription ? ' - ' : ''}
+                  {hasDescription
+                    ? article.metadata.get('ogDescrption') ||
+                      article.metadata.get('description')
+                    : ''}
+                </Col>
+              </Row>
+              <Row>
+                <Collapse in={this.state.isMenuOpen}>
+                  <Col xs={12} sm={12} md={12} lg={12}>
                     {article.dateAdded ? (
                       <small>
                         Date added: {article.dateAdded.toLocaleDateString()}{' '}
@@ -164,26 +164,16 @@ class Article extends React.Component<Props, State> {
                     ) : (
                       ' '
                     )}
-                  </p>
-                  {article.projects ? (
-                    <p>
-                      Projects:{' '}
-                      {article.projects.valueSeq().map((t: string) => t + ' ')}
-                    </p>
-                  ) : (
-                    ''
-                  )}
-                  <AddArticleToProject id={article.id} />
-                </div>
-              </Collapse>
-            </Col>
-            <Col xs={2} sm={2} md={1} lg={1} mdOffset={9} lgOffset={9}>
-              {this.state.isMenuOpen && (
-                <ButtonGroup>
-                  <ToggleArticle id={article.id} />
-                  <DeleteArticle id={article.id} />
-                </ButtonGroup>
-              )}
+                    {article.projects
+                      ? 'Projects: ' +
+                        article.projects
+                          .map((t: string) => t + ' ')
+                          .toJS()
+                      : ' '}
+                    <AddArticleToProject id={article.id} />
+                  </Col>
+                </Collapse>
+              </Row>
             </Col>
           </Grid>
         </LazyLoad>
