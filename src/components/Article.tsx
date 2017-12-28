@@ -75,21 +75,16 @@ class Article extends React.Component<Props, State> {
               sm={showImage ? 8 : 12}
               md={showImage ? 10 : 12}
               lg={showImage ? 10 : 12}
+              onTouchEnd={() =>
+                this.setState({
+                  isMenuOpen: this.props.scrolling
+                    ? this.state.isMenuOpen
+                    : !this.state.isMenuOpen
+                })
+              }
             >
               <Row>
-                <Col
-                  xs={10}
-                  sm={10}
-                  md={10}
-                  lg={10}
-                  onTouchEnd={() =>
-                    this.setState({
-                      isMenuOpen: this.props.scrolling
-                        ? this.state.isMenuOpen
-                        : !this.state.isMenuOpen
-                    })
-                  }
-                >
+                <Col xs={10} sm={10} md={10} lg={10}>
                   {article.fetching && (
                     <p>
                       <Glyphicon glyph="refresh" />Fetching metadata
@@ -166,9 +161,7 @@ class Article extends React.Component<Props, State> {
                     )}
                     {article.projects
                       ? 'Projects: ' +
-                        article.projects
-                          .map((t: string) => t + ' ')
-                          .toJS()
+                        article.projects.map((t: string) => t + ' ').toJS()
                       : ' '}
                     <AddArticleToProject id={article.id} />
                   </Col>
