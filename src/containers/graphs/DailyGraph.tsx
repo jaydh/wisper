@@ -168,11 +168,6 @@ class DailyGraph extends React.Component<Props, State> {
             fill: false,
             pointHoverRadius: 2,
             data: t.dataset
-              .filter(
-                (p: Date) =>
-                  isBefore(p, addDays(graphMax, 1)) &&
-                  isAfter(p, subDays(graphMin, 1))
-              )
               .map((p: Date) => {
                 return {
                   x: p,
