@@ -10,7 +10,10 @@ import {
   subDays,
   subWeeks,
   startOfDay,
-  endOfDay
+  startOfToday,
+  startOfYesterday,
+  endOfYesterday,
+  endOfToday
 } from 'date-fns';
 
 interface Props {
@@ -35,31 +38,39 @@ class SetDailyGraphSpan extends React.Component<Props> {
   render() {
     const { onSubmit, currentMax, currentMin } = this.props;
     const choices = this.getChoices();
-    const absMax = endOfDay(new Date());
     const startDate = currentMin ? currentMin : choices.last();
     const endDate = currentMax ? currentMax : new Date();
 
     return (
       <Nav justified={true} bsStyle="tabs" bsSize="xsmall">
-        <NavItem onClick={() => onSubmit(startOfDay(absMax), endOfDay(absMax))}>
+        <NavItem onClick={() => onSubmit(startOfToday(), endOfToday())}>
           Today
         </NavItem>
+        <NavItem onClick={() => onSubmit(startOfYesterday(), endOfYesterday())}>
+          Yeserday
+        </NavItem>
         <NavItem
-          onClick={() => onSubmit(startOfDay(subWeeks(new Date(), 1)), absMax)}
+          onClick={() =>
+            onSubmit(startOfDay(subWeeks(startOfToday(), 1)), endOfToday())
+          }
         >
           Week
         </NavItem>
         <NavItem
-          onClick={() => onSubmit(startOfDay(subWeeks(new Date(), 2)), absMax)}
+          onClick={() =>
+            onSubmit(startOfDay(subWeeks(startOfToday(), 2)), endOfToday())
+          }
         >
           2 Weeks
         </NavItem>
         <NavItem
-          onClick={() => onSubmit(startOfDay(subWeeks(new Date(), 4)), absMax)}
+          onClick={() =>
+            onSubmit(startOfDay(subWeeks(startOfToday(), 4)), endOfToday())
+          }
         >
           Month
         </NavItem>
-        <NavItem onClick={() => onSubmit(this.props.absMin, absMax)}>
+        <NavItem onClick={() => onSubmit(this.props.absMin, endOfToday())}>
           Full
         </NavItem>
         <NavDropdown
