@@ -81,7 +81,7 @@ class DailyGraph extends React.Component<Props> {
             <Row>
               <Col>
                 <h2 style={{ textAlign: 'center' }}>
-                  Recent Completion Percentage
+                  Completion Percentage
                 </h2>
               </Col>
             </Row>
