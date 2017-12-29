@@ -35,7 +35,7 @@ class SetDailyGraphSpan extends React.Component<Props> {
   render() {
     const { onSubmit, currentMax, currentMin } = this.props;
     const choices = this.getChoices();
-    const absMax = new Date();
+    const absMax = endOfDay(new Date());
     const startDate = currentMin ? currentMin : choices.last();
     const endDate = currentMax ? currentMax : new Date();
 
@@ -44,13 +44,19 @@ class SetDailyGraphSpan extends React.Component<Props> {
         <NavItem onClick={() => onSubmit(startOfDay(absMax), endOfDay(absMax))}>
           Today
         </NavItem>
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 1), absMax)}>
+        <NavItem
+          onClick={() => onSubmit(startOfDay(subWeeks(new Date(), 1)), absMax)}
+        >
           Week
         </NavItem>
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 2), absMax)}>
+        <NavItem
+          onClick={() => onSubmit(startOfDay(subWeeks(new Date(), 2)), absMax)}
+        >
           2 Weeks
         </NavItem>
-        <NavItem onClick={() => onSubmit(subWeeks(new Date(), 4), absMax)}>
+        <NavItem
+          onClick={() => onSubmit(startOfDay(subWeeks(new Date(), 4)), absMax)}
+        >
           Month
         </NavItem>
         <NavItem onClick={() => onSubmit(this.props.absMin, absMax)}>
