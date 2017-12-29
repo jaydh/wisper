@@ -15,7 +15,6 @@ interface Props {
   dailies: List<Daily>;
   graphMin: Date;
   graphMax: Date;
-  absMin: Date;
 }
 
 class DailyGraph extends React.Component<Props> {
@@ -24,9 +23,9 @@ class DailyGraph extends React.Component<Props> {
       .filter((t: Daily) => !t.finalized)
       .map((t: Daily, key: number) => {
         const graphMax = this.props.graphMax ? this.props.graphMax : new Date();
-        const graphMin = this.props.graphMin
-          ? this.props.graphMin
-          : this.props.absMin;
+        const graphMin = isBefore(this.props.graphMin, t.completedOn.first())
+          ? t.completedOn.first()
+          : this.props.graphMin;
         const filterData = t.completedOn.filter(
           (p: Date) =>
             (isBefore(p, graphMax) && isAfter(p, graphMin)) ||
@@ -80,9 +79,7 @@ class DailyGraph extends React.Component<Props> {
           <div>
             <Row>
               <Col>
-                <h2 style={{ textAlign: 'center' }}>
-                  Completion Percentage
-                </h2>
+                <h2 style={{ textAlign: 'center' }}>Completion Percentage</h2>
               </Col>
             </Row>
             <Row>
@@ -102,11 +99,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
   return {
     dailies: state.get('dailies'),
     graphMin: state.get('ui').dailyGraphMin,
-    graphMax: state.get('ui').dailyGraphMax,
-    absMin: state
-      .get('dailies')
-      .map((t: Daily) => t.completedOn.first())
-      .min()
+    graphMax: state.get('ui').dailyGraphMax
   };
 };
 
