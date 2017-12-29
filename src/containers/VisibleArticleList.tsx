@@ -144,9 +144,10 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
 function getSearchedArticles(articles: List<articleType>, search: string) {
   const options = {
     shouldSort: false,
-    threshold: 0.4,
+    threshold: 0.2,
+    tokenize: true,
     location: 0,
-    distance: 100,
+    distance: articles.size,
     maxPatternLength: 32,
     minMatchCharLength: 1,
     keys: [
@@ -163,12 +164,11 @@ function getSearchedArticles(articles: List<articleType>, search: string) {
   const fuse = new Fuse(
     articles
       .map((t: articleType) => {
-        const arrayedProjects = t.projects
-          ? fromJS(t.projects)
-              .valueSeq()
-              .toJS()
-          : null;
-        return { ...t, projects: arrayedProjects };
+        return {
+          ...t,
+          projects: t.projects.toJS(),
+          metadata: t.metadata.toJS()
+        };
       })
       .toJS(),
     options
