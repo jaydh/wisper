@@ -12,7 +12,7 @@ interface Props {
 class Sort extends React.Component<Props> {
   render() {
     const { onClick, currentSort } = this.props;
-    const glyph = (function(sort: string) {
+    const glyph = ((sort: string) => {
       switch (sort) {
         case 'date-asc':
           return 'sort-by-order';
@@ -30,10 +30,24 @@ class Sort extends React.Component<Props> {
           return '';
       }
     })(currentSort);
+
+    const currentSortString = ((sort: string) => {
+      if (sort.startsWith('date-')) {
+        return 'by date added';
+      }
+      if (sort.startsWith('title')) {
+        return 'by title';
+      }
+      if (sort.startsWith('date')) {
+        return 'by date read';
+      }
+      return '';
+    })(currentSort);
     return (
       <Dropdown id="bg-nested-dropdown">
         <Dropdown.Toggle>
-          Sort <Glyphicon glyph={glyph} />
+          Sort {currentSortString}{' '}
+          <Glyphicon glyph={glyph} />
         </Dropdown.Toggle>
         <Dropdown.Menu className="filter-dropdown ">
           <MenuItem
