@@ -28,9 +28,11 @@ export default class GitInfor extends React.Component<{}, State> {
   render() {
     return (
       <h2 style={{ fontSize: '1em' }}>
-        Under active development; Last updated:{' '}
-        {new Date(this.state.gitCommit).toLocaleString()} <br />
-        Source: <a>{'https://github.com/jaydh/wispy'}</a>
+        Last updated: {new Date(this.state.gitCommit).toLocaleString()} <br />
+        Source code:{' '}
+        <a href="https://github.com/jaydh/wispy" target="_blank">
+          {'https://github.com/jaydh/wispy'}
+        </a>
       </h2>
     );
   }
