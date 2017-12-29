@@ -54,6 +54,7 @@ class Article extends React.Component<Props, State> {
       <ListGroupItem
         onMouseEnter={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
+        bsStyle={article.completed ? 'success' : 'info'}
       >
         <LazyLoad height="300" offset={600} overflow={false}>
           <Grid>

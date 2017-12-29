@@ -35,9 +35,6 @@ a {
 .article-list-container {
   background-color: var(--fourary);
 }
-.list-group-item {
-  background-color: var(--fourary);
-}
 
 .btn-group-filters {
   background-color: var(--fourary);
