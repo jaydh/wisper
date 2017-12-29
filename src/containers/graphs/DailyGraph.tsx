@@ -159,7 +159,7 @@ class DailyGraph extends React.Component<Props, State> {
         .map((t: { daily: string; dataset: Set<Date> }, key: number) => {
           const color = this.state.colorMap.get(t.daily);
           return {
-            type: isSameDay(graphMax, graphMin) ? 'bubble' : 'line',
+            type: isSameDay(graphMin, graphMax) ? 'bubble' : 'line',
             label: t.daily + ' line graph ' + key,
             backgroundColor: color,
             borderColor: color,
@@ -167,14 +167,28 @@ class DailyGraph extends React.Component<Props, State> {
             pointRadius: 0,
             fill: false,
             pointHoverRadius: 2,
-            data: t.dataset
-              .map((p: Date) => {
-                return {
-                  x: p,
-                  y: t.daily
-                };
-              })
-              .toJS()
+            data: isSameDay(graphMin, graphMax)
+              ? t.dataset
+                  .filter(
+                    (p: Date) =>
+                      isBefore(p, addDays(graphMax, 1)) &&
+                      isAfter(p, subDays(graphMin, 1))
+                  )
+                  .map((p: Date) => {
+                    return {
+                      x: p,
+                      y: t.daily
+                    };
+                  })
+                  .toJS()
+              : t.dataset
+                  .map((p: Date) => {
+                    return {
+                      x: p,
+                      y: t.daily
+                    };
+                  })
+                  .toJS()
           };
         })
         .toJS()
