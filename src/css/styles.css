@@ -5,9 +5,7 @@
   --fourary: #deecef;
   --fivary: #eec584;
 }
-h2 {
-  color: var(--fivary);
-}
+
 p {
   font-size: 1.2em;
   color: black;
@@ -43,15 +41,6 @@ a {
 
 .btn-group-filters {
   background-color: var(--fourary);
-}
-
-.navbar-nav {
-}
-
-.login {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
 }
 
 .well {
