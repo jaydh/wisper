@@ -312,6 +312,7 @@ class DailyGraph extends React.Component<Props, State> {
       <div>
         {!this.props.dailies.isEmpty() && (
           <div>
+            <SetDailyGraphSpan />
             <Line
               data={this.getData()}
               options={this.getOptions()}
@@ -328,7 +329,6 @@ class DailyGraph extends React.Component<Props, State> {
                 }
               }}
             />
-            <SetDailyGraphSpan />
           </div>
         )}
       </div>
