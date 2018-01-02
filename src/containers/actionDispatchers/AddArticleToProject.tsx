@@ -1,45 +1,43 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import addArticleToProject from '../../actions/articles/addArticleToProject';
-import { Button, Form } from 'react-bootstrap';
-import { Article as articleType } from '../../constants/StoreState';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { List } from 'immutable';
 
 export interface Props {
-  article: articleType;
+  id: string;
+  projects: List<string>;
   onAddToProject: (t: string, p: string) => void;
 }
 
 class AddArticleToProject extends React.Component<Props, {}> {
   render() {
-    let input: any;
-    const { onAddToProject, article } = this.props;
+    const { onAddToProject, projects, id } = this.props;
     return (
-      <Form
-        onSubmit={e => {
-          e.preventDefault();
-          if (!input.value.trim()) {
-            return;
-          }
-          onAddToProject(article.id, input.value);
-          input.value = '';
-        }}
+      <DropdownButton
+        bsSize="sm"
+        title="Add to Project"
+        id={id + 'addProjectDropdown'}
       >
-        <input
-          ref={node => {
-            input = node;
-          }}
-        />
-        <Button>Add Article to Project</Button>
-      </Form>
+        {projects.map((t: string) => (
+          <MenuItem
+            key={id + ' addProject ' + t}
+            onClick={() => onAddToProject(id, t)}
+          >
+            {t}
+          </MenuItem>
+        ))}
+      </DropdownButton>
     );
   }
 }
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    article: state
-      .get('articles')
-      .find((t: articleType) => t.id === ownProps.id)
+    projects: state
+      .get('projects')
+      .keySeq()
+      .toList()
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
