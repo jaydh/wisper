@@ -14,7 +14,7 @@ function getArticlesWithProject(
 ) {
   let articlesInProject: List<articleType>;
   switch (projectFilter) {
-    case 'All':
+    case 'All Projects':
       articlesInProject = articles;
       break;
     case 'None':

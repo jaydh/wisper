@@ -23,7 +23,7 @@ class ProjectSelector extends React.Component<Props> {
       onClick,
       articlesInActivity
     } = this.props;
-    const options = ['All', ...projects.toJS(), 'None'];
+    const options = ['All Projects', ...projects.toJS(), 'None'];
     return (
       <Dropdown id="bg-nested-dropdown">
         <Dropdown.Toggle>{currentProject}</Dropdown.Toggle>
@@ -40,7 +40,7 @@ class ProjectSelector extends React.Component<Props> {
                   {articlesInActivity
                     .filter((t: articleType) => {
                       switch (project) {
-                        case 'All':
+                        case 'All Projects':
                           return true;
                         case 'None':
                           return !t.projects;

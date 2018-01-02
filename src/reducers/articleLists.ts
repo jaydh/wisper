@@ -165,7 +165,7 @@ const articleLists = createReducer(
       order: 1,
       sort: 'date-asc',
       visibilityFilter: 'Active',
-      projectFilter: 'All',
+      projectFilter: 'All Projects',
       view: 'full',
       xPosition: 0,
       yPosition: 0,
