@@ -13,11 +13,6 @@ interface Props {
 interface State {
   colors: List<string>;
   colorMap: Map<string, string>;
-  projectData: Map<string, ProjectMeta>;
-  projectCountData: any;
-  projectCountOptions: any;
-  projectCompletionData: any;
-  projectCompletionOptions: any;
 }
 
 interface ProjectMeta {
@@ -48,43 +43,9 @@ export class ProjectsGraph extends React.Component<Props, State> {
       const color = colors.get(index);
       colorMap = colorMap.set(t, color);
     });
-
-    const projectCountOptions = {
-      title: {
-        display: true,
-        text: 'Project Count Distribution'
-      },
-      legend: {
-        display: true,
-        position: window.innerWidth > 992 ? 'right' : 'bottom'
-      }
-    } as any;
-    const projectCompletionOptions = {
-      title: {
-        display: true,
-        text: 'Project Completed Percentage'
-      },
-      legend: {
-        display: false
-      }
-    };
     this.state = {
-      colors: colors,
-      colorMap: colorMap,
-      projectData: this.getProjectData(props.articles),
-      projectCountData: {},
-      projectCountOptions,
-      projectCompletionData: {},
-      projectCompletionOptions
-    };
-    this.state = {
-      colors: colors,
-      colorMap: colorMap,
-      projectData: this.getProjectData(props.articles),
-      projectCountData: this.getProjectCountData(),
-      projectCountOptions,
-      projectCompletionData: this.getProjectCompletionData(),
-      projectCompletionOptions
+      colors,
+      colorMap
     };
   }
 
@@ -105,23 +66,12 @@ export class ProjectsGraph extends React.Component<Props, State> {
       nextProjects.forEach((t: string) => {
         newColorMap = newColorMap.set(t, this.dynamicColors());
       });
-      this.setState(
-        {
-          projectData: this.getProjectData(nextProps.articles),
-          colorMap: newColorMap
-        },
-        () =>
-          this.setState({
-            projectCompletionData: this.getProjectCompletionData(),
-            projectCountData: this.getProjectCountData()
-          })
-      );
     }
   }
 
-  getProjectData(articles: List<articleType>): Map<string, ProjectMeta> {
+  getProjectData(): Map<string, ProjectMeta> {
     let projectData = Map<string, ProjectMeta>();
-    articles.forEach((article: articleType) => {
+    this.props.articles.forEach((article: articleType) => {
       const keys = !article.projects.isEmpty()
         ? fromJS(article.projects).valueSeq()
         : fromJS(['NONE']);
@@ -148,9 +98,7 @@ export class ProjectsGraph extends React.Component<Props, State> {
   }
 
   getProjectCountData() {
-    const projectCount = this.state.projectData.map(
-      (t: ProjectMeta) => t.count
-    );
+    const projectCount = this.getProjectData().map((t: ProjectMeta) => t.count);
     const borderColors = projectCount
       .valueSeq()
       .map(() => '#f2b632')
@@ -162,7 +110,7 @@ export class ProjectsGraph extends React.Component<Props, State> {
         {
           label: 'project count',
           data: projectCount.valueSeq().toJS(),
-          backgroundColor: this.state.projectData
+          backgroundColor: this.getProjectData()
             .map((t: ProjectMeta, key: string) => this.state.colorMap.get(key))
             .valueSeq()
             .toJS(),
@@ -175,10 +123,10 @@ export class ProjectsGraph extends React.Component<Props, State> {
   }
 
   getProjectCompletionData() {
-    const projectCompletedPercentage = this.state.projectData.map(
-      (t: ProjectMeta) => Math.round(t.completed / t.count * 100) / 100
+    const projectCompletedPercentage = this.getProjectData().map(
+      (t: ProjectMeta) => Math.round(t.completed / t.count * 100)
     );
-    const borderColors = this.state.projectData
+    const borderColors = this.getProjectData()
       .valueSeq()
       .map(() => '#f2b632')
       .toJS();
@@ -189,7 +137,7 @@ export class ProjectsGraph extends React.Component<Props, State> {
         {
           label: 'project completion',
           data: projectCompletedPercentage.valueSeq().toJS(),
-          backgroundColor: this.state.projectData
+          backgroundColor: this.getProjectData()
             .map((t: ProjectMeta, key: string) => this.state.colorMap.get(key))
             .valueSeq()
             .toJS(),
@@ -202,24 +150,57 @@ export class ProjectsGraph extends React.Component<Props, State> {
   }
 
   render() {
+    const projectCountOptions = {
+      title: {
+        display: true,
+        text: 'Project Count Distribution'
+      },
+      legend: {
+        display: true,
+        position: window.innerWidth > 992 ? 'right' : 'bottom'
+      }
+    } as any;
+    const projectCompletionOptions = {
+      title: {
+        display: true,
+        text: 'Project Completed Percentage'
+      },
+      legend: {
+        display: false
+      },
+      scale: {
+        ticks: {
+          callback: (tick: any, index: any, array: any) => {
+            return tick + '%';
+          }
+        }
+      },
+      tooltips: {
+        callbacks: {
+          label: function(t: any, d: any) {
+            const label = d.labels[t.index];
+            const datapoint = d.datasets[t.datasetIndex].data[t.index];
+            return `${label}: ${datapoint} %`;
+          }
+        }
+      }
+    };
     return (
       <div>
-        {!this.state.projectData.isEmpty() && (
-          <Row>
-            <Col xs={12} sm={12} md={6} lg={6}>
-              <Doughnut
-                data={this.state.projectCountData}
-                options={this.state.projectCountOptions}
-              />
-            </Col>
-            <Col xs={12} sm={12} md={6} lg={6}>
-              <Polar
-                data={this.state.projectCompletionData}
-                options={this.state.projectCompletionOptions}
-              />
-            </Col>
-          </Row>
-        )}
+        <Row>
+          <Col xs={12} sm={12} md={6} lg={6}>
+            <Doughnut
+              data={this.getProjectCountData()}
+              options={projectCountOptions}
+            />
+          </Col>
+          <Col xs={12} sm={12} md={6} lg={6}>
+            <Polar
+              data={this.getProjectCompletionData()}
+              options={projectCompletionOptions}
+            />
+          </Col>
+        </Row>
       </div>
     );
   }
