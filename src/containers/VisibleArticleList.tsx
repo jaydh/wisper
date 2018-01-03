@@ -19,7 +19,7 @@ function getArticlesWithProject(
       break;
     case 'None':
       articlesInProject = articles.filter((article: articleType) => {
-        return !article.projects;
+        return article.projects.isEmpty();
       }) as List<articleType>;
       break;
     default:
