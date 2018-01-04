@@ -25,7 +25,7 @@ class DeleteArticleList extends React.Component<Props, State> {
       <div>
         <Button bsSize="small" onClick={() => this.toggleLock()}>
           Toggle the dangerous button to the right
-          <Glyphicon glyph="danger" />
+          <Glyphicon glyph="chevron-right" />
         </Button>
 
         <Button
@@ -34,7 +34,7 @@ class DeleteArticleList extends React.Component<Props, State> {
           onClick={() => this.props.onDeleteClick()}
         >
           Delete user data
-          <Glyphicon glyph="danger" />
+          <Glyphicon glyph="floppy-remove" />
         </Button>
       </div>
     );

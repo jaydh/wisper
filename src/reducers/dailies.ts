@@ -1,3 +1,4 @@
+import { DeleteDailyFulfilled } from './../actions/dailies/deleteDaily';
 import { CompleteDailyFulfilled } from './../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { fromJS, List } from 'immutable';
@@ -152,6 +153,10 @@ function demoDailyCompletionBatch(
     .map((t: Daily) => processDaily(t));
 }
 
+function deleteDaily(articleState: List<Daily>, action: DeleteDailyFulfilled) {
+  return articleState.filter(t => (t ? action.id !== t.id : false));
+}
+
 function finalizeDaily(
   dailyState: List<Daily>,
   action: FinalizeDailyFulfilled
@@ -169,5 +174,6 @@ export default createReducer(List(), {
   UPDATE_DAILY: updateDaily,
   ADD_FETCHED_DAILIES: addFetchedDailies,
   FINALIZE_DAILY_FULFILLED: finalizeDaily,
-  DEMO_DAILY_COMPLETION_BATCH: demoDailyCompletionBatch
+  DEMO_DAILY_COMPLETION_BATCH: demoDailyCompletionBatch,
+  DELETE_DAILY_FULFILLED: deleteDaily
 });
