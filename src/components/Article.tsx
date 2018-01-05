@@ -49,6 +49,7 @@ class Article extends React.Component<Props, State> {
       : false;
 
     const showImage = !compact || this.state.isMenuOpen;
+    const showTitle = !compact || this.state.isMenuOpen;
 
     return (
       <ListGroupItem
@@ -117,54 +118,61 @@ class Article extends React.Component<Props, State> {
                   )}
                 </Col>
               </Row>
-              <Row>
-                <Col xs={12} sm={12} md={12} lg={12}>
-                  {hasSiteName
-                    ? article.metadata.get('siteName') ||
-                      article.metadata.get('ogSiteName')
-                    : ''}
-                  {hasSiteName && hasDescription ? ' - ' : ''}
-                  {hasDescription
-                    ? article.metadata.get('ogDescrption') ||
-                      article.metadata.get('description')
-                    : ''}
-                </Col>
-              </Row>
+              {showTitle && (
+                <Row>
+                  <Col xs={12} sm={12} md={12} lg={12}>
+                    {hasSiteName
+                      ? article.metadata.get('siteName') ||
+                        article.metadata.get('ogSiteName')
+                      : ''}
+                    {hasSiteName && hasDescription ? ' - ' : ''}
+                    {hasDescription
+                      ? article.metadata.get('ogDescrption') ||
+                        article.metadata.get('description')
+                      : ''}
+                  </Col>
+                </Row>
+              )}
               <Row>
                 <Collapse in={this.state.isMenuOpen}>
                   <Col xs={12} sm={12} md={12} lg={12}>
-                    {article.dateAdded ? (
-                      <small>
-                        Date added: {article.dateAdded.toLocaleDateString()}{' '}
-                        <br />
-                      </small>
-                    ) : (
-                      ''
-                    )}
-                    {!article.viewedOn.isEmpty() ? (
-                      <small>
-                        {`Last viewed on ${article.viewedOn
-                          .last()
-                          .toLocaleString()}
+                    <Row>
+                      {article.dateAdded ? (
+                        <small>
+                          Date added: {article.dateAdded.toLocaleDateString()}{' '}
+                          <br />
+                        </small>
+                      ) : (
+                        ''
+                      )}
+                      {!article.viewedOn.isEmpty() ? (
+                        <small>
+                          {`Last viewed on ${article.viewedOn
+                            .last()
+                            .toLocaleString()}
                         - viewed ${article.viewedOn.size} time(s)`}
-                        <br />
-                      </small>
-                    ) : (
-                      ''
-                    )}
-                    {article.dateRead ? (
-                      <small>
-                        {'Date Read: ' + article.dateRead.toLocaleDateString()}
-                        <br />
-                      </small>
-                    ) : (
-                      ' '
-                    )}
-                    {article.projects
-                      ? 'Projects: ' +
-                        article.projects.map((t: string) => t + ' ').toJS()
-                      : ' '}
-                    <AddArticleToProject id={article.id} />
+                          <br />
+                        </small>
+                      ) : (
+                        ''
+                      )}
+                      {article.dateRead ? (
+                        <small>
+                          {'Date Read: ' +
+                            article.dateRead.toLocaleDateString()}
+                          <br />
+                        </small>
+                      ) : (
+                        ' '
+                      )}
+                      {article.projects
+                        ? 'Projects: ' +
+                          article.projects.map((t: string) => t + ' ').toJS()
+                        : ' '}
+                    </Row>
+                    <Row>
+                      <AddArticleToProject id={article.id} />
+                    </Row>
                   </Col>
                 </Collapse>
               </Row>

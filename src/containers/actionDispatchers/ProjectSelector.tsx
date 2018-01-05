@@ -32,7 +32,7 @@ class ProjectSelector extends React.Component<Props> {
             return (
               <MenuItem
                 id={String(project)}
-                key={String(project)}
+                key={'projectSelectorItem ' + String(project)}
                 onClick={() => onClick(String(project))}
               >
                 {project}
