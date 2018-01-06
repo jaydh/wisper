@@ -5,7 +5,8 @@ import { List, fromJS } from 'immutable';
 import { Dropdown, MenuItem } from 'react-bootstrap';
 import {
   ArticleList as ArticleListType,
-  Article as articleType
+  Article as articleType,
+  Project
 } from '../../constants/StoreState';
 
 interface Props {
@@ -64,8 +65,7 @@ class ProjectSelector extends React.Component<Props> {
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
     projects: state
-      .get('projects')
-      .keySeq()
+      .map((t: Project) => t.id)
       .sort((a: string, b: string) => a.localeCompare(b)),
     currentProject: state
       .get('articleLists')
