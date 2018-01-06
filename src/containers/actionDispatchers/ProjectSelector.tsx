@@ -29,7 +29,7 @@ class ProjectSelector extends React.Component<Props> {
       <Dropdown id="bg-nested-dropdown">
         <Dropdown.Toggle>{currentProject}</Dropdown.Toggle>
         <Dropdown.Menu>
-          {options.map(project => {
+          {options.map((project: string) => {
             return (
               <MenuItem
                 id={String(project)}
