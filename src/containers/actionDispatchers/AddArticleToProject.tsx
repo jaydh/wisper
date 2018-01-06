@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import addArticleToProject from '../../actions/articles/addArticleToProject';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { List, Set } from 'immutable';
+import { Project } from '../../constants/StoreState';
 
 export interface Props {
   id: string;
@@ -42,7 +43,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
   return {
     projects: state
       .get('projects')
-      .keySeq()
+      .map((t: Project) => t.id)
       .toList()
       .sort()
   };
