@@ -13,7 +13,6 @@ interface Props {
 class DeleteProject extends React.Component<Props> {
   render() {
     const { onFinalizeClick, projects } = this.props;
-    console.log(projects.toJS());
     return (
       <ButtonGroup vertical={true}>
         {projects.map((t: Project) => (
