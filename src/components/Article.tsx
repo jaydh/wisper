@@ -182,7 +182,10 @@ class Article extends React.Component<Props, State> {
                         : ' '}
                     </Row>
                     <Row>
-                      <AddArticleToProject id={article.id} />
+                      <AddArticleToProject
+                        id={article.id}
+                        articleProjects={article.projects}
+                      />
                     </Row>
                   </Col>
                 </Collapse>

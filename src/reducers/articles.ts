@@ -17,7 +17,9 @@ function processArticle(article: any): articleType {
       article[x] = fromJS(article[x]);
     }
   }
-  article.projects = article.projects ? article.projects.valueSeq() : Set();
+  article.projects = article.projects
+    ? article.projects.valueSeq().sort()
+    : Set();
   article.viewedOn = article.viewedOn
     ? fromJS(article.viewedOn)
         .toSet()

@@ -48,34 +48,25 @@ export default function addArticleToProject(
       '/userData/' + user + '/' + 'articles/' + articleID + '/projects'
     );
     const projects = database.ref('/userData/' + user + '/projects/');
-
+    
     projectRef
-      .once('value', function (snapshot: any) {
-        projectRef
-          .push(project)
-          .then(() => {
-            dispatch(AddArticleToProjectFulfilled(articleID, project));
-          })
-          .catch((error: string) => {
-            console.log(error);
-            dispatch(AddArticleToProjectRejected());
-          });
+      .push(project)
+      .then(() => {
+        dispatch(AddArticleToProjectFulfilled(articleID, project));
+      })
+      .catch((error: string) => {
+        console.log(error);
+        dispatch(AddArticleToProjectRejected());
       })
       .then(() => {
-        projects.once('value').then(function (snapshot: any) {
-          const push = () =>
+        projects.once('value').then(function(snapshot: any) {
+          const articleProjects = fromJS(snapshot.val())
+            .valueSeq()
+            .map((t: Map<string, any>) => t.get('id'));
+          if (articleProjects.isEmpty() || !articleProjects.includes(project)) {
             projects.push({
               id: project
             });
-          if (snapshot.val()) {
-            const proj = fromJS(snapshot.val())
-              .valueSeq()
-              .map((t: Map<string, any>) => t.get('id'));
-            if (!proj.includes(project)) {
-              push();
-            }
-          } else {
-            push();
           }
         });
       });
