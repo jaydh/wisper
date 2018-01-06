@@ -41,3 +41,9 @@ export interface StoreState {
   articles: List<Article>;
   projects?: List<String>;
 }
+
+export interface Project {
+  dictionary: List<string>;
+  id: string;
+  finalized: boolean;
+}

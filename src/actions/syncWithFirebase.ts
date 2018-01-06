@@ -1,6 +1,10 @@
 import { auth, database } from '../firebase';
 import { Dispatch } from 'react-redux';
-import { Article as articleType, Daily } from '../constants/StoreState';
+import {
+  Article as articleType,
+  Daily,
+  Project
+} from '../constants/StoreState';
 
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
@@ -19,20 +23,17 @@ export interface DeleteArticleFromServer {
 
 export interface AddProject {
   type: 'ADD_PROJECT';
-  project: {
-    id: string;
-    dictionary?: any;
-  };
+  project: Project;
 }
 
 export interface UpdateProject {
   type: 'UPDATE_PROJECT';
-  project: any;
+  project: Project;
 }
 
 export interface DeleteProject {
   type: 'DELETE_PROJECT';
-  project: any;
+  project: Project;
 }
 
 function updateArticle(article: articleType) {

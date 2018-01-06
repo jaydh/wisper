@@ -48,27 +48,28 @@ export default function addArticleToProject(
       '/userData/' + user + '/' + 'articles/' + articleID + '/projects'
     );
     const projects = database.ref('/userData/' + user + '/projects/');
-    
-    projectRef
-      .push(project)
-      .then(() => {
-        dispatch(AddArticleToProjectFulfilled(articleID, project));
+
+    return Promise.all([
+      projectRef
+        .push(project)
+        .then(() => {
+          dispatch(AddArticleToProjectFulfilled(articleID, project));
+        })
+        .catch((error: string) => {
+          console.log(error);
+          dispatch(AddArticleToProjectRejected());
+        }),
+      projects.once('value').then(function(snapshot: any) {
+        const articleProjects = fromJS(snapshot.val())
+          .valueSeq()
+          .map((t: Map<string, any>) => t.get('id'));
+        if (articleProjects.isEmpty() || !articleProjects.includes(project)) {
+          projects.push({
+            id: project,
+            finalized: false
+          });
+        }
       })
-      .catch((error: string) => {
-        console.log(error);
-        dispatch(AddArticleToProjectRejected());
-      })
-      .then(() => {
-        projects.once('value').then(function(snapshot: any) {
-          const articleProjects = fromJS(snapshot.val())
-            .valueSeq()
-            .map((t: Map<string, any>) => t.get('id'));
-          if (articleProjects.isEmpty() || !articleProjects.includes(project)) {
-            projects.push({
-              id: project
-            });
-          }
-        });
-      });
+    ]);
   };
 }

@@ -4,34 +4,27 @@ import {
   AddProject,
   DeleteProject
 } from '../actions/syncWithFirebase';
-import { Set, Map } from 'immutable';
+import { List } from 'immutable';
+import { Project } from '../constants/StoreState';
 
-function addProject(
-  projectState: Map<string, Set<string>>,
-  action: AddProject
-) {
-  return projectState.update(
-    action.project.id,
-    (t = Set([])) =>
-      action.project.dictionary ? t.union(action.project.dictionary) : Set([])
+function addProject(projectState: List<Project>, action: AddProject) {
+  const entry = projectState.find((t: Project) => t.id === action.project.id);
+  return entry
+    ? projectState.set(entry[0], action.project)
+    : projectState.push(action.project);
+}
+
+function deleteProject(projectState: List<Project>, action: DeleteProject) {
+  return projectState.filter((t: Project) => t.id !== action.project.id);
+}
+
+function updateProject(projectState: List<Project>, action: UpdateProject) {
+  return projectState.map(
+    (t: Project) => (t.id === action.project.id ? action.project : t)
   );
 }
 
-function deleteProject(
-  projectState: Map<string, Set<string>>,
-  action: DeleteProject
-) {
-  return projectState.delete(action.project.id);
-}
-
-function updateProject(
-  projectState: Map<string, Set<string>>,
-  action: UpdateProject
-) {
-  return projectState.set(action.project.id, Set(action.project.dictionary));
-}
-
-const projectReducer = createReducer(Map<string, Set<string>>(), {
+const projectReducer = createReducer(List(), {
   UPDATE_PROJECT: updateProject,
   ADD_PROJECT: addProject,
   DELETE_PROJECT: deleteProject
