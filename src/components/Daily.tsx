@@ -5,7 +5,8 @@ import {
   isSameDay,
   isBefore,
   subDays,
-  differenceInCalendarDays
+  differenceInCalendarDays,
+  getHours
 } from 'date-fns';
 import FinalizeDaily from '../containers/actionDispatchers/FinalizeDaily';
 
@@ -67,7 +68,22 @@ export default class Daily extends React.Component<Props, State> {
                   daily.completedOn.last().toLocaleDateString()
                 : ''}
               <br />
+              Last Completed{' '}
+              {differenceInCalendarDays(
+                daily.completedOn.last(),
+                new Date()
+              )}{' '}
+              days ago
+              <br />
               Completed {daily.completedOn.size} times <br />
+              Avg. hour of completion{' '}
+              {Math.round(
+                daily.completedOn.reduce(
+                  (acc: number, t: Date) => acc + getHours(t),
+                  0
+                ) / daily.completedOn.size
+              )}
+              <br />
               Started{' '}
               {differenceInCalendarDays(
                 new Date(),
