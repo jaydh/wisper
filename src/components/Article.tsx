@@ -48,8 +48,10 @@ class Article extends React.Component<Props, State> {
       ? article.metadata.has('siteName') || article.metadata.has('ogSiteName')
       : false;
 
-    const showImage = !compact || this.state.isMenuOpen;
-    const showTitle = !compact || this.state.isMenuOpen;
+    const showImage =
+      (!compact || this.state.isMenuOpen) &&
+      article.metadata &&
+      article.metadata.has('images');
 
     return (
       <ListGroupItem
@@ -61,15 +63,11 @@ class Article extends React.Component<Props, State> {
           <Grid>
             {showImage && (
               <Col xs={4} sm={4} md={2} lg={2}>
-                {article.metadata && article.metadata.has('images') ? (
-                  <Image
-                    src={article.metadata.get('images').get(0)}
-                    responsive={true}
-                    thumbnail={true}
-                  />
-                ) : (
-                  ''
-                )}
+                <Image
+                  src={article.metadata.get('images').get(0)}
+                  responsive={true}
+                  thumbnail={true}
+                />
               </Col>
             )}
             <Col
@@ -77,37 +75,18 @@ class Article extends React.Component<Props, State> {
               sm={showImage ? 8 : 12}
               md={showImage ? 10 : 12}
               lg={showImage ? 10 : 12}
-              onTouchEnd={() =>
-                this.setState({
-                  isMenuOpen: this.props.scrolling
-                    ? this.state.isMenuOpen
-                    : !this.state.isMenuOpen
-                })
-              }
             >
-              <Row>
+              <Row
+                onTouchEnd={() =>
+                  this.setState({
+                    isMenuOpen: this.props.scrolling
+                      ? this.state.isMenuOpen
+                      : !this.state.isMenuOpen
+                  })
+                }
+              >
                 <Col xs={10} sm={10} md={10} lg={10}>
-                  {article.fetching && (
-                    <p>
-                      <Glyphicon glyph="refresh" />Fetching metadata
-                    </p>
-                  )}
-                  <a
-                    className="article-link"
-                    href={article.link}
-                    target="_blank"
-                    style={{
-                      fontSize: '1.6rem'
-                    }}
-                    onClick={() => {
-                      onArticleView(article.id);
-                    }}
-                  >
-                    {hasTitle
-                      ? article.metadata.get('ogTitle') ||
-                        article.metadata.get('title')
-                      : article.link}
-                  </a>
+                  {article.fetching && <Glyphicon glyph="refresh" />}
                 </Col>
                 <Col xs={2} sm={2} md={2} lg={2}>
                   {this.state.isMenuOpen && (
@@ -118,25 +97,57 @@ class Article extends React.Component<Props, State> {
                   )}
                 </Col>
               </Row>
-              {showTitle && (
-                <Row>
-                  <Col xs={12} sm={12} md={12} lg={12}>
-                    {hasSiteName
-                      ? article.metadata.get('siteName') ||
-                        article.metadata.get('ogSiteName')
-                      : ''}
-                    {hasSiteName && hasDescription ? ' - ' : ''}
-                    {hasDescription
-                      ? article.metadata.get('ogDescrption') ||
-                        article.metadata.get('description')
-                      : ''}
-                  </Col>
-                </Row>
-              )}
+              <Row
+                onTouchEnd={() =>
+                  this.setState({
+                    isMenuOpen: this.props.scrolling
+                      ? this.state.isMenuOpen
+                      : !this.state.isMenuOpen
+                  })
+                }
+              >
+                <Col>
+                  {hasTitle
+                    ? article.metadata.get('title') ||
+                      article.metadata.get('ogTitle')
+                    : article.link}
+                </Col>
+              </Row>
               <Row>
                 <Collapse in={this.state.isMenuOpen}>
-                  <Col xs={12} sm={12} md={12} lg={12}>
-                    <Row>
+                  <Col>
+                    <Row
+                      onTouchEnd={() =>
+                        this.setState({
+                          isMenuOpen: this.props.scrolling
+                            ? this.state.isMenuOpen
+                            : !this.state.isMenuOpen
+                        })
+                      }
+                    >
+                      {hasSiteName
+                        ? article.metadata.get('siteName') ||
+                          article.metadata.get('ogSiteName')
+                        : ''}
+                      {hasSiteName && hasDescription ? ' - ' : ''}
+                      {hasDescription
+                        ? article.metadata.get('ogDescrption') ||
+                          article.metadata.get('description')
+                        : ''}
+
+                      <a
+                        href={article.link}
+                        target="_blank"
+                        style={{
+                          fontSize: '1.6rem'
+                        }}
+                        onClick={() => {
+                          onArticleView(article.id);
+                        }}
+                      >
+                        {article.link}
+                      </a>
+                      <br />
                       {article.dateAdded ? (
                         <small>
                           Date added: {article.dateAdded.toLocaleDateString()}{' '}
