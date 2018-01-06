@@ -27,7 +27,7 @@ class DeleteArticle extends React.Component<Props, State> {
     const { onDeleteClick, dailies } = this.props;
     return (
       <ButtonGroup vertical={true}>
-        <Button bsSize="small" onClick={() => this.toggleLock()}>
+        <Button onClick={() => this.toggleLock()}>
           Toggle deleting dailies
           <Glyphicon glyph="chevron-down" />
         </Button>
