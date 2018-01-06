@@ -16,7 +16,8 @@ import demoDailyCompletion from '../actions/demo/demoDailyCompletion';
 import SetUIView from '../actions/ui/setUIView';
 import { List } from 'immutable';
 
-export default async function (store: any, persistor: any) {
+export default async function(store: any, persistor: any) {
+  console.time('demoTimer');
   store.dispatch({ type: 'USER_LOGOUT' });
   store.dispatch(demoStart());
   store.dispatch(SetUIView('dailies'));
@@ -197,4 +198,5 @@ export default async function (store: any, persistor: any) {
   await store.dispatch(demoDailyCompletion(ids));
   store.dispatch(SetUIView('dailies'));
   store.dispatch(demoComplete());
+  console.timeEnd('demoTimer');
 }
