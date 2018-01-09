@@ -103,7 +103,6 @@ class AddArticle extends React.Component<Props, State> {
 
   render() {
     const { projectFilter } = this.props;
-    console.log(this.state.suggestion);
     return (
       <form
         onSubmit={event => {
