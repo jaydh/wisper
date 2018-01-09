@@ -4,14 +4,24 @@ import {
   AddProject,
   DeleteProject
 } from '../actions/syncWithFirebase';
-import { List } from 'immutable';
+import { List, fromJS } from 'immutable';
 import { Project } from '../constants/StoreState';
+
+function processProject(project: Project) {
+  for (const x in project) {
+    if (!Object.hasOwnProperty(x)) {
+      project[x] = fromJS(project[x]);
+    }
+  }
+  project.dictionary = project.dictionary ? project.dictionary : List();
+  return project;
+}
 
 function addProject(projectState: List<Project>, action: AddProject) {
   const entry = projectState.find((t: Project) => t.id === action.project.id);
   return entry
-    ? projectState.set(entry[0], action.project)
-    : projectState.push(action.project);
+    ? projectState.set(entry[0], processProject(action.project))
+    : projectState.push(processProject(action.project));
 }
 
 function deleteProject(projectState: List<Project>, action: DeleteProject) {
@@ -20,7 +30,8 @@ function deleteProject(projectState: List<Project>, action: DeleteProject) {
 
 function updateProject(projectState: List<Project>, action: UpdateProject) {
   return projectState.map(
-    (t: Project) => (t.id === action.project.id ? action.project : t)
+    (t: Project) =>
+      t.id === action.project.id ? processProject(action.project) : t
   );
 }
 

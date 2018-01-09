@@ -49,7 +49,6 @@ try {
   });
 } catch (e) {
   store.dispatch({ type: 'USER_LOGOUT' });
-  persistor.purge();
   console.log(e);
 }
 

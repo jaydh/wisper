@@ -2,8 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import addArticle from '../../actions/articles/addArticle';
 import { InputGroup, Button, FormGroup, FormControl } from 'react-bootstrap';
-import { Set, fromJS, Map } from 'immutable';
+import { List, fromJS, Map } from 'immutable';
 import parseUri from '../../helpers/parseURI';
+import { Project } from '../../constants/StoreState';
 
 interface State {
   value: string;
@@ -12,7 +13,7 @@ interface State {
 }
 interface Props {
   onAdd: (t: string, p?: string) => void;
-  wordbanks: Map<string, Set<string>>;
+  projects: List<Project>;
   projectFilter: string;
 }
 
@@ -54,7 +55,7 @@ class AddArticle extends React.Component<Props, State> {
   }
 
   getSuggestion() {
-    const { wordbanks } = this.props;
+    const { projects } = this.props;
     const separators = [' ', '.', '+', '(', ')', '*', '\\/', ':', '?', '-'];
     const paths = fromJS(
       (this.state.parse.path + ' ' + this.state.parse.authority).split(
@@ -64,17 +65,19 @@ class AddArticle extends React.Component<Props, State> {
     const queries = fromJS(this.state.parse.queryKey).valueSeq();
 
     let counts = Map<string, number>();
-    wordbanks.keySeq().forEach((t: string) => {
+    projects.forEach((t: Project) => {
+      const dictionary = t.dictionary;
       paths.union(queries).forEach((p: string) => {
-        if (p === t) {
+        if (p === t.id) {
           this.setState({
             suggestion: p
           });
-          return;
+          return false;
         }
-        if (wordbanks.get(t).includes(p.toLocaleLowerCase())) {
-          counts = counts.update(t, (count: number = 0) => count + 1);
+        if (dictionary.includes(p.toLocaleLowerCase())) {
+          counts = counts.update(t.id, (count: number = 0) => count + 1);
         }
+        return true;
       });
     });
     const max = Math.max(...counts.valueSeq().toJS());
@@ -85,7 +88,9 @@ class AddArticle extends React.Component<Props, State> {
   handleSubmit(useSuggest: boolean) {
     const { onAdd, projectFilter } = this.props;
     let project =
-      projectFilter !== 'None' && projectFilter !== 'All Projects' ? projectFilter : '';
+      projectFilter !== 'None' && projectFilter !== 'All Projects'
+        ? projectFilter
+        : '';
     project = useSuggest ? this.state.suggestion : project;
 
     if (this.getValidationState() === 'success') {
@@ -98,6 +103,7 @@ class AddArticle extends React.Component<Props, State> {
 
   render() {
     const { projectFilter } = this.props;
+    console.log(this.state.suggestion);
     return (
       <form
         onSubmit={event => {
@@ -125,7 +131,7 @@ class AddArticle extends React.Component<Props, State> {
           <FormControl.Feedback />
         </FormGroup>
         {this.getValidationState() === 'success' &&
-          (projectFilter === 'All' || projectFilter === 'None') &&
+          (projectFilter === 'All Projects' || projectFilter === 'None') &&
           this.state.suggestion && (
             <Button onClick={() => this.handleSubmit(true)}>
               Add to {this.state.suggestion} project?
@@ -146,7 +152,7 @@ const mapDispatchToProps = (dispatch: any) => {
 
 const mapStateToProps = (state: any, ownProps: { projectFilter: string }) => {
   return {
-    wordbanks: state.get('projects')
+    projects: state.get('projects')
   };
 };
 
