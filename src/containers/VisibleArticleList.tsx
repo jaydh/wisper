@@ -5,7 +5,7 @@ import {
   Article as articleType,
   ArticleList as ArticleListType
 } from '../constants/StoreState';
-import { isBefore } from 'date-fns';
+import { isBefore, isToday } from 'date-fns';
 import * as Fuse from 'fuse.js';
 
 function getArticlesWithProject(
@@ -46,6 +46,13 @@ function getVisibleArticles(
       return articles.filter((t: articleType) => !t.completed) as List<
         articleType
       >;
+    case 'Today':
+      return articles.filter(
+        (t: articleType) =>
+          t.dateRead
+            ? isToday(t.viewedOn.last()) || isToday(t.dateRead)
+            : isToday(t.viewedOn.last())
+      ) as List<articleType>;
     default:
       throw new Error('Unknown filter: ' + visibilityFilter);
   }
