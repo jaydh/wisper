@@ -17,7 +17,7 @@ class ActiveSelector extends React.Component<Props> {
       <DropdownButton id={currentActive} title={currentActive}>
         {options.map((t: string) => (
           <MenuItem
-            key={`activeSelector ${currentActive}`}
+            key={`activeSelector ${t}`}
             onClick={() => onClick(t)}
           >
             {t}
