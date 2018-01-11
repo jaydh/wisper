@@ -2,12 +2,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Polar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
-import { Article as articleType } from '../../constants/StoreState';
+import { Article as articleType, Project } from '../../constants/StoreState';
 import { Row, Col } from 'react-bootstrap';
 
 interface Props {
   articles: List<articleType>;
-  projects: Map<string, List<string>>;
+  projects: List<Project>;
 }
 
 interface State {
@@ -38,10 +38,10 @@ export class ProjectsGraph extends React.Component<Props, State> {
       .toList();
 
     let colorMap: Map<string, string> = Map();
-    props.projects.keySeq().forEach((t: string) => {
+    props.projects.forEach((t: Project) => {
       const index = Math.floor(Math.random() * colors.size);
       const color = colors.get(index);
-      colorMap = colorMap.set(t, color);
+      colorMap = colorMap.set(t.id, color);
     });
     this.state = {
       colors,
@@ -56,15 +56,15 @@ export class ProjectsGraph extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const projects = this.props.projects.keySeq();
-    const nextProjects = nextProps.projects.keySeq();
+    const projects = this.props.projects;
+    const nextProjects = nextProps.projects;
     if (
       !nextProjects.equals(projects) ||
       !nextProps.articles.equals(this.props.articles)
     ) {
       let newColorMap: Map<string, string> = Map({ NONE: '' });
-      nextProjects.forEach((t: string) => {
-        newColorMap = newColorMap.set(t, this.dynamicColors());
+      nextProjects.forEach((t: Project) => {
+        newColorMap = newColorMap.set(t.id, this.dynamicColors());
       });
     }
   }
