@@ -22,8 +22,7 @@ class DeleteProject extends React.Component<Props> {
               onFinalizeClick(t.id);
             }}
           >
-            <Glyphicon glyph="remove" />
-            {t.id}
+            {t.id} <Glyphicon glyph={t.finalized ? 'edit' : 'check'} />
           </Button>
         ))}
       </ButtonGroup>
