@@ -1,0 +1,24 @@
+[debug] [2018-01-11T01:19:17.052Z] ----------------------------------------------------------------------
+[debug] [2018-01-11T01:19:17.056Z] Command:       /usr/bin/node /home/jay/.yarn/bin/firebase deploy --only hosting
+[debug] [2018-01-11T01:19:17.057Z] CLI Version:   3.14.0
+[debug] [2018-01-11T01:19:17.057Z] Platform:      linux
+[debug] [2018-01-11T01:19:17.057Z] Node Version:  v9.4.0
+[debug] [2018-01-11T01:19:17.057Z] Time:          Wed Jan 10 2018 17:19:17 GMT-0800 (PST)
+[debug] [2018-01-11T01:19:17.057Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-01-11T01:19:17.083Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-01-11T01:19:17.083Z] > authorizing via signed-in user
+[debug] [2018-01-11T01:19:17.088Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/wisper-ffe5b  
+ Wed Jan 10 2018 17:19:17 GMT-0800 (PST)
+[debug] [2018-01-11T01:19:19.091Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-11T01:19:19.093Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/wisper-ffe5b/tokens  
+ Wed Jan 10 2018 17:19:19 GMT-0800 (PST)
+[debug] [2018-01-11T01:19:20.311Z] <<< HTTP RESPONSE 200
+[info] 1
+[info] 
+[info] === Deploying to 'wisper-ffe5b'...
+[info] 
+[info] i  deploying hosting
+[info] i  hosting: preparing build directory for upload...
+[debug] [2018-01-11T01:19:22.118Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/wisper-ffe5b/uploads/-L2XnBqWfCCRQJYUQWL5?fileCount=13&message=  
+ Wed Jan 10 2018 17:19:22 GMT-0800 (PST)

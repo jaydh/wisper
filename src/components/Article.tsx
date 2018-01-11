@@ -107,10 +107,23 @@ class Article extends React.Component<Props, State> {
                 }
               >
                 <Col>
-                  {hasTitle
-                    ? article.metadata.get('title') ||
-                      article.metadata.get('ogTitle')
-                    : article.link}
+                  {this.state.isMenuOpen ? (
+                    <a
+                      onClick={() => onArticleView(article.id)}
+                      href={article.link}
+                      target="_blank"
+                    >
+                      {hasTitle
+                        ? article.metadata.get('title') ||
+                          article.metadata.get('ogTitle')
+                        : article.link}
+                    </a>
+                  ) : hasTitle ? (
+                    article.metadata.get('title') ||
+                    article.metadata.get('ogTitle')
+                  ) : (
+                    article.link
+                  )}
                 </Col>
               </Row>
               <Row>
@@ -135,18 +148,6 @@ class Article extends React.Component<Props, State> {
                           article.metadata.get('description')
                         : ''}
 
-                      <a
-                        href={article.link}
-                        target="_blank"
-                        style={{
-                          fontSize: '1.6rem'
-                        }}
-                        onClick={() => {
-                          onArticleView(article.id);
-                        }}
-                      >
-                        {article.link}
-                      </a>
                       <br />
                       {article.dateAdded ? (
                         <small>
