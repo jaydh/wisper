@@ -14,6 +14,7 @@ import { Article as articleType } from '../constants/StoreState';
 import {
   Glyphicon,
   ListGroup,
+  Badge,
   ButtonGroup,
   Row,
   Col,
@@ -96,7 +97,9 @@ class ArticleList extends React.Component<Props, State> {
               <Sort id={id} />
               <SetArticleListView id={id} />
             </ButtonGroup>
-            <Glyphicon glyph="list-alt" /> {articles.size}
+            <Badge>
+              <Glyphicon glyph="list-alt" /> {articles.size}
+            </Badge>
           </Col>
           <Col
             xs={12}
