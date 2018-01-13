@@ -39,13 +39,13 @@ function setDailyGraphSpan(uiState: UIState, action: any): UIState {
 }
 export default createReducer(
   {
-    view: 'dailies',
+    view: 'compact',
     fetchingArticles: false,
     fetchingDailies: false,
     demoComplete: null,
     demoStart: null,
-    dailyGraphMin: null,
-    dailyGraphMax: null
+    dailyGraphMin: new Date(),
+    dailyGraphMax: new Date()
   },
   {
     SET_UI_VIEW: setUIView,

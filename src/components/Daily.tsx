@@ -31,7 +31,11 @@ export default class Daily extends React.Component<Props, State> {
       <ButtonGroup bsSize="small">
         <Button
           bsStyle="daily"
-          disabled={isSameDay(daily.completedOn.last(), new Date())}
+          disabled={
+            daily.completedOn
+              ? isSameDay(daily.completedOn.last(), new Date())
+              : false
+          }
           onClick={() => onComplete()}
         >
           {daily.streakCount > 4 && (
@@ -63,7 +67,7 @@ export default class Daily extends React.Component<Props, State> {
           <div>
             <p>
               <br />
-              {daily.completedOn.last()
+              {daily.completedOn && daily.completedOn.last()
                 ? 'Last Completed: ' +
                   daily.completedOn.last().toLocaleDateString()
                 : ''}

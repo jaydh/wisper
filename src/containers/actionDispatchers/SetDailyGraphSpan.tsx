@@ -116,6 +116,11 @@ const mapStateToProps = (state: any) => {
       .get('dailies')
       .map((t: Daily) => t.completedOn.first())
       .min()
+      ? state
+          .get('dailies')
+          .map((t: Daily) => t.completedOn.first())
+          .min()
+      : startOfDay(new Date())
   };
 };
 

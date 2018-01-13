@@ -111,7 +111,12 @@ class DailyGraph extends React.Component<Props, State> {
 
     dailies.forEach((t: Daily) => {
       let dataset: Set<Date> = Set();
-
+      if (t.completedOn.size === 1) {
+        dotDailies = dotDailies.set(
+          t.title,
+          dotDailies.get(t.title).push(t.completedOn.first())
+        );
+      }
       const iter = t.completedOn.sort().values();
       let current = iter.next();
       let before = current;
