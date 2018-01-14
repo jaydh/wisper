@@ -64,6 +64,11 @@ class Article extends React.Component<Props, State> {
             {showImage && (
               <Col xs={4} sm={4} md={2} lg={2}>
                 <Image
+                  onTouchEnd={() =>
+                    this.setState({
+                      isMenuOpen: !this.state.isMenuOpen
+                    })
+                  }
                   src={article.metadata.get('images').get(0)}
                   responsive={true}
                   thumbnail={true}
@@ -76,15 +81,7 @@ class Article extends React.Component<Props, State> {
               md={showImage ? 10 : 12}
               lg={showImage ? 10 : 12}
             >
-              <Row
-                onTouchEnd={() =>
-                  this.setState({
-                    isMenuOpen: this.props.scrolling
-                      ? this.state.isMenuOpen
-                      : !this.state.isMenuOpen
-                  })
-                }
-              >
+              <Row>
                 <Col xs={10} sm={10} md={10} lg={10}>
                   {article.fetching && <Glyphicon glyph="refresh" />}
                 </Col>
