@@ -1,5 +1,4 @@
 import { DeleteDailyFulfilled } from './../actions/dailies/deleteDaily';
-import { CompleteDailyFulfilled } from './../actions/dailies/completeDaily';
 import { Daily } from '../constants/StoreState';
 import { fromJS, List } from 'immutable';
 import {
@@ -110,21 +109,6 @@ function updateDaily(dailyState: List<Daily>, action: UpdateDaily) {
   );
 }
 
-function completeDaily(
-  dailyState: List<Daily>,
-  action: CompleteDailyFulfilled
-) {
-  return dailyState.map(
-    (t: Daily) =>
-      t.id === action.id
-        ? {
-            ...t,
-            completedOn: t.completedOn.push(action.date).sort()
-          }
-        : t
-  );
-}
-
 function addFetchedDailies(dailyState: List<Daily>, action: any) {
   let newDailyState = dailyState;
   for (let dailyKey in action.dailies) {
@@ -158,7 +142,6 @@ function deleteDaily(articleState: List<Daily>, action: DeleteDailyFulfilled) {
 
 export default createReducer(List(), {
   ADD_DAILY_FULFILLED: addDaily,
-  COMPLETE_DAILY_FULFILLED: completeDaily,
   ADD_DAILY_FROM_SERVER: addDailyFromServer,
   DELETE_DAILY_FROM_SERVER: deleteDailyFromServer,
   UPDATE_DAILY: updateDaily,

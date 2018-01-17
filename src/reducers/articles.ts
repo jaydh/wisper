@@ -1,7 +1,5 @@
 import { AddArticleFulfilled } from '../actions/articles/addArticle';
 import { DeleteArticleFulfilled } from '../actions/articles/deleteArticle';
-import { ToggleArticleReadFulfilled } from '../actions/articles/toggleArticleRead';
-import { ArticleViewedFulfilled } from '../actions/articles/articleViewed';
 import {
   UpdateArticle,
   AddArticleFromServer,
@@ -102,39 +100,6 @@ function deleteArticleFromServer(
   );
 }
 
-function articleViewed(
-  dailyState: List<articleType>,
-  action: ArticleViewedFulfilled
-) {
-  return dailyState.map((t: articleType) => {
-    return t.id === action.id
-      ? {
-          ...t,
-          viewedOn: t.viewedOn.add(action.date).sort()
-        }
-      : t;
-  });
-}
-
-function toggleArticleRead(
-  articleState: List<articleType>,
-  action: ToggleArticleReadFulfilled
-) {
-  return articleState.map(article => {
-    if (article) {
-      return article.id === action.articleHash
-        ? {
-            ...article,
-            completed: action.update.completed,
-            dateRead: action.update.dateRead,
-            lastViewed: new Date()
-          }
-        : article;
-    }
-    return article;
-  });
-}
-
 function addFetchedArticles(articleState: List<articleType>, action: any) {
   let newArticleState = articleState;
   for (let articleKey in action.articles) {
@@ -154,11 +119,9 @@ function addFetchedArticles(articleState: List<articleType>, action: any) {
 const articles = createReducer(List(), {
   ADD_ARTICLE_FULFILLED: addArticle,
   DELETE_ARTICLE_FULFILLED: deleteArticle,
-  TOGGLE_ARTICLE_READ: toggleArticleRead,
   UPDATE_ARTICLE: updateArticle,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,
-  ARTICLE_VIEWED_FULFILLED: articleViewed,
   ADD_FETCHED_ARTICLES: addFetchedArticles
 });
 

@@ -2,7 +2,6 @@ import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { parse, isSameDay } from 'date-fns';
-import { ListenForDailyUpdates } from '../syncWithFirebase';
 
 export interface CompleteDailyRequested {
   type: 'COMPLETE_DAILY_REQUESTED';
@@ -12,11 +11,6 @@ export interface CompleteDailyRejected {
   type: 'COMPLETE_DAILY_REJECTED';
 }
 
-export interface CompleteDailyFulfilled {
-  type: 'COMPLETE_DAILY_FULFILLED';
-  date: Date;
-  id: string;
-}
 function CompleteDailyRequested(): CompleteDailyRequested {
   return {
     type: 'COMPLETE_DAILY_REQUESTED'
@@ -29,16 +23,6 @@ function CompleteDailyRejected(): CompleteDailyRejected {
   };
 }
 
-function CompleteDailyFulfilled(
-  id: string,
-  date: Date
-): CompleteDailyFulfilled {
-  return {
-    type: 'COMPLETE_DAILY_FULFILLED',
-    date,
-    id
-  };
-}
 export default function completeDaily(
   id: string,
   completionDate: Date = new Date()
@@ -50,8 +34,6 @@ export default function completeDaily(
     );
 
     dispatch(CompleteDailyRequested());
-    // Turn off listener for changes in dailes on server
-    dailyRef.parent.parent.off('child_changed');
     return dailyRef
       .once('value')
       .then(function(snapshot: any) {
@@ -81,8 +63,6 @@ export default function completeDaily(
             .toJS()
         )
       )
-      .then(() => dispatch(CompleteDailyFulfilled(id, completionDate)))
-      .then(() => dispatch(ListenForDailyUpdates()))
       .catch((error: string) => {
         console.log(error);
         dispatch(CompleteDailyRejected());

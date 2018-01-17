@@ -40,8 +40,7 @@ export function deleteArticle(id: string) {
       '/userData/' + user + '/' + 'articles/' + id
     );
 
-    // Check if article in database
-    articleRef
+    return articleRef
       .remove()
       .then(() => {
         dispatch(deleteArticleFulfilled(id));

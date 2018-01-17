@@ -67,11 +67,10 @@ export default function addDaily(daily: string) {
         if (snapshot.exists()) {
           dispatch(AddDailyRejected());
         } else {
-          dailyRef.set(set);
+          dailyRef.set(set).then(() => {
+            dispatch(AddDailyFulfilled(daily));
+          });
         }
-      })
-      .then(() => {
-        dispatch(AddDailyFulfilled(daily));
       })
       .catch((error: string) => {
         console.log(error);

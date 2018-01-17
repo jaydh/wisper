@@ -10,12 +10,6 @@ export interface ArticleViewedRejected {
   type: 'ARTICLE_VIEWED_REJECTED';
 }
 
-export interface ArticleViewedFulfilled {
-  type: 'ARTICLE_VIEWED_FULFILLED';
-  date: Date;
-  id: string;
-}
-
 function ArticleViewedRequested(): ArticleViewedRequested {
   return {
     type: 'ARTICLE_VIEWED_REQUESTED'
@@ -25,14 +19,6 @@ function ArticleViewedRequested(): ArticleViewedRequested {
 function ArticleViewedRejected(): ArticleViewedRejected {
   return {
     type: 'ARTICLE_VIEWED_REJECTED'
-  };
-}
-
-function ArticleViewedFulfilled(id: string): ArticleViewedFulfilled {
-  return {
-    type: 'ARTICLE_VIEWED_FULFILLED',
-    date: new Date(),
-    id
   };
 }
 
@@ -56,9 +42,6 @@ export function ArticleViewed(id: string) {
         : OrderedSet([now]);
       dailyRef
         .set(update.map((t: Date) => t.toLocaleString()).toJS())
-        .then(() => {
-          dispatch(ArticleViewedFulfilled(id));
-        })
         .catch((error: string) => {
           console.log(error);
           dispatch(ArticleViewedRejected());

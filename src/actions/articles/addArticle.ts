@@ -62,30 +62,28 @@ export default function addArticle(articleLink: string, project?: string) {
 
     return articleRef.once('value').then(function(snapshot: any) {
       // Check if article in database
-      if (snapshot.exists()) {
-        dispatch(AddArticleRejected());
-      } else {
-        articleRef
-          .set({
-            link: articleLink,
-            id: hash,
-            dateAdded: now.toLocaleString(),
-            completed: false,
-            fetching: true
-          })
-          .then(() => {
-            dispatch(AddArticleFulfilled(articleLink));
-          })
-          .then(() => {
-            if (project) {
-              dispatch(AddArticleToProject(hash, project));
-            }
-          })
-          .catch((error: string) => {
-            console.log(error);
-            dispatch(AddArticleRejected());
-          });
-      }
+      snapshot.exists()
+        ? dispatch(AddArticleRejected)
+        : articleRef
+            .set({
+              link: articleLink,
+              id: hash,
+              dateAdded: now.toLocaleString(),
+              completed: false,
+              fetching: true
+            })
+            .then(() => {
+              dispatch(AddArticleFulfilled(articleLink));
+            })
+            .then(() => {
+              if (project) {
+                dispatch(AddArticleToProject(hash, project));
+              }
+            })
+            .catch((error: string) => {
+              console.log(error);
+              dispatch(AddArticleRejected());
+            });
     });
   };
 }
