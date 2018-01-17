@@ -40,15 +40,7 @@ interface Props {
   onReposition: (x: number, y: number) => void;
 }
 
-interface State {
-  scrolling: boolean;
-}
-
-class ArticleList extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { scrolling: false };
-  }
+class ArticleList extends React.Component<Props> {
   componentDidUpdate() {
     forceCheck();
   }
@@ -114,21 +106,13 @@ class ArticleList extends React.Component<Props, State> {
           </Col>
         </Row>
         <Row>
-          <ListGroup
-            onTouchMove={() => this.setState({ scrolling: true })}
-            onTouchEnd={() =>
-              this.setState({
-                scrolling: false
-              })
-            }
-          >
+          <ListGroup>
             {articles.map((article: articleType) => {
               return (
                 <Article
                   key={id + article.id}
                   article={article}
                   compact={articleListView === 'compact'}
-                  scrolling={this.state.scrolling}
                 />
               );
             })}

@@ -7,7 +7,6 @@ import {
   DeleteDailyFromServer,
   UpdateDaily
 } from '../actions/syncWithFirebase';
-import { FinalizeDailyFulfilled } from '../actions/dailies/finalizeDaily';
 import createReducer from './createReducer';
 import { parse, isSameDay, subDays } from 'date-fns';
 import { AddDailyFulfilled } from '../actions/dailies/addDaily';
@@ -157,15 +156,6 @@ function deleteDaily(articleState: List<Daily>, action: DeleteDailyFulfilled) {
   return articleState.filter(t => (t ? action.id !== t.id : false));
 }
 
-function finalizeDaily(
-  dailyState: List<Daily>,
-  action: FinalizeDailyFulfilled
-) {
-  return dailyState.map(
-    (t: Daily) => (t.id === action.id ? { ...t, finalized: true } : t)
-  );
-}
-
 export default createReducer(List(), {
   ADD_DAILY_FULFILLED: addDaily,
   COMPLETE_DAILY_FULFILLED: completeDaily,
@@ -173,7 +163,6 @@ export default createReducer(List(), {
   DELETE_DAILY_FROM_SERVER: deleteDailyFromServer,
   UPDATE_DAILY: updateDaily,
   ADD_FETCHED_DAILIES: addFetchedDailies,
-  FINALIZE_DAILY_FULFILLED: finalizeDaily,
   DEMO_DAILY_COMPLETION_BATCH: demoDailyCompletionBatch,
   DELETE_DAILY_FULFILLED: deleteDaily
 });
