@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Well, Button, Glyphicon, ButtonGroup } from 'react-bootstrap';
+import {
+  Well,
+  Button,
+  Glyphicon,
+  ButtonGroup,
+  OverlayTrigger,
+  Tooltip
+} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import completeDaily from '../actions/dailies/completeDaily';
 import Daily from '../components/Daily';
@@ -57,7 +64,7 @@ class Dailies extends React.Component<Props, State> {
                         subDays(new Date(), 7)
                       ) && (
                         <b>
-                          <Glyphicon glyph="warning-sign" />{' '}
+                          <Glyphicon glyph="warning-sign" />
                         </b>
                       )}
                     {t.title}
@@ -66,32 +73,50 @@ class Dailies extends React.Component<Props, State> {
               })}
           </ButtonGroup>
           <ButtonGroup style={{ float: 'right' }}>
-            <Button
-              bsSize="xsmall"
-              bsStyle="daily"
-              active={this.state.expand}
-              onClick={() =>
-                this.state.expand
-                  ? this.setState({ expand: false })
-                  : this.setState({ expand: true })
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id="expandAllDailyStats">
+                  Expand all daily stats
+                </Tooltip>
               }
             >
-              <Glyphicon
-                glyph={this.state.expand ? 'minus-sign' : 'plus-sign'}
-              />
-            </Button>
-            <Button
-              bsSize="xsmall"
-              bsStyle="daily"
-              active={this.state.showCompleted}
-              onClick={() =>
-                this.state.showCompleted
-                  ? this.setState({ showCompleted: false })
-                  : this.setState({ showCompleted: true })
+              <Button
+                bsSize="xsmall"
+                bsStyle="daily"
+                active={this.state.expand}
+                onClick={() =>
+                  this.state.expand
+                    ? this.setState({ expand: false })
+                    : this.setState({ expand: true })
+                }
+              >
+                <Glyphicon
+                  glyph={this.state.expand ? 'minus-sign' : 'plus-sign'}
+                />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id="showDailiesCompletedToday">
+                  Show dailies completed today
+                </Tooltip>
               }
             >
-              <Glyphicon glyph={'check'} />
-            </Button>
+              <Button
+                bsSize="xsmall"
+                bsStyle="daily"
+                active={this.state.showCompleted}
+                onClick={() =>
+                  this.state.showCompleted
+                    ? this.setState({ showCompleted: false })
+                    : this.setState({ showCompleted: true })
+                }
+              >
+                <Glyphicon glyph={'check'} />
+              </Button>
+            </OverlayTrigger>
           </ButtonGroup>
         </div>
       </Well>

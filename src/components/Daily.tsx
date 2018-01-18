@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Button, Glyphicon, Collapse, ButtonGroup } from 'react-bootstrap';
+import {
+  Button,
+  Glyphicon,
+  Collapse,
+  ButtonGroup,
+  Tooltip,
+  OverlayTrigger
+} from 'react-bootstrap';
 import { Daily as DailyType } from '../constants/StoreState';
 import {
   isSameDay,
@@ -8,7 +15,6 @@ import {
   differenceInCalendarDays,
   getHours
 } from 'date-fns';
-import FinalizeDaily from '../containers/actionDispatchers/FinalizeDaily';
 
 interface Props {
   onComplete: () => void;
@@ -52,17 +58,26 @@ export default class Daily extends React.Component<Props, State> {
             )}
           {daily.title}
         </Button>
-        <Button
-          bsStyle="daily"
-          active={this.state.showDetails}
-          onClick={() =>
-            this.state.showDetails || expand
-              ? this.setState({ showDetails: false })
-              : this.setState({ showDetails: true })
+        <OverlayTrigger
+          placement="right"
+          overlay={
+            <Tooltip id={'dailyStatsFor' + daily.title}>
+              Stats for {daily.title}
+            </Tooltip>
           }
         >
-          <Glyphicon glyph="stats" />
-        </Button>
+          <Button
+            bsStyle="daily"
+            active={this.state.showDetails}
+            onClick={() =>
+              this.state.showDetails || expand
+                ? this.setState({ showDetails: false })
+                : this.setState({ showDetails: true })
+            }
+          >
+            <Glyphicon glyph="stats" />
+          </Button>
+        </OverlayTrigger>
         <Collapse in={this.state.showDetails || expand}>
           <div>
             <p>
@@ -95,7 +110,6 @@ export default class Daily extends React.Component<Props, State> {
               )}{' '}
               days ago
             </p>
-            <FinalizeDaily id={daily.id} />
           </div>
         </Collapse>
       </ButtonGroup>
