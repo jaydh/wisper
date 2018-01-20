@@ -1,7 +1,19 @@
 import * as React from 'react';
 import setUIView from '../actions/ui/setUIView';
-import { MenuItem, NavDropdown, Navbar, NavItem, Nav } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import {
+  Nav,
+  UncontrolledDropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  NavbarBrand,
+  NavLink,
+  NavbarToggler,
+  NavItem,
+  Navbar,
+  Collapse
+} from 'reactstrap';
 import logout from '../helpers/firebaseLogout';
 interface Props {
   onSetUIView: (t: string) => void;
@@ -11,63 +23,63 @@ interface Props {
 interface OwnProps {
   user: string;
 }
-class Menu extends React.Component<Props> {
+interface State {
+  isOpen: boolean;
+}
+class Menu extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { isOpen: false };
+    this.toggle = this.toggle.bind(this);
+  }
+  toggle() {
+    this.setState({ isOpen: !this.state.isOpen });
+  }
+
   render() {
-    const active = (() => {
-      switch (this.props.view) {
-        case 'dailies':
-          return 1;
-        case 'compact':
-          return 2;
-        case 'canvas':
-          return 3;
-        case 'analytics':
-          return 4;
-        case 'Full':
-          return 5;
-        default:
-          return 0;
-      }
-    })();
     return (
-      <Navbar collapseOnSelect={true}>
-        <Navbar.Header>
-          <Navbar.Brand>Wispy</Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav bsStyle={'tabs'} activeKey={active}>
-            <NavItem
-              eventKey={1}
-              onClick={() => this.props.onSetUIView('dailies')}
-            >
-              Dailies{' '}
+      <Navbar color="faded" light={true} expand="md">
+        <NavbarBrand>Wispy</NavbarBrand>
+        <NavbarToggler onClick={this.toggle} />
+        <Collapse isOpen={this.state.isOpen} navbar={true}>
+          <Nav className="ml-auto" tabs={true} navbar={true}>
+            <NavItem>
+              <NavLink
+                active={this.props.view === 'dailies'}
+                onClick={() => this.props.onSetUIView('dailies')}
+              >
+                Dailies
+              </NavLink>
             </NavItem>
-            <NavItem
-              eventKey={2}
-              onClick={() => this.props.onSetUIView('compact')}
-            >
-              Articles{' '}
+            <NavItem>
+              <NavLink
+                active={this.props.view === 'compact'}
+                onClick={() => this.props.onSetUIView('compact')}
+              >
+                Articles
+              </NavLink>
             </NavItem>
-            <NavItem
-              eventKey={4}
-              onClick={() => this.props.onSetUIView('analytics')}
-            >
-              Analytics{' '}
+            <NavItem>
+              <NavLink
+                active={this.props.view === 'analytics'}
+                onClick={() => this.props.onSetUIView('analytics')}
+              >
+                Analytics
+              </NavLink>
             </NavItem>
+            <UncontrolledDropdown nav={true}>
+              <DropdownToggle caret={true}>
+                {this.props.user ? this.props.user : 'Demo'}
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem onClick={() => this.props.onSetUIView('User')}>
+                  User menu
+                </DropdownItem>
+                <DropdownItem onClick={() => logout()}> Logout</DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
           </Nav>
-          <Nav pullRight={true}>
-            <NavDropdown
-              title={this.props.user ? this.props.user : 'Demo'}
-              id="user-dropdown"
-            >
-              <MenuItem onClick={() => this.props.onSetUIView('User')}>
-                User menu
-              </MenuItem>
-              <MenuItem onClick={() => logout()}> Logout</MenuItem>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
+        </Collapse>
       </Navbar>
     );
   }

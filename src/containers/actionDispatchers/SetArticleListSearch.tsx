@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { setArticleListSearch } from '../../actions/ui/articleList';
-import {
-  Form,
-  InputGroup,
-  FormGroup,
-  FormControl,
-  Glyphicon
-} from 'react-bootstrap';
+import { Form, Input, FormGroup, FormFeedback } from 'reactstrap';
 import { ArticleList } from '../../constants/StoreState';
 
 interface State {
@@ -42,19 +36,11 @@ class AddArticle extends React.Component<Props, State> {
     return (
       <Form inline={true} onSubmit={event => event.preventDefault()}>
         <FormGroup controlId="formBasicText" type="text">
-          <InputGroup bsSize="small">
-            <FormControl
-              value={this.state.value}
-              placeholder={
-                this.state.value === '' ? 'Search' : this.state.value
-              }
-              onChange={event => this.handleChange(event)}
-            />
-            <InputGroup.Addon>
-              <Glyphicon glyph="search" />
-            </InputGroup.Addon>
-          </InputGroup>
-          <FormControl.Feedback />
+          <Input
+            placeholder={this.state.value === '' ? 'Search' : this.state.value}
+            onChange={event => this.handleChange(event)}
+          />
+          <FormFeedback />
         </FormGroup>
       </Form>
     );

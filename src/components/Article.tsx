@@ -6,16 +6,19 @@ import AddArticleToProject from '../containers/actionDispatchers/AddArticleToPro
 import DeleteArticle from '../containers/actionDispatchers/DeleteArticle';
 import ToggleArticle from '../containers/actionDispatchers/ToggleArticle';
 import {
-  Image,
-  Glyphicon,
+  Card,
+  CardTitle,
+  CardSubtitle,
+  CardBody,
   Collapse,
   ListGroupItem,
-  Grid,
+  Container,
   Col,
   ButtonGroup,
   Row
-} from 'react-bootstrap';
+} from 'reactstrap';
 import LazyLoad from 'react-lazyload';
+import { Icon } from 'react-fa';
 
 interface Props {
   onArticleView: (t: string) => void;
@@ -57,55 +60,23 @@ class Article extends React.Component<Props, State> {
       <ListGroupItem
         onMouseEnter={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        bsStyle={article.completed ? 'success' : 'info'}
+        color={article.completed ? 'success' : 'info'}
       >
         <LazyLoad height="300" offset={600} overflow={false}>
-          <Grid>
-            {showImage && (
-              <Col xs={4} sm={4} md={2} lg={2}>
-                <Image
-                  onTouchEnd={() =>
-                    this.setState({
-                      isMenuOpen: !this.state.isMenuOpen
-                    })
-                  }
-                  src={article.metadata.get('images').get(0)}
-                  responsive={true}
-                  thumbnail={true}
-                />
-              </Col>
-            )}
-            <Col
-              xs={showImage ? 8 : 12}
-              sm={showImage ? 8 : 12}
-              md={showImage ? 10 : 12}
-              lg={showImage ? 10 : 12}
-            >
-              <Row>
-                <Col xs={10} sm={10} md={10} lg={10}>
-                  {article.fetching && <Glyphicon glyph="refresh" />}
-                </Col>
-                <Col xs={2} sm={2} md={2} lg={2}>
-                  {this.state.isMenuOpen && (
-                    <ButtonGroup>
-                      <ToggleArticle id={article.id} />
-                      <DeleteArticle id={article.id} />
-                    </ButtonGroup>
-                  )}
-                </Col>
-              </Row>
-              <Row
-                onTouchEnd={() =>
-                  this.setState({
-                    isMenuOpen: this.props.scrolling
-                      ? this.state.isMenuOpen
-                      : !this.state.isMenuOpen
-                  })
-                }
+          <Container>
+            <Row>
+              <Col
+                xs={showImage ? 8 : 12}
+                sm={showImage ? 8 : 12}
+                md={showImage ? 10 : 12}
+                lg={showImage ? 10 : 12}
               >
-                <Col>
-                  {this.state.isMenuOpen ? (
+                <Card>
+                  <CardTitle>
+                    {article.fetching && <Icon spin={true} name="spinner" />}
                     <a
+                      className="w-75 p-3"
+                      style={{ textOverflow: 'ellipsis' }}
                       onClick={() => onArticleView(article.id)}
                       href={article.link}
                       target="_blank"
@@ -115,26 +86,15 @@ class Article extends React.Component<Props, State> {
                           article.metadata.get('ogTitle')
                         : article.link}
                     </a>
-                  ) : hasTitle ? (
-                    article.metadata.get('title') ||
-                    article.metadata.get('ogTitle')
-                  ) : (
-                    article.link
-                  )}
-                </Col>
-              </Row>
-              <Row>
-                <Collapse in={this.state.isMenuOpen}>
-                  <Col>
-                    <Row
-                      onTouchEnd={() =>
-                        this.setState({
-                          isMenuOpen: this.props.scrolling
-                            ? this.state.isMenuOpen
-                            : !this.state.isMenuOpen
-                        })
-                      }
-                    >
+                    {this.state.isMenuOpen && (
+                      <ButtonGroup style={{ float: 'right' }} size="sm">
+                        <ToggleArticle id={article.id} />
+                        <DeleteArticle id={article.id} />
+                      </ButtonGroup>
+                    )}
+                  </CardTitle>
+                  <Collapse isOpen={this.state.isMenuOpen}>
+                    <CardSubtitle>
                       {hasSiteName
                         ? article.metadata.get('siteName') ||
                           article.metadata.get('ogSiteName')
@@ -144,8 +104,8 @@ class Article extends React.Component<Props, State> {
                         ? article.metadata.get('ogDescrption') ||
                           article.metadata.get('description')
                         : ''}
-
-                      <br />
+                    </CardSubtitle>
+                    <CardBody>
                       {article.dateAdded ? (
                         <small>
                           Date added: {article.dateAdded.toLocaleDateString()}{' '}
@@ -178,18 +138,29 @@ class Article extends React.Component<Props, State> {
                         ? 'Projects: ' +
                           article.projects.map((t: string) => t + ' ').toJS()
                         : ' '}
-                    </Row>
-                    <Row>
                       <AddArticleToProject
                         id={article.id}
                         articleProjects={article.projects}
                       />
-                    </Row>
-                  </Col>
-                </Collapse>
-              </Row>
-            </Col>
-          </Grid>
+                    </CardBody>
+                  </Collapse>
+                </Card>
+              </Col>
+              {showImage && (
+                <Col xs={4} sm={4} md={2} lg={2}>
+                  <img
+                    className="img-fluid img-thumbnail"
+                    onTouchEnd={() =>
+                      this.setState({
+                        isMenuOpen: !this.state.isMenuOpen
+                      })
+                    }
+                    src={article.metadata.get('images').get(0)}
+                  />
+                </Col>
+              )}
+            </Row>
+          </Container>
         </LazyLoad>
       </ListGroupItem>
     );

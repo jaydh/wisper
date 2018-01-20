@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { auth, provider } from '../firebase';
 import GitInfo from './GitInfo';
-import { Well, Button } from 'react-bootstrap';
+import { Card, Button } from 'reactstrap';
 export default class LoginLoading extends React.Component {
   render() {
     return (
-      <Well style={{ maxWidth: '40rem', margin: 'auto' }}>
+      <Card style={{ maxWidth: '40rem', margin: 'auto' }}>
         <Button
           bsStyle="daily"
           bsSize="large"
@@ -34,7 +34,7 @@ export default class LoginLoading extends React.Component {
           <br />
         </p>
         <GitInfo />
-      </Well>
+      </Card>
     );
   }
 }

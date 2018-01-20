@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { deleteUserData } from '../../actions/deleteUserData';
-import { Button, Glyphicon, ButtonGroup } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'reactstrap';
+import { Icon } from 'react-fa';
 
 interface Props {
   onDeleteClick: () => void;
@@ -23,17 +24,16 @@ class DeleteArticleList extends React.Component<Props, State> {
   render() {
     return (
       <ButtonGroup>
-        <Button bsSize="small" onClick={() => this.toggleLock()}>
+        <Button onClick={() => this.toggleLock()}>
           Toggle the dangerous button to the right
-          <Glyphicon glyph="chevron-right" />
+          <Icon name="chevron-right" />
         </Button>
 
         <Button
-          bsSize="small"
           disabled={this.state.locked}
           onClick={() => this.props.onDeleteClick()}
         >
-          Delete user data <Glyphicon glyph="floppy-remove" />
+          Delete user data <Icon name="trash" />
         </Button>
       </ButtonGroup>
     );

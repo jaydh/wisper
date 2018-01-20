@@ -1,7 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import addArticleToProject from '../../actions/articles/addArticleToProject';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import {
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from 'reactstrap';
 import { List, Set } from 'immutable';
 import { Project } from '../../constants/StoreState';
 
@@ -17,24 +22,23 @@ class AddArticleToProject extends React.Component<Props> {
     const { onAddToProject, projects, articleProjects, id } = this.props;
 
     return (
-      <DropdownButton
-        bsSize="sm"
-        title="Add to Project"
-        id={id + 'addProjectDropdown'}
-      >
-        {projects
-          .filter((t: string) => {
-            return !articleProjects.includes(t);
-          })
-          .map((t: string) => (
-            <MenuItem
-              key={id + ' addProject ' + t}
-              onClick={() => onAddToProject(id, t)}
-            >
-              {t}
-            </MenuItem>
-          ))}
-      </DropdownButton>
+      <UncontrolledDropdown size="sm">
+        <DropdownToggle caret={true}>Add Article to Project</DropdownToggle>
+        <DropdownMenu>
+          {projects
+            .filter((t: string) => {
+              return !articleProjects.includes(t);
+            })
+            .map((t: string) => (
+              <DropdownItem
+                key={id + ' addProject ' + t}
+                onClick={() => onAddToProject(id, t)}
+              >
+                {t}
+              </DropdownItem>
+            ))}
+        </DropdownMenu>
+      </UncontrolledDropdown>
     );
   }
 }

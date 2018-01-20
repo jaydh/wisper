@@ -12,14 +12,15 @@ import SetArticleListView from '../containers/actionDispatchers/SetArticleListVi
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 import {
-  Glyphicon,
-  ListGroup,
-  Badge,
-  ButtonGroup,
+  Container,
   Row,
   Col,
-  Grid
-} from 'react-bootstrap';
+  Card,
+  ButtonGroup,
+  Badge,
+  ListGroup
+} from 'reactstrap';
+import { Icon } from 'react-fa';
 import { forceCheck } from 'react-lazyload';
 
 interface Props {
@@ -56,13 +57,13 @@ class ArticleList extends React.Component<Props> {
     } = this.props;
 
     return (
-      <Grid>
+      <Container>
         {!(uiView === 'compact') && (
           <Row>
             <Col sm={1} md={1}>
               <LockArticleList id={id} />
             </Col>
-            <Col sm={2} md={2} smOffset={9} mdOffset={9}>
+            <Col sm={{ size: 2, offset: 9 }} md={{ size: 2, offset: 9 }}>
               {!locked && (
                 <ButtonGroup>
                   <MaximizedArticleList id={id} />
@@ -80,7 +81,7 @@ class ArticleList extends React.Component<Props> {
         </Row>
         <Row>
           <Col xs={12} sm={5} md={6} lg={6}>
-            <ButtonGroup bsStyle="filters">
+            <ButtonGroup>
               <ActiveSelector id={id} />
               <ProjectSelector
                 id={id}
@@ -90,35 +91,34 @@ class ArticleList extends React.Component<Props> {
               <SetArticleListView id={id} />
             </ButtonGroup>
             <Badge>
-              <Glyphicon glyph="list-alt" /> {articles.size}
+              <Icon name="list-alt" /> {articles.size}
             </Badge>
           </Col>
           <Col
             xs={12}
-            smOffset={3}
-            sm={4}
-            mdOffset={3}
-            md={3}
-            lgOffset={3}
-            lg={3}
+            sm={{ size: 4, offset: 3 }}
+            md={{ size: 3, offset: 3 }}
+            lg={{ size: 3, offset: 3 }}
           >
             <SetArticleListSearch id={id} />
           </Col>
         </Row>
         <Row>
-          <ListGroup>
-            {articles.map((article: articleType) => {
-              return (
-                <Article
-                  key={id + article.id}
-                  article={article}
-                  compact={articleListView === 'compact'}
-                />
-              );
-            })}
-          </ListGroup>
+          <Card>
+            <ListGroup>
+              {articles.map((article: articleType) => {
+                return (
+                  <Article
+                    key={id + article.id}
+                    article={article}
+                    compact={articleListView === 'compact'}
+                  />
+                );
+              })}
+            </ListGroup>
+          </Card>
         </Row>
-      </Grid>
+      </Container>
     );
   }
 }

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { deleteArticleList } from '../../actions/ui/articleList';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Button } from 'reactstrap';
+import { Icon } from 'react-fa';
 
 export interface Props {
   onDeleteClick: () => void;
@@ -11,8 +12,8 @@ class DeleteArticleList extends React.Component<Props, {}> {
   render() {
     const { onDeleteClick } = this.props;
     return (
-      <Button bsSize="small" onClick={() => onDeleteClick()}>
-        <Glyphicon glyph="remove" />
+      <Button onClick={() => onDeleteClick()}>
+        <Icon name="remove" />
       </Button>
     );
   }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import addArticle from '../../actions/articles/addArticle';
-import { InputGroup, Button, FormGroup, FormControl } from 'react-bootstrap';
+import { Form, Input, Button, FormGroup } from 'reactstrap';
 import { List, fromJS, Map } from 'immutable';
 import parseUri from '../../helpers/parseURI';
 import { Project } from '../../constants/StoreState';
@@ -43,13 +43,13 @@ class AddArticle extends React.Component<Props, State> {
   getValidationState() {
     // Checks if valid hyperlink
     if (this.state.parse.authority === '' || this.state.parse.protocol === '') {
-      return 'warning';
+      return false;
     } else if (this.state.parse.authority && this.state.parse.protocol) {
-      return 'success';
+      return true;
     } else if (this.state.parse === '') {
       return undefined;
     } else if (!this.state.parse) {
-      return 'error';
+      return false;
     }
     return undefined;
   }
@@ -93,7 +93,7 @@ class AddArticle extends React.Component<Props, State> {
         : '';
     project = useSuggest ? this.state.suggestion : project;
 
-    if (this.getValidationState() === 'success') {
+    if (this.getValidationState()) {
       onAdd(this.state.parse.source, project);
       this.setState({ parse: '', value: '' });
     } else {
@@ -104,39 +104,31 @@ class AddArticle extends React.Component<Props, State> {
   render() {
     const { projectFilter } = this.props;
     return (
-      <form
+      <Form
+        inline={true}
         onSubmit={event => {
           event.preventDefault();
           this.handleSubmit(false);
         }}
       >
-        <FormGroup
-          controlId="formBasicText"
-          type="text"
-          validationState={this.getValidationState()}
-        >
-          <InputGroup bsSize="large">
-            <InputGroup.Button>
-              <Button bsStyle="submit" onClick={() => this.handleSubmit(false)}>
-                Submit
-              </Button>
-            </InputGroup.Button>
-            <FormControl
-              value={this.state.value}
-              placeholder="Enter link"
-              onChange={this.handleChange}
-            />
-          </InputGroup>
-          <FormControl.Feedback />
+        <FormGroup type="url">
+          <Input
+            value={this.state.value}
+            onChange={this.handleChange}
+            type="url"
+            valid={this.getValidationState()}
+            placeholder="Enter link"
+          />{' '}
+          <Button onClick={() => this.handleSubmit(false)}>Submit</Button>
         </FormGroup>
-        {this.getValidationState() === 'success' &&
+        {this.getValidationState() &&
           (projectFilter === 'All Projects' || projectFilter === 'None') &&
           this.state.suggestion && (
             <Button onClick={() => this.handleSubmit(true)}>
               Add to {this.state.suggestion} project?
             </Button>
           )}
-      </form>
+      </Form>
     );
   }
 }

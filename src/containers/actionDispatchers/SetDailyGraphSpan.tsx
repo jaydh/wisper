@@ -1,6 +1,13 @@
 import setDailyGraphSpan from '../../actions/ui/setDailyGraphSpan';
 import { connect } from 'react-redux';
-import { Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
+import {
+  ButtonGroup,
+  Button,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownMenu
+} from 'reactstrap';
 import * as React from 'react';
 import { Daily } from '../../constants/StoreState';
 import { List } from 'immutable';
@@ -42,68 +49,75 @@ class SetDailyGraphSpan extends React.Component<Props> {
     const endDate = currentMax ? currentMax : new Date();
 
     return (
-      <Nav justified={true} bsStyle="tabs" bsSize="xsmall">
-        <NavItem onClick={() => onSubmit(startOfToday(), endOfToday())}>
+      <ButtonGroup>
+        <Button onClick={() => onSubmit(startOfToday(), endOfToday())}>
           Today
-        </NavItem>
-        <NavItem onClick={() => onSubmit(startOfYesterday(), endOfYesterday())}>
+        </Button>
+        <Button onClick={() => onSubmit(startOfYesterday(), endOfYesterday())}>
           Yeserday
-        </NavItem>
-        <NavItem
+        </Button>
+        <Button
           onClick={() =>
             onSubmit(startOfDay(subWeeks(startOfToday(), 1)), endOfToday())
           }
         >
           Week
-        </NavItem>
-        <NavItem
+        </Button>
+        <Button
           onClick={() =>
             onSubmit(startOfDay(subWeeks(startOfToday(), 2)), endOfToday())
           }
         >
           2 Weeks
-        </NavItem>
-        <NavItem
+        </Button>
+        <Button
           onClick={() =>
             onSubmit(startOfDay(subWeeks(startOfToday(), 4)), endOfToday())
           }
         >
           Month
-        </NavItem>
-        <NavItem onClick={() => onSubmit(this.props.absMin, endOfToday())}>
+        </Button>
+        <Button onClick={() => onSubmit(this.props.absMin, endOfToday())}>
           Full
-        </NavItem>
-        <NavDropdown
-          title={'Start Date: ' + startDate.toLocaleDateString()}
-          id="daily-graph-min-selector"
-        >
-          {choices
-            .filter((t: Date) => isBefore(t, currentMax))
-            .map((t: Date, key: number) => (
-              <MenuItem
-                key={'daily-graph-min' + t.toLocaleDateString()}
-                onClick={() => onSubmit(t, currentMax)}
-              >
-                {t.toLocaleDateString()}
-              </MenuItem>
-            ))}
-        </NavDropdown>
-        <NavDropdown
+        </Button>
+        <UncontrolledDropdown id="daily-graph-min-selector">
+          <DropdownToggle caret={true}>
+            Start Date: {startDate.toLocaleDateString()}
+          </DropdownToggle>
+          <DropdownMenu>
+            {choices
+              .filter((t: Date) => isBefore(t, currentMax))
+              .map((t: Date, key: number) => (
+                <DropdownItem
+                  key={'daily-graph-min' + t.toLocaleDateString()}
+                  onClick={() => onSubmit(t, currentMax)}
+                >
+                  {t.toLocaleDateString()}
+                </DropdownItem>
+              ))}
+          </DropdownMenu>
+        </UncontrolledDropdown>
+        <UncontrolledDropdown
           title={'End Date: ' + endDate.toLocaleDateString()}
           id="daily-graph-max-selector"
         >
-          {choices
-            .filter((t: Date) => isAfter(t, currentMin))
-            .map((t: Date) => (
-              <MenuItem
-                key={'daily-graph-max' + t.toLocaleDateString()}
-                onClick={() => onSubmit(currentMin, t)}
-              >
-                {t.toLocaleDateString()}
-              </MenuItem>
-            ))}
-        </NavDropdown>
-      </Nav>
+          <DropdownToggle caret={true}>
+            Start Date: {startDate.toLocaleDateString()}
+          </DropdownToggle>
+          <DropdownMenu>
+            {choices
+              .filter((t: Date) => isAfter(t, currentMin))
+              .map((t: Date) => (
+                <DropdownItem
+                  key={'daily-graph-max' + t.toLocaleDateString()}
+                  onClick={() => onSubmit(currentMin, t)}
+                >
+                  {t.toLocaleDateString()}
+                </DropdownItem>
+              ))}
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </ButtonGroup>
     );
   }
 }

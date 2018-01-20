@@ -5,7 +5,6 @@ import DailyAnalytics from '../components/DailyAnalytics';
 import ArticleAnalytics from '../components/ArticleAnalytics';
 import VisibleArticleList from '../containers/VisibleArticleList';
 import UserPage from '../components/UserPage';
-import { Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { ArticleList as ArticleListType } from '../constants/StoreState';
 import { List } from 'immutable';
@@ -13,6 +12,8 @@ import {
   pullFromFirebase,
   ListenToFirebase
 } from '../actions/syncWithFirebase';
+import { Icon } from 'react-fa';
+
 interface Props {
   uiView: string;
   fetchingArticles: boolean;
@@ -45,7 +46,7 @@ class AppRoutes extends React.Component<Props, State> {
 
   render() {
     return (
-      <div>
+      <>
         {(this.props.fetchingArticles ||
           this.props.fetchingDailies ||
           (this.props.demoStart && !this.props.demoComplete)) && (
@@ -57,7 +58,7 @@ class AppRoutes extends React.Component<Props, State> {
               right: '0.5em'
             }}
           >
-            <Glyphicon glyph="refresh" />{' '}
+            <Icon spin={true} name="spinner" />{' '}
             {this.props.fetchingArticles ? 'Updating Articles' : ''}{' '}
             {this.props.fetchingDailies ? 'Updating Dailies' : ''}{' '}
             {this.props.demoStart && !this.props.demoComplete
@@ -91,7 +92,7 @@ class AppRoutes extends React.Component<Props, State> {
               );
           }
         })()}
-      </div>
+      </>
     );
   }
 }

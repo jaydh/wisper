@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import finalizeProject from '../../actions/articles/finalizeProject';
-import { ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
+import { ButtonGroup, Button } from 'reactstrap';
+import { Icon } from 'react-fa';
 import { List } from 'immutable';
 import { Project } from '../../constants/StoreState';
 
@@ -22,7 +23,7 @@ class DeleteProject extends React.Component<Props> {
               onFinalizeClick(t.id);
             }}
           >
-            {t.id} <Glyphicon glyph={t.finalized ? 'edit' : 'check'} />
+            {t.id} <Icon name={t.finalized ? 'pencil' : 'check'} />
           </Button>
         ))}
       </ButtonGroup>

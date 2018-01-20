@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { setArticleListView } from '../../actions/ui/articleList';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Button } from 'reactstrap';
+import { Icon } from 'react-fa';
 import { ArticleList } from '../../constants/StoreState';
 
 export interface Props {
@@ -14,7 +15,6 @@ class SetArticleListView extends React.Component<Props, {}> {
     return (
       <Button
         type="button"
-        bsStyle="filter"
         onClick={() =>
           this.props.currentView === 'compact'
             ? this.props.onClick('full')
@@ -22,8 +22,8 @@ class SetArticleListView extends React.Component<Props, {}> {
         }
       >
         {' '}
-        <Glyphicon
-          glyph={
+        <Icon
+          name={
             this.props.currentView === 'compact' ? 'th-list' : 'align-justify'
           }
         />

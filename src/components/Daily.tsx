@@ -1,12 +1,4 @@
 import * as React from 'react';
-import {
-  Button,
-  Glyphicon,
-  Collapse,
-  ButtonGroup,
-  Tooltip,
-  OverlayTrigger
-} from 'react-bootstrap';
 import { Daily as DailyType } from '../constants/StoreState';
 import {
   isSameDay,
@@ -15,6 +7,14 @@ import {
   differenceInCalendarDays,
   getHours
 } from 'date-fns';
+import {
+  Button,
+  ButtonGroup,
+  Collapse,
+  Card,
+  UncontrolledTooltip
+} from 'reactstrap';
+import { Icon } from 'react-fa';
 
 interface Props {
   onComplete: () => void;
@@ -34,54 +34,44 @@ export default class Daily extends React.Component<Props, State> {
   render() {
     const { onComplete, daily, expand } = this.props;
     return (
-      <ButtonGroup bsSize="small">
-        <Button
-          bsStyle="daily"
-          disabled={
-            daily.completedOn
-              ? isSameDay(daily.completedOn.last(), new Date())
-              : false
-          }
-          onClick={() => onComplete()}
-        >
-          {daily.streakCount > 4 && (
-            <b>
-              {daily.streakCount}
-              <Glyphicon glyph="fire" />{' '}
-            </b>
-          )}
-          {daily.completedOn &&
-            isBefore(daily.completedOn.last(), subDays(new Date(), 7)) && (
-              <b>
-                <Glyphicon glyph="warning-sign" />{' '}
-              </b>
-            )}
-          {daily.title}
-        </Button>
-        <OverlayTrigger
-          placement="right"
-          overlay={
-            <Tooltip id={'dailyStatsFor' + daily.title}>
-              Stats for {daily.title}
-            </Tooltip>
-          }
-        >
+      <Card>
+        <ButtonGroup>
           <Button
-            bsStyle="daily"
+            disabled={
+              daily.completedOn
+                ? isSameDay(daily.completedOn.last(), new Date())
+                : false
+            }
+            onClick={() => onComplete()}
+          >
+            {daily.streakCount > 4 && (
+              <>
+                {daily.streakCount}
+                <Icon name="fire" />
+              </>
+            )}
+            {daily.completedOn &&
+              isBefore(daily.completedOn.last(), subDays(new Date(), 7)) && (
+                <Icon name="exclamation" />
+              )}
+            {daily.title}
+          </Button>
+          <Button
             active={this.state.showDetails}
+            id={'Tooltip' + daily.id}
             onClick={() =>
               this.state.showDetails || expand
                 ? this.setState({ showDetails: false })
                 : this.setState({ showDetails: true })
             }
           >
-            <Glyphicon glyph="stats" />
+            <Icon name="bar-chart" />
           </Button>
-        </OverlayTrigger>
-        <Collapse in={this.state.showDetails || expand}>
-          <div>
-            <p>
-              <br />
+          <UncontrolledTooltip placement="right" target={'Tooltip' + daily.id}>
+            Show details
+          </UncontrolledTooltip>
+          <Collapse isOpen={this.state.showDetails || expand}>
+            <>
               {daily.completedOn && daily.completedOn.last()
                 ? 'Last Completed: ' +
                   daily.completedOn.last().toLocaleDateString()
@@ -109,10 +99,10 @@ export default class Daily extends React.Component<Props, State> {
                 daily.completedOn.first()
               )}{' '}
               days ago
-            </p>
-          </div>
-        </Collapse>
-      </ButtonGroup>
+            </>
+          </Collapse>
+        </ButtonGroup>
+      </Card>
     );
   }
 }

@@ -4,7 +4,7 @@ import {
   resizeArticleList,
   repositionArticleList
 } from '../../actions/ui/articleList';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Button } from 'reactstrap';
 
 export interface Props {
   onMaximizeClick: () => void;
@@ -15,7 +15,7 @@ class DeleteArticleList extends React.Component<Props, {}> {
     const { onMaximizeClick } = this.props;
     return (
       <Button onClick={() => onMaximizeClick()} bsSize="small">
-        <Glyphicon glyph="resize-full" />
+        DeleteArticleList
       </Button>
     );
   }

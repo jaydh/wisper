@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Polar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
 import { Article as articleType, Project } from '../../constants/StoreState';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'reactstrap';
 
 interface Props {
   articles: List<articleType>;

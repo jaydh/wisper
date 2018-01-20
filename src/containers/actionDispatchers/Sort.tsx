@@ -1,31 +1,48 @@
 import * as React from 'react';
-import { Dropdown, MenuItem, Glyphicon } from 'react-bootstrap';
+import {
+  ButtonDropdown,
+  DropdownMenu,
+  DropdownToggle,
+  DropdownItem
+} from 'reactstrap';
 import setSortFilter from '../../actions/ui/setSortFilter';
 import { connect } from 'react-redux';
 import { ArticleList } from '../../constants/StoreState';
+import { Icon } from 'react-fa';
 
 interface Props {
   onClick: (t: string) => void;
   currentSort: string;
 }
+interface State {
+  isOpen: boolean;
+}
 
-class Sort extends React.Component<Props> {
+class Sort extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { isOpen: false };
+    this.toggle = this.toggle.bind(this);
+  }
+  toggle() {
+    this.setState({ isOpen: !this.state.isOpen });
+  }
   render() {
     const { onClick, currentSort } = this.props;
     const glyph = ((sort: string) => {
       switch (sort) {
         case 'date-asc':
-          return 'sort-by-order';
+          return 'sort-amount-asc';
         case 'date-desc':
-          return 'sort-by-order-alt';
+          return 'sort-amount-desc';
         case 'title':
-          return 'sort-by-alphabet';
+          return 'sort-amount-asc';
         case 'title-reverse':
-          return 'sort-by-alphabet-alt';
+          return 'sort-amount-desc';
         case 'dateRead':
-          return 'sort-by-attributes';
+          return 'sort-amount-asc';
         case 'dateRead-reverse':
-          return 'sort-by-attributes-alt';
+          return 'sort-amount-desc';
         default:
           return '';
       }
@@ -44,62 +61,47 @@ class Sort extends React.Component<Props> {
       return '';
     })(currentSort);
     return (
-      <Dropdown id="bg-nested-dropdown">
-        <Dropdown.Toggle>
-          Sort {currentSortString}{' '}
-          <Glyphicon glyph={glyph} />
-        </Dropdown.Toggle>
-        <Dropdown.Menu className="filter-dropdown ">
-          <MenuItem
+      <ButtonDropdown isOpen={this.state.isOpen} toggle={this.toggle}>
+        <DropdownToggle>
+          Sort {currentSortString} <Icon name={glyph} />
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem
             onClick={() =>
               currentSort === 'title'
                 ? onClick('title-reverse')
                 : onClick('title')
             }
           >
-            <Glyphicon
-              glyph={
-                currentSort === 'title'
-                  ? 'sort-by-alphabet-alt'
-                  : 'sort-by-alphabet'
-              }
-            />{' '}
+            <Icon name={currentSort === 'title' ? 'sort-desc' : 'sort-asc'} />{' '}
             Title
-          </MenuItem>
-          <MenuItem
+          </DropdownItem>
+          <DropdownItem
             onClick={() => {
               currentSort === 'date-asc'
                 ? onClick('date-desc')
                 : onClick('date-asc');
             }}
           >
-            <Glyphicon
-              glyph={
-                currentSort === 'date-asc'
-                  ? 'sort-by-order-alt'
-                  : 'sort-by-order'
-              }
+            <Icon
+              name={currentSort === 'date-asc' ? 'sort-desc' : 'sort-asc'}
             />{' '}
             Added
-          </MenuItem>
-          <MenuItem
+          </DropdownItem>
+          <DropdownItem
             onClick={() =>
               currentSort === 'dateRead'
                 ? onClick('dateRead-reverse')
                 : onClick('dateRead')
             }
           >
-            <Glyphicon
-              glyph={
-                currentSort === 'dateRead'
-                  ? 'sort-by-attributes-alt'
-                  : 'sort-by-attributes'
-              }
+            <Icon
+              name={currentSort === 'dateRead' ? 'sort-desc' : 'sort-asc'}
             />{' '}
             Read
-          </MenuItem>
-        </Dropdown.Menu>
-      </Dropdown>
+          </DropdownItem>
+        </DropdownMenu>
+      </ButtonDropdown>
     );
   }
 }

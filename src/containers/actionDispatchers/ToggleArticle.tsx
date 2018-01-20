@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { toggleArticleRead } from '../../actions/articles/toggleArticleRead';
-import { Glyphicon, Button } from 'react-bootstrap';
+import { Button } from 'reactstrap';
+import { Icon } from 'react-fa';
 
 export interface Props {
   onToggleClick: () => void;
@@ -13,13 +14,11 @@ class ToggleArticleRead extends React.Component<Props> {
     const { onToggleClick } = this.props;
     return (
       <Button
-        bsSize="xsmall"
-        bsStyle="more"
         onClick={() => {
           onToggleClick();
         }}
       >
-        <Glyphicon glyph="ok" />
+        <Icon name="check" />
       </Button>
     );
   }

@@ -9,7 +9,7 @@ import {
   isBefore,
   isSameDay
 } from 'date-fns';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'reactstrap';
 
 interface Props {
   dailies: List<Daily>;

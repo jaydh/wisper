@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { togglelockArticleList } from '../../actions/ui/articleList';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Button } from 'reactstrap';
 
 export interface Props {
   onLockClick(): () => void;
@@ -16,9 +16,7 @@ class LockArticleList extends React.Component<Props, {}> {
         onClick={() => onLockClick()}
         className="close"
         aria-label="Close"
-      >
-        <Glyphicon glyph="lock" />
-      </Button>
+      />
     );
   }
 }

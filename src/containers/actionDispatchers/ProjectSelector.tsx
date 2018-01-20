@@ -2,7 +2,12 @@ import * as React from 'react';
 import { setProjectFilter } from '../../actions/ui/projectFilter';
 import { connect } from 'react-redux';
 import { List, fromJS } from 'immutable';
-import { Dropdown, MenuItem } from 'react-bootstrap';
+import {
+  ButtonDropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle
+} from 'reactstrap';
 import {
   ArticleList as ArticleListType,
   Article as articleType,
@@ -15,8 +20,19 @@ interface Props {
   articlesInActivity: List<articleType>;
   onClick: (t: string) => void;
 }
+interface State {
+  isOpen: boolean;
+}
 
-class ProjectSelector extends React.Component<Props> {
+class ProjectSelector extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { isOpen: false };
+    this.toggle = this.toggle.bind(this);
+  }
+  toggle() {
+    this.setState({ isOpen: !this.state.isOpen });
+  }
   render() {
     const {
       projects,
@@ -26,12 +42,12 @@ class ProjectSelector extends React.Component<Props> {
     } = this.props;
     const options = ['All Projects', ...projects.toJS(), 'None'];
     return (
-      <Dropdown id="bg-nested-dropdown">
-        <Dropdown.Toggle>{currentProject}</Dropdown.Toggle>
-        <Dropdown.Menu>
+      <ButtonDropdown isOpen={this.state.isOpen} toggle={this.toggle}>
+        <DropdownToggle caret={true}>{currentProject}</DropdownToggle>
+        <DropdownMenu>
           {options.map((project: string) => {
             return (
-              <MenuItem
+              <DropdownItem
                 id={String(project)}
                 key={'projectSelectorItem ' + String(project)}
                 onClick={() => onClick(String(project))}
@@ -53,11 +69,11 @@ class ProjectSelector extends React.Component<Props> {
                     })
                     .count()}
                 </div>
-              </MenuItem>
+              </DropdownItem>
             );
           })}
-        </Dropdown.Menu>
-      </Dropdown>
+        </DropdownMenu>
+      </ButtonDropdown>
     );
   }
 }

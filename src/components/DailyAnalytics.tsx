@@ -1,18 +1,18 @@
 import * as React from 'react';
 import CompletionGraph from '../containers/graphs/DailyCompletionGraphs';
 import DailyTrackerGraph from '../containers/graphs/DailyGraph';
-import { Grid, Row } from 'react-bootstrap';
+import { Container, Row } from 'reactstrap';
 class DailyAnalytics extends React.Component {
   render() {
     return (
-      <Grid>
+      <Container>
         <Row>
           <DailyTrackerGraph />
         </Row>
         <Row>
           <CompletionGraph />
         </Row>
-      </Grid>
+      </Container>
     );
   }
 }

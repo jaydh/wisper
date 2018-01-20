@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import finalizeDaily from '../../actions/dailies/finalizeDaily';
-import { Button, ButtonGroup, Glyphicon } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'reactstrap';
+import { Icon } from 'react-fa';
 import { List } from 'immutable';
 import { Daily } from '../../constants/StoreState';
 
@@ -23,7 +24,7 @@ class DeleteArticle extends React.Component<Props> {
             }}
           >
             {t.finalized ? 'Continue tracking' : 'Halt tracking'} "{t.title}"
-            Daily <Glyphicon glyph={t.finalized ? 'road' : 'flag'} />
+            Daily <Icon name={t.finalized ? 'road' : 'flag'} />
           </Button>
         ))}
       </ButtonGroup>
