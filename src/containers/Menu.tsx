@@ -46,7 +46,10 @@ class Menu extends React.Component<Props, State> {
             <NavItem>
               <NavLink
                 active={this.props.view === 'dailies'}
-                onClick={() => this.props.onSetUIView('dailies')}
+                onClick={() => {
+                  this.props.onSetUIView('dailies');
+                  this.toggle();
+                }}
               >
                 Dailies
               </NavLink>
@@ -54,7 +57,10 @@ class Menu extends React.Component<Props, State> {
             <NavItem>
               <NavLink
                 active={this.props.view === 'compact'}
-                onClick={() => this.props.onSetUIView('compact')}
+                onClick={() => {
+                  this.props.onSetUIView('compact');
+                  this.toggle();
+                }}
               >
                 Articles
               </NavLink>
@@ -62,7 +68,10 @@ class Menu extends React.Component<Props, State> {
             <NavItem>
               <NavLink
                 active={this.props.view === 'analytics'}
-                onClick={() => this.props.onSetUIView('analytics')}
+                onClick={() => {
+                  this.props.onSetUIView('analytics');
+                  this.toggle();
+                }}
               >
                 Analytics
               </NavLink>
@@ -72,7 +81,12 @@ class Menu extends React.Component<Props, State> {
                 {this.props.user ? this.props.user : 'Demo'}
               </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem onClick={() => this.props.onSetUIView('User')}>
+                <DropdownItem
+                  onClick={() => {
+                    this.props.onSetUIView('User');
+                    this.toggle();
+                  }}
+                >
                   User menu
                 </DropdownItem>
                 <DropdownItem onClick={() => logout()}> Logout</DropdownItem>
