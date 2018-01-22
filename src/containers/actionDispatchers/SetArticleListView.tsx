@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { setArticleListView } from '../../actions/ui/articleList';
-import { Button } from 'reactstrap';
+import { Button, Badge } from 'reactstrap';
 import { Icon } from 'react-fa';
 import { ArticleList } from '../../constants/StoreState';
 
 export interface Props {
   currentView: string;
   onClick: (t: string) => void;
+  articlesSize: number;
 }
 
-class SetArticleListView extends React.Component<Props, {}> {
+class SetArticleListView extends React.Component<Props> {
   render() {
     return (
       <Button
@@ -26,7 +27,10 @@ class SetArticleListView extends React.Component<Props, {}> {
           name={
             this.props.currentView === 'compact' ? 'th-list' : 'align-justify'
           }
-        />
+        />{' '}
+        <Badge>
+          <Icon name="list-alt" /> {this.props.articlesSize}
+        </Badge>
       </Button>
     );
   }

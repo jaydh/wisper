@@ -11,16 +11,7 @@ import LockArticleList from '../containers/actionDispatchers/LockArticleList';
 import SetArticleListView from '../containers/actionDispatchers/SetArticleListView';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  ButtonGroup,
-  Badge,
-  ListGroup
-} from 'reactstrap';
-import { Icon } from 'react-fa';
+import { Container, Row, Col, Card, ButtonGroup, ListGroup } from 'reactstrap';
 import { forceCheck } from 'react-lazyload';
 
 interface Props {
@@ -41,9 +32,27 @@ interface Props {
   onReposition: (x: number, y: number) => void;
 }
 
-class ArticleList extends React.Component<Props> {
+interface State {
+  width: number;
+}
+
+class ArticleList extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { width: window.innerWidth };
+    this.updateWidth = this.updateWidth.bind(this);
+  }
+  updateWidth() {
+    this.setState({ width: window.innerWidth });
+  }
   componentDidUpdate() {
     forceCheck();
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.updateWidth);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWidth);
   }
   render() {
     const {
@@ -80,29 +89,14 @@ class ArticleList extends React.Component<Props> {
           </Col>
         </Row>
         <Row>
-          <Col xs={12} sm={5} md={6} lg={6}>
-            <ButtonGroup>
-              <ActiveSelector id={id} />
-              <ProjectSelector
-                id={id}
-                articlesInActivity={articlesInActivity}
-              />
-              <Sort id={id} />
-              <SetArticleListView id={id} />
-            </ButtonGroup>
-            <Badge>
-              <Icon name="list-alt" /> {articles.size}
-            </Badge>
-          </Col>
-          <Col
-            xs={12}
-            sm={{ size: 4, offset: 3 }}
-            md={{ size: 3, offset: 3 }}
-            lg={{ size: 3, offset: 3 }}
-          >
-            <SetArticleListSearch id={id} />
-          </Col>
+          <ButtonGroup vertical={this.state.width > 768 ? false : true}>
+            <ActiveSelector id={id} />
+            <ProjectSelector id={id} articlesInActivity={articlesInActivity} />
+            <Sort id={id} />
+            <SetArticleListView id={id} articlesSize={articles.size} />
+          </ButtonGroup>
         </Row>
+        <SetArticleListSearch id={id} />
         <Row>
           <Card>
             <ListGroup>
