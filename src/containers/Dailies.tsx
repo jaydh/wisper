@@ -6,12 +6,7 @@ import { Daily as DailyType } from '../constants/StoreState';
 import { List } from 'immutable';
 import { isBefore, subDays, isSameDay } from 'date-fns';
 import { Icon } from 'react-fa';
-import {
-  CardGroup,
-  Button,
-  ButtonGroup,
-  UncontrolledTooltip
-} from 'reactstrap';
+import { CardDeck, Button, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 interface Props {
   onComplete: (id: string) => void;
   AddDaily: (daily: string) => void;
@@ -69,7 +64,7 @@ class Dailies extends React.Component<Props, State> {
             Show completed dailies
           </UncontrolledTooltip>
         </ButtonGroup>
-        <CardGroup>
+        <CardDeck>
           {activeDailies.map((t: DailyType) => (
             <Daily
               key={t.id}
@@ -90,7 +85,7 @@ class Dailies extends React.Component<Props, State> {
               {t.title}
             </Daily>
           ))}
-        </CardGroup>
+        </CardDeck>
       </>
     );
   }

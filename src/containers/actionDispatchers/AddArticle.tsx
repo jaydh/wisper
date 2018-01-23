@@ -1,7 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import addArticle from '../../actions/articles/addArticle';
-import { Form, Input, Button, FormGroup } from 'reactstrap';
+import {
+  ButtonGroup,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  ButtonDropdown,
+  Form,
+  Input,
+  Button,
+  FormGroup
+} from 'reactstrap';
 import { List, fromJS, Map } from 'immutable';
 import parseUri from '../../helpers/parseURI';
 import { Project } from '../../constants/StoreState';
@@ -10,6 +20,7 @@ interface State {
   value: string;
   parse: any;
   suggestion: string;
+  projectSelectorOpen: boolean;
 }
 interface Props {
   onAdd: (t: string, p?: string) => void;
@@ -23,10 +34,12 @@ class AddArticle extends React.Component<Props, State> {
     this.state = {
       value: '',
       parse: '',
-      suggestion: ''
+      suggestion: '',
+      projectSelectorOpen: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.getValidationState = this.getValidationState.bind(this);
+    this.projectSelectorToggle = this.projectSelectorToggle.bind(this);
   }
 
   handleChange(e: any) {
@@ -100,9 +113,12 @@ class AddArticle extends React.Component<Props, State> {
       alert('Please enter valid link');
     }
   }
+  projectSelectorToggle() {
+    this.setState({ projectSelectorOpen: !this.state.projectSelectorOpen });
+  }
 
   render() {
-    const { projectFilter } = this.props;
+    const { projectFilter, projects } = this.props;
     return (
       <Form
         inline={true}
@@ -119,15 +135,30 @@ class AddArticle extends React.Component<Props, State> {
             valid={this.getValidationState()}
             placeholder="Enter link"
           />{' '}
-          <Button onClick={() => this.handleSubmit(false)}>Submit</Button>
+          <ButtonGroup>
+            <Button onClick={() => this.handleSubmit(false)}>Submit</Button>
+            <ButtonDropdown
+              isOpen={this.state.projectSelectorOpen}
+              toggle={this.projectSelectorToggle}
+            >
+              <DropdownToggle caret={true} />
+              <DropdownMenu>
+                {projects.map((t: Project) => (
+                  <DropdownItem key={t.id + 'dropdownSubmit'}>
+                    Submit to {t.id}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </ButtonDropdown>
+            {this.getValidationState() &&
+              (projectFilter === 'All Projects' || projectFilter === 'None') &&
+              this.state.suggestion && (
+                <Button onClick={() => this.handleSubmit(true)}>
+                  Suggestion: Add to {this.state.suggestion} project?
+                </Button>
+              )}
+          </ButtonGroup>
         </FormGroup>
-        {this.getValidationState() &&
-          (projectFilter === 'All Projects' || projectFilter === 'None') &&
-          this.state.suggestion && (
-            <Button onClick={() => this.handleSubmit(true)}>
-              Add to {this.state.suggestion} project?
-            </Button>
-          )}
       </Form>
     );
   }

@@ -12,6 +12,7 @@ import {
   ButtonGroup,
   Collapse,
   Card,
+  CardBody,
   UncontrolledTooltip
 } from 'reactstrap';
 import { Icon } from 'react-fa';
@@ -69,39 +70,39 @@ export default class Daily extends React.Component<Props, State> {
           </Button>
           <UncontrolledTooltip placement="right" target={'Tooltip' + daily.id}>
             Show details
-          </UncontrolledTooltip>
-          <Collapse isOpen={this.state.showDetails || expand}>
-            <>
-              {daily.completedOn && daily.completedOn.last()
-                ? 'Last Completed: ' +
-                  daily.completedOn.last().toLocaleDateString()
-                : ''}
-              <br />
-              Last Completed{' '}
-              {differenceInCalendarDays(
-                daily.completedOn.last(),
-                new Date()
-              )}{' '}
-              days ago
-              <br />
-              Completed {daily.completedOn.size} times <br />
-              Avg. hour of completion{' '}
-              {Math.round(
-                daily.completedOn.reduce(
-                  (acc: number, t: Date) => acc + getHours(t),
-                  0
-                ) / daily.completedOn.size
-              )}
-              <br />
-              Started{' '}
-              {differenceInCalendarDays(
-                new Date(),
-                daily.completedOn.first()
-              )}{' '}
-              days ago
-            </>
-          </Collapse>
+          </UncontrolledTooltip>{' '}
         </ButtonGroup>
+        <Collapse isOpen={this.state.showDetails || expand}>
+          <CardBody>
+            {daily.completedOn && daily.completedOn.last()
+              ? 'Last Completed: ' +
+                daily.completedOn.last().toLocaleDateString()
+              : ''}
+            <br />
+            Last Completed{' '}
+            {differenceInCalendarDays(
+              new Date(),
+              daily.completedOn.last()
+            )}{' '}
+            days ago
+            <br />
+            Completed {daily.completedOn.size} times <br />
+            Avg. hour of completion{' '}
+            {Math.round(
+              daily.completedOn.reduce(
+                (acc: number, t: Date) => acc + getHours(t),
+                0
+              ) / daily.completedOn.size
+            )}
+            <br />
+            Started{' '}
+            {differenceInCalendarDays(
+              new Date(),
+              daily.completedOn.first()
+            )}{' '}
+            days ago
+          </CardBody>
+        </Collapse>
       </Card>
     );
   }
