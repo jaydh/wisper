@@ -98,12 +98,12 @@ class AddArticle extends React.Component<Props, State> {
       suggestion: counts.findKey((count: number) => count === max)
     });
   }
-  handleSubmit(useSuggest: boolean) {
+  handleSubmit(useSuggest: boolean = false, project?: string) {
     const { onAdd, projectFilter } = this.props;
-    let project =
-      projectFilter !== 'None' && projectFilter !== 'All Projects'
-        ? projectFilter
-        : '';
+    project =
+      project || projectFilter === 'None' || projectFilter === 'All Projects'
+        ? project
+        : projectFilter;
     project = useSuggest ? this.state.suggestion : project;
 
     if (this.getValidationState()) {
@@ -144,7 +144,10 @@ class AddArticle extends React.Component<Props, State> {
               <DropdownToggle caret={true} />
               <DropdownMenu>
                 {projects.map((t: Project) => (
-                  <DropdownItem key={t.id + 'dropdownSubmit'}>
+                  <DropdownItem
+                    key={t.id + 'dropdownSubmit'}
+                    onClick={() => this.handleSubmit(false, t.id)}
+                  >
                     Submit to {t.id}
                   </DropdownItem>
                 ))}
