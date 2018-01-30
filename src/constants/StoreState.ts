@@ -9,6 +9,7 @@ export interface Article {
   projects: Set<String>;
   viewedOn: Set<Date>;
   completed: boolean;
+  HTMLContent?: string;
 }
 
 export interface Daily {

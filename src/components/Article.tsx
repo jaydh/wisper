@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Article as articleType } from '../constants/StoreState';
-import { ArticleViewed } from '../actions/articles/articleViewed';
+import articleViewed from '../actions/articles/articleViewed';
+import setCurrentArticle from '../actions/ui/setCurrentArticle';
 import AddArticleToProject from '../containers/actionDispatchers/AddArticleToProject';
-import DeleteArticle from '../containers/actionDispatchers/DeleteArticle';
-import ToggleArticle from '../containers/actionDispatchers/ToggleArticle';
+import setUIView from '../actions/ui/setUIView';
+import ArticleMenu from '../containers/ArticleMenu';
 import {
   Card,
   CardTitle,
@@ -14,7 +15,6 @@ import {
   ListGroupItem,
   Container,
   Col,
-  ButtonGroup,
   Row
 } from 'reactstrap';
 import LazyLoad from 'react-lazyload';
@@ -22,6 +22,8 @@ import { Icon } from 'react-fa';
 
 interface Props {
   onArticleView: (t: string) => void;
+  onSetUIView: (t: string) => void;
+  onSetCurrentArticle: (article: articleType) => void;
   article: articleType;
   compact: boolean;
   scrolling: boolean;
@@ -39,7 +41,13 @@ class Article extends React.Component<Props, State> {
   }
 
   render() {
-    const { onArticleView, article, compact } = this.props;
+    const {
+      onArticleView,
+      article,
+      onSetCurrentArticle,
+      onSetUIView,
+      compact
+    } = this.props;
     const hasTitle = article.metadata
       ? article.metadata.has('title') || article.metadata.has('oGtitle')
       : false;
@@ -72,12 +80,26 @@ class Article extends React.Component<Props, State> {
                 lg={showImage ? 10 : 12}
               >
                 <Card>
-                  <CardTitle>
+                  <CardTitle
+                    onClick={() => {
+                      onArticleView(article.id);
+                      onSetCurrentArticle(article);
+                      onSetUIView('article');
+                    }}
+                  >
                     {article.fetching && <Icon spin={true} name="spinner" />}
-                    <a
+                    {hasTitle
+                      ? article.metadata.get('title') ||
+                        article.metadata.get('ogTitle')
+                      : article.link}
+                    {/*<a
                       className="w-75 p-3"
                       style={{ textOverflow: 'ellipsis' }}
-                      onClick={() => onArticleView(article.id)}
+                      onClick={() => {
+                        onArticleView(article.id);
+                        onSetCurrentArticle(article);
+                        onSetUIView('article');
+                      }}
                       href={article.link}
                       target="_blank"
                     >
@@ -85,13 +107,10 @@ class Article extends React.Component<Props, State> {
                         ? article.metadata.get('title') ||
                           article.metadata.get('ogTitle')
                         : article.link}
-                    </a>
-                    {this.state.isMenuOpen && (
-                      <ButtonGroup style={{ float: 'right' }} size="sm">
-                        <ToggleArticle id={article.id} />
-                        <DeleteArticle id={article.id} />
-                      </ButtonGroup>
-                    )}
+                    </a>*/}
+                    <div style={{ float: 'right' }}>
+                      {this.state.isMenuOpen && <ArticleMenu id={article.id} />}
+                    </div>
                   </CardTitle>
                   <Collapse isOpen={this.state.isMenuOpen}>
                     <CardSubtitle>
@@ -173,7 +192,13 @@ const mapStateToProps = (state: any, ownProps: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onArticleView: (articleID: string) => {
-      dispatch(ArticleViewed(articleID));
+      dispatch(articleViewed(articleID));
+    },
+    onSetUIView: (view: string) => {
+      dispatch(setUIView(view));
+    },
+    onSetCurrentArticle: (article: articleType) => {
+      dispatch(setCurrentArticle(article));
     }
   };
 };

@@ -4,6 +4,7 @@ import Dailies from '../containers/Dailies';
 import DailyAnalytics from '../components/DailyAnalytics';
 import ArticleAnalytics from '../components/ArticleAnalytics';
 import VisibleArticleList from '../containers/VisibleArticleList';
+import ArticleView from '../containers/ArticleView';
 import UserPage from '../components/UserPage';
 import { connect } from 'react-redux';
 import { ArticleList as ArticleListType } from '../constants/StoreState';
@@ -88,6 +89,8 @@ class AppRoutes extends React.Component<Props, State> {
               );
             case 'User':
               return <UserPage />;
+            case 'article':
+              return <ArticleView />;
             default:
               return (
                 <div>
