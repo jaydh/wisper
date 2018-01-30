@@ -5,7 +5,8 @@ import {
   isBefore,
   subDays,
   differenceInCalendarDays,
-  getHours
+  getHours,
+  getMinutes
 } from 'date-fns';
 import {
   Button,
@@ -35,6 +36,12 @@ export default class Daily extends React.Component<Props, State> {
   }
   render() {
     const { onComplete, daily, expand } = this.props;
+    const avgMinuteOfCompletion =
+      daily.completedOn.reduce(
+        (acc: number, t: Date) => acc + 60 * getHours(t) + getMinutes(t),
+        0
+      ) / daily.completedOn.size;
+
     return (
       <Card>
         <CardHeader>
@@ -87,33 +94,24 @@ export default class Daily extends React.Component<Props, State> {
         </CardHeader>
         <Collapse isOpen={this.state.showDetails || expand}>
           <CardBody>
-            {daily.completedOn && daily.completedOn.last()
-              ? 'Last Completed: ' +
-                daily.completedOn.last().toLocaleDateString()
-              : ''}
             <br />
             Last Completed{' '}
             {differenceInCalendarDays(
               new Date(),
               daily.completedOn.last()
             )}{' '}
-            days ago
+            day(s) ago ({daily.completedOn.last().toLocaleDateString()})
             <br />
             Completed {daily.completedOn.size} times <br />
-            Avg. hour of completion{' '}
-            {Math.round(
-              daily.completedOn.reduce(
-                (acc: number, t: Date) => acc + getHours(t),
-                0
-              ) / daily.completedOn.size
-            )}
-            <br />
             Started{' '}
             {differenceInCalendarDays(
               new Date(),
               daily.completedOn.first()
             )}{' '}
-            days ago
+            days ago <br />
+            On average completed at {Math.round(
+              avgMinuteOfCompletion / 60
+            )}:{Math.round(avgMinuteOfCompletion % 60)}
           </CardBody>
         </Collapse>
       </Card>
