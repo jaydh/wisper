@@ -22,13 +22,13 @@ let store = createStore(
 initFirebase();
 let persistor = persistStore(store);
 try {
-  auth().onAuthStateChanged(function(user: any) {
+  auth().onAuthStateChanged(function (user: any) {
     if (user) {
       if (user.isAnonymous) {
         database
           .ref('/userData/' + user.uid)
           .once('value')
-          .then(function(snapshot: any) {
+          .then(function (snapshot: any) {
             if (!snapshot.val()) {
               demo(store, persistor);
             }

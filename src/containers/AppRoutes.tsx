@@ -13,6 +13,10 @@ import {
   ListenToFirebase
 } from '../actions/syncWithFirebase';
 import { Icon } from 'react-fa';
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const readability = require('readability-node');
+const Readability = readability.Readability;
 
 interface Props {
   uiView: string;
@@ -27,15 +31,39 @@ interface Props {
 }
 
 interface State {
+  content: any;
   timeout?: any;
 }
 
 class AppRoutes extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { content: '' };
+  }
   componentDidMount() {
     this.props.pullOnMount();
     this.setState({
       timeout: setTimeout(() => this.props.listenAfterMount(), 2000)
     });
+
+    JSDOM.fromURL('https://www.ostechnix.com/yay-found-yet-another-reliable-aur-helper/', {}).then(dom => {
+      const loc = dom.window.location;
+      var uri = {
+        spec: loc.href,
+        host: loc.host,
+        prePath: loc.protocol + '//' + loc.host,
+        scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
+        pathBase:
+          loc.protocol +
+          '//' +
+          loc.host +
+          loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+      };
+
+      const article = new Readability(uri, dom.window.document).parse();
+      console.log(article);
+      return article.content;
+    }).then(content => this.setState({ content }));
   }
 
   componentWillUnmount() {
@@ -45,27 +73,28 @@ class AppRoutes extends React.Component<Props, State> {
   }
 
   render() {
+    console.log(this.state.content);
     return (
       <>
-        {(this.props.fetchingArticles ||
+        <div dangerouslySetInnerHTML={{ __html: (this.state.content) }} />        {(this.props.fetchingArticles ||
           this.props.fetchingDailies ||
           (this.props.demoStart && !this.props.demoComplete)) && (
-          <p
-            style={{
-              zIndex: 100,
-              position: 'fixed',
-              bottom: '0.5em',
-              right: '0.5em'
-            }}
-          >
-            <Icon spin={true} name="spinner" />{' '}
-            {this.props.fetchingArticles ? 'Updating Articles' : ''}{' '}
-            {this.props.fetchingDailies ? 'Updating Dailies' : ''}{' '}
-            {this.props.demoStart && !this.props.demoComplete
-              ? 'Populating data'
-              : ''}{' '}
-          </p>
-        )}
+            <p
+              style={{
+                zIndex: 100,
+                position: 'fixed',
+                bottom: '0.5em',
+                right: '0.5em'
+              }}
+            >
+              <Icon spin={true} name="spinner" />{' '}
+              {this.props.fetchingArticles ? 'Updating Articles' : ''}{' '}
+              {this.props.fetchingDailies ? 'Updating Dailies' : ''}{' '}
+              {this.props.demoStart && !this.props.demoComplete
+                ? 'Populating data'
+                : ''}{' '}
+            </p>
+          )}
         {(() => {
           switch (this.props.uiView) {
             case 'compact':

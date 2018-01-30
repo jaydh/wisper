@@ -6,15 +6,13 @@
   "devDependencies": {},
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
-    "watch-css":
-      "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "deploy": "react-scripts-ts build && firebase deploy --only hosting",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "analyze":
-      "react-scripts-ts build && source-map-explorer build/static/js/main.*"
+    "analyze": "react-scripts-ts build && source-map-explorer build/static/js/main.*"
   },
   "dependencies": {
     "@types/chart.js": "^2.6.2",
@@ -31,6 +29,7 @@
     "fuse.js": "^3.2.0",
     "immutable": "^3.8.1",
     "jest": "^20.0.4",
+    "jsdom": "^11.6.2",
     "jshashes": "^1.0.7",
     "node-sass-chokidar": "^0.0.3",
     "react": "16.2",
@@ -43,6 +42,7 @@
     "react-scripts-ts": "^2.5.0",
     "react-transition-group": "^2.2.1",
     "reactstrap": "^5.0.0-alpha.4",
+    "readability-node": "^0.1.0",
     "redux": "^3.7.2",
     "redux-batched-actions": "^0.1.6",
     "redux-devtools": "^3.4.0",
