@@ -3,6 +3,10 @@ const admin = require('firebase-admin');
 const scrape = require('scrape-metadata');
 const fetch = require('node-fetch');
 const pos = require('pos');
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const readability = require('readability-node');
+const Readability = readability.Readability;
 const { Map, Set, List, fromJS } = require('immutable');
 admin.initializeApp(functions.config().firebase);
 
@@ -12,19 +16,34 @@ exports.getMetadata = functions.database
     const article = event.data.val();
     event.data.ref.parent.update({ fetching: true });
 
-    const promise = new Promise(function(resolve, reject) {
-      scrape(article, (err, meta) => {
-        let updates = {};
-        // Filters out null/undefined values
-        updates['/metadata/'] = fromJS(meta)
-          .filter(t => t)
-          .toJS();
-        updates['/fetching'] = false;
+    return Promise.all([
+      new Promise(function(resolve, reject) {
+        scrape(article, (err, meta) => {
+          // Filters out null/undefined values
+          const filteredMeta = fromJS(meta)
+            .filter(t => t)
+            .toJS();
+          resolve(event.data.ref.parent.child('metadata').set(filteredMeta));
+        });
+      }),
+      JSDOM.fromURL(article, {}).then(dom => {
+        const loc = dom.window.location;
+        var uri = {
+          spec: loc.href,
+          host: loc.host,
+          prePath: loc.protocol + '//' + loc.host,
+          scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
+          pathBase:
+            loc.protocol +
+            '//' +
+            loc.host +
+            loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+        };
+        const article = new Readability(uri, dom.window.document).parse();
 
-        resolve(updates);
-      });
-    }).then(updates => event.data.ref.parent.update(updates));
-    return promise;
+        return event.data.ref.parent.child('HTMLContent').set(article.content);
+      })
+    ]).then(() => event.data.ref.parent.child('fetching').set(false));
   });
 
 exports.addKeywordsFromMetadata = functions.database

@@ -3,10 +3,12 @@
   "description": "Cloud Functions for Firebase",
   "dependencies": {
     "firebase-admin": "~4.2.1",
-    "firebase-functions": "^0.5.7",
+    "firebase-functions": "^0.8.1",
     "immutable": "^3.8.1",
+    "jsdom": "^11.6.2",
     "node-fetch": "^1.7.2",
     "pos": "^0.4.2",
+    "readability-node": "^0.1.0",
     "request": "^2.81.0",
     "scrape-metadata": "^2.0.0"
   },
