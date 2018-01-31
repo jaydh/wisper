@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Article } from '../constants/StoreState';
-import ArticleMenu from './ArticleMenu';
+import { Article as ArticleType } from '../constants/StoreState';
+import { Jumbotron } from 'reactstrap';
+import ReactHTMLParser from 'react-html-parser';
+import Article from '../components/Article';
+import ExitArticleView from '../containers/actionDispatchers/ExitArticleView';
+
 interface Props {
-  article: Article;
+  article: ArticleType;
 }
 
 class ArticleView extends React.Component<Props> {
@@ -21,7 +25,9 @@ class ArticleView extends React.Component<Props> {
       : false;
 
     return (
-      <>
+      <Jumbotron>
+        <ExitArticleView />
+        <Article article={article} />
         {hasTitle
           ? article.metadata.get('title') || article.metadata.get('ogTitle')
           : article.link}
@@ -35,18 +41,16 @@ class ArticleView extends React.Component<Props> {
             article.metadata.get('description')
           : ''}
 
-        <ArticleMenu id={article.id} />
-        {article.HTMLContent && (
-          <div dangerouslySetInnerHTML={{ __html: article.HTMLContent }} />
-        )}
-      </>
+        {article.HTMLContent && <>{ReactHTMLParser(article.HTMLContent)}</>}
+      </Jumbotron>
     );
   }
 }
-
 const mapStateToProps = (state: any) => {
   return {
-    article: state.get('ui').currentArticle
+    article: state
+      .get('articles')
+      .find((t: ArticleType) => t.id === state.get('ui').currentArticle)
   };
 };
 

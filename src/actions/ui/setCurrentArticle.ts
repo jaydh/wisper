@@ -1,12 +1,10 @@
-import { Article } from '../../constants/StoreState';
-
 export interface SetCurrentArticle {
   type: 'SET_CURRENT_ARTICLE';
-  article: Article;
+  id: string;
 }
-export default function setCurrentArticle(article: Article): SetCurrentArticle {
+export default function setCurrentArticle(id: string): SetCurrentArticle {
   return {
     type: 'SET_CURRENT_ARTICLE',
-    article
+    id
   };
 }

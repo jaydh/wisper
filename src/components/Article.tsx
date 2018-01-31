@@ -23,7 +23,7 @@ import { Icon } from 'react-fa';
 interface Props {
   onArticleView: (t: string) => void;
   onSetUIView: (t: string) => void;
-  onSetCurrentArticle: (article: articleType) => void;
+  onSetCurrentArticle: (id: string) => void;
   article: articleType;
   compact: boolean;
   scrolling: boolean;
@@ -68,7 +68,7 @@ class Article extends React.Component<Props, State> {
       <ListGroupItem
         onMouseEnter={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        color={article.completed ? 'success' : 'info'}
+        color={article.completed ? 'success' : 'primary'}
       >
         <LazyLoad height="300" offset={600} overflow={false}>
           <Container>
@@ -79,38 +79,40 @@ class Article extends React.Component<Props, State> {
                 md={showImage ? 10 : 12}
                 lg={showImage ? 10 : 12}
               >
-                <Card>
-                  <CardTitle
-                    onClick={() => {
-                      onArticleView(article.id);
-                      onSetCurrentArticle(article);
-                      onSetUIView('article');
-                    }}
-                  >
-                    {article.fetching && <Icon spin={true} name="spinner" />}
-                    {hasTitle
-                      ? article.metadata.get('title') ||
-                        article.metadata.get('ogTitle')
-                      : article.link}
-                    {/*<a
-                      className="w-75 p-3"
-                      style={{ textOverflow: 'ellipsis' }}
-                      onClick={() => {
-                        onArticleView(article.id);
-                        onSetCurrentArticle(article);
-                        onSetUIView('article');
-                      }}
-                      href={article.link}
-                      target="_blank"
-                    >
-                      {hasTitle
-                        ? article.metadata.get('title') ||
-                          article.metadata.get('ogTitle')
-                        : article.link}
-                    </a>*/}
-                    <div style={{ float: 'right' }}>
-                      {this.state.isMenuOpen && <ArticleMenu id={article.id} />}
-                    </div>
+                <Card
+                  style={{
+                    textOverflow: 'ellipsis',
+                    borderColor: '#333',
+                    backgrouonColor: '#333'
+                  }}
+                >
+                  <CardTitle>
+                    <Row>
+                      <Col
+                        onClick={() => {
+                          onArticleView(article.id);
+                          onSetCurrentArticle(article.id);
+                          onSetUIView('article');
+                        }}
+                        xs={10}
+                        sm={10}
+                        md={10}
+                        lg={10}
+                      >
+                        {article.fetching && (
+                          <Icon spin={true} name="spinner" />
+                        )}
+                        {hasTitle
+                          ? article.metadata.get('title') ||
+                            article.metadata.get('ogTitle')
+                          : article.link}
+                      </Col>
+                      {this.state.isMenuOpen && (
+                        <Col xs={2} sm={2} md={2} lg={2}>
+                          <ArticleMenu article={article} />
+                        </Col>
+                      )}
+                    </Row>
                   </CardTitle>
                   <Collapse isOpen={this.state.isMenuOpen}>
                     <CardSubtitle>
@@ -197,8 +199,8 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetUIView: (view: string) => {
       dispatch(setUIView(view));
     },
-    onSetCurrentArticle: (article: articleType) => {
-      dispatch(setCurrentArticle(article));
+    onSetCurrentArticle: (id: string) => {
+      dispatch(setCurrentArticle(id));
     }
   };
 };

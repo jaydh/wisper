@@ -1,17 +1,24 @@
 import * as React from 'react';
 import ToggleArticle from '../containers/actionDispatchers/ToggleArticle';
 import DeleteArticle from '../containers/actionDispatchers/DeleteArticle';
-import { ButtonGroup } from 'reactstrap';
+import { ButtonGroup, Button } from 'reactstrap';
+import { Icon } from 'react-fa';
+import { Article } from '../constants/StoreState';
+
 interface Props {
-  id: string;
+  article: Article;
 }
+
 export default class ArticleMenu extends React.Component<Props> {
   render() {
-    const { id } = this.props;
+    const { article } = this.props;
     return (
       <ButtonGroup size="sm">
-        <ToggleArticle id={id} />
-        <DeleteArticle id={id} />
+        <Button onClick={() => window.open(article.link, '_blank')}>
+          <Icon name="external-link" />
+        </Button>
+        <ToggleArticle id={article.id} />
+        <DeleteArticle id={article.id} />
       </ButtonGroup>
     );
   }

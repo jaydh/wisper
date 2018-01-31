@@ -1,7 +1,6 @@
 import { SetUIView } from '../actions/ui/setUIView';
 import { SetCurrentArticle } from '../actions/ui/setCurrentArticle';
 import createReducer from './createReducer';
-import { Article } from '../constants/StoreState';
 
 interface UIState {
   view: string;
@@ -11,7 +10,7 @@ interface UIState {
   demoComplete: boolean;
   dailyGraphMin: Date;
   dailyGraphMax: Date;
-  currentArticle: Article;
+  currentArticle: string;
 }
 
 function setUIView(uiState: UIState, action: SetUIView): UIState {
@@ -45,7 +44,7 @@ function setCurrentArticle(
   uiState: UIState,
   action: SetCurrentArticle
 ): UIState {
-  return { ...uiState, currentArticle: action.article };
+  return { ...uiState, currentArticle: action.id};
 }
 
 export default createReducer(
