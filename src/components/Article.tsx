@@ -7,6 +7,7 @@ import AddArticleToProject from '../containers/actionDispatchers/AddArticleToPro
 import setUIView from '../actions/ui/setUIView';
 import ArticleMenu from '../containers/ArticleMenu';
 import {
+  Button,
   Card,
   CardTitle,
   CardSubtitle,
@@ -88,24 +89,23 @@ class Article extends React.Component<Props, State> {
                 >
                   <CardTitle>
                     <Row>
-                      <Col
-                        onClick={() => {
-                          onArticleView(article.id);
-                          onSetCurrentArticle(article.id);
-                          onSetUIView('article');
-                        }}
-                        xs={10}
-                        sm={10}
-                        md={10}
-                        lg={10}
-                      >
-                        {article.fetching && (
-                          <Icon spin={true} name="spinner" />
-                        )}
-                        {hasTitle
-                          ? article.metadata.get('title') ||
-                            article.metadata.get('ogTitle')
-                          : article.link}
+                      <Col xs={10} sm={10} md={10} lg={10}>
+                        <Button
+                          color="link"
+                          onClick={() => {
+                            onArticleView(article.id);
+                            onSetCurrentArticle(article.id);
+                            onSetUIView('article');
+                          }}
+                        >
+                          {article.fetching && (
+                            <Icon spin={true} name="spinner" />
+                          )}
+                          {hasTitle
+                            ? article.metadata.get('title') ||
+                              article.metadata.get('ogTitle')
+                            : article.link}
+                        </Button>
                       </Col>
                       {this.state.isMenuOpen && (
                         <Col xs={2} sm={2} md={2} lg={2}>
