@@ -96,6 +96,7 @@ class Article extends React.Component<Props, State> {
                             onArticleView(article.id);
                             onSetCurrentArticle(article.id);
                             onSetUIView('article');
+                            window.scroll(0, 0);
                           }}
                         >
                           {article.fetching && (

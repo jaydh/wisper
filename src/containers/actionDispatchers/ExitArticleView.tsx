@@ -12,7 +12,13 @@ class ExitArticleView extends React.Component<Props, {}> {
   render() {
     const { onExit } = this.props;
     return (
-      <Button onClick={() => onExit()} size="small">
+      <Button
+        onClick={() => {
+          onExit();
+          window.scroll(0, 0);
+        }}
+        size="sm"
+      >
         <Icon name="arrow-left" />
       </Button>
     );
