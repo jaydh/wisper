@@ -55,6 +55,8 @@ class ArticleView extends React.Component<Props, State> {
       ? article.metadata.has('siteName') || article.metadata.has('ogSiteName')
       : false;
 
+    const isWebkit = 'WebkitAppearance' in document.documentElement.style;
+
     return (
       <Jumbotron>
         {this.state.scrollUp && (
@@ -62,7 +64,7 @@ class ArticleView extends React.Component<Props, State> {
             dark={true}
             style={{
               backgroundColor: '#33507f',
-              position: 'sticky',
+              position: isWebkit ? '-webkit-sticky' : 'sticky',
               top: '20px'
             }}
           >
