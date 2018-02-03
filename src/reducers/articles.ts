@@ -50,7 +50,8 @@ function addArticle(
         completed: false,
         fetching: true,
         viewedOn: Set(),
-        projects: Set()
+        projects: Set(),
+        metadata: Map<string, any>()
       })
     : articleState;
 }

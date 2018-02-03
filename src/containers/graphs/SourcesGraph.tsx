@@ -36,8 +36,8 @@ export class SourcesGraph extends React.Component<Props, State> {
       .map(
         (article: articleType) =>
           article.metadata
-            ? article.metadata.ogSiteName ||
-              article.metadata.siteName ||
+            ? article.metadata.has('ogSiteName') ||
+              article.metadata.has('siteName') ||
               parseUri(article.link).authority
             : parseUri(article.link).authority
       )
@@ -62,16 +62,16 @@ export class SourcesGraph extends React.Component<Props, State> {
     const domains = this.props.articles.map(
       (article: articleType) =>
         article.metadata
-          ? article.metadata.ogSiteName ||
-            article.metadata.siteName ||
+          ? article.metadata.has('ogSiteName') ||
+            article.metadata.has('siteName') ||
             parseUri(article.link).authority
           : parseUri(article.link).authority
     );
     const nextDomains = nextProps.articles.map(
       (article: articleType) =>
         article.metadata
-          ? article.metadata.ogSiteName ||
-            article.metadata.siteName ||
+          ? article.metadata.has('ogSiteName') ||
+            article.metadata.has('siteName') ||
             parseUri(article.link).authority
           : parseUri(article.link).authority
     );
@@ -89,8 +89,8 @@ export class SourcesGraph extends React.Component<Props, State> {
     const domains = articles.map(
       (article: articleType) =>
         article.metadata
-          ? article.metadata.ogSiteName ||
-            article.metadata.siteName ||
+          ? article.metadata.has('ogSiteName') ||
+            article.metadata.has('siteName') ||
             parseUri(article.link).authority
           : parseUri(article.link).authority
     );
