@@ -60,11 +60,7 @@ class Article extends React.Component<Props, State> {
       ? article.metadata.has('siteName') || article.metadata.has('ogSiteName')
       : false;
 
-    const showImage =
-      (!compact || this.state.isMenuOpen) &&
-      article.metadata &&
-      article.metadata.has('images');
-
+    const showImage = compact ? this.state.isMenuOpen : true;
     return (
       <ListGroupItem
         onMouseEnter={() => this.setState({ isMenuOpen: true })}
@@ -177,7 +173,11 @@ class Article extends React.Component<Props, State> {
                         isMenuOpen: !this.state.isMenuOpen
                       })
                     }
-                    src={article.metadata.get('images').get(0)}
+                    src={
+                      article.metadata.has('images')
+                        ? article.metadata.get('images').get(0)
+                        : 'http://images6.fanpop.com/image/photos/34100000/Brave-brave-34108077-442-500.jpg'
+                    }
                   />
                 </Col>
               )}
