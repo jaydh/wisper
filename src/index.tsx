@@ -6,29 +6,36 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import appReducer from './reducers/index';
 import thunk from 'redux-thunk';
-const { persistStore, autoRehydrate } = require('redux-persist-immutable');
+import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import { initFirebase, auth, database } from './firebase';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { enableBatching } from 'redux-batched-actions';
 import demo from './constants/demo';
 import 'bootstrap/dist/css/bootstrap.css';
 import './css/styles.css';
+import { persistReducer } from 'redux-persist';
+import * as storage from 'localforage';
 
-let store = createStore(
-  enableBatching(appReducer),
+const persistConfig = {
+  key: 'root',
+  storage: storage
+};
+const persistedReducer = persistReducer(persistConfig, appReducer);
+
+const store = createStore(
+  persistedReducer,
   composeWithDevTools(applyMiddleware(thunk)),
   autoRehydrate()
 );
 initFirebase();
-let persistor = persistStore(store);
+const persistor = persistStore(store);
 try {
-  auth().onAuthStateChanged(function (user: any) {
+  auth().onAuthStateChanged(function(user: any) {
     if (user) {
       if (user.isAnonymous) {
         database
           .ref('/userData/' + user.uid)
           .once('value')
-          .then(function (snapshot: any) {
+          .then(function(snapshot: any) {
             if (!snapshot.val()) {
               demo(store, persistor);
             }
