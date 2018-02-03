@@ -3,26 +3,36 @@ import { connect } from 'react-redux';
 import { toggleArticleRead } from '../../actions/articles/toggleArticleRead';
 import { Button } from 'reactstrap';
 import { Icon } from 'react-fa';
+import { Article } from '../../constants/StoreState';
 
 export interface Props {
   onToggleClick: () => void;
   id: string;
+  articleCompleted: boolean;
 }
 
 class ToggleArticleRead extends React.Component<Props> {
   render() {
-    const { onToggleClick } = this.props;
+    const { onToggleClick, articleCompleted } = this.props;
     return (
       <Button
         onClick={() => {
           onToggleClick();
         }}
       >
-        <Icon name="check" />
+        <Icon name={articleCompleted ? 'book' : 'check'} />
       </Button>
     );
   }
 }
+
+const mapStateToProps = (state: any, ownProps: any) => {
+  return {
+    articleCompleted: state
+      .get('articles')
+      .find((t: Article) => t.id === ownProps.id).completed
+  };
+};
 
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
@@ -32,4 +42,4 @@ const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ToggleArticleRead);
+export default connect(mapStateToProps, mapDispatchToProps)(ToggleArticleRead);
