@@ -6,7 +6,7 @@ import {
   DeleteArticleFromServer
 } from '../actions/syncWithFirebase';
 import { Article as articleType } from '../constants/StoreState';
-import { fromJS, List, Set } from 'immutable';
+import { fromJS, List, Set, Map } from 'immutable';
 import createReducer from './createReducer';
 
 function processArticle(article: any): articleType {
@@ -24,6 +24,9 @@ function processArticle(article: any): articleType {
         .map((t: string) => new Date(t))
         .sort()
     : Set();
+  article.metadata = article.metadata
+    ? fromJS(article.metadata)
+    : Map<string, any>();
   article.dateAdded = article.dateAdded ? new Date(article.dateAdded) : null;
   article.dateRead = article.dateRead ? new Date(article.dateRead) : null;
 

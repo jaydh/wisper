@@ -1,8 +1,8 @@
-import { List, Set } from 'immutable';
+import { List, Set, Map } from 'immutable';
 export interface Article {
   id: string;
   link: string;
-  metadata?: any;
+  metadata: Map<string, any>;
   fetching?: boolean;
   dateAdded: Date;
   dateRead?: Date;
