@@ -7,7 +7,7 @@ import VisibleArticleList from '../containers/VisibleArticleList';
 import ArticleView from '../containers/ArticleView';
 import UserPage from '../components/UserPage';
 import { connect } from 'react-redux';
-import { ArticleList as ArticleListType } from '../constants/StoreState';
+import { Article as ArticleType } from '../constants/StoreState';
 import { List } from 'immutable';
 import {
   pullFromFirebase,
@@ -22,10 +22,10 @@ interface Props {
   fetchingDailies: boolean;
   demoStart: boolean;
   demoComplete: boolean;
-  articleLists: List<ArticleListType>;
   pullOnMount: () => void;
   listenAfterMount: () => void;
-  createArticleList: (id: string) => void;
+  currentArticle: string;
+  articles: List<ArticleType>;
 }
 
 interface State {
@@ -61,7 +61,6 @@ class AppRoutes extends React.Component<Props, State> {
   }
 
   render() {
-    console.log(this.state.fadeIn);
     return (
       <>
         {(this.props.fetchingArticles ||
@@ -102,7 +101,13 @@ class AppRoutes extends React.Component<Props, State> {
               case 'User':
                 return <UserPage />;
               case 'article':
-                return <ArticleView />;
+                return this.props.articles.find(
+                  (t: ArticleType) => t.id === this.props.currentArticle
+                ) ? (
+                  <ArticleView />
+                ) : (
+                  <p>Fetching article</p>
+                );
               default:
                 return (
                   <div>
@@ -120,12 +125,13 @@ class AppRoutes extends React.Component<Props, State> {
 
 const mapStateToProps = (state: any) => {
   return {
-    articleLists: state.get('articleLists'),
     uiView: state.get('ui').view,
     fetchingArticles: state.get('ui').fetchingArticles,
     fetchingDailies: state.get('ui').fetchingDailies,
     demoStart: state.get('ui').demoStart,
-    demoComplete: state.get('ui').demoComplete
+    demoComplete: state.get('ui').demoComplete,
+    currentArticle: state.get('ui').currentArticle,
+    articles: state.get('articles')
   };
 };
 
