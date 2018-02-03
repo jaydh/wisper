@@ -19,6 +19,11 @@ a {
   z-index: inherit !important;
 }
 
+.article-list-bar {
+  position: sticky;
+  position: -webkit-sticky;
+}
+
 .well-daily-graph {
   background-color: var(--fourary) !important;
 }
@@ -48,29 +53,4 @@ a {
   position: sticky;
   position: -webkit-sticky;
   border-width: 0 6px 6px 0;
-}
-
-.glyphicon-refresh {
-  -webkit-animation: spin 1000ms infinite linear;
-  animation: spin 1000ms infinite linear;
-}
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
-}
-@keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
 }
