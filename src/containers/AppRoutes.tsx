@@ -14,6 +14,7 @@ import {
   ListenToFirebase
 } from '../actions/syncWithFirebase';
 import { Icon } from 'react-fa';
+import { Fade } from 'reactstrap';
 
 interface Props {
   uiView: string;
@@ -28,14 +29,17 @@ interface Props {
 }
 
 interface State {
-  content: any;
+  fadeIn: boolean;
   timeout?: any;
 }
 
 class AppRoutes extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { content: '' };
+    this.state = { fadeIn: true };
+  }
+  toggle() {
+    this.setState({ fadeIn: !this.state.fadeIn });
   }
   componentDidMount() {
     this.props.pullOnMount();
@@ -44,13 +48,20 @@ class AppRoutes extends React.Component<Props, State> {
     });
   }
 
-  componentWillUnmount() {
+  componentWillUmount() {
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
     }
   }
+  componentWillUpdate(nextProps: Props) {
+    if (nextProps.uiView !== this.props.uiView) {
+      this.toggle();
+      setTimeout(() => this.toggle(), 500);
+    }
+  }
 
   render() {
+    console.log(this.state.fadeIn);
     return (
       <>
         {(this.props.fetchingArticles ||
@@ -72,34 +83,36 @@ class AppRoutes extends React.Component<Props, State> {
               : ''}{' '}
           </p>
         )}
-        {(() => {
-          switch (this.props.uiView) {
-            case 'compact':
-              return <VisibleArticleList id={'compactAL'} />;
-            case 'canvas':
-              return <Canvas />;
-            case 'analytics':
-              return <ArticleAnalytics />;
-            case 'dailies':
-              return (
-                <div>
-                  <Dailies />
-                  <DailyAnalytics />
-                </div>
-              );
-            case 'User':
-              return <UserPage />;
-            case 'article':
-              return <ArticleView />;
-            default:
-              return (
-                <div>
-                  <Dailies />
-                  <DailyAnalytics />
-                </div>
-              );
-          }
-        })()}
+        <Fade in={true}>
+          {(() => {
+            switch (this.props.uiView) {
+              case 'compact':
+                return <VisibleArticleList id={'compactAL'} />;
+              case 'canvas':
+                return <Canvas />;
+              case 'analytics':
+                return <ArticleAnalytics />;
+              case 'dailies':
+                return (
+                  <div>
+                    <Dailies />
+                    <DailyAnalytics />
+                  </div>
+                );
+              case 'User':
+                return <UserPage />;
+              case 'article':
+                return <ArticleView />;
+              default:
+                return (
+                  <div>
+                    <Dailies />
+                    <DailyAnalytics />
+                  </div>
+                );
+            }
+          })()}
+        </Fade>
       </>
     );
   }
