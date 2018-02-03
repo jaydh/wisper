@@ -38,7 +38,7 @@ class Menu extends React.Component<Props, State> {
 
   render() {
     return (
-      <Navbar color="faded" light={true} expand="md">
+      <Navbar color="faded" light={true} expand="sm">
         <NavbarBrand>Wispy</NavbarBrand>
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar={true}>
