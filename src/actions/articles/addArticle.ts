@@ -1,7 +1,6 @@
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import AddArticleToProject from './addArticleToProject';
-import * as moment from 'moment';
 let Hashes = require('jshashes');
 var SHA1 = new Hashes.SHA1();
 
@@ -50,7 +49,7 @@ function AddArticleFulfilled(
 
 export default function addArticle(articleLink: string, project?: string) {
   const user = auth().currentUser.uid;
-  const now = moment();
+  const now = new Date();
 
   return async (dispatch: Dispatch<any>) => {
     dispatch(AddArticleRequested());

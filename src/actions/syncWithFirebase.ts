@@ -5,6 +5,8 @@ import {
   Daily,
   Project
 } from '../constants/StoreState';
+import { setUIViewSuccess } from './ui/setUIView';
+import { setCurrentArticleSuccess } from './ui/setCurrentArticle';
 
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
@@ -157,20 +159,32 @@ export function pullFromFirebase() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
-
+  const uiViewRef = database.ref('/userData/' + user + '/uiView');
+  const currentArticleRef = database.ref(
+    '/userData/' + user + '/currentArticle'
+  );
   return async (dispatch: Dispatch<any>) => {
     dispatch(fetchingDailiesRequested());
     dispatch(fetchingArticlesRequested());
     return Promise.all([
-      dailyRef.once('value').then(function(snap: any) {
-        dispatch(addFetchedDailies(snap.val()));
-        dispatch(fetchingDailiesCompleted());
-      }),
-      articleRef.once('value').then(function(snap: any) {
-        dispatch(addFetchedArticles(snap.val()));
-        dispatch(fetchingArticlesCompleted());
-      })
-    ]);
+      uiViewRef
+        .once('value')
+        .then((snap: any) => dispatch(setUIViewSuccess(snap.val()))),
+      currentArticleRef
+        .once('value')
+        .then((snap: any) => dispatch(setCurrentArticleSuccess(snap.val())))
+    ]).then(() =>
+      Promise.all([
+        dailyRef.once('value').then(function(snap: any) {
+          dispatch(addFetchedDailies(snap.val()));
+          dispatch(fetchingDailiesCompleted());
+        }),
+        articleRef.once('value').then(function(snap: any) {
+          dispatch(addFetchedArticles(snap.val()));
+          dispatch(fetchingArticlesCompleted());
+        })
+      ])
+    );
   };
 }
 
