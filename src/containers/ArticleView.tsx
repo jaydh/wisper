@@ -48,7 +48,7 @@ class ArticleView extends React.Component<Props, State> {
         el => el.textContent === this.props.article.bookmark
       );
       if (target) {
-        target.scrollIntoView();
+        target.scrollIntoView(true);
       }
     }
     window.addEventListener('scroll', this.handleScroll);
@@ -57,27 +57,32 @@ class ArticleView extends React.Component<Props, State> {
     window.removeEventListener('scroll', this.handleScroll);
   }
   handleScroll(event: any) {
-    const elements = document
-      .querySelectorAll('div.page')[0]
-      .getElementsByTagName('*');
-    let lastText: string = '';
-    for (let i = 0, max = elements.length; i < max; i++) {
-      const rect = elements[i].getBoundingClientRect();
-      if (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <=
-          (window.innerHeight ||
-            document.documentElement.clientHeight) /*or $(window).height() */ &&
-        rect.right <=
-          (window.innerWidth ||
-            document.documentElement.clientWidth) /*or $(window).width() */
-      ) {
-        let el = elements[i];
-        lastText = el.textContent ? el.textContent : lastText;
-        updateBookmark(this.props.article.id, lastText);
+    window.requestAnimationFrame(() => {
+      // Div page is classname produced from Readability parsing
+      const elements = document
+        .querySelectorAll('div.page')[0]
+        .getElementsByTagName('*');
+      for (let i = 0, max = elements.length; i < max; i++) {
+        const element = elements[i];
+        const rect = element.getBoundingClientRect();
+        if (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <=
+            (window.innerHeight ||
+              document.documentElement
+                .clientHeight) /*or $(window).height() */ &&
+          rect.right <=
+            (window.innerWidth ||
+              document.documentElement.clientWidth) /*or $(window).width() */ &&
+          element.textContent
+        ) {
+          updateBookmark(this.props.article.id, element.textContent);
+          break;
+        }
       }
-    }
+    });
+
     if (
       (!this.state.ticking &&
         this.state.scrollPosition < window.scrollY - 25) ||
