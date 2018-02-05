@@ -10,6 +10,7 @@ export interface Article {
   viewedOn: Set<Date>;
   completed: boolean;
   HTMLContent?: string;
+  bookmark?: string;
 }
 
 export interface Daily {
