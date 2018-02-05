@@ -66,10 +66,28 @@ class Article extends React.Component<Props, State> {
         onMouseEnter={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
         color={article.completed ? 'success' : 'primary'}
+        style={{ backgroundColor: '#4A6670' }}
       >
         <LazyLoad height="300" offset={600} overflow={false}>
           <Container>
             <Row>
+              {showImage && (
+                <Col xs={4} sm={4} md={2} lg={2}>
+                  <img
+                    className="img-fluid img-thumbnail"
+                    onTouchEnd={() =>
+                      this.setState({
+                        isMenuOpen: !this.state.isMenuOpen
+                      })
+                    }
+                    src={
+                      article.metadata.has('images')
+                        ? article.metadata.get('images').get(0)
+                        : 'http://images6.fanpop.com/image/photos/34100000/Brave-brave-34108077-442-500.jpg'
+                    }
+                  />
+                </Col>
+              )}
               <Col
                 xs={showImage ? 8 : 12}
                 sm={showImage ? 8 : 12}
@@ -80,12 +98,12 @@ class Article extends React.Component<Props, State> {
                   style={{
                     textOverflow: 'ellipsis',
                     borderColor: '#333',
-                    backgrouonColor: '#333'
+                    backgroundColor: '#CEE0DC'
                   }}
                 >
                   <CardTitle>
                     <Row>
-                      <Col xs={10} sm={10} md={10} lg={10}>
+                      <Col xs={9} sm={9} md={9} lg={9}>
                         <Button
                           color="link"
                           onClick={() => {
@@ -94,6 +112,7 @@ class Article extends React.Component<Props, State> {
                             onSetUIView('article');
                             window.scroll(0, 0);
                           }}
+                          style={{ whiteSpace: 'pre-line' }}
                         >
                           {article.fetching && (
                             <Icon spin={true} name="spinner" />
@@ -105,7 +124,7 @@ class Article extends React.Component<Props, State> {
                         </Button>
                       </Col>
                       {this.state.isMenuOpen && (
-                        <Col xs={2} sm={2} md={2} lg={2}>
+                        <Col xs={3} sm={3} md={3} lg={3}>
                           <ArticleMenu article={article} />
                         </Col>
                       )}
@@ -164,23 +183,6 @@ class Article extends React.Component<Props, State> {
                   </Collapse>
                 </Card>
               </Col>
-              {showImage && (
-                <Col xs={4} sm={4} md={2} lg={2}>
-                  <img
-                    className="img-fluid img-thumbnail"
-                    onTouchEnd={() =>
-                      this.setState({
-                        isMenuOpen: !this.state.isMenuOpen
-                      })
-                    }
-                    src={
-                      article.metadata.has('images')
-                        ? article.metadata.get('images').get(0)
-                        : 'http://images6.fanpop.com/image/photos/34100000/Brave-brave-34108077-442-500.jpg'
-                    }
-                  />
-                </Col>
-              )}
             </Row>
           </Container>
         </LazyLoad>

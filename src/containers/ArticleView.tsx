@@ -36,17 +36,18 @@ class ArticleView extends React.Component<Props, State> {
       ticking: false,
       showDetails: false
     };
+    this.handleScroll = this.handleScroll.bind(this);
   }
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.addEventListener('scroll', this.handleScroll);
   }
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll.bind(this));
+    window.removeEventListener('scroll', this.handleScroll);
   }
   handleScroll() {
     if (
       (!this.state.ticking &&
-        this.state.scrollPosition < window.scrollY - 100) ||
+        this.state.scrollPosition < window.scrollY - 25) ||
       this.state.scrollPosition > window.scrollY + 100
     ) {
       window.requestAnimationFrame(() => {
@@ -74,12 +75,16 @@ class ArticleView extends React.Component<Props, State> {
       ? article.metadata.has('siteName') || article.metadata.has('ogSiteName')
       : false;
 
+    const width = window.innerWidth > 768 ? '65vw' : '90vw';
+
     return (
-      <Jumbotron style={{ margin: '0 auto', width: '65vw' }}>
+      <Jumbotron
+        style={{ backgroundColor: '#C3B59F', margin: '0 auto', width: width }}
+      >
         <Fade
           className="article-list-bar"
           style={{
-            backgroundColor: '#33507f',
+            backgroundColor: '#668F80',
             top: '20px'
           }}
           in={this.state.scrollUp}
