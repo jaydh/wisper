@@ -15,7 +15,12 @@ exports.getMetadata = functions.database
   .onCreate(event => {
     const article = event.data.val();
     event.data.ref.parent.update({ fetching: true });
-
+    const metaRef = event.data.ref.parent.child('metadata');
+    const rootRef = event.data.ref.parent.parent.parent.parent.parent;
+    const htmlRef = rootRef
+      .child('articleHTMLData')
+      .child(event.params.articleID)
+      .child('HTMLContent');
     return Promise.all([
       new Promise(function(resolve, reject) {
         scrape(article, (err, meta) => {
@@ -23,27 +28,76 @@ exports.getMetadata = functions.database
           const filteredMeta = fromJS(meta)
             .filter(t => t)
             .toJS();
-          resolve(event.data.ref.parent.child('metadata').set(filteredMeta));
+          resolve(metaRef.set(filteredMeta));
         });
       }),
-      JSDOM.fromURL(article, {}).then(dom => {
-        const loc = dom.window.location;
-        var uri = {
-          spec: loc.href,
-          host: loc.host,
-          prePath: loc.protocol + '//' + loc.host,
-          scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
-          pathBase:
-            loc.protocol +
-            '//' +
-            loc.host +
-            loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
-        };
-        const article = new Readability(uri, dom.window.document).parse();
-
-        return event.data.ref.parent.child('HTMLContent').set(article.content);
-      })
+      htmlRef.once('value', snapshot => snapshot.val() !== null).then(
+        exists =>
+          exists
+            ? JSDOM.fromURL(article, {}).then(dom => {
+                const loc = dom.window.location;
+                var uri = {
+                  spec: loc.href,
+                  host: loc.host,
+                  prePath: loc.protocol + '//' + loc.host,
+                  scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
+                  pathBase:
+                    loc.protocol +
+                    '//' +
+                    loc.host +
+                    loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+                };
+                const article = new Readability(
+                  uri,
+                  dom.window.document
+                ).parse();
+                return htmlRef.set(article.content);
+              })
+            : null
+      )
     ]).then(() => event.data.ref.parent.child('fetching').set(false));
+  });
+
+exports.refetchHTML = functions.database
+  .ref('/userData/{uId}/articles/{articleID}/refetch')
+  .onCreate(event => {
+    const rootRef = event.data.ref.parent.parent.parent.parent.parent;
+    const htmlRef = rootRef
+      .child('articleHTMLData')
+      .child(event.params.articleID)
+      .child('HTMLContent');
+    return event.data.ref.parent
+      .child('link')
+      .once('value')
+      .then(snapshot =>
+        event.data.ref.parent
+          .child('fetching')
+          .set(true)
+          .then(() =>
+            JSDOM.fromURL(snapshot.val(), {})
+              .then(dom => {
+                const loc = dom.window.location;
+                var uri = {
+                  spec: loc.href,
+                  host: loc.host,
+                  prePath: loc.protocol + '//' + loc.host,
+                  scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
+                  pathBase:
+                    loc.protocol +
+                    '//' +
+                    loc.host +
+                    loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+                };
+                const article = new Readability(
+                  uri,
+                  dom.window.document
+                ).parse();
+                return htmlRef.set(article.content);
+              })
+              .then(() => event.data.ref.parent.child('refetch').remove())
+              .then(() => event.data.ref.parent.child('fetching').set(false))
+          )
+      );
   });
 
 exports.addKeywordsFromMetadata = functions.database
