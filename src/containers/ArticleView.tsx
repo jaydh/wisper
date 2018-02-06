@@ -17,9 +17,12 @@ import ArticleMenu from './ArticleMenu';
 import ReactHTMLParser from 'react-html-parser';
 import ExitArticleView from '../containers/actionDispatchers/ExitArticleView';
 import updateBookmark from '../actions/articles/updateBookmark';
+import refetchHTML from '../actions/articles/refetchHTML';
 
 interface Props {
   article: ArticleType;
+  HTMLContent: string;
+  onRefetch: (id: string) => void;
 }
 interface State {
   scrollPosition: number;
@@ -40,7 +43,7 @@ class ArticleView extends React.Component<Props, State> {
     this.handleScroll = this.handleScroll.bind(this);
   }
   componentDidMount() {
-    if (this.props.article.bookmark) {
+    if (this.props.article.bookmark && this.props.HTMLContent) {
       const elements = document
         .querySelectorAll('div.page')[0]
         .getElementsByTagName('*');
@@ -52,6 +55,9 @@ class ArticleView extends React.Component<Props, State> {
       }
     }
     window.addEventListener('scroll', this.handleScroll);
+    if (!this.props.HTMLContent && this.props.article) {
+      this.props.onRefetch(this.props.article.id);
+    }
   }
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -101,7 +107,7 @@ class ArticleView extends React.Component<Props, State> {
   }
 
   render() {
-    const { article } = this.props;
+    const { article, HTMLContent } = this.props;
     const hasTitle = article.metadata
       ? article.metadata.has('title') || article.metadata.has('oGtitle')
       : false;
@@ -114,7 +120,6 @@ class ArticleView extends React.Component<Props, State> {
       : false;
 
     const width = window.innerWidth > 768 ? '65vw' : '90vw';
-
     return (
       <Jumbotron
         style={{ backgroundColor: '#C3B59F', margin: '0 auto', width: width }}
@@ -134,28 +139,10 @@ class ArticleView extends React.Component<Props, State> {
               </NavItem>
             </Nav>
             <NavbarBrand style={{ whiteSpace: 'pre-line' }}>
-              {hasSiteName
-                ? article.metadata.get('siteName') ||
-                  article.metadata.get('ogSiteName')
-                : ''}
-              {hasSiteName && hasDescription ? ' - ' : ''}
-              {hasDescription
-                ? article.metadata.get('ogDescrption') ||
-                  article.metadata.get('description')
-                : ''}
               {hasTitle
                 ? article.metadata.get('title') ||
                   article.metadata.get('ogTitle')
                 : article.link}
-              {hasSiteName
-                ? article.metadata.get('siteName') ||
-                  article.metadata.get('ogSiteName')
-                : ''}
-              {hasSiteName && hasDescription ? ' - ' : ''}
-              {hasDescription
-                ? article.metadata.get('ogDescrption') ||
-                  article.metadata.get('description')
-                : ''}
             </NavbarBrand>
             <Nav className="ml-auto" navbar={true}>
               <NavItem>
@@ -172,6 +159,16 @@ class ArticleView extends React.Component<Props, State> {
             </Nav>
           </Navbar>
           <Collapse isOpen={this.state.showDetails}>
+            {' '}
+            {hasSiteName
+              ? article.metadata.get('siteName') ||
+                article.metadata.get('ogSiteName')
+              : ''}
+            {hasSiteName && hasDescription ? ' - ' : ''}
+            {hasDescription
+              ? article.metadata.get('ogDescrption') ||
+                article.metadata.get('description')
+              : ''}
             {article.dateAdded ? (
               <small>
                 Date added: {article.dateAdded.toLocaleDateString()} <br />
@@ -202,17 +199,25 @@ class ArticleView extends React.Component<Props, State> {
               : ' '}
           </Collapse>
         </Fade>
-        {article.HTMLContent && <>{ReactHTMLParser(article.HTMLContent)}</>}
+        {HTMLContent && <>{ReactHTMLParser(HTMLContent)}</>}
       </Jumbotron>
     );
   }
 }
+
 const mapStateToProps = (state: any) => {
   return {
     article: state
       .get('articles')
-      .find((t: ArticleType) => t.id === state.get('ui').currentArticle)
+      .find((t: ArticleType) => t.id === state.get('ui').currentArticle),
+    HTMLContent: state.get('ui').currentHTML
   };
 };
 
-export default connect(mapStateToProps)(ArticleView);
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    onRefetch: (id: string) => dispatch(refetchHTML(id))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleView);

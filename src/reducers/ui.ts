@@ -1,5 +1,8 @@
 import { SetUIView } from '../actions/ui/setUIView';
-import { SetCurrentArticle } from '../actions/ui/setCurrentArticle';
+import {
+  SetCurrentArticle,
+  SetCurrentHTML
+} from '../actions/ui/setCurrentArticle';
 import createReducer from './createReducer';
 
 interface UIState {
@@ -11,6 +14,7 @@ interface UIState {
   dailyGraphMin: Date;
   dailyGraphMax: Date;
   currentArticle: string;
+  currentHTML: string;
 }
 
 function setUIView(uiState: UIState, action: SetUIView): UIState {
@@ -40,11 +44,15 @@ function setDailyGraphSpan(uiState: UIState, action: any): UIState {
   return { ...uiState, dailyGraphMin: action.min, dailyGraphMax: action.max };
 }
 
+function SetCurrentHTML(uiState: UIState, action: SetCurrentHTML): UIState {
+  return { ...uiState, currentHTML: action.content };
+}
+
 function setCurrentArticle(
   uiState: UIState,
   action: SetCurrentArticle
 ): UIState {
-  return { ...uiState, currentArticle: action.id};
+  return { ...uiState, currentArticle: action.id };
 }
 
 export default createReducer(
@@ -66,6 +74,7 @@ export default createReducer(
     DEMO_START: demoStart,
     DEMO_COMPLETE: demoComplete,
     SET_DAILY_GRAPH_SPAN: setDailyGraphSpan,
-    SET_CURRENT_ARTICLE: setCurrentArticle
+    SET_CURRENT_ARTICLE: setCurrentArticle,
+    SET_CURRENT_HTML: SetCurrentHTML
   }
 );

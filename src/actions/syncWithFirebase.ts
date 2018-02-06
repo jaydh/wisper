@@ -6,7 +6,7 @@ import {
   Project
 } from '../constants/StoreState';
 import { setUIViewSuccess } from './ui/setUIView';
-import { setCurrentArticleSuccess } from './ui/setCurrentArticle';
+import setCurrentArticle from './ui/setCurrentArticle';
 
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
@@ -172,7 +172,7 @@ export function pullFromFirebase() {
         .then((snap: any) => dispatch(setUIViewSuccess(snap.val()))),
       currentArticleRef
         .once('value')
-        .then((snap: any) => dispatch(setCurrentArticleSuccess(snap.val())))
+        .then((snap: any) => dispatch(setCurrentArticle(snap.val())))
     ]).then(() =>
       Promise.all([
         dailyRef.once('value').then(function(snap: any) {
