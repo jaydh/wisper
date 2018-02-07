@@ -15,11 +15,13 @@ import { Icon } from 'react-fa';
 import ArticleMenu from '../containers/ArticleMenu';
 import ExitArticleView from '../containers/actionDispatchers/ExitArticleView';
 import refetchHTML from '../actions/articles/refetchHTML';
+import setCurrentArticle from '../actions/ui/setCurrentArticle';
 
 interface Props {
   article: ArticleType;
   showMenu: boolean;
   onRefetch: (id: string) => void;
+  onReset: (id: string) => void;
 }
 
 interface State {
@@ -32,6 +34,12 @@ class ArticleViewBar extends React.Component<Props, State> {
     this.state = {
       showDetails: false
     };
+  }
+  componentWillUpdate(nextProps: Props) {
+    if (this.props.article.fetching && !nextProps.article.fetching) {
+      // Reset current article
+      this.props.onReset(this.props.article.id);
+    }
   }
 
   render() {
@@ -59,7 +67,12 @@ class ArticleViewBar extends React.Component<Props, State> {
         <Navbar dark={true}>
           <Nav navbar={true}>
             <NavItem>
-              <ExitArticleView />
+              <ButtonGroup size="sm">
+                <ExitArticleView />
+                <Button onClick={() => this.props.onRefetch(article.id)}>
+                  <Icon name="refresh" />
+                </Button>
+              </ButtonGroup>
             </NavItem>
           </Nav>
           <NavbarBrand style={{ whiteSpace: 'pre-line' }}>
@@ -77,9 +90,6 @@ class ArticleViewBar extends React.Component<Props, State> {
                   }
                 >
                   <Icon name="info" />
-                </Button>
-                <Button onClick={() => this.props.onRefetch(article.id)}>
-                  <Icon name="refresh" />
                 </Button>
               </ButtonGroup>
               <ArticleMenu article={article} />
@@ -131,7 +141,8 @@ class ArticleViewBar extends React.Component<Props, State> {
 }
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
-    onRefetch: (id: string) => dispatch(refetchHTML(id))
+    onRefetch: (id: string) => dispatch(refetchHTML(id)),
+    onReset: (id: string) => dispatch(setCurrentArticle(id))
   };
 };
 

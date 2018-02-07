@@ -17,7 +17,6 @@ class ExitArticleView extends React.Component<Props, {}> {
           onExit();
           window.scroll(0, 0);
         }}
-        size="sm"
       >
         <Icon name="arrow-left" />
       </Button>
