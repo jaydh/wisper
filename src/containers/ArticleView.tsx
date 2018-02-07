@@ -18,6 +18,7 @@ import ReactHTMLParser from 'react-html-parser';
 import ExitArticleView from '../containers/actionDispatchers/ExitArticleView';
 import updateBookmark from '../actions/articles/updateBookmark';
 import refetchHTML from '../actions/articles/refetchHTML';
+const debounce = require('lodash.debounce');
 
 interface Props {
   article: ArticleType;
@@ -26,9 +27,9 @@ interface Props {
 }
 interface State {
   scrollPosition: number;
-  scrollUp: boolean;
-  ticking: boolean;
+  showMenu: boolean;
   showDetails: boolean;
+  articleNodeList: any;
 }
 
 class ArticleView extends React.Component<Props, State> {
@@ -36,74 +37,85 @@ class ArticleView extends React.Component<Props, State> {
     super(props);
     this.state = {
       scrollPosition: window.scrollY,
-      scrollUp: true,
-      ticking: false,
-      showDetails: false
+      showMenu: true,
+      showDetails: false,
+      articleNodeList: null
     };
-    this.handleScroll = this.handleScroll.bind(this);
+    this.handleScroll = debounce(this.handleScroll, 100).bind(this);
+    this.scrollToBookmark = this.scrollToBookmark.bind(this);
   }
-  componentDidMount() {
-    if (this.props.article.bookmark && this.props.HTMLContent) {
-      const elements = document
-        .querySelectorAll('div.page')[0]
-        .getElementsByTagName('*');
-      const target = Array.from(elements).find(
-        el => el.textContent === this.props.article.bookmark
+
+  scrollToBookmark() {
+    const elements = document
+      .querySelectorAll('div.page')[0]
+      .getElementsByTagName('*');
+    const target = Array.from(elements).find(
+      el => el.textContent === this.props.article.bookmark
+    );
+    if (target) {
+      window.removeEventListener('scroll', this.handleScroll);
+      target.scrollIntoView(true);
+      this.setState({ showMenu: false });
+      setTimeout(
+        () => window.addEventListener('scroll', this.handleScroll),
+        1200
       );
-      if (target) {
-        target.scrollIntoView(true);
+    }
+  }
+
+  componentDidMount() {
+    const { article, HTMLContent } = this.props;
+    // Div page is classname produced from Readability parsing
+    const allElements = document.querySelectorAll('div.page p');
+    const textElements: any = [];
+    for (let i = 0, max = allElements.length; i < max; i++) {
+      const element = allElements[i];
+      if (element.textContent) {
+        textElements.push(element);
       }
     }
+
     window.addEventListener('scroll', this.handleScroll);
-    if (!this.props.HTMLContent && this.props.article) {
+    if (article.bookmark && HTMLContent) {
+      this.scrollToBookmark();
+    }
+    if (!HTMLContent && article) {
       this.props.onRefetch(this.props.article.id);
     }
+    this.setState({
+      articleNodeList: textElements
+    });
   }
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   }
-  handleScroll(event: any) {
-    window.requestAnimationFrame(() => {
-      // Div page is classname produced from Readability parsing
-      const elements = document
-        .querySelectorAll('div.page')[0]
-        .getElementsByTagName('*');
-      for (let i = 0, max = elements.length; i < max; i++) {
-        const element = elements[i];
-        const rect = element.getBoundingClientRect();
-        if (
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <=
-            (window.innerHeight ||
-              document.documentElement
-                .clientHeight) /*or $(window).height() */ &&
-          rect.right <=
-            (window.innerWidth ||
-              document.documentElement.clientWidth) /*or $(window).width() */ &&
-          element.textContent
-        ) {
-          updateBookmark(this.props.article.id, element.textContent);
-          break;
-        }
+  getBookmark() {
+    const elements = this.state.articleNodeList;
+    for (let i = 0, max = elements.length; i < max; i++) {
+      const element = elements[i];
+      const rect = element.getBoundingClientRect();
+      if (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <=
+          (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <=
+          (window.innerWidth || document.documentElement.clientWidth) &&
+        element.textContent !== this.props.article.bookmark
+      ) {
+        updateBookmark(this.props.article.id, element.textContent);
+        break;
       }
-    });
-
-    if (
-      (!this.state.ticking &&
-        this.state.scrollPosition < window.scrollY - 25) ||
-      this.state.scrollPosition > window.scrollY + 100
-    ) {
-      window.requestAnimationFrame(() => {
-        this.setState({
-          scrollPosition: window.scrollY,
-          scrollUp:
-            window.scrollY < 20 || this.state.scrollPosition > window.scrollY,
-          ticking: false
-        });
-      });
-      this.setState({ ticking: true });
     }
+  }
+  handleScroll() {
+    this.setState({
+      scrollPosition: window.scrollY,
+      showMenu:
+        window.scrollY < 20 || this.state.scrollPosition > window.scrollY
+    });
+    this.getBookmark();
   }
 
   render() {
@@ -130,7 +142,7 @@ class ArticleView extends React.Component<Props, State> {
             backgroundColor: '#668F80',
             top: '20px'
           }}
-          in={this.state.scrollUp}
+          in={this.state.showMenu}
         >
           <Navbar dark={true}>
             <Nav navbar={true}>
