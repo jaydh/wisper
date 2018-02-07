@@ -66,30 +66,26 @@ class ArticleView extends React.Component<Props, State> {
   componentDidMount() {
     const { article, HTMLContent } = this.props;
     // Div page is classname produced from Readability parsing
-    const allElements = document.querySelectorAll('div.page p');
-    const textElements: any = [];
-    for (let i = 0, max = allElements.length; i < max; i++) {
-      const element = allElements[i];
-      if (element.textContent) {
-        textElements.push(element);
-      }
-    }
+    // Find all nodes in page with textContent
+    this.setState({
+      articleNodeList: Array.from(
+        document.querySelectorAll('div.page p')
+      ).filter(el => el.textContent)
+    });
 
-    window.addEventListener('scroll', this.handleScroll);
     if (article.bookmark && HTMLContent) {
       this.scrollToBookmark();
     }
     if (!HTMLContent && article) {
       this.props.onRefetch(this.props.article.id);
     }
-    this.setState({
-      articleNodeList: textElements
-    });
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   }
+
   getBookmark() {
     const elements = this.state.articleNodeList;
     for (let i = 0, max = elements.length; i < max; i++) {
@@ -109,6 +105,7 @@ class ArticleView extends React.Component<Props, State> {
       }
     }
   }
+
   handleScroll() {
     this.setState({
       scrollPosition: window.scrollY,
