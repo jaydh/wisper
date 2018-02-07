@@ -166,25 +166,26 @@ export function pullFromFirebase() {
   return async (dispatch: Dispatch<any>) => {
     dispatch(fetchingDailiesRequested());
     dispatch(fetchingArticlesRequested());
-    return Promise.all([
-      uiViewRef
-        .once('value')
-        .then((snap: any) => dispatch(setUIViewSuccess(snap.val()))),
-      currentArticleRef
-        .once('value')
-        .then((snap: any) => dispatch(setCurrentArticle(snap.val())))
-    ]).then(() =>
-      Promise.all([
-        dailyRef.once('value').then(function(snap: any) {
-          dispatch(addFetchedDailies(snap.val()));
-          dispatch(fetchingDailiesCompleted());
-        }),
-        articleRef.once('value').then(function(snap: any) {
-          dispatch(addFetchedArticles(snap.val()));
-          dispatch(fetchingArticlesCompleted());
-        })
-      ])
-    );
+    return currentArticleRef
+      .once('value')
+      .then((snap: any) => dispatch(setCurrentArticle(snap.val())))
+      .then(() =>
+        uiViewRef
+          .once('value')
+          .then((snap: any) => dispatch(setUIViewSuccess(snap.val())))
+          .then(() =>
+            Promise.all([
+              dailyRef.once('value').then(function(snap: any) {
+                dispatch(addFetchedDailies(snap.val()));
+                dispatch(fetchingDailiesCompleted());
+              }),
+              articleRef.once('value').then(function(snap: any) {
+                dispatch(addFetchedArticles(snap.val()));
+                dispatch(fetchingArticlesCompleted());
+              })
+            ])
+          )
+      );
   };
 }
 
