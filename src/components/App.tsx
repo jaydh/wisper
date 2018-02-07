@@ -9,10 +9,7 @@ import '!!style-loader!css-loader!../css/styles.css';
 export default class App extends React.Component {
   render() {
     return (
-      <div
-        className="container-fluid app-container"
-        style={{ backgroundColor: '#D6A2AD' }}
-      >
+      <div className="container-fluid app-container">
         {auth().currentUser ? (
           <div>
             <Menu user={auth().currentUser.displayName} />
