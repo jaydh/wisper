@@ -1,56 +1,12 @@
-:root {
-  --primary: #2e6171;
-  --secondary: #556f7a;
-  --tertiatry: #798086;
-  --fourary: #deecef;
-  --fivary: #eec584;
-}
-
 p {
   font-size: 1.2em;
   color: black;
 }
 a {
-  font-size: 1.1em;
   word-wrap: break-word;
-}
-.input-group .form-control,
-.input-group-btn .btn {
-  z-index: inherit !important;
 }
 
 .article-list-bar {
   position: sticky;
   position: -webkit-sticky;
-}
-
-.well-daily-graph {
-  background-color: var(--fourary) !important;
-}
-
-.btn-daily {
-  background-color: var(--fourary);
-}
-.btn-addList {
-  background-color: var(--fourary);
-}
-.btn-filter {
-  background-color: var(--secondary);
-}
-.article-list-container {
-  background-color: var(--fourary);
-}
-
-.btn-group-filters {
-  background-color: var(--fourary);
-}
-
-.well {
-  margin: auto;
-}
-
-.resize {
-  position: sticky;
-  position: -webkit-sticky;
-  border-width: 0 6px 6px 0;
 }

@@ -4,15 +4,14 @@ import { Article as ArticleType } from '../constants/StoreState';
 import { Jumbotron } from 'reactstrap';
 import ReactHTMLParser from 'react-html-parser';
 import updateBookmark from '../actions/articles/updateBookmark';
-import refetchHTML from '../actions/articles/refetchHTML';
-import ArticleViewBar from '../components/ArticleViewBar';
+import ArticleViewBar from './ArticleViewBar';
 const debounce = require('lodash.debounce');
 
 interface Props {
   article: ArticleType;
   HTMLContent: string;
-  onRefetch: (id: string) => void;
 }
+
 interface State {
   scrollPosition: number;
   showMenu: boolean;
@@ -62,9 +61,6 @@ class ArticleView extends React.Component<Props, State> {
     if (article.bookmark && HTMLContent) {
       this.scrollToBookmark();
     }
-    if (!HTMLContent && article) {
-      this.props.onRefetch(this.props.article.id);
-    }
     window.addEventListener('scroll', this.handleScroll);
   }
 
@@ -106,7 +102,7 @@ class ArticleView extends React.Component<Props, State> {
     return (
       <Jumbotron
         style={{
-          backgroundColor: '#C3B59F',
+          backgroundColor: '#fffff4',
           margin: '0 auto',
           width: window.innerWidth > 768 ? '65vw' : '90vw'
         }}
@@ -127,10 +123,4 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onRefetch: (id: string) => dispatch(refetchHTML(id))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleView);
+export default connect(mapStateToProps)(ArticleView);

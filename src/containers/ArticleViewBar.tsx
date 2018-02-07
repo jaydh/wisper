@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { Article as ArticleType } from '../constants/StoreState';
 import {
   Collapse,
+  ButtonGroup,
   Fade,
   Nav,
   Navbar,
@@ -12,23 +14,26 @@ import {
 import { Icon } from 'react-fa';
 import ArticleMenu from '../containers/ArticleMenu';
 import ExitArticleView from '../containers/actionDispatchers/ExitArticleView';
+import refetchHTML from '../actions/articles/refetchHTML';
 
 interface Props {
   article: ArticleType;
   showMenu: boolean;
+  onRefetch: (id: string) => void;
 }
 
 interface State {
   showDetails: boolean;
 }
 
-export default class ArtivleViewBar extends React.Component<Props, State> {
+class ArticleViewBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
       showDetails: false
     };
   }
+
   render() {
     const { article } = this.props;
     const hasTitle = article.metadata
@@ -58,20 +63,25 @@ export default class ArtivleViewBar extends React.Component<Props, State> {
             </NavItem>
           </Nav>
           <NavbarBrand style={{ whiteSpace: 'pre-line' }}>
+            {article.fetching && <Icon spin={true} name="spinner" />}
             {hasTitle
               ? article.metadata.get('title') || article.metadata.get('ogTitle')
               : article.link}
           </NavbarBrand>
           <Nav className="ml-auto" navbar={true}>
             <NavItem>
-              <Button
-                size="sm"
-                onClick={() =>
-                  this.setState({ showDetails: !this.state.showDetails })
-                }
-              >
-                <Icon name="info" />
-              </Button>
+              <ButtonGroup size="sm">
+                <Button
+                  onClick={() =>
+                    this.setState({ showDetails: !this.state.showDetails })
+                  }
+                >
+                  <Icon name="info" />
+                </Button>
+                <Button onClick={() => this.props.onRefetch(article.id)}>
+                  <Icon name="refresh" />
+                </Button>
+              </ButtonGroup>
               <ArticleMenu article={article} />
             </NavItem>
           </Nav>
@@ -119,3 +129,10 @@ export default class ArtivleViewBar extends React.Component<Props, State> {
     );
   }
 }
+const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+  return {
+    onRefetch: (id: string) => dispatch(refetchHTML(id))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ArticleViewBar);
