@@ -51,7 +51,7 @@ exports.getMetadata = functions.database
                   uri,
                   dom.window.document
                 ).parse();
-                return htmlRef.set(article.content);
+                return article ? htmlRef.set(article.content) : null;
               })
             : null
       )
@@ -92,7 +92,7 @@ exports.refetchHTML = functions.database
                   uri,
                   dom.window.document
                 ).parse();
-                return htmlRef.set(article.content);
+                return article ? htmlRef.set(article.content) : null;
               })
               .then(() => event.data.ref.parent.child('refetch').remove())
               .then(() => event.data.ref.parent.child('fetching').set(false))
