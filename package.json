@@ -16,11 +16,10 @@
   },
   "dependencies": {
     "@types/chart.js": "^2.6.2",
-    "@types/react-bootstrap": "^0.0.52",
     "@types/react-dom": "^16.0.1",
-    "@types/react-redux": "^4.4.47",
+    "@types/react-redux": "^5.0.14",
     "@types/redux-logger": "^3.0.0",
-    "babel-jest": "^20.0.3",
+    "babel-jest": "^22.2.0",
     "bootstrap": "^4.0.0-beta.3",
     "chart.js": "^2.7.1",
     "date-fns": "^1.29.0",
@@ -28,7 +27,7 @@
     "firebase-functions": "^0.8.1",
     "fuse.js": "^3.2.0",
     "immutable": "^3.8.1",
-    "jest": "^20.0.4",
+    "jest": "^22.2.1",
     "jshashes": "^1.0.7",
     "localforage": "^1.5.6",
     "lodash.debounce": "^4.0.8",
@@ -45,7 +44,6 @@
     "react-transition-group": "^2.2.1",
     "reactstrap": "^5.0.0-alpha.4",
     "redux": "^3.7.2",
-    "redux-batched-actions": "^0.1.6",
     "redux-devtools": "^3.4.0",
     "redux-devtools-dock-monitor": "^1.1.2",
     "redux-devtools-extension": "^2.13.2",
@@ -55,7 +53,7 @@
     "redux-persist-immutable": "^4.3.0",
     "redux-thunk": "^2.2.0",
     "source-map-explorer": "^1.4.0",
-    "ts-jest": "^20.0.7",
+    "ts-jest": "^22.0.3",
     "typescript": "^2.7.1"
   }
 }
