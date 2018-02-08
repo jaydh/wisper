@@ -32,27 +32,15 @@ interface Props {
   onReposition: (x: number, y: number) => void;
 }
 
-interface State {
-  width: number;
-}
-
-class ArticleList extends React.Component<Props, State> {
+class ArticleList extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.state = { width: window.innerWidth };
-    this.updateWidth = this.updateWidth.bind(this);
-  }
-  updateWidth() {
-    this.setState({ width: window.innerWidth });
   }
   componentDidUpdate() {
     forceCheck();
   }
   componentDidMount() {
-    window.addEventListener('resize', this.updateWidth);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWidth);
+    document.title = 'wispy - Articles';
   }
   render() {
     const {
@@ -89,7 +77,7 @@ class ArticleList extends React.Component<Props, State> {
           </Col>
         </Row>
         <Row>
-          <ButtonGroup vertical={this.state.width > 768 ? false : true}>
+          <ButtonGroup>
             <ActiveSelector id={id} />
             <ProjectSelector id={id} articlesInActivity={articlesInActivity} />
             <Sort id={id} />

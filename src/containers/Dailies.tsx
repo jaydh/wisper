@@ -28,6 +28,10 @@ class Dailies extends React.Component<Props, State> {
     super(props);
     this.state = { expand: false, showCompleted: false };
   }
+
+  componentDidMount() {
+    document.title = 'wispy - ' + 'Dailies';
+  }
   render() {
     const { onComplete, dailies } = this.props;
     const activeDailies = dailies
