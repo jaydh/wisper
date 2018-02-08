@@ -30,21 +30,6 @@ class ArticleView extends React.Component<Props, State> {
     this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
   }
 
-  scrollToBookmark() {
-    const elements = document
-      .querySelectorAll('div.page')[0]
-      .getElementsByTagName('*');
-    const target = Array.from(elements).find(
-      el => el.textContent === this.props.article.bookmark
-    );
-    if (target) {
-      window.removeEventListener('scroll', this.handleScroll, true);
-      target.scrollIntoView(true);
-      this.setState({ showMenu: false });
-      window.addEventListener('scroll', this.handleScroll, true);
-    }
-  }
-
   componentDidMount() {
     const { article, HTMLContent } = this.props;
     document.title = 'wispy - ' + article.metadata.get('title');
@@ -66,6 +51,19 @@ class ArticleView extends React.Component<Props, State> {
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll, true);
     window.removeEventListener('resize', this.scrollToBookmark);
+  }
+
+  scrollToBookmark() {
+    const elements = this.state.articleNodeList;
+    const target = Array.from(elements).find(
+      (el: any) => el.textContent === this.props.article.bookmark
+    ) as any;
+    if (target) {
+      window.removeEventListener('scroll', this.handleScroll, true);
+      target.scrollIntoView(true);
+      this.setState({ showMenu: false });
+      window.addEventListener('scroll', this.handleScroll, true);
+    }
   }
 
   getBookmark() {
