@@ -27,7 +27,7 @@ class ArticleView extends React.Component<Props, State> {
       articleNodeList: null
     };
     this.handleScroll = debounce(this.handleScroll, 100).bind(this);
-    this.scrollToBookmark = this.scrollToBookmark.bind(this);
+    this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
   }
 
   scrollToBookmark() {
@@ -38,13 +38,10 @@ class ArticleView extends React.Component<Props, State> {
       el => el.textContent === this.props.article.bookmark
     );
     if (target) {
-      window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('scroll', this.handleScroll, true);
       target.scrollIntoView(true);
       this.setState({ showMenu: false });
-      setTimeout(
-        () => window.addEventListener('scroll', this.handleScroll),
-        1200
-      );
+      window.addEventListener('scroll', this.handleScroll, true);
     }
   }
 
@@ -61,11 +58,13 @@ class ArticleView extends React.Component<Props, State> {
     if (article.bookmark && HTMLContent) {
       this.scrollToBookmark();
     }
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll, true);
+    window.addEventListener('resize', this.scrollToBookmark);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll, true);
+    window.removeEventListener('resize', this.scrollToBookmark);
   }
 
   getBookmark() {
@@ -82,7 +81,8 @@ class ArticleView extends React.Component<Props, State> {
           (window.innerWidth || document.documentElement.clientWidth) &&
         element.textContent !== this.props.article.bookmark
       ) {
-        updateBookmark(this.props.article.id, element.textContent);
+        // Use element before as bookmark
+        updateBookmark(this.props.article.id, elements[i - 1].textContent);
         break;
       }
     }
