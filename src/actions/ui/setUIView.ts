@@ -22,6 +22,7 @@ export default function setUIView(view: string) {
       .set(view)
       .then(() => {
         dispatch(setUIViewSuccess(view));
+        window.scrollTo(0, 0);
       })
       .catch((error: string) => {
         console.log(error);
