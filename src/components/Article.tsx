@@ -16,7 +16,8 @@ import {
   ListGroupItem,
   Container,
   Col,
-  Row
+  Row,
+  Progress
 } from 'reactstrap';
 import LazyLoad from 'react-lazyload';
 import { Icon } from 'react-fa';
@@ -181,6 +182,11 @@ class Article extends React.Component<Props, State> {
                       />
                     </CardBody>
                   </Collapse>
+                  {article.progress && (
+                    <Progress value={article.progress}>
+                      {Math.round(article.progress)}%
+                    </Progress>
+                  )}
                 </Card>
               </Col>
             </Row>

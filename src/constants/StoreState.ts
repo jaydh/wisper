@@ -11,6 +11,7 @@ export interface Article {
   completed: boolean;
   HTMLContent?: string;
   bookmark?: string;
+  progress?: number;
 }
 
 export interface Daily {

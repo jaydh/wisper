@@ -4,6 +4,7 @@ import { Article as ArticleType } from '../constants/StoreState';
 import { Jumbotron } from 'reactstrap';
 import ReactHTMLParser from 'react-html-parser';
 import updateBookmark from '../actions/articles/updateBookmark';
+import updateProgress from '../actions/articles/updateProgress';
 import ArticleViewBar from './ArticleViewBar';
 const debounce = require('lodash.debounce');
 
@@ -90,6 +91,17 @@ class ArticleView extends React.Component<Props, State> {
     }
   }
 
+  getScrollPercent() {
+    const h = document.documentElement,
+      b = document.body,
+      st = 'scrollTop',
+      sh = 'scrollHeight';
+    updateProgress(
+      this.props.article.id,
+      (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100
+    );
+  }
+
   handleScroll() {
     this.setState({
       scrollPosition: window.scrollY,
@@ -97,6 +109,7 @@ class ArticleView extends React.Component<Props, State> {
         window.scrollY < 20 || this.state.scrollPosition > window.scrollY
     });
     this.getBookmark();
+    this.getScrollPercent();
   }
 
   render() {
@@ -115,7 +128,6 @@ class ArticleView extends React.Component<Props, State> {
     );
   }
 }
-
 const mapStateToProps = (state: any) => {
   return {
     article: state
