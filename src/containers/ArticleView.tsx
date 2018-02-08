@@ -47,6 +47,7 @@ class ArticleView extends React.Component<Props, State> {
 
   componentDidMount() {
     const { article, HTMLContent } = this.props;
+    document.title = 'wispy - ' + article.metadata.get('title');
     // Div page is classname produced from Readability parsing
     // Find all nodes in page with textContent
     this.setState({
@@ -82,7 +83,10 @@ class ArticleView extends React.Component<Props, State> {
         element.textContent !== this.props.article.bookmark
       ) {
         // Use element before as bookmark
-        updateBookmark(this.props.article.id, elements[i - 1].textContent);
+        updateBookmark(
+          this.props.article.id,
+          i === 0 ? elements[0].textContent : elements[i - 1].textContent
+        );
         break;
       }
     }
