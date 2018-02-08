@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import finalizeDaily from '../../actions/dailies/finalizeDaily';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Button } from 'reactstrap';
+import { Icon } from 'react-fa';
 
 export interface Props {
   onClick: () => void;
@@ -13,7 +14,7 @@ class FinalizeDaily extends React.Component<Props, {}> {
     const { onClick } = this.props;
     return (
       <Button bsSize="xsmall" onClick={() => onClick()}>
-        Finalize <Glyphicon glyph="inbox" />
+        Finalize <Icon name="inbox" />{' '}
       </Button>
     );
   }

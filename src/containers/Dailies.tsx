@@ -14,7 +14,6 @@ import {
 } from 'reactstrap';
 interface Props {
   onComplete: (id: string) => void;
-  AddDaily: (daily: string) => void;
   dailies: List<DailyType>;
 }
 
