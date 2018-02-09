@@ -15,6 +15,7 @@ import {
 } from '../actions/syncWithFirebase';
 import { Icon } from 'react-fa';
 import { Fade } from 'reactstrap';
+import SuggestContineuArticle from './actionDispatchers/SuggestContinueArticle';
 
 interface Props {
   uiView: string;
@@ -82,6 +83,10 @@ class AppRoutes extends React.Component<Props, State> {
               : ''}{' '}
           </p>
         )}
+        {this.props.currentArticle &&
+          this.props.uiView !== 'article' && (
+            <SuggestContineuArticle articleID={this.props.currentArticle} />
+          )}
         <Fade in={true}>
           {(() => {
             switch (this.props.uiView) {
