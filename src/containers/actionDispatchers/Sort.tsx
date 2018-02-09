@@ -49,6 +49,9 @@ class Sort extends React.Component<Props, State> {
     })(currentSort);
 
     const currentSortString = ((sort: string) => {
+      if (sort.sartsWith('viewed')) {
+        return 'by date viewed';
+      }
       if (sort.startsWith('date-')) {
         return 'by date added';
       }
@@ -66,6 +69,17 @@ class Sort extends React.Component<Props, State> {
           Sort {currentSortString} <Icon name={glyph} />
         </DropdownToggle>
         <DropdownMenu>
+          <DropdownItem
+            onClick={() =>
+              currentSort === 'viewed'
+                ? onClick('viewed-reverse')
+                : onClick('viewed')
+            }
+          >
+            <Icon name={currentSort === 'viewed' ? 'sort-desc' : 'sort-asc'} />{' '}
+            Viewed
+          </DropdownItem>
+
           <DropdownItem
             onClick={() =>
               currentSort === 'title'
