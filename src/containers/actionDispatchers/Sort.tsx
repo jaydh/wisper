@@ -49,7 +49,7 @@ class Sort extends React.Component<Props, State> {
     })(currentSort);
 
     const currentSortString = ((sort: string) => {
-      if (sort.sartsWith('viewed')) {
+      if (sort.startsWith('viewed')) {
         return 'by date viewed';
       }
       if (sort.startsWith('date-')) {
