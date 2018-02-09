@@ -79,7 +79,8 @@ class ArticleView extends React.Component<Props, State> {
           (window.innerHeight || document.documentElement.clientHeight) &&
         rect.right <=
           (window.innerWidth || document.documentElement.clientWidth) &&
-        element.textContent !== this.props.article.bookmark
+        element.textContent !== this.props.article.bookmark &&
+        element.textContent.replace(/\s /g, '') !== ''
       ) {
         // Use element before as bookmark
         updateBookmark(
