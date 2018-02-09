@@ -3,9 +3,9 @@ import { Dispatch } from 'react-redux';
 
 export interface SetCurrentArticle {
   type: 'SET_CURRENT_ARTICLE';
-  id: string;
+  id?: string;
 }
-function setCurrentArticleSuccess(id: string): SetCurrentArticle {
+function setCurrentArticleSuccess(id?: string): SetCurrentArticle {
   return {
     type: 'SET_CURRENT_ARTICLE',
     id
@@ -13,34 +13,39 @@ function setCurrentArticleSuccess(id: string): SetCurrentArticle {
 }
 export interface SetCurrentHTML {
   type: 'SET_CURRENT_HTML';
-  content: string;
+  content?: string;
 }
 
-function setCurrentHTML(content: string): SetCurrentHTML {
+function setCurrentHTML(content?: string): SetCurrentHTML {
   return {
     type: 'SET_CURRENT_HTML',
     content
   };
 }
 
-export default function SetCurrentArticle(id: string) {
+export default function SetCurrentArticle(id?: string) {
   const user = auth().currentUser.uid;
   const ref = database.ref('/userData/' + user + '/currentArticle');
 
   return async (dispatch: Dispatch<any>) =>
-    ref
-      .set(id)
-      .then(() => {
-        dispatch(setCurrentArticleSuccess(id));
-      })
-      .then(() =>
-        database
-          .ref('/articleHTMLData/' + id + '/HTMLContent')
-          .once('value', (snapshot: any) =>
-            dispatch(setCurrentHTML(snapshot.val()))
+    id
+      ? ref
+          .set(id)
+          .then(() => {
+            dispatch(setCurrentArticleSuccess(id));
+          })
+          .then(() =>
+            database
+              .ref('/articleHTMLData/' + id + '/HTMLContent')
+              .once('value', (snapshot: any) =>
+                dispatch(setCurrentHTML(snapshot.val()))
+              )
           )
-      )
-      .catch((error: string) => {
-        console.log(error);
-      });
+          .catch((error: string) => {
+            console.log(error);
+          })
+      : ref
+          .remove()
+          .then(() => dispatch(setCurrentArticleSuccess()))
+          .then(() => dispatch(setCurrentArticleSuccess(undefined)));
 }

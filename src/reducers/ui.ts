@@ -13,8 +13,8 @@ interface UIState {
   demoComplete: boolean;
   dailyGraphMin: Date;
   dailyGraphMax: Date;
-  currentArticle: string;
-  currentHTML: string;
+  currentArticle?: string;
+  currentHTML?: string;
 }
 
 function setUIView(uiState: UIState, action: SetUIView): UIState {

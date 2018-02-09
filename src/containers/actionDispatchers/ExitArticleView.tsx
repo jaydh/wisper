@@ -1,4 +1,5 @@
 import setUIView from '../../actions/ui/setUIView';
+import setCurrentArticle from '../../actions/ui/setCurrentArticle';
 import { connect } from 'react-redux';
 import * as React from 'react';
 import { Button } from 'reactstrap';
@@ -27,6 +28,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     onExit: () => {
       dispatch(setUIView('compact'));
+      dispatch(setCurrentArticle(undefined));
     }
   };
 };
