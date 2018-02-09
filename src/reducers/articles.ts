@@ -29,6 +29,11 @@ function processArticle(article: any): articleType {
     : Map<string, any>();
   article.dateAdded = article.dateAdded ? new Date(article.dateAdded) : null;
   article.dateRead = article.dateRead ? new Date(article.dateRead) : null;
+  const hasTitle =
+    article.metadata.has('title') || article.metadata.has('oGtitle');
+  article.title = hasTitle
+    ? article.metadata.get('title') || article.metadata.get('ogTitle')
+    : article.link;
 
   return article;
 }
@@ -46,12 +51,13 @@ function addArticle(
     ? articleState.push({
         id: action.articleHash,
         link: action.articleLink,
+        title: action.articleLink,
         dateAdded: new Date(),
         completed: false,
         fetching: true,
         viewedOn: Set(),
         projects: Set(),
-        metadata: Map<string, any>(),
+        metadata: Map<string, any>()
       })
     : articleState;
 }

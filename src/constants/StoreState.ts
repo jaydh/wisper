@@ -12,6 +12,7 @@ export interface Article {
   HTMLContent?: string;
   bookmark?: string;
   progress?: number;
+  title: string;
 }
 
 export interface Daily {
