@@ -25,7 +25,7 @@ interface Props {
   demoComplete: boolean;
   pullOnMount: () => void;
   listenAfterMount: () => void;
-  currentArticle: string;
+  currentArticle: ArticleType;
   articles: List<ArticleType>;
 }
 
@@ -85,7 +85,7 @@ class AppRoutes extends React.Component<Props, State> {
         )}
         {this.props.currentArticle &&
           this.props.uiView !== 'article' && (
-            <SuggestContineuArticle articleID={this.props.currentArticle} />
+            <SuggestContineuArticle article={this.props.currentArticle} />
           )}
         <Fade in={true}>
           {(() => {
@@ -106,7 +106,11 @@ class AppRoutes extends React.Component<Props, State> {
               case 'User':
                 return <UserPage />;
               case 'article':
-                return <ArticleView />;
+                return this.props.currentArticle ? (
+                  <ArticleView />
+                ) : (
+                  <VisibleArticleList id={'compactAL'} />
+                );
               default:
                 return (
                   <div>
@@ -123,13 +127,16 @@ class AppRoutes extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: any) => {
+  const currentArticleID = state.get('ui').currentArticle;
   return {
     uiView: state.get('ui').view,
     fetchingArticles: state.get('ui').fetchingArticles,
     fetchingDailies: state.get('ui').fetchingDailies,
     demoStart: state.get('ui').demoStart,
     demoComplete: state.get('ui').demoComplete,
-    currentArticle: state.get('ui').currentArticle,
+    currentArticle: state
+      .get('articles')
+      .find((t: ArticleType) => t.id === currentArticleID),
     articles: state.get('articles')
   };
 };
