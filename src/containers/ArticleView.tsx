@@ -27,43 +27,43 @@ class ArticleView extends React.Component<Props, State> {
       showMenu: true,
       articleNodeList: null
     };
-    this.handleScroll = debounce(this.handleScroll, 100).bind(this);
+    this.handleScroll = debounce(this.handleScroll.bind(this), 100);
     this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
   }
 
   componentDidMount() {
-    const { article, HTMLContent } = this.props;
+    const { article } = this.props;
     document.title = 'wispy - ' + article.metadata.get('title');
     // Div page is classname produced from Readability parsing
     // Find all nodes in page with textContent
-    this.setState({
-      articleNodeList: Array.from(
-        document.querySelectorAll('div.page p')
-      ).filter(el => el.textContent)
-    });
-
-    if (article.bookmark && HTMLContent) {
-      this.scrollToBookmark();
-    }
-    window.addEventListener('scroll', this.handleScroll, true);
+    this.setState(
+      {
+        articleNodeList: Array.from(
+          document.querySelectorAll('div.page p')
+        ).filter(el => el.textContent)
+      },
+      () => this.scrollToBookmark()
+    );
+    window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.scrollToBookmark);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll, true);
+    window.removeEventListener('scroll', this.handleScroll);
     window.removeEventListener('resize', this.scrollToBookmark);
   }
 
   scrollToBookmark() {
     const elements = this.state.articleNodeList;
     const target = Array.from(elements).find(
-      (el: any) => el.textContent === this.props.article.bookmark
+      (el: any) =>
+        el.textContent.replace(/\s/g, '') === this.props.article.bookmark
     ) as any;
     if (target) {
-      window.removeEventListener('scroll', this.handleScroll, true);
+      window.removeEventListener('scroll', this.handleScroll);
       target.scrollIntoView(true);
       this.setState({ showMenu: false });
-      window.addEventListener('scroll', this.handleScroll, true);
+      window.addEventListener('scroll', this.handleScroll);
     }
   }
 
@@ -80,12 +80,11 @@ class ArticleView extends React.Component<Props, State> {
         rect.right <=
           (window.innerWidth || document.documentElement.clientWidth) &&
         element.textContent !== this.props.article.bookmark &&
-        element.textContent.replace(/\s /g, '') !== ''
+        element.textContent.replace(/\s/g, '') !== ''
       ) {
-        // Use element before as bookmark
         updateBookmark(
           this.props.article.id,
-          i === 0 ? elements[0].textContent : elements[i - 1].textContent
+          element.textContent.replace(/\s/g, '')
         );
         break;
       }
@@ -115,6 +114,7 @@ class ArticleView extends React.Component<Props, State> {
 
   render() {
     const { article, HTMLContent } = this.props;
+    console.log(article);
     return (
       <Jumbotron
         style={{
