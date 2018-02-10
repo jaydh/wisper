@@ -124,7 +124,11 @@ class ArticleView extends React.Component<Props, State> {
         }}
       >
         <ArticleViewBar showMenu={this.state.showMenu} article={article} />
-        {HTMLContent && <>{ReactHTMLParser(HTMLContent)}</>}
+        {article && HTMLContent ? (
+          <>{ReactHTMLParser(HTMLContent)}</>
+        ) : (
+          <p>Fetching article</p>
+        )}
       </Jumbotron>
     );
   }

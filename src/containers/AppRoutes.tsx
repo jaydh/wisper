@@ -106,13 +106,7 @@ class AppRoutes extends React.Component<Props, State> {
               case 'User':
                 return <UserPage />;
               case 'article':
-                return this.props.articles.find(
-                  (t: ArticleType) => t.id === this.props.currentArticle
-                ) ? (
-                  <ArticleView />
-                ) : (
-                  <p>Fetching article</p>
-                );
+                return <ArticleView />;
               default:
                 return (
                   <div>
