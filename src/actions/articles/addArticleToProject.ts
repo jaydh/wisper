@@ -1,6 +1,6 @@
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 export interface AddArticleToProjectRequested {
   type: 'ADD_ARTICLE_TO_PROJECT_REQUESTED';
@@ -60,9 +60,11 @@ export default function addArticleToProject(
           dispatch(AddArticleToProjectRejected());
         }),
       projects.once('value').then(function(snapshot: any) {
-        const articleProjects = fromJS(snapshot.val())
-          .valueSeq()
-          .map((t: Map<string, any>) => t.get('id'));
+        const articleProjects = snapshot.val()
+          ? fromJS(snapshot.val())
+              .valueSeq()
+              .map((t: Map<string, any>) => t.get('id'))
+          : List<string>();
         if (articleProjects.isEmpty() || !articleProjects.includes(project)) {
           projects.push({
             id: project,
