@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Article } from '../../constants/StoreState';
 import setUIView from '../../actions/ui/setUIView';
 import { connect } from 'react-redux';
-import { Modal, ModalBody, ModalFooter, ButtonGroup, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 interface Props {
   articleID: string;
@@ -28,17 +28,19 @@ class SuggestContineuArticle extends React.Component<Props, State> {
       <Modal isOpen={!this.state.asked}>
         <ModalBody>Continue reading '{this.props.article.title}'?</ModalBody>
         <ModalFooter>
-          <ButtonGroup>
-            <Button
-              onClick={() => {
-                this.props.onClickContinue();
-                this.setAsked();
-              }}
-            >
-              Yes
-            </Button>
-            <Button onClick={() => this.setAsked()}> No</Button>
-          </ButtonGroup>
+          <Button
+            color="primary"
+            onClick={() => {
+              this.props.onClickContinue();
+              this.setAsked();
+            }}
+          >
+            Yes
+          </Button>
+          <Button color="secondary" onClick={() => this.setAsked()}>
+            {' '}
+            No
+          </Button>
         </ModalFooter>
       </Modal>
     );
