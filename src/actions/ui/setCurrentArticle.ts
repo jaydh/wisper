@@ -46,6 +46,5 @@ export default function SetCurrentArticle(id?: string) {
           })
       : ref
           .remove()
-          .then(() => dispatch(setCurrentArticleSuccess()))
           .then(() => dispatch(setCurrentArticleSuccess(undefined)));
 }
