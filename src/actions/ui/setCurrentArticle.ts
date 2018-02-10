@@ -16,10 +16,17 @@ export interface SetCurrentHTML {
   content?: string;
 }
 
-function setCurrentHTML(content?: string): SetCurrentHTML {
+function setCurrentHTML(content: string): SetCurrentHTML {
   return {
     type: 'SET_CURRENT_HTML',
     content
+  };
+}
+
+export function setCurrentArticleFromServer(id: string) {
+  return {
+    type: 'SET_CURRENT_ARTICLE_FROM_SERVER',
+    id
   };
 }
 
@@ -44,7 +51,5 @@ export default function SetCurrentArticle(id?: string) {
           .catch((error: string) => {
             console.log(error);
           })
-      : ref
-          .remove()
-          .then(() => dispatch(setCurrentArticleSuccess()));
+      : ref.remove().then(() => dispatch(setCurrentArticleSuccess()));
 }

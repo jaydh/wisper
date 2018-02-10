@@ -55,6 +55,12 @@ function setCurrentArticle(
   return { ...uiState, currentArticle: action.id };
 }
 
+function setCurrentArticleFromServer(uiState: UIState, action: any): UIState {
+  return uiState.currentArticle
+    ? uiState
+    : { ...uiState, currentArticle: action.id };
+}
+
 export default createReducer(
   {
     view: 'compact',
@@ -75,6 +81,7 @@ export default createReducer(
     DEMO_COMPLETE: demoComplete,
     SET_DAILY_GRAPH_SPAN: setDailyGraphSpan,
     SET_CURRENT_ARTICLE: setCurrentArticle,
+    SET_CURRENT_ARTICLE_FROM_SERVER: setCurrentArticleFromServer,
     SET_CURRENT_HTML: SetCurrentHTML
   }
 );

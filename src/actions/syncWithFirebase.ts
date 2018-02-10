@@ -5,7 +5,7 @@ import {
   Daily,
   Project
 } from '../constants/StoreState';
-import setCurrentArticle from './ui/setCurrentArticle';
+import { setCurrentArticleFromServer } from './ui/setCurrentArticle';
 
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
@@ -168,7 +168,7 @@ export function pullFromFirebase() {
       .once('value')
       .then((snap: any) => {
         const articleId = snap.val();
-        dispatch(setCurrentArticle(articleId));
+        dispatch(setCurrentArticleFromServer(articleId));
         return articleId
           ? database
               .ref(`/userData/${user}/articles/${articleId}`)
