@@ -53,6 +53,19 @@ class ArticleView extends React.Component<Props, State> {
     window.removeEventListener('resize', this.scrollToBookmark);
   }
 
+  componentDidUpdate(nextProps: Props) {
+    if (nextProps.HTMLContent !== this.props.HTMLContent) {
+      this.setState(
+        {
+          articleNodeList: Array.from(
+            document.querySelectorAll('div.page p')
+          ).filter(el => el.textContent)
+        },
+        () => this.scrollToBookmark()
+      );
+    }
+  }
+
   scrollToBookmark() {
     const elements = this.state.articleNodeList;
     const target = Array.from(elements).find(
@@ -114,7 +127,6 @@ class ArticleView extends React.Component<Props, State> {
 
   render() {
     const { article, HTMLContent } = this.props;
-    console.log(article);
     return (
       <Jumbotron
         style={{
