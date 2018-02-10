@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { Article } from '../../constants/StoreState';
 import setUIView from '../../actions/ui/setUIView';
+import setCurrentArticle from '../../actions/ui/setCurrentArticle';
 import { connect } from 'react-redux';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 interface Props {
-  articleID: string;
   article: Article;
   onClickContinue: () => void;
+  onClickNo: () => void;
 }
 
 interface State {
@@ -37,7 +38,13 @@ class SuggestContineuArticle extends React.Component<Props, State> {
           >
             Yes
           </Button>
-          <Button color="secondary" onClick={() => this.setAsked()}>
+          <Button
+            color="secondary"
+            onClick={() => {
+              this.setAsked();
+              this.props.onClickNo();
+            }}
+          >
             {' '}
             No
           </Button>
@@ -47,20 +54,11 @@ class SuggestContineuArticle extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => {
-  return {
-    article: state
-      .get('articles')
-      .find((t: Article) => t.id === ownProps.articleID)
-  };
-};
-
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onClickContinue: () => dispatch(setUIView('article'))
+    onClickContinue: () => dispatch(setUIView('article')),
+    onClickNo: () => dispatch(setCurrentArticle())
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  SuggestContineuArticle
-);
+export default connect(null, mapDispatchToProps)(SuggestContineuArticle);
