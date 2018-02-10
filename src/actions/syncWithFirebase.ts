@@ -166,7 +166,18 @@ export function pullFromFirebase() {
     dispatch(fetchingArticlesRequested());
     return currentArticleRef
       .once('value')
-      .then((snap: any) => dispatch(setCurrentArticle(snap.val())))
+      .then((snap: any) => {
+        const articleId = snap.val();
+        dispatch(setCurrentArticle(articleId));
+        return articleId
+          ? database
+              .ref(`/userData/${user}/articles/${articleId}`)
+              .once('value')
+              .then((snapIn: any) =>
+                dispatch(addArticleFromServer(snapIn.val()))
+              )
+          : null;
+      })
       .then(() =>
         Promise.all([
           dailyRef.once('value').then(function(snap: any) {
