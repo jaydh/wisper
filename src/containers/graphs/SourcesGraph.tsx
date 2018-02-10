@@ -35,11 +35,9 @@ export class SourcesGraph extends React.Component<Props, State> {
     props.articles
       .map(
         (article: articleType) =>
-          article.metadata
-            ? article.metadata.has('ogSiteName') ||
-              article.metadata.has('siteName') ||
-              parseUri(article.link).authority
-            : parseUri(article.link).authority
+          article.metadata.get('ogSiteName') ||
+          article.metadata.get('siteName') ||
+          parseUri(article.link).authority
       )
       .forEach((t: string) => {
         const index = Math.floor(Math.random() * colors.size);
@@ -61,17 +59,15 @@ export class SourcesGraph extends React.Component<Props, State> {
   componentWillReceiveProps(nextProps: Props) {
     const domains = this.props.articles.map(
       (article: articleType) =>
-        article.metadata
-          ? article.metadata.has('ogSiteName') ||
-            article.metadata.has('siteName') ||
-            parseUri(article.link).authority
-          : parseUri(article.link).authority
+        article.metadata.get('ogSiteName') ||
+        article.metadata.get('siteName') ||
+        parseUri(article.link).authority
     );
     const nextDomains = nextProps.articles.map(
       (article: articleType) =>
         article.metadata
-          ? article.metadata.has('ogSiteName') ||
-            article.metadata.has('siteName') ||
+          ? article.metadata.get('ogSiteName') ||
+            article.metadata.get('siteName') ||
             parseUri(article.link).authority
           : parseUri(article.link).authority
     );
@@ -88,11 +84,9 @@ export class SourcesGraph extends React.Component<Props, State> {
     const { articles } = this.props;
     const domains = articles.map(
       (article: articleType) =>
-        article.metadata
-          ? article.metadata.has('ogSiteName') ||
-            article.metadata.has('siteName') ||
-            parseUri(article.link).authority
-          : parseUri(article.link).authority
+        article.metadata.get('ogSiteName') ||
+        article.metadata.get('siteName') ||
+        parseUri(article.link).authority
     );
     let domainCounts = Map<string, number>();
     domains.map(
@@ -106,7 +100,6 @@ export class SourcesGraph extends React.Component<Props, State> {
     const domainCounts = this.getDomainData().sort(
       (a: number, b: number) => (b > a ? 1 : -1)
     );
-
     const data = {
       labels: domainCounts.keySeq().toJS(),
 
