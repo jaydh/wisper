@@ -41,6 +41,7 @@ export default class Daily extends React.Component<Props, State> {
         (acc: number, t: Date) => acc + 60 * getHours(t) + getMinutes(t),
         0
       ) / daily.completedOn.size;
+    const hasBeenCompletedOnce = !daily.completedOn.isEmpty();
 
     return (
       <Card>
@@ -61,7 +62,7 @@ export default class Daily extends React.Component<Props, State> {
                   <Icon name="fire" />
                 </>
               )}
-              {daily.completedOn &&
+              {hasBeenCompletedOnce &&
                 isBefore(daily.completedOn.last(), subDays(new Date(), 7)) && (
                   <Icon name="exclamation" />
                 )}
@@ -93,26 +94,28 @@ export default class Daily extends React.Component<Props, State> {
           </ButtonGroup>
         </CardHeader>
         <Collapse isOpen={this.state.showDetails || expand}>
-          <CardBody>
-            <br />
-            Last Completed{' '}
-            {differenceInCalendarDays(
-              new Date(),
-              daily.completedOn.last()
-            )}{' '}
-            day(s) ago ({daily.completedOn.last().toLocaleDateString()})
-            <br />
-            Completed {daily.completedOn.size} times <br />
-            Started{' '}
-            {differenceInCalendarDays(
-              new Date(),
-              daily.completedOn.first()
-            )}{' '}
-            days ago <br />
-            On average completed at {Math.round(
-              avgMinuteOfCompletion / 60
-            )}:{Math.round(avgMinuteOfCompletion % 60)}
-          </CardBody>
+          {hasBeenCompletedOnce && (
+            <CardBody>
+              <br />
+              Last Completed{' '}
+              {differenceInCalendarDays(
+                new Date(),
+                daily.completedOn.last()
+              )}{' '}
+              day(s) ago ({daily.completedOn.last().toLocaleDateString()})
+              <br />
+              Completed {daily.completedOn.size} times <br />
+              Started{' '}
+              {differenceInCalendarDays(
+                new Date(),
+                daily.completedOn.first()
+              )}{' '}
+              days ago <br />
+              On average completed at {Math.round(
+                avgMinuteOfCompletion / 60
+              )}:{Math.round(avgMinuteOfCompletion % 60)}
+            </CardBody>
+          )}
         </Collapse>
       </Card>
     );
