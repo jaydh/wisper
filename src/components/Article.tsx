@@ -182,14 +182,12 @@ class Article extends React.Component<Props, State> {
                       />
                     </CardBody>
                   </Collapse>
-                  {article.progress && (
-                    <Progress
-                      color="success"
-                      value={article.progress}
-                    >
-                      {Math.round(article.progress)}%
-                    </Progress>
-                  )}
+                  {article.progress &&
+                    article.progress > 0 && (
+                      <Progress color="success" value={article.progress}>
+                        {Math.round(article.progress)}%
+                      </Progress>
+                    )}
                 </Card>
               </Col>
             </Row>
