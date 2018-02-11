@@ -59,7 +59,8 @@ class ArticleViewBar extends React.Component<Props, State> {
       <Fade
         className="article-list-bar"
         style={{
-          backgroundColor: '#f9f9f9',
+          backgroundColor: '#679bef',
+          margin: '0 auto',
           top: '20px'
         }}
         in={this.props.showMenu}
@@ -75,7 +76,7 @@ class ArticleViewBar extends React.Component<Props, State> {
               </ButtonGroup>
             </NavItem>
           </Nav>
-          <NavbarBrand style={{ whiteSpace: 'pre-line' }}>
+          <NavbarBrand style={{ margin: '0 auto', whiteSpace: 'pre-line' }}>
             {article.fetching && <Icon spin={true} name="spinner" />}
             {hasTitle
               ? article.metadata.get('title') || article.metadata.get('ogTitle')
@@ -91,12 +92,12 @@ class ArticleViewBar extends React.Component<Props, State> {
                 >
                   <Icon name="info" />
                 </Button>
+                <ArticleMenu article={article} />
               </ButtonGroup>
-              <ArticleMenu article={article} />
             </NavItem>
           </Nav>
         </Navbar>
-        <Collapse isOpen={this.state.showDetails}>
+        <Collapse className="article-list-bar" isOpen={this.state.showDetails}>
           {' '}
           {hasSiteName
             ? article.metadata.get('siteName') ||
