@@ -128,20 +128,30 @@ class ArticleView extends React.Component<Props, State> {
   render() {
     const { article, HTMLContent } = this.props;
     return (
-      <Jumbotron
-        style={{
-          backgroundColor: '#fffff4',
-          margin: '0 auto',
-          width: window.innerWidth > 768 ? '65vw' : '90vw'
-        }}
-      >
+      <>
         <ArticleViewBar showMenu={this.state.showMenu} article={article} />
-        {article && HTMLContent ? (
-          <>{ReactHTMLParser(HTMLContent)}</>
-        ) : (
-          <p>Fetching article</p>
-        )}
-      </Jumbotron>
+        <Jumbotron
+          style={{
+            backgroundColor: '#fffff4',
+            margin: '0 auto',
+            width: window.innerWidth > 768 ? '65vw' : '90vw'
+          }}
+        >
+          {article && HTMLContent ? (
+            <>
+              {ReactHTMLParser(HTMLContent, {
+                transform: (node: any) => {
+                  if (node.name === 'img') {
+                    node.attribs.class = 'img-fluid';
+                  }
+                }
+              })}
+            </>
+          ) : (
+            <p>Fetching article</p>
+          )}
+        </Jumbotron>
+      </>
     );
   }
 }
