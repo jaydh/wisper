@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Article as ArticleType } from '../constants/StoreState';
-import { Jumbotron } from 'reactstrap';
+import { Jumbotron, Button } from 'reactstrap';
 import ReactHTMLParser from 'react-html-parser';
 import updateBookmark from '../actions/articles/updateBookmark';
 import updateProgress from '../actions/articles/updateProgress';
@@ -144,7 +144,36 @@ class ArticleView extends React.Component<Props, State> {
                 transform: (node: any) => {
                   if (node.name === 'img') {
                     node.attribs.class = 'img-fluid';
+                    return undefined;
                   }
+                  if (
+                    node.name === 'a' &&
+                    node.attribs.href &&
+                    node.attribs.href.startsWith(article.link)
+                  ) {
+                    const id = node.attribs.href
+                      ? node.attribs.href.substr(
+                          node.attribs.href.indexOf('#') + 1
+                        )
+                      : null;
+
+                    if (!node.prev) {
+                      console.log(node);
+                    }
+                    return (
+                      <Button
+                        onClick={() => {
+                          const el = document.querySelector(`#${id}`);
+                          if (el) {
+                            el.scrollIntoView(true);
+                          }
+                        }}
+                      >
+                        {node.children[0].data}
+                      </Button>
+                    );
+                  }
+                  return undefined;
                 }
               })}
             </>
