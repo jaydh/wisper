@@ -6,6 +6,7 @@ import ReactHTMLParser from 'react-html-parser';
 import updateBookmark from '../actions/articles/updateBookmark';
 import updateProgress from '../actions/articles/updateProgress';
 import ArticleViewBar from './ArticleViewBar';
+import { Icon } from 'react-fa';
 const debounce = require('lodash.debounce');
 
 interface Props {
@@ -148,7 +149,10 @@ class ArticleView extends React.Component<Props, State> {
               })}
             </>
           ) : (
-            <p>Fetching article</p>
+            <p>
+              <Icon spin={true} name="spinner" />
+              Fetching article
+            </p>
           )}
         </Jumbotron>
       </>
