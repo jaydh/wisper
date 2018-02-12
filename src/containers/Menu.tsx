@@ -12,13 +12,18 @@ import {
   NavbarToggler,
   NavItem,
   Navbar,
-  Collapse
+  Collapse,
+  Badge
 } from 'reactstrap';
+import { Daily } from '../constants/StoreState';
+import { isSameDay } from 'date-fns';
 import logout from '../helpers/firebaseLogout';
+
 interface Props {
   onSetUIView: (t: string) => void;
   view: string;
   user: string;
+  incompleteDailiesNum: number;
 }
 interface OwnProps {
   user: string;
@@ -51,7 +56,10 @@ class Menu extends React.Component<Props, State> {
                   this.toggle();
                 }}
               >
-                Dailies
+                Dailies{' '}
+                <Badge pill={true} color="info">
+                  {this.props.incompleteDailiesNum}
+                </Badge>
               </NavLink>
             </NavItem>
             <NavItem>
@@ -99,17 +107,23 @@ class Menu extends React.Component<Props, State> {
   }
 }
 
+const mapStateToProps = (state: any, ownProps: OwnProps) => {
+  return {
+    view: state.get('ui').view,
+    incompleteDailiesNum: state
+      .get('dailies')
+      .filter(
+        (t: Daily) =>
+          !t.finalized && !isSameDay(new Date(), t.completedOn.last())
+      ).size
+  };
+};
+
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onSetUIView: (view: string) => {
       dispatch(setUIView(view));
     }
-  };
-};
-
-const mapStateToProps = (state: any, ownProps: OwnProps) => {
-  return {
-    view: state.get('ui').view
   };
 };
 
