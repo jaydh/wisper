@@ -5,7 +5,10 @@ import {
   Daily,
   Project
 } from '../constants/StoreState';
-import { setCurrentArticleFromServer } from './ui/setCurrentArticle';
+import {
+  setCurrentArticleFromServer,
+  setCurrentHTML
+} from './ui/setCurrentArticle';
 
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
@@ -170,12 +173,18 @@ export function pullFromFirebase() {
         const articleId = snap.val();
         dispatch(setCurrentArticleFromServer(articleId));
         return articleId
-          ? database
-              .ref(`/userData/${user}/articles/${articleId}`)
-              .once('value')
-              .then((snapIn: any) =>
-                dispatch(addArticleFromServer(snapIn.val()))
-              )
+          ? Promise.all([
+              database
+                .ref(`/userData/${user}/articles/${articleId}`)
+                .once('value')
+                .then((snapIn: any) =>
+                  dispatch(addArticleFromServer(snapIn.val()))
+                ),
+              database
+                .ref(`/articleHTMLData/${articleId}/HTMLContent`)
+                .once('value')
+                .then((snapIn: any) => dispatch(setCurrentHTML(snapIn.val())))
+            ])
           : null;
       })
       .then(() =>
