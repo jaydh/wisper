@@ -12,12 +12,14 @@ const debounce = require('lodash.debounce');
 interface Props {
   article: ArticleType;
   HTMLContent: string;
+  fontSize: number;
 }
 
 interface State {
   scrollPosition: number;
   showMenu: boolean;
   articleNodeList: any;
+  fontSize: number;
 }
 
 class ArticleView extends React.Component<Props, State> {
@@ -26,7 +28,8 @@ class ArticleView extends React.Component<Props, State> {
     this.state = {
       scrollPosition: window.scrollY,
       showMenu: true,
-      articleNodeList: null
+      articleNodeList: null,
+      fontSize: 1.0
     };
     this.handleScroll = debounce(this.handleScroll.bind(this), 100);
     this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
@@ -64,6 +67,9 @@ class ArticleView extends React.Component<Props, State> {
         },
         () => this.scrollToBookmark()
       );
+      if (nextProps.fontSize !== this.props.fontSize) {
+        this.scrollToBookmark();
+      }
     }
   }
 
@@ -139,9 +145,9 @@ class ArticleView extends React.Component<Props, State> {
           }}
         >
           {article && HTMLContent ? (
-            <>
+            <div style={{ fontSize: this.props.fontSize + 'rem' }}>
               {ReactHTMLParser(HTMLContent, {
-                transform: (node: any) => {
+                transform: (node: any, index: number) => {
                   if (node.name === 'img') {
                     node.attribs.class = 'img-fluid';
                     return undefined;
@@ -173,7 +179,7 @@ class ArticleView extends React.Component<Props, State> {
                   return undefined;
                 }
               })}
-            </>
+            </div>
           ) : (
             <p>
               <Icon spin={true} name="spinner" />
@@ -190,7 +196,8 @@ const mapStateToProps = (state: any) => {
     article: state
       .get('articles')
       .find((t: ArticleType) => t.id === state.get('ui').currentArticle),
-    HTMLContent: state.get('ui').currentHTML
+    HTMLContent: state.get('ui').currentHTML,
+    fontSize: state.get('ui').articleViewFontSize
   };
 };
 

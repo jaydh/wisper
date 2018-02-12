@@ -16,6 +16,7 @@ interface UIState {
   dailyGraphMax: Date;
   currentArticle?: string;
   currentHTML?: string;
+  articleViewFontSize: number;
 }
 
 function setUIView(uiState: UIState, action: SetUIView): UIState {
@@ -45,8 +46,12 @@ function setDailyGraphSpan(uiState: UIState, action: any): UIState {
   return { ...uiState, dailyGraphMin: action.min, dailyGraphMax: action.max };
 }
 
-function SetCurrentHTML(uiState: UIState, action: SetCurrentHTML): UIState {
+function setCurrentHTML(uiState: UIState, action: SetCurrentHTML): UIState {
   return { ...uiState, currentHTML: action.content };
+}
+
+function setArticleViewFontSize(uiState: UIState, action: any): UIState {
+  return { ...uiState, articleViewFontSize: action.size };
 }
 
 function setCurrentArticle(
@@ -70,7 +75,8 @@ export default createReducer(
     demoComplete: null,
     demoStart: null,
     dailyGraphMin: startOfDay(new Date()),
-    dailyGraphMax: endOfDay(new Date())
+    dailyGraphMax: endOfDay(new Date()),
+    articleViewFontSize: 1.0
   },
   {
     SET_UI_VIEW: setUIView,
@@ -83,6 +89,7 @@ export default createReducer(
     SET_DAILY_GRAPH_SPAN: setDailyGraphSpan,
     SET_CURRENT_ARTICLE: setCurrentArticle,
     SET_CURRENT_ARTICLE_FROM_SERVER: setCurrentArticleFromServer,
-    SET_CURRENT_HTML: SetCurrentHTML
+    SET_CURRENT_HTML: setCurrentHTML,
+    SET_ARTICLE_VIEW_FONT_SIZE: setArticleViewFontSize
   }
 );

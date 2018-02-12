@@ -16,12 +16,15 @@ import ArticleMenu from '../containers/ArticleMenu';
 import ExitArticleView from '../containers/actionDispatchers/ExitArticleView';
 import refetchHTML from '../actions/articles/refetchHTML';
 import setCurrentArticle from '../actions/ui/setCurrentArticle';
+import setArticleViewFontSize from '../actions/ui/setArticleViewFontSize';
 
 interface Props {
   article: ArticleType;
   showMenu: boolean;
   onRefetch: (id: string) => void;
   onReset: (id: string) => void;
+  onSetFontSize: (size: number) => void;
+  fontSize: number;
 }
 
 interface State {
@@ -43,7 +46,8 @@ class ArticleViewBar extends React.Component<Props, State> {
   }
 
   render() {
-    const { article } = this.props;
+    const { article, fontSize, onSetFontSize } = this.props;
+    console.log();
     const hasTitle = article.metadata
       ? article.metadata.has('title') || article.metadata.has('oGtitle')
       : false;
@@ -91,6 +95,12 @@ class ArticleViewBar extends React.Component<Props, State> {
                   }
                 >
                   <Icon name="info" />
+                </Button>
+                <Button onClick={() => onSetFontSize(fontSize - 0.1)}>
+                  <Icon name="font" />
+                </Button>
+                <Button onClick={() => onSetFontSize(fontSize + 0.1)}>
+                  <Icon name="font" size="lg" />
                 </Button>
                 <ArticleMenu article={article} />
               </ButtonGroup>
@@ -140,11 +150,19 @@ class ArticleViewBar extends React.Component<Props, State> {
     );
   }
 }
-const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+
+const mapStateToProps = (state: any) => {
   return {
-    onRefetch: (id: string) => dispatch(refetchHTML(id)),
-    onReset: (id: string) => dispatch(setCurrentArticle(id))
+    fontSize: state.get('ui').articleViewFontSize
   };
 };
 
-export default connect(null, mapDispatchToProps)(ArticleViewBar);
+const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+  return {
+    onRefetch: (id: string) => dispatch(refetchHTML(id)),
+    onReset: (id: string) => dispatch(setCurrentArticle(id)),
+    onSetFontSize: (size: number) => dispatch(setArticleViewFontSize(size))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleViewBar);
