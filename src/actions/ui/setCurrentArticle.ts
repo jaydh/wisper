@@ -16,7 +16,7 @@ export interface SetCurrentHTML {
   content?: string;
 }
 
-function setCurrentHTML(content?: string): SetCurrentHTML {
+export function setCurrentHTML(content?: string): SetCurrentHTML {
   return {
     type: 'SET_CURRENT_HTML',
     content
