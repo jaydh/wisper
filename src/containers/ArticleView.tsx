@@ -149,23 +149,20 @@ class ArticleView extends React.Component<Props, State> {
                   if (
                     node.name === 'a' &&
                     node.attribs.href &&
-                    node.attribs.href.startsWith(article.link)
+                    node.attribs.href.includes(article.link)
                   ) {
-                    const id = node.attribs.href
-                      ? node.attribs.href.substr(
-                          node.attribs.href.indexOf('#') + 1
-                        )
-                      : null;
-
-                    if (!node.prev) {
-                      console.log(node);
-                    }
+                    const id = node.attribs.href.substr(
+                      node.attribs.href.indexOf('#') + 1
+                    );
                     return (
                       <Button
+                        color="link"
                         onClick={() => {
                           const el = document.querySelector(`#${id}`);
                           if (el) {
                             el.scrollIntoView(true);
+                          } else {
+                            window.open(node.attribs.href);
                           }
                         }}
                       >
