@@ -6,7 +6,7 @@ a {
   word-wrap: break-word;
 }
 
-.article-list-bar {
+.article-view-bar {
   position: sticky;
   position: -webkit-sticky;
 }

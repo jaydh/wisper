@@ -61,7 +61,7 @@ class ArticleViewBar extends React.Component<Props, State> {
 
     return (
       <Fade
-        className="article-list-bar"
+        className="article-view-bar"
         style={{
           backgroundColor: '#679bef',
           margin: '0 auto',
