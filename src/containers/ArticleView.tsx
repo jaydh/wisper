@@ -31,7 +31,7 @@ class ArticleView extends React.Component<Props, State> {
       articleNodeList: null,
       fontSize: 1.0
     };
-    this.handleScroll = debounce(this.handleScroll.bind(this), 100);
+    this.handleScroll = debounce(this.handleScroll.bind(this), 500);
     this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
   }
 
@@ -126,7 +126,7 @@ class ArticleView extends React.Component<Props, State> {
     this.setState({
       scrollPosition: window.scrollY,
       showMenu:
-        window.scrollY < 20 || this.state.scrollPosition > window.scrollY
+        window.scrollY < 20 || this.state.scrollPosition - 30 > window.scrollY
     });
     this.getBookmark();
     this.getScrollPercent();
@@ -136,6 +136,15 @@ class ArticleView extends React.Component<Props, State> {
     const { article, HTMLContent } = this.props;
     return (
       <>
+        {!this.state.showMenu && (
+          <Button
+            className="article-view-bar"
+            style={{ top: '50vh' }}
+            onClick={() => this.setState({ showMenu: !this.state.showMenu })}
+          >
+            <Icon name="universal-access" />
+          </Button>
+        )}
         <ArticleViewBar showMenu={this.state.showMenu} article={article} />
         <Jumbotron
           style={{
