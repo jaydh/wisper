@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Polar, Doughnut } from 'react-chartjs-2';
 import { Map, List, fromJS } from 'immutable';
 import { Article as articleType, Project } from '../../constants/StoreState';
-import { Row, Col } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 
 interface Props {
   articles: List<articleType>;
@@ -186,22 +186,20 @@ export class ProjectsGraph extends React.Component<Props, State> {
       }
     };
     return (
-      <div>
-        <Row>
-          <Col xs={12} sm={12} md={6} lg={6}>
-            <Doughnut
-              data={this.getProjectCountData()}
-              options={projectCountOptions}
-            />
-          </Col>
-          <Col xs={12} sm={12} md={6} lg={6}>
-            <Polar
-              data={this.getProjectCompletionData()}
-              options={projectCompletionOptions}
-            />
-          </Col>
-        </Row>
-      </div>
+      <Row>
+        <Col>
+          <Doughnut
+            data={this.getProjectCountData()}
+            options={projectCountOptions}
+          />
+        </Col>
+        <Col>
+          <Polar
+            data={this.getProjectCompletionData()}
+            options={projectCompletionOptions}
+          />
+        </Col>
+      </Row>
     );
   }
 }

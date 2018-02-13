@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { connect } from 'react-redux';
 import { HorizontalBar } from 'react-chartjs-2';
 import { Map, List } from 'immutable';
@@ -82,31 +83,46 @@ export class SourcesGraph extends React.Component<Props, State> {
 
   getDomainData() {
     const { articles } = this.props;
-    const domains = articles.map(
-      (article: articleType) =>
+    let domains = Map<string, List<articleType>>();
+    articles.forEach((article: articleType) => {
+      const domain =
         article.metadata.get('ogSiteName') ||
         article.metadata.get('siteName') ||
-        parseUri(article.link).authority
-    );
-    let domainCounts = Map<string, number>();
-    domains.map(
-      (x: string) =>
-        (domainCounts = domainCounts.update(x, (t: number = 0) => t + 1))
-    );
-    return domainCounts.filter((t: number) => t > 1);
+        parseUri(article.link).authority;
+      domains = domains.update(
+        domain,
+        (s: List<articleType>) => (s ? s.push(article) : List([article]))
+      );
+    });
+    return domains.filter((t: List<articleType>) => t.size > 1).sort();
   }
 
   render() {
-    const domainCounts = this.getDomainData().sort(
-      (a: number, b: number) => (b > a ? 1 : -1)
+    const domainMap = this.getDomainData();
+    const domainCounts = domainMap.map((t: List<articleType>) => t.size);
+    const domainCompletion = domainMap.map(
+      (t: List<articleType>) => t.filter((s: articleType) => s.completed).size
     );
     const data = {
       labels: domainCounts.keySeq().toJS(),
-
       datasets: [
         {
-          label: 'sources',
+          label: 'Count',
           data: domainCounts.valueSeq().toJS(),
+          backgroundColor: domainCounts
+            .map((value: number, key: string) => this.state.colorMap.get(key))
+            .valueSeq()
+            .toJS(),
+          borderColor: domainCounts
+            .valueSeq()
+            .map(() => '#f2b632')
+            .toJS(),
+          borderWidth: 1,
+          hoverBorderWidth: 3
+        },
+        {
+          label: 'Completed',
+          data: domainCompletion.valueSeq().toJS(),
           backgroundColor: domainCounts
             .map((value: number, key: string) => this.state.colorMap.get(key))
             .valueSeq()
@@ -120,6 +136,7 @@ export class SourcesGraph extends React.Component<Props, State> {
         }
       ]
     };
+
     const options = {
       title: {
         display: true,
@@ -131,24 +148,29 @@ export class SourcesGraph extends React.Component<Props, State> {
       scales: {
         xAxes: [
           {
-            id: 'x-axis-0',
             gridLines: {
               display: false
             },
+            stacked: true,
             ticks: {
               beginAtZero: true
             }
+          }
+        ],
+        yAxes: [
+          {
+            stacked: true
           }
         ]
       }
     } as any;
 
     return (
-      <div>
+      <>
         {!domainCounts.isEmpty() && (
           <HorizontalBar data={data} options={options} />
         )}
-      </div>
+      </>
     );
   }
 }
