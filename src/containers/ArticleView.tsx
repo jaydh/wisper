@@ -20,6 +20,7 @@ interface State {
   showMenu: boolean;
   articleNodeList: any;
   fontSize: number;
+  darkMode: boolean;
 }
 
 class ArticleView extends React.Component<Props, State> {
@@ -29,10 +30,12 @@ class ArticleView extends React.Component<Props, State> {
       scrollPosition: window.scrollY,
       showMenu: true,
       articleNodeList: null,
-      fontSize: 1.0
+      fontSize: 1.0,
+      darkMode: false
     };
     this.handleScroll = debounce(this.handleScroll.bind(this), 500);
     this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
+    this.toggleDarkMode = this.toggleDarkMode.bind(this);
   }
 
   componentDidMount() {
@@ -132,10 +135,20 @@ class ArticleView extends React.Component<Props, State> {
     this.getScrollPercent();
   }
 
+  toggleDarkMode() {
+    this.setState({
+      darkMode: !this.state.darkMode
+    });
+  }
+
   render() {
     const { article, HTMLContent } = this.props;
     return (
-      <>
+      <div
+        style={{
+          backgroundColor: this.state.darkMode ? '#5c5c5c' : 'white'
+        }}
+      >
         {!this.state.showMenu && (
           <Button
             className="article-view-bar"
@@ -145,16 +158,25 @@ class ArticleView extends React.Component<Props, State> {
             <Icon name="universal-access" />
           </Button>
         )}
-        <ArticleViewBar showMenu={this.state.showMenu} article={article} />
+        <ArticleViewBar
+          showMenu={this.state.showMenu}
+          article={article}
+          darkModeToggler={this.toggleDarkMode}
+        />
         <Jumbotron
           style={{
-            backgroundColor: '#fffff4',
+            backgroundColor: this.state.darkMode ? '#6b6b6b' : '#fffff4',
             margin: '0 auto',
             width: window.innerWidth > 768 ? '65vw' : '90vw'
           }}
         >
           {article && HTMLContent ? (
-            <div style={{ fontSize: this.props.fontSize + 'rem' }}>
+            <div
+              style={{
+                fontSize: this.props.fontSize + 'rem',
+                color: this.state.darkMode ? '#ffbf00' : 'black'
+              }}
+            >
               {ReactHTMLParser(HTMLContent, {
                 transform: (node: any, index: number) => {
                   if (node.name === 'img') {
@@ -196,7 +218,7 @@ class ArticleView extends React.Component<Props, State> {
             </p>
           )}
         </Jumbotron>
-      </>
+      </div>
     );
   }
 }
