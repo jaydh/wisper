@@ -167,7 +167,6 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
       : articles.sort(
           (a: articleType, b: articleType) => (a.progress > b.progress ? -1 : 1)
         );
-  console.log(sort);
 
   switch (sort) {
     case 'date-desc':
