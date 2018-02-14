@@ -61,6 +61,12 @@ class Sort extends React.Component<Props, State> {
       if (sort.startsWith('date')) {
         return 'by date read';
       }
+      if (sort.startsWith('percent')) {
+        return 'by read percentage';
+      }
+      if (sort.startsWith('viewed')) {
+        return 'by date viewed';
+      }
       return '';
     })(currentSort);
     return (
@@ -69,6 +75,17 @@ class Sort extends React.Component<Props, State> {
           Sort {currentSortString} <Icon name={glyph} />
         </DropdownToggle>
         <DropdownMenu>
+          {' '}
+          <DropdownItem
+            onClick={() =>
+              currentSort === 'percent'
+                ? onClick('percent-reverse')
+                : onClick('percent')
+            }
+          >
+            <Icon name={currentSort === 'viewed' ? 'sort-desc' : 'sort-asc'} />{' '}
+            Percent
+          </DropdownItem>
           <DropdownItem
             onClick={() =>
               currentSort === 'viewed'
@@ -79,7 +96,6 @@ class Sort extends React.Component<Props, State> {
             <Icon name={currentSort === 'viewed' ? 'sort-desc' : 'sort-asc'} />{' '}
             Viewed
           </DropdownItem>
-
           <DropdownItem
             onClick={() =>
               currentSort === 'title'

@@ -57,7 +57,8 @@ function addArticle(
         fetching: true,
         viewedOn: Set(),
         projects: Set(),
-        metadata: Map<string, any>()
+        metadata: Map<string, any>(),
+        progress: 0
       })
     : articleState;
 }

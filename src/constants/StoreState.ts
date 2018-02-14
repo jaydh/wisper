@@ -11,7 +11,7 @@ export interface Article {
   completed: boolean;
   HTMLContent?: string;
   bookmark?: string;
-  progress?: number;
+  progress: number;
   title: string;
 }
 

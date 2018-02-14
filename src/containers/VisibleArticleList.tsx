@@ -135,6 +135,12 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
           .sort((a, b) => {
             const aa = a.viewedOn.last();
             const bb = b.viewedOn.last();
+            if (!aa) {
+              return 1;
+            }
+            if (!bb) {
+              return -1;
+            }
             return isBefore(aa, bb) ? 1 : -1;
           })
           .toList()
@@ -142,9 +148,26 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
           .sort((b, a) => {
             const aa = a.viewedOn.last();
             const bb = b.viewedOn.last();
+            if (!aa) {
+              return 1;
+            }
+            if (!bb) {
+              return -1;
+            }
+
             return isBefore(aa, bb) ? 1 : -1;
           })
           .toList();
+
+  const sortByPercent = (reverse?: boolean) =>
+    reverse
+      ? articles.sort((a: articleType, b: articleType) => {
+          return a.progress > b.progress ? 1 : -1;
+        })
+      : articles.sort(
+          (a: articleType, b: articleType) => (a.progress > b.progress ? -1 : 1)
+        );
+  console.log(sort);
 
   switch (sort) {
     case 'date-desc':
@@ -163,6 +186,10 @@ function getSortedArticles(articles: List<articleType>, sort: string) {
       return sortByViewed();
     case 'viewed-reverse':
       return sortByViewed(true);
+    case 'percent':
+      return sortByPercent();
+    case 'percent-reverse':
+      return sortByPercent(true);
     default:
       return articles;
   }
