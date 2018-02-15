@@ -66,7 +66,7 @@ class ArticleViewBar extends React.Component<Props, State> {
         style={{
           backgroundColor: '#679bef',
           margin: '0 auto',
-          top: '20px'
+          top: '0px'
         }}
         in={this.props.showMenu}
       >
