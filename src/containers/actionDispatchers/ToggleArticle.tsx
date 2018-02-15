@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { toggleArticleRead } from '../../actions/articles/toggleArticleRead';
-import setCurrentArticle,{setCurrentHTML} from '../../actions/ui/setCurrentArticle';
+import setCurrentArticle, {
+  setCurrentHTML
+} from '../../actions/ui/setCurrentArticle';
 import setUIView from '../../actions/ui/setUIView';
 import { Button } from 'reactstrap';
 import { Icon } from 'react-fa';
