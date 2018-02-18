@@ -14,26 +14,35 @@ exports.getMetadata = functions.database
   .ref('/userData/{uId}/articles/{articleID}/link')
   .onCreate(event => {
     const article = event.data.val();
-    event.data.ref.parent.update({ fetching: true });
-    const metaRef = event.data.ref.parent.child('metadata');
     const rootRef = event.data.ref.parent.parent.parent.parent.parent;
-    const htmlRef = rootRef
-      .child('articleHTMLData')
-      .child(event.params.articleID)
-      .child('HTMLContent');
+    const articleDataRef = rootRef
+      .child('articleData')
+      .child(event.params.articleID);
+    const htmlRef = articleDataRef.child('HTMLContent');
+    const metaRef = articleDataRef.child('metadata');
+    articleDataRef.child('fetching').set(true);
+
     return Promise.all([
-      new Promise(function(resolve, reject) {
-        scrape(article, (err, meta) => {
-          // Filters out null/undefined values
-          const filteredMeta = fromJS(meta)
-            .filter(t => t)
-            .toJS();
-          resolve(metaRef.set(filteredMeta));
-        });
-      }),
+      metaRef
+        .once('value')
+        .then(snap => snap.val() !== null)
+        .then(
+          exists =>
+            !exists
+              ? new Promise(function(resolve, reject) {
+                  scrape(article, (err, meta) => {
+                    // Filters out null/undefined values
+                    const filteredMeta = fromJS(meta)
+                      .filter(t => t)
+                      .toJS();
+                    resolve(metaRef.set(filteredMeta));
+                  });
+                })
+              : null
+        ),
       htmlRef.once('value', snapshot => snapshot.val() !== null).then(
         exists =>
-          exists
+          !exists
             ? JSDOM.fromURL(article, {}).then(dom => {
                 const loc = dom.window.location;
                 var uri = {
@@ -55,17 +64,19 @@ exports.getMetadata = functions.database
               })
             : null
       )
-    ]).then(() => event.data.ref.parent.child('fetching').set(false));
+    ]).then(() => articleDataRef.child('fetching').set(false));
   });
 
 exports.refetchHTML = functions.database
   .ref('/userData/{uId}/articles/{articleID}/refetch')
   .onCreate(event => {
     const rootRef = event.data.ref.parent.parent.parent.parent.parent;
-    const htmlRef = rootRef
-      .child('articleHTMLData')
-      .child(event.params.articleID)
-      .child('HTMLContent');
+    const articleDataRef = rootRef
+      .child('articleData')
+      .child(event.params.articleID);
+    const htmlRef = articleDataRef.child('HTMLContent');
+    const metaRef = articleDataRef.child('metadata');
+
     return event.data.ref.parent
       .child('link')
       .once('value')
@@ -74,8 +85,17 @@ exports.refetchHTML = functions.database
           .child('fetching')
           .set(true)
           .then(() =>
-            JSDOM.fromURL(snapshot.val(), {})
-              .then(dom => {
+            Promise.all([
+              new Promise(function(resolve, reject) {
+                scrape(snapshot.val(), (err, meta) => {
+                  // Filters out null/undefined values
+                  const filteredMeta = fromJS(meta)
+                    .filter(t => t)
+                    .toJS();
+                  resolve(metaRef.set(filteredMeta));
+                });
+              }),
+              JSDOM.fromURL(snapshot.val(), {}).then(dom => {
                 const loc = dom.window.location;
                 var uri = {
                   spec: loc.href,
@@ -94,6 +114,7 @@ exports.refetchHTML = functions.database
                 ).parse();
                 return article ? htmlRef.set(article.content) : null;
               })
+            ])
               .then(() => event.data.ref.parent.child('refetch').remove())
               .then(() => event.data.ref.parent.child('fetching').set(false))
           )

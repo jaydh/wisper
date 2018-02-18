@@ -5,6 +5,7 @@ import {
   AddArticleFromServer,
   DeleteArticleFromServer
 } from '../actions/syncWithFirebase';
+import { UpdateMetadata } from '../actions/articles/updateMetadata';
 import { Article as articleType } from '../constants/StoreState';
 import { fromJS, List, Set, Map } from 'immutable';
 import createReducer from './createReducer';
@@ -57,7 +58,9 @@ function addArticle(
         fetching: true,
         viewedOn: Set(),
         projects: Set(),
-        metadata: Map<string, any>(),
+        metadata: action.metadata
+          ? fromJS(action.metadata)
+          : Map<string, any>(),
         progress: 0
       })
     : articleState;
@@ -73,10 +76,11 @@ function deleteArticle(
 }
 
 function updateArticle(articleState: List<articleType>, action: UpdateArticle) {
+  console.log(action);
   return articleState.map(article => {
-    return article && article.id === action.article.id
-      ? processArticle(action.article)
-      : article;
+    return article; /* && article.id === action.article.id
+      ? processArticle(action.article, article)
+      : article;*/
   });
 }
 
@@ -113,6 +117,7 @@ function deleteArticleFromServer(
 
 function addFetchedArticles(articleState: List<articleType>, action: any) {
   let newArticleState = articleState;
+
   for (let articleKey in action.articles) {
     if (action.articles.hasOwnProperty(articleKey)) {
       const article = action.articles[articleKey];
@@ -127,13 +132,25 @@ function addFetchedArticles(articleState: List<articleType>, action: any) {
   return newArticleState;
 }
 
+function updateMetadata(
+  articleState: List<articleType>,
+  action: UpdateMetadata
+) {
+  return articleState.map((t: articleType) => {
+    return t.id === action.id
+      ? { ...t, metadata: t.metadata.set(action.key, fromJS(action.value)) }
+      : t;
+  });
+}
+
 const articles = createReducer(List(), {
   ADD_ARTICLE_FULFILLED: addArticle,
   DELETE_ARTICLE_FULFILLED: deleteArticle,
   UPDATE_ARTICLE: updateArticle,
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,
-  ADD_FETCHED_ARTICLES: addFetchedArticles
+  ADD_FETCHED_ARTICLES: addFetchedArticles,
+  UPDATE_METADATA: updateMetadata
 });
 
 export default articles;

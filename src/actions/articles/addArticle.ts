@@ -1,6 +1,7 @@
 import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import AddArticleToProject from './addArticleToProject';
+import updateMetadata from './updateMetadata';
 let Hashes = require('jshashes');
 var SHA1 = new Hashes.SHA1();
 
@@ -12,6 +13,7 @@ export interface AddArticleFulfilled {
   articleLink: string;
   articleHash: string;
   project?: string;
+  metadata: any;
 }
 export interface AddArticleRejected {
   type: 'ADD_ARTICLE_REJECTED';
@@ -37,12 +39,14 @@ function AddArticleRejected(): AddArticleRejected {
 
 function AddArticleFulfilled(
   articleLink: string,
+  metadata: any,
   project?: string
 ): AddArticleFulfilled {
   return {
     type: 'ADD_ARTICLE_FULFILLED',
     articleLink: articleLink,
     articleHash: SHA1.hex(articleLink),
+    metadata,
     project: project
   };
 }
@@ -55,34 +59,43 @@ export default function addArticle(articleLink: string, project?: string) {
     dispatch(AddArticleRequested());
 
     const hash = SHA1.hex(articleLink);
+    console.log(hash);
     const articleRef = database.ref(
       '/userData/' + user + '/' + 'articles/' + hash
     );
-
-    return articleRef.once('value').then(function(snapshot: any) {
-      // Check if article in database
-      snapshot.exists()
-        ? dispatch(AddArticleRejected)
-        : articleRef
-            .set({
-              link: articleLink,
-              id: hash,
-              dateAdded: now.toLocaleString(),
-              completed: false,
-              fetching: true
-            })
-            .then(() => {
-              dispatch(AddArticleFulfilled(articleLink));
-            })
-            .then(() => {
-              if (project) {
-                dispatch(AddArticleToProject(hash, project));
-              }
-            })
-            .catch((error: string) => {
-              console.log(error);
-              dispatch(AddArticleRejected());
-            });
-    });
+    return articleRef.once('value').then(
+      (snapshot: any) =>
+        snapshot.exists()
+          ? dispatch(AddArticleRejected)
+          : articleRef
+              .set({
+                link: articleLink,
+                id: hash,
+                dateAdded: now.toLocaleString(),
+                completed: false
+              })
+              .then(() =>
+                database
+                  .ref(`/articleData/${hash}/metadata`)
+                  .once('value')
+                  .then((metadata: any) =>
+                    dispatch(AddArticleFulfilled(articleLink, metadata.val()))
+                  )
+              )
+              .then(() => {
+                if (project) {
+                  dispatch(AddArticleToProject(hash, project));
+                }
+                database
+                  .ref(`/articleData/${hash}/metadata/`)
+                  .on('child_added', (event: any) =>
+                    dispatch(updateMetadata(hash, event.key, event.val()))
+                  );
+              })
+              .catch((error: string) => {
+                console.log(error);
+                dispatch(AddArticleRejected());
+              })
+    );
   };
 }

@@ -3,7 +3,7 @@ import {
   SetCurrentArticle,
   SetCurrentHTML
 } from '../actions/ui/setCurrentArticle';
-import { startOfDay, endOfDay } from 'date-fns';
+import { startOfDay, endOfDay, subWeeks } from 'date-fns';
 import createReducer from './createReducer';
 
 interface UIState {
@@ -75,7 +75,7 @@ export default createReducer(
     demoComplete: null,
     demoStart: null,
     dailyGraphMin: startOfDay(new Date()),
-    dailyGraphMax: endOfDay(new Date()),
+    dailyGraphMax: endOfDay(subWeeks(new Date(), 1)),
     articleViewFontSize: 1.0
   },
   {

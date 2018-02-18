@@ -173,18 +173,10 @@ export function pullFromFirebase() {
         const articleId = snap.val();
         dispatch(setCurrentArticleFromServer(articleId));
         return articleId
-          ? Promise.all([
-              database
-                .ref(`/userData/${user}/articles/${articleId}`)
-                .once('value')
-                .then((snapIn: any) =>
-                  dispatch(addArticleFromServer(snapIn.val()))
-                ),
-              database
-                .ref(`/articleHTMLData/${articleId}/HTMLContent`)
-                .once('value')
-                .then((snapIn: any) => dispatch(setCurrentHTML(snapIn.val())))
-            ])
+          ? database
+              .ref(`/articleData/${articleId}/HTMLContent`)
+              .once('value')
+              .then((snapIn: any) => dispatch(setCurrentHTML(snapIn.val())))
           : null;
       })
       .then(() =>
@@ -193,10 +185,31 @@ export function pullFromFirebase() {
             dispatch(addFetchedDailies(snap.val()));
             dispatch(fetchingDailiesCompleted());
           }),
-          articleRef.once('value').then(function(snap: any) {
-            dispatch(addFetchedArticles(snap.val()));
-            dispatch(fetchingArticlesCompleted());
-          })
+          articleRef
+            .once('value')
+            .then(function(snap: any) {
+              let articles = snap.val();
+              let promises: any = [];
+              for (const key in articles) {
+                if (key) {
+                  promises.push(
+                    database
+                      .ref(`/articleData/${key}/metadata`)
+                      .once('value')
+                      .then((snapIn: any) => {
+                        articles[key].metadata = snapIn.val();
+                        return articles[key];
+                      })
+                  );
+                }
+              }
+              return Promise.all(promises);
+            })
+            .then((articles: any) => {
+              console.log(articles);
+              dispatch(addFetchedArticles(articles));
+              dispatch(fetchingArticlesCompleted());
+            })
         ])
       );
   };

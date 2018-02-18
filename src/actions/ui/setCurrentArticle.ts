@@ -43,7 +43,7 @@ export default function SetCurrentArticle(id?: string) {
           })
           .then(() =>
             database
-              .ref('/articleHTMLData/' + id + '/HTMLContent')
+              .ref('/articleData/' + id + '/HTMLContent')
               .once('value', (snapshot: any) =>
                 dispatch(setCurrentHTML(snapshot.val()))
               )
