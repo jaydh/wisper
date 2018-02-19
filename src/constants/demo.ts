@@ -172,14 +172,13 @@ export default async function(store: any, persistor: any) {
     }
   ];
 
-  Promise.all(
-    articles.map(async (t: { link: string; project?: string }) => {
-      await store.dispatch(addArticle(t.link, t.project));
-      if (Math.floor(Math.random() * 2) === 0) {
-        store.dispatch(toggleArticleRead(SHA1.hex(t.link)));
-      }
-    })
-  );
+  articles.map(async (t: { link: string; project?: string }) => {
+    await store.dispatch(addArticle(t.link, t.project));
+    if (Math.floor(Math.random() * 2) === 0) {
+      await store.dispatch(toggleArticleRead(SHA1.hex(t.link)));
+    }
+  });
+
   const dailies = List([
     'Excercise',
     'Check the garbage',
@@ -196,7 +195,7 @@ export default async function(store: any, persistor: any) {
       .toArray()
   );
   await store.dispatch(demoDailyCompletion(ids));
-  store.dispatch(SetUIView('dailies'));
+  store.dispatch(SetUIView('compact'));
   store.dispatch(demoComplete());
   console.timeEnd('demoTimer');
 }

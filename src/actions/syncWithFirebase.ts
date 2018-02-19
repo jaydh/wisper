@@ -206,7 +206,6 @@ export function pullFromFirebase() {
               return Promise.all(promises);
             })
             .then((articles: any) => {
-              console.log(articles);
               dispatch(addFetchedArticles(articles));
               dispatch(fetchingArticlesCompleted());
             })
@@ -229,8 +228,16 @@ export function ListenForArticleUpdates() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
   return (dispatch: Dispatch<any>) => {
-    articleRef.on('child_changed', function(snapshot: any) {
-      dispatch(updateArticle(snapshot.val()));
+    articleRef.on('child_changed', function(snap: any) {
+      let article = snap.val();
+      const id = article.id;
+      database
+        .ref(`/articleData/${id}/metadata`)
+        .once('value')
+        .then((snapIn: any) => {
+          article.metadata = snapIn.val();
+          dispatch(updateArticle(snapIn.val()));
+        });
     });
   };
 }
@@ -254,7 +261,15 @@ export function ListenToFirebase() {
       dispatch(deleteProject(snapshot.val()));
     });
     articleRef.on('child_added', function(snap: any) {
-      dispatch(addArticleFromServer(snap.val()));
+      let article = snap.val();
+      const id = article.id;
+      database
+        .ref(`/articleData/${id}/metadata`)
+        .once('value')
+        .then((snapIn: any) => {
+          article.metadata = snapIn.val();
+          dispatch(addArticleFromServer(article));
+        });
     });
     articleRef.on('child_removed', function(snap: any) {
       dispatch(deleteArticleFromServer(snap.val()));

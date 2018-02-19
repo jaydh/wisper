@@ -76,11 +76,10 @@ function deleteArticle(
 }
 
 function updateArticle(articleState: List<articleType>, action: UpdateArticle) {
-  console.log(action);
-  return articleState.map(article => {
-    return article; /* && article.id === action.article.id
-      ? processArticle(action.article, article)
-      : article;*/
+  return articleState.map((article: articleType) => {
+    return article && article.id === action.article.id
+      ? processArticle(action.article)
+      : article;
   });
 }
 

@@ -59,7 +59,6 @@ export default function addArticle(articleLink: string, project?: string) {
     dispatch(AddArticleRequested());
 
     const hash = SHA1.hex(articleLink);
-    console.log(hash);
     const articleRef = database.ref(
       '/userData/' + user + '/' + 'articles/' + hash
     );
@@ -74,14 +73,6 @@ export default function addArticle(articleLink: string, project?: string) {
                 dateAdded: now.toLocaleString(),
                 completed: false
               })
-              .then(() =>
-                database
-                  .ref(`/articleData/${hash}/metadata`)
-                  .once('value')
-                  .then((metadata: any) =>
-                    dispatch(AddArticleFulfilled(articleLink, metadata.val()))
-                  )
-              )
               .then(() => {
                 if (project) {
                   dispatch(AddArticleToProject(hash, project));
