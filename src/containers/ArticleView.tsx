@@ -212,10 +212,7 @@ class ArticleView extends React.Component<Props, State> {
               })}
             </div>
           ) : (
-            <p>
-              <Icon spin={true} name="spinner" />
-              Fetching article
-            </p>
+            <p>Reader Unavailable</p>
           )}
         </Jumbotron>
       </div>
