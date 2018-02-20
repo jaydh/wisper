@@ -236,7 +236,8 @@ export function ListenForArticleUpdates() {
         .once('value')
         .then((snapIn: any) => {
           article.metadata = snapIn.val();
-          dispatch(updateArticle(snapIn.val()));
+          console.log(2, article);
+          dispatch(updateArticle(article));
         });
     });
   };
