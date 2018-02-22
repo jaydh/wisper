@@ -2,6 +2,7 @@ import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 import AddArticleToProject from './addArticleToProject';
 import updateMetadata from './updateMetadata';
+import updateFetching from './updateFetching';
 let Hashes = require('jshashes');
 var SHA1 = new Hashes.SHA1();
 
@@ -79,8 +80,13 @@ export default function addArticle(articleLink: string, project?: string) {
                 }
                 database
                   .ref(`/articleData/${hash}/metadata/`)
-                  .on('child_added', (event: any) =>
-                    dispatch(updateMetadata(hash, event.key, event.val()))
+                  .on('value', (event: any) =>
+                    dispatch(updateMetadata(hash, event.val()))
+                  );
+                database
+                  .ref(`articleData/${hash}/fetching`)
+                  .on('value', (event: any) =>
+                    dispatch(updateFetching(hash, event.val()))
                   );
               })
               .catch((error: string) => {
