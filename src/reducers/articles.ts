@@ -6,6 +6,7 @@ import {
   DeleteArticleFromServer
 } from '../actions/syncWithFirebase';
 import { UpdateMetadata } from '../actions/articles/updateMetadata';
+import { UpdateFetching } from '../actions/articles/updateFetching';
 import { Article as articleType } from '../constants/StoreState';
 import { fromJS, List, Set, Map } from 'immutable';
 import createReducer from './createReducer';
@@ -136,9 +137,16 @@ function updateMetadata(
   action: UpdateMetadata
 ) {
   return articleState.map((t: articleType) => {
-    return t.id === action.id
-      ? { ...t, metadata: t.metadata.set(action.key, fromJS(action.value)) }
-      : t;
+    return t.id === action.id ? { ...t, metadata: fromJS(action.value) } : t;
+  });
+}
+
+function updateFetching(
+  articleState: List<articleType>,
+  action: UpdateFetching
+) {
+  return articleState.map((t: articleType) => {
+    return t.id === action.id ? { ...t, fetching: action.fetching } : t;
   });
 }
 
@@ -149,7 +157,8 @@ const articles = createReducer(List(), {
   ADD_ARTICLE_FROM_SERVER: addArticleFromServer,
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,
   ADD_FETCHED_ARTICLES: addFetchedArticles,
-  UPDATE_METADATA: updateMetadata
+  UPDATE_METADATA: updateMetadata,
+  UPDATE_FETCHING: updateFetching
 });
 
 export default articles;

@@ -9,6 +9,8 @@ import {
   setCurrentArticleFromServer,
   setCurrentHTML
 } from './ui/setCurrentArticle';
+import updateMetadata from './articles/updateMetadata';
+import updateFetching from './articles/updateFetching';
 
 export interface AddArticleFromServer {
   type: 'ADD_ARTICLE_FROM_SERVER';
@@ -231,14 +233,15 @@ export function ListenForArticleUpdates() {
     articleRef.on('child_changed', function(snap: any) {
       let article = snap.val();
       const id = article.id;
+      dispatch(updateArticle(snap.val()));
       database
         .ref(`/articleData/${id}/metadata`)
         .once('value')
-        .then((snapIn: any) => {
-          article.metadata = snapIn.val();
-          console.log(2, article);
-          dispatch(updateArticle(article));
-        });
+        .then((snapIn: any) => dispatch(updateMetadata(id, snapIn.val())));
+      database
+        .ref(`/articleData/${id}/fetching`)
+        .once('value')
+        .then((snapIn: any) => dispatch(updateFetching(id, snapIn.val())));
     });
   };
 }
