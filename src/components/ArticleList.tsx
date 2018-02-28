@@ -5,9 +5,6 @@ import SetArticleListSearch from '../containers/actionDispatchers/SetArticleList
 import ProjectSelector from '../containers/actionDispatchers/ProjectSelector';
 import ActiveSelector from '../containers/actionDispatchers/ActiveSelector';
 import Sort from '../containers/actionDispatchers/Sort';
-import DeleteArticleList from '../containers/actionDispatchers/DeleteArticleList';
-import MaximizedArticleList from '../containers/actionDispatchers/MaximizeArticleList';
-import LockArticleList from '../containers/actionDispatchers/LockArticleList';
 import SetArticleListView from '../containers/actionDispatchers/SetArticleListView';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
@@ -25,8 +22,6 @@ interface Props {
   yPosition: number;
   width: number;
   height: number;
-  locked: boolean;
-  uiView: string;
   articleListView: string;
   onResize: (x: number, y: number) => void;
   onReposition: (x: number, y: number) => void;
@@ -48,28 +43,11 @@ class ArticleList extends React.Component<Props> {
       id,
       projectFilter,
       articlesInActivity,
-      locked,
-      uiView,
       articleListView
     } = this.props;
 
     return (
       <Container>
-        {!(uiView === 'compact') && (
-          <Row>
-            <Col sm={1} md={1}>
-              <LockArticleList id={id} />
-            </Col>
-            <Col sm={{ size: 2, offset: 9 }} md={{ size: 2, offset: 9 }}>
-              {!locked && (
-                <ButtonGroup>
-                  <MaximizedArticleList id={id} />
-                  <DeleteArticleList id={id} />
-                </ButtonGroup>
-              )}
-            </Col>
-          </Row>
-        )}
         <div style={{ marginTop: '3em' }} />
         <Row>
           <Col xs={12} sm={12} md={12} lg={12}>
