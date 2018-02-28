@@ -33,7 +33,7 @@ class ArticleView extends React.Component<Props, State> {
       fontSize: 1.0,
       darkMode: false
     };
-    this.handleScroll = debounce(this.handleScroll.bind(this), 500);
+    this.handleScroll = debounce(this.handleScroll.bind(this));
     this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
     this.toggleDarkMode = this.toggleDarkMode.bind(this);
   }
@@ -126,13 +126,19 @@ class ArticleView extends React.Component<Props, State> {
   }
 
   handleScroll() {
-    this.setState({
-      scrollPosition: window.scrollY,
-      showMenu:
-        window.scrollY < 20 || this.state.scrollPosition - 30 > window.scrollY
-    });
-    this.getBookmark();
-    this.getScrollPercent();
+    if (window.scrollY < 20) {
+      this.setState({ showMenu: true });
+    }
+    if (this.state.scrollPosition > window.scrollY) {
+      this.setState({
+        showMenu: true
+      });
+      this.getBookmark();
+      this.getScrollPercent();
+    } else {
+      this.setState({ showMenu: false });
+    }
+    this.setState({ scrollPosition: window.scrollY });
   }
 
   toggleDarkMode() {
