@@ -7,11 +7,12 @@ import { Article } from '../constants/StoreState';
 
 interface Props {
   article: Article;
+  collapseHandler?: () => void;
 }
 
 export default class ArticleMenu extends React.Component<Props> {
   render() {
-    const { article } = this.props;
+    const { article, collapseHandler } = this.props;
     return (
       <ButtonGroup size="sm">
         <Button onClick={() => window.open(article.link, '_blank')}>
@@ -19,6 +20,11 @@ export default class ArticleMenu extends React.Component<Props> {
         </Button>
         <ToggleArticle id={article.id} />
         <DeleteArticle id={article.id} />
+        {collapseHandler && (
+          <Button onClick={collapseHandler}>
+            <Icon name="plus" />
+          </Button>
+        )}
       </ButtonGroup>
     );
   }

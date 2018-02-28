@@ -32,14 +32,21 @@ interface Props {
 }
 interface State {
   isMenuOpen: boolean;
+  showCollapse: boolean;
 }
 
 class Article extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isMenuOpen: false
+      isMenuOpen: false,
+      showCollapse: false
     };
+    this.toggleCollapse = this.toggleCollapse.bind(this);
+  }
+
+  toggleCollapse() {
+    this.setState({ showCollapse: !this.state.showCollapse });
   }
 
   render() {
@@ -126,12 +133,15 @@ class Article extends React.Component<Props, State> {
                       </Col>
                       {this.state.isMenuOpen && (
                         <Col xs={3} sm={3} md={3} lg={3}>
-                          <ArticleMenu article={article} />
+                          <ArticleMenu
+                            article={article}
+                            collapseHandler={this.toggleCollapse}
+                          />
                         </Col>
                       )}
                     </Row>
                   </CardTitle>
-                  <Collapse isOpen={this.state.isMenuOpen}>
+                  <Collapse isOpen={this.state.showCollapse}>
                     <CardSubtitle>
                       {hasSiteName
                         ? article.metadata.get('siteName') ||
