@@ -10,7 +10,7 @@ import { Icon } from 'react-fa';
 import { Article } from '../../constants/StoreState';
 
 export interface Props {
-  onToggleClick: () => void;
+  onToggleClick: (toBeCompleted: boolean) => void;
   id: string;
   articleCompleted: boolean;
 }
@@ -21,7 +21,7 @@ class ToggleArticleRead extends React.Component<Props> {
     return (
       <Button
         onClick={() => {
-          onToggleClick();
+          onToggleClick(!articleCompleted);
         }}
       >
         <Icon name={articleCompleted ? 'book' : 'check'} />
@@ -40,10 +40,13 @@ const mapStateToProps = (state: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
-    onToggleClick: () => {
+    onToggleClick: (toBeCompleted: boolean) => {
       dispatch(toggleArticleRead(ownProps.id));
-      dispatch(setCurrentArticle());
-      dispatch(setCurrentHTML());
+      // Reset article viewer if toggled from bar
+      if (toBeCompleted) {
+        dispatch(setCurrentArticle());
+        dispatch(setCurrentHTML());
+      }
       dispatch(setUIView);
     }
   };
