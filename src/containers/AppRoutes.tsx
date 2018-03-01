@@ -91,7 +91,7 @@ class AppRoutes extends React.Component<Props, State> {
           {(() => {
             switch (this.props.uiView) {
               case 'compact':
-                return <VisibleArticleList id={'compactAL'} />;
+                return <VisibleArticleList />;
               case 'canvas':
                 return <Canvas />;
               case 'analytics':

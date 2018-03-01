@@ -33,7 +33,7 @@ class ArticleView extends React.Component<Props, State> {
       fontSize: 1.0,
       darkMode: false
     };
-    this.handleScroll = debounce(this.handleScroll.bind(this));
+    this.handleScroll = debounce(this.handleScroll.bind(this), 1000);
     this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
     this.toggleDarkMode = this.toggleDarkMode.bind(this);
   }
