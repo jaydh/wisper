@@ -7,7 +7,6 @@ import {
 } from 'reactstrap';
 import setSortFilter from '../../actions/ui/setSortFilter';
 import { connect } from 'react-redux';
-import { ArticleList } from '../../constants/StoreState';
 import { Icon } from 'react-fa';
 
 interface Props {
@@ -139,16 +138,14 @@ class Sort extends React.Component<Props, State> {
 function mapDispatchToProps(dispatch: any, ownProps: any) {
   return {
     onClick: (filter: string) => {
-      dispatch(setSortFilter(filter, ownProps.id));
+      dispatch(setSortFilter(filter));
     }
   };
 }
 
 function mapStateToProps(state: any, ownProps: any) {
   return {
-    currentSort: state
-      .get('articleLists')
-      .find((t: ArticleList) => t.id === ownProps.id).sort
+    currentSort: state.get('articleLists').sort
   };
 }
 

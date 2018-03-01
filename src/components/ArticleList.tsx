@@ -14,17 +14,9 @@ import { forceCheck } from 'react-lazyload';
 interface Props {
   articles: List<articleType>;
   articlesInActivity: List<articleType>;
-  order: number;
-  id: string;
   sort: string;
   projectFilter: string;
-  xPosition: number;
-  yPosition: number;
-  width: number;
-  height: number;
   articleListView: string;
-  onResize: (x: number, y: number) => void;
-  onReposition: (x: number, y: number) => void;
 }
 
 class ArticleList extends React.Component<Props> {
@@ -40,7 +32,6 @@ class ArticleList extends React.Component<Props> {
   render() {
     const {
       articles,
-      id,
       projectFilter,
       articlesInActivity,
       articleListView
@@ -56,20 +47,20 @@ class ArticleList extends React.Component<Props> {
         </Row>
         <Row>
           <ButtonGroup>
-            <ActiveSelector id={id} />
-            <ProjectSelector id={id} articlesInActivity={articlesInActivity} />
-            <Sort id={id} />
-            <SetArticleListView id={id} articlesSize={articles.size} />
+            <ActiveSelector />
+            <ProjectSelector articlesInActivity={articlesInActivity} />
+            <Sort />
+            <SetArticleListView articlesSize={articles.size} />
           </ButtonGroup>
         </Row>
-        <SetArticleListSearch id={id} />
+        <SetArticleListSearch />
         <Row>
           <Card>
             <ListGroup>
               {articles.map((article: articleType) => {
                 return (
                   <Article
-                    key={id + article.id}
+                    key={article.id}
                     article={article}
                     compact={articleListView === 'compact'}
                   />

@@ -8,11 +8,7 @@ import {
   DropdownMenu,
   DropdownToggle
 } from 'reactstrap';
-import {
-  ArticleList as ArticleListType,
-  Article as articleType,
-  Project
-} from '../../constants/StoreState';
+import { Article as articleType, Project } from '../../constants/StoreState';
 
 interface Props {
   projects: List<String>;
@@ -84,16 +80,14 @@ const mapStateToProps = (state: any, ownProps: any) => {
       .get('projects')
       .map((t: Project) => t.id)
       .sort((a: string, b: string) => a.localeCompare(b)),
-    currentProject: state
-      .get('articleLists')
-      .find((list: ArticleListType) => list.id === ownProps.id).projectFilter
+    currentProject: state.get('articleLists').projectFilter
   };
 };
 
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onClick: (filter: string) => {
-      dispatch(setProjectFilter(filter, ownProps.id));
+      dispatch(setProjectFilter(filter));
     }
   };
 };

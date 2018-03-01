@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
 import ArticleList from '../components/ArticleList';
 import { List, fromJS } from 'immutable';
-import {
-  Article as articleType,
-  ArticleList as ArticleListType
-} from '../constants/StoreState';
+import { Article as articleType } from '../constants/StoreState';
 import { isBefore, isToday } from 'date-fns';
 import * as Fuse from 'fuse.js';
 
@@ -236,9 +233,7 @@ function getSearchedArticles(articles: List<articleType>, search: string) {
 }
 
 function mapStateToProps(state: any, ownProps: any) {
-  const articleList = state
-    .get('articleLists')
-    .find((list: ArticleListType) => list.id === ownProps.id);
+  const articleList = state.get('articleLists');
   const articles = state.get('articles');
   const { visibilityFilter, projectFilter, sort } = articleList;
   const articlesInActivity = getVisibleArticles(articles, visibilityFilter);
@@ -254,13 +249,8 @@ function mapStateToProps(state: any, ownProps: any) {
   return {
     articles: final,
     articlesInActivity,
-    order: articleList.order,
     sort: articleList.sort,
     projectFilter: articleList.projectFilter,
-    xPosition: articleList.xPosition,
-    yPosition: articleList.yPosition,
-    height: articleList.height,
-    width: articleList.width,
     articleListView: articleList.view
   };
 }

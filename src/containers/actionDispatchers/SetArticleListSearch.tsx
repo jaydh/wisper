@@ -2,14 +2,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { setArticleListSearch } from '../../actions/ui/articleList';
 import { Form, Input, FormGroup, FormFeedback } from 'reactstrap';
-import { ArticleList } from '../../constants/StoreState';
 
 interface State {
   value: string;
 }
 interface Props {
   onChange: (t: string) => void;
-  id: string;
   search: string;
 }
 
@@ -50,16 +48,14 @@ class AddArticle extends React.Component<Props, State> {
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onChange: (search: string) => {
-      dispatch(setArticleListSearch(ownProps.id, search));
+      dispatch(setArticleListSearch(search));
     }
   };
 };
 
 const mapStatetoProps = (state: any, ownProps: any) => {
   return {
-    search: state
-      .get('articleLists')
-      .find((list: ArticleList) => list.id === ownProps.id).search
+    search: state.get('articleLists').search
   };
 };
 

@@ -68,7 +68,7 @@ class Article extends React.Component<Props, State> {
       ? article.metadata.has('siteName') || article.metadata.has('ogSiteName')
       : false;
 
-    const showImage = compact ? this.state.isMenuOpen : true;
+    const showImage = compact ? this.state.showCollapse : true;
     return (
       <ListGroupItem
         onMouseEnter={() => this.setState({ isMenuOpen: true })}

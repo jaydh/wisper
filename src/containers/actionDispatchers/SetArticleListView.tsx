@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { setArticleListView } from '../../actions/ui/articleList';
 import { Button, Badge } from 'reactstrap';
 import { Icon } from 'react-fa';
-import { ArticleList } from '../../constants/StoreState';
 
 export interface Props {
   currentView: string;
@@ -38,16 +37,14 @@ class SetArticleListView extends React.Component<Props> {
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    currentView: state
-      .get('articleLists')
-      .find((t: ArticleList) => t.id === ownProps.id).view
+    currentView: state.get('articleLists').view
   };
 };
 
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onClick: (t: string) => {
-      dispatch(setArticleListView(ownProps.id, t));
+      dispatch(setArticleListView(t));
     }
   };
 };

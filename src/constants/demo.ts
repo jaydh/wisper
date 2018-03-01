@@ -2,11 +2,6 @@ let Hashes = require('jshashes');
 let SHA1 = new Hashes.SHA1();
 import addArticle from '../actions/articles/addArticle';
 import { toggleArticleRead } from '../actions/articles/toggleArticleRead';
-import {
-  addArticleList,
-  repositionArticleList,
-  resizeArticleList
-} from '../actions/ui/articleList';
 import setSortFilter from '../actions/ui/setSortFilter';
 import { setProjectFilter } from '../actions/ui/projectFilter';
 import { setVisibilityFilter } from '../actions/ui/visibilityFilter';
@@ -21,15 +16,9 @@ export default async function(store: any, persistor: any) {
   store.dispatch({ type: 'USER_LOGOUT' });
   store.dispatch(demoStart());
   store.dispatch(SetUIView('dailies'));
-  store.dispatch(addArticleList('0'));
-  store.dispatch(addArticleList('1'));
-  store.dispatch(setVisibilityFilter('All', '0'));
-  store.dispatch(setSortFilter('title', '1'));
-  store.dispatch(setProjectFilter('news', '1'));
-  store.dispatch(resizeArticleList('0', -200, 100));
-  store.dispatch(
-    repositionArticleList('1', innerWidth * 0.4, innerHeight * 0.1)
-  );
+  store.dispatch(setVisibilityFilter('All'));
+  store.dispatch(setSortFilter('title'));
+  store.dispatch(setProjectFilter('news'));
   const articles = [
     {
       link:

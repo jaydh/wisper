@@ -25,16 +25,9 @@ export interface Daily {
 }
 
 export interface ArticleList {
-  id: string;
-  order: number;
   visibilityFilter: string;
   projectFilter: string;
   sort: string;
-  xPosition: number;
-  yPosition: number;
-  width: number;
-  height: number;
-  locked: boolean;
   search: string;
   view: string;
 }

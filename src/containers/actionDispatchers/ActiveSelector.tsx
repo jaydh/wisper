@@ -7,7 +7,6 @@ import {
   DropdownToggle,
   DropdownItem
 } from 'reactstrap';
-import { ArticleList as ArticleListType } from '../../constants/StoreState';
 
 interface Props {
   onClick: (t: string) => void;
@@ -34,10 +33,7 @@ class ActiveSelector extends React.Component<Props, State> {
         <DropdownToggle caret={true}>{currentActive}</DropdownToggle>
         <DropdownMenu>
           {options.map((t: string) => (
-            <DropdownItem
-              key={'activeSelector' + t}
-              onClick={() => onClick(t)}
-            >
+            <DropdownItem key={'activeSelector' + t} onClick={() => onClick(t)}>
               {t}
             </DropdownItem>
           ))}
@@ -49,16 +45,14 @@ class ActiveSelector extends React.Component<Props, State> {
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    currentActive: state
-      .get('articleLists')
-      .find((list: ArticleListType) => list.id === ownProps.id).visibilityFilter
+    currentActive: state.get('articleLists').visibilityFilter
   };
 };
 
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onClick: (filter: string) => {
-      dispatch(setVisibilityFilter(filter, ownProps.id));
+      dispatch(setVisibilityFilter(filter));
     }
   };
 };
