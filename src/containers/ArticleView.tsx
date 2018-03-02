@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Article as ArticleType } from '../constants/StoreState';
-import { Jumbotron, Button } from 'reactstrap';
+import { Jumbotron, Fade, Button } from 'reactstrap';
 import ReactHTMLParser from 'react-html-parser';
 import updateBookmark from '../actions/articles/updateBookmark';
 import updateProgress from '../actions/articles/updateProgress';
@@ -33,7 +33,11 @@ class ArticleView extends React.Component<Props, State> {
       fontSize: 1.0,
       darkMode: false
     };
-    this.handleScroll = debounce(this.handleScroll.bind(this), 1000);
+    this.progressScrollHandler = debounce(
+      this.progressScrollHandler.bind(this),
+      2000
+    );
+    this.menuScrollHandler = this.menuScrollHandler.bind(this);
     this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
     this.toggleDarkMode = this.toggleDarkMode.bind(this);
   }
@@ -51,12 +55,18 @@ class ArticleView extends React.Component<Props, State> {
       },
       () => this.scrollToBookmark()
     );
-    window.addEventListener('scroll', this.handleScroll);
+    let isScrolling: any;
+    window.addEventListener('scroll', this.progressScrollHandler);
+    window.addEventListener('scroll', () => {
+      window.clearTimeout(isScrolling);
+      isScrolling = setTimeout(this.menuScrollHandler, 66);
+    });
     window.addEventListener('resize', this.scrollToBookmark);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.menuScrollHandler);
+    window.removeEventListener('scroll', this.progressScrollHandler);
     window.removeEventListener('resize', this.scrollToBookmark);
   }
 
@@ -83,10 +93,10 @@ class ArticleView extends React.Component<Props, State> {
         el.textContent.replace(/\s/g, '') === this.props.article.bookmark
     ) as any;
     if (target) {
-      window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('scroll', this.progressScrollHandler);
       target.scrollIntoView(true);
       this.setState({ showMenu: false });
-      window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('scroll', this.progressScrollHandler);
     }
   }
 
@@ -125,7 +135,11 @@ class ArticleView extends React.Component<Props, State> {
     );
   }
 
-  handleScroll() {
+  progressScrollHandler() {
+    this.getBookmark();
+    this.getScrollPercent();
+  }
+  menuScrollHandler() {
     if (window.scrollY < 20) {
       this.setState({ showMenu: true });
     }
@@ -133,8 +147,6 @@ class ArticleView extends React.Component<Props, State> {
       this.setState({
         showMenu: true
       });
-      this.getBookmark();
-      this.getScrollPercent();
     } else {
       this.setState({ showMenu: false });
     }
@@ -155,15 +167,17 @@ class ArticleView extends React.Component<Props, State> {
           backgroundColor: this.state.darkMode ? '#5c5c5c' : 'white'
         }}
       >
-        {!this.state.showMenu && (
+        <Fade
+          in={!this.state.showMenu}
+          className="article-view-bar"
+          style={{ top: '50vh' }}
+        >
           <Button
-            className="article-view-bar"
-            style={{ top: '50vh' }}
             onClick={() => this.setState({ showMenu: !this.state.showMenu })}
           >
             <Icon name="universal-access" />
           </Button>
-        )}
+        </Fade>
         <ArticleViewBar
           showMenu={this.state.showMenu}
           article={article}

@@ -30,7 +30,6 @@
     "jest": "^22.2.1",
     "jshashes": "^1.0.7",
     "localforage": "^1.5.6",
-    "lodash.debounce": "^4.0.8",
     "node-sass-chokidar": "^0.0.3",
     "react": "16.2",
     "react-chartjs-2": "^2.6.4",
