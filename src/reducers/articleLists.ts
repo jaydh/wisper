@@ -42,7 +42,7 @@ function setArticleListView(
 
 const articleLists = createReducer(
   {
-    sort: 'percent',
+    sort: 'date',
     visibilityFilter: 'Active',
     projectFilter: 'All Projects',
     view: 'full',

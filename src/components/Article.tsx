@@ -9,8 +9,8 @@ import ArticleMenu from '../containers/ArticleMenu';
 import {
   Button,
   Card,
+  CardHeader,
   CardTitle,
-  CardSubtitle,
   CardBody,
   Collapse,
   ListGroupItem,
@@ -83,6 +83,7 @@ class Article extends React.Component<Props, State> {
                 <Col xs={4} sm={4} md={2} lg={2}>
                   <img
                     className="img-fluid img-thumbnail"
+                    style={{ height: '5rem' }}
                     onTouchEnd={() =>
                       this.setState({
                         isMenuOpen: !this.state.isMenuOpen
@@ -109,7 +110,11 @@ class Article extends React.Component<Props, State> {
                     backgroundColor: '#CEE0DC'
                   }}
                 >
-                  <CardTitle>
+                  <CardHeader
+                    onClick={() =>
+                      this.setState({ showCollapse: !this.state.showCollapse })
+                    }
+                  >
                     <Row>
                       <Col xs={9} sm={9} md={9} lg={9}>
                         <Button
@@ -140,20 +145,21 @@ class Article extends React.Component<Props, State> {
                         </Col>
                       )}
                     </Row>
-                  </CardTitle>
+                  </CardHeader>
                   <Collapse isOpen={this.state.showCollapse}>
-                    <CardSubtitle>
-                      {hasSiteName
-                        ? article.metadata.get('siteName') ||
-                          article.metadata.get('ogSiteName')
-                        : ''}
-                      {hasSiteName && hasDescription ? ' - ' : ''}
-                      {hasDescription
-                        ? article.metadata.get('ogDescrption') ||
-                          article.metadata.get('description')
-                        : ''}
-                    </CardSubtitle>
+                    {' '}
                     <CardBody>
+                      <CardTitle>
+                        {hasSiteName
+                          ? article.metadata.get('siteName') ||
+                            article.metadata.get('ogSiteName')
+                          : ''}
+                        {hasSiteName && hasDescription ? ' - ' : ''}
+                        {hasDescription
+                          ? article.metadata.get('ogDescrption') ||
+                            article.metadata.get('description')
+                          : ''}
+                      </CardTitle>
                       {article.dateAdded ? (
                         <small>
                           Date added: {article.dateAdded.toLocaleDateString()}{' '}

@@ -9,5 +9,5 @@ export default function addArticleToProject(
     '/userData/' + user + '/' + 'articles/' + articleID + '/progress'
   );
 
-  return ref.set(percent);
+  return !isNaN(percent) ? ref.set(percent) : null;
 }
