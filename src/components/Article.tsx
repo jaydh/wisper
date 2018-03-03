@@ -7,6 +7,7 @@ import AddArticleToProject from '../containers/actionDispatchers/AddArticleToPro
 import setUIView from '../actions/ui/setUIView';
 import ArticleMenu from '../containers/ArticleMenu';
 import {
+  Fade,
   Button,
   Card,
   CardHeader,
@@ -73,6 +74,9 @@ class Article extends React.Component<Props, State> {
       <ListGroupItem
         onMouseEnter={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
+        onClick={() =>
+          this.setState({ showCollapse: !this.state.showCollapse })
+        }
         color={article.completed ? 'success' : 'primary'}
         style={{ backgroundColor: '#4A6670' }}
       >
@@ -110,13 +114,9 @@ class Article extends React.Component<Props, State> {
                     backgroundColor: '#CEE0DC'
                   }}
                 >
-                  <CardHeader
-                    onClick={() =>
-                      this.setState({ showCollapse: !this.state.showCollapse })
-                    }
-                  >
+                  <CardHeader>
                     <Row>
-                      <Col xs={9} sm={9} md={9} lg={9}>
+                      <Col xs={12} sm={7} md={10} lg={10}>
                         <Button
                           color="link"
                           onClick={() => {
@@ -136,14 +136,19 @@ class Article extends React.Component<Props, State> {
                             : article.link}
                         </Button>
                       </Col>
-                      {this.state.isMenuOpen && (
-                        <Col xs={3} sm={3} md={3} lg={3}>
+                      <Col
+                        xs={{ size: 8, offset: 4 }}
+                        sm={{ size: 5, offset: 7 }}
+                        md={2}
+                        lg={2}
+                      >
+                        <Fade in={this.state.isMenuOpen}>
                           <ArticleMenu
                             article={article}
                             collapseHandler={this.toggleCollapse}
                           />
-                        </Col>
-                      )}
+                        </Fade>
+                      </Col>
                     </Row>
                   </CardHeader>
                   <Collapse isOpen={this.state.showCollapse}>
