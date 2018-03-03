@@ -44,7 +44,11 @@ class ArticleView extends React.Component<Props, State> {
 
   componentDidMount() {
     const { article } = this.props;
-    document.title = 'wispy - ' + article.metadata.get('title');
+    document.title = `wispy - ${
+      article.metadata.has('title')
+        ? article.metadata.get('title')
+        : article.link
+    }`;
     // Div page is classname produced from Readability parsing
     // Find all nodes in page with textContent
     this.setState(
