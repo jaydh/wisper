@@ -94,12 +94,12 @@ class ArticleView extends React.Component<Props, State> {
     const elements = this.state.articleNodeList;
     const target = Array.from(elements).find(
       (el: any) =>
-        el.textContent.replace(/\s/g, '') === this.props.article.bookmark
+        el.textContent.replace(/\s/g, '').substr(0, 20) ===
+        this.props.article.bookmark
     ) as any;
     if (target) {
       window.removeEventListener('scroll', this.progressScrollHandler);
       target.scrollIntoView(true);
-      this.setState({ showMenu: false });
       window.addEventListener('scroll', this.progressScrollHandler);
     }
   }
@@ -121,7 +121,7 @@ class ArticleView extends React.Component<Props, State> {
       ) {
         updateBookmark(
           this.props.article.id,
-          element.textContent.replace(/\s/g, '')
+          element.textContent.replace(/\s/g, '').substr(0, 20)
         );
         break;
       }
