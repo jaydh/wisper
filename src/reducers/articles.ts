@@ -137,7 +137,12 @@ function updateMetadata(
   action: UpdateMetadata
 ) {
   return articleState.map((t: articleType) => {
-    return t.id === action.id ? { ...t, metadata: fromJS(action.value) } : t;
+    return t.id === action.id
+      ? {
+          ...t,
+          metadata: action.value ? fromJS(action.value) : Map<string, any>()
+        }
+      : t;
   });
 }
 
