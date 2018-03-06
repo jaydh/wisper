@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import * as React from 'react';
 import { setVisibilityFilter } from '../../actions/ui/visibilityFilter';
+import { pullCompletedArticles } from '../../actions/syncWithFirebase';
 import {
   ButtonDropdown,
   DropdownMenu,
@@ -10,6 +11,7 @@ import {
 
 interface Props {
   onClick: (t: string) => void;
+  fetchCompleted: () => void;
   currentActive: string;
 }
 interface State {
@@ -33,7 +35,15 @@ class ActiveSelector extends React.Component<Props, State> {
         <DropdownToggle caret={true}>{currentActive}</DropdownToggle>
         <DropdownMenu>
           {options.map((t: string) => (
-            <DropdownItem key={'activeSelector' + t} onClick={() => onClick(t)}>
+            <DropdownItem
+              key={'activeSelector' + t}
+              onClick={() => {
+                onClick(t);
+                if (t === 'Completed') {
+                  this.props.fetchCompleted();
+                }
+              }}
+            >
               {t}
             </DropdownItem>
           ))}
@@ -53,7 +63,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onClick: (filter: string) => {
       dispatch(setVisibilityFilter(filter));
-    }
+    },
+    fetchCompleted: () => dispatch(pullCompletedArticles())
   };
 };
 

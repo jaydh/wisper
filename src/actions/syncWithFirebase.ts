@@ -158,7 +158,6 @@ function addFetchedDailies(dailies: any) {
     dailies
   };
 }
-
 export function pullFromFirebase() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
@@ -166,6 +165,7 @@ export function pullFromFirebase() {
   const currentArticleRef = database.ref(
     '/userData/' + user + '/currentArticle'
   );
+
   return async (dispatch: Dispatch<any>) => {
     dispatch(fetchingDailiesRequested());
     dispatch(fetchingArticlesRequested());
@@ -188,6 +188,8 @@ export function pullFromFirebase() {
             dispatch(fetchingDailiesCompleted());
           }),
           articleRef
+            .orderByChild('completed')
+            .equalTo(false)
             .once('value')
             .then(function(snap: any) {
               let articles = snap.val();
@@ -216,9 +218,40 @@ export function pullFromFirebase() {
   };
 }
 
+export function pullCompletedArticles() {
+  const user = auth().currentUser.uid;
+  const articleRef = database.ref('/userData/' + user + '/articles/');
+
+  return async (dispatch: Dispatch<any>) =>
+    articleRef
+      .orderByChild('completed')
+      .equalTo(true)
+      .once('value')
+      .then(function(snap: any) {
+        let articles = snap.val();
+        let promises: any = [];
+        for (const key in articles) {
+          if (key) {
+            promises.push(
+              database
+                .ref(`/articleData/${key}/metadata`)
+                .once('value')
+                .then((snapIn: any) => {
+                  articles[key].metadata = snapIn.val();
+                  return articles[key];
+                })
+            );
+          }
+        }
+        return Promise.all(promises);
+      })
+      .then((articles: any) => dispatch(addFetchedArticles(articles)));
+}
+
 export function ListenForDailyUpdates() {
   const user = auth().currentUser.uid;
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
+
   return (dispatch: Dispatch<any>) => {
     dailyRef.on('child_changed', function(snapshot: any) {
       dispatch(updateDaily(snapshot.val()));
@@ -229,6 +262,7 @@ export function ListenForDailyUpdates() {
 export function ListenForArticleUpdates() {
   const user = auth().currentUser.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
+
   return (dispatch: Dispatch<any>) => {
     articleRef.on('child_changed', function(snap: any) {
       let article = snap.val();
@@ -248,9 +282,10 @@ export function ListenForArticleUpdates() {
 
 export function ListenToFirebase() {
   const user = auth().currentUser.uid;
-  const dailyRef = database.ref('/userData/' + user + '/dailies/');
-  const projectRef = database.ref('/userData/' + user + '/projects/');
   const articleRef = database.ref('/userData/' + user + '/articles/');
+  const dailyRef = database.ref('/userData/' + user + '/dailies/');
+  const projectRef = database.ref('userData/' + user + '/projects');
+
   return (dispatch: Dispatch<any>) => {
     dispatch(ListenForDailyUpdates());
     dispatch(ListenForArticleUpdates());
@@ -264,17 +299,20 @@ export function ListenToFirebase() {
     projectRef.on('child_removed', function(snapshot: any) {
       dispatch(deleteProject(snapshot.val()));
     });
-    articleRef.on('child_added', function(snap: any) {
-      let article = snap.val();
-      const id = article.id;
-      database
-        .ref(`/articleData/${id}/metadata`)
-        .once('value')
-        .then((snapIn: any) => {
-          article.metadata = snapIn.val();
-          dispatch(addArticleFromServer(article));
-        });
-    });
+    articleRef
+      .orderByChild('completed')
+      .equalTo(false)
+      .on('child_added', function(snap: any) {
+        let article = snap.val();
+        const id = article.id;
+        database
+          .ref(`/articleData/${id}/metadata`)
+          .once('value')
+          .then((snapIn: any) => {
+            article.metadata = snapIn.val();
+            dispatch(addArticleFromServer(article));
+          });
+      });
     articleRef.on('child_removed', function(snap: any) {
       dispatch(deleteArticleFromServer(snap.val()));
     });

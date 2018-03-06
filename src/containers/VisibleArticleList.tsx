@@ -248,7 +248,7 @@ function mapStateToProps(state: any, ownProps: any) {
 
   return {
     articles: final,
-    articlesInActivity,
+    articlesInActivity
   };
 }
 
