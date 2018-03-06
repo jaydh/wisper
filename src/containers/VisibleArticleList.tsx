@@ -249,9 +249,6 @@ function mapStateToProps(state: any, ownProps: any) {
   return {
     articles: final,
     articlesInActivity,
-    sort: articleList.sort,
-    projectFilter: articleList.projectFilter,
-    articleListView: articleList.view
   };
 }
 

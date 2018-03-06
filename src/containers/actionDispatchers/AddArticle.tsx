@@ -175,9 +175,10 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-const mapStateToProps = (state: any, ownProps: { projectFilter: string }) => {
+const mapStateToProps = (state: any) => {
   return {
-    projects: state.get('projects')
+    projects: state.get('projects'),
+    projectFilter: state.get('articleLists').projectFilter
   };
 };
 

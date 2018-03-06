@@ -32,7 +32,6 @@ class ArticleList extends React.Component<Props> {
   render() {
     const {
       articles,
-      projectFilter,
       articlesInActivity,
       articleListView
     } = this.props;
@@ -42,7 +41,7 @@ class ArticleList extends React.Component<Props> {
         <div style={{ marginTop: '3em' }} />
         <Row>
           <Col xs={12} sm={12} md={12} lg={12}>
-            <AddArticle projectFilter={projectFilter} />
+            <AddArticle />
           </Col>
         </Row>
         <Row>

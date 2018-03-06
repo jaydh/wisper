@@ -12,7 +12,7 @@ function setVisibilityFilter(
   articleListState: ArticleList,
   action: SetVisbilityFilter
 ) {
-  return { ...articleListState, visibilityfilter: action.filter };
+  return { ...articleListState, visibilityFilter: action.filter };
 }
 
 function setProjectFilter(
