@@ -38,8 +38,12 @@ class ArticleView extends React.Component<Props, State> {
       2000
     );
     this.menuScrollHandler = this.menuScrollHandler.bind(this);
-    this.scrollToBookmark = debounce(this.scrollToBookmark.bind(this));
+    this.progressScrollHandler = debounce(
+      this.progressScrollHandler.bind(this)
+    );
     this.toggleDarkMode = this.toggleDarkMode.bind(this);
+    this.getBookmark = this.getBookmark.bind(this);
+    this.getScrollPercent = this.getScrollPercent.bind(this);
   }
 
   componentDidMount() {
@@ -54,16 +58,18 @@ class ArticleView extends React.Component<Props, State> {
     this.setState(
       {
         articleNodeList: Array.from(
-          document.querySelectorAll('div.page p')
+          document.querySelectorAll('div.page *')
         ).filter(el => el.textContent)
       },
       () => this.scrollToBookmark()
     );
     let isScrolling: any;
-    window.addEventListener('scroll', this.progressScrollHandler);
+    window.addEventListener('scroll', this.menuScrollHandler);
+
+    // Only fires at end of scroll event
     window.addEventListener('scroll', () => {
       window.clearTimeout(isScrolling);
-      isScrolling = setTimeout(this.menuScrollHandler, 66);
+      isScrolling = setTimeout(this.progressScrollHandler, 66);
     });
     window.addEventListener('resize', this.scrollToBookmark);
   }
@@ -79,7 +85,7 @@ class ArticleView extends React.Component<Props, State> {
       this.setState(
         {
           articleNodeList: Array.from(
-            document.querySelectorAll('div.page p')
+            document.querySelectorAll('div.page *')
           ).filter(el => el.textContent)
         },
         () => this.scrollToBookmark()
@@ -93,9 +99,7 @@ class ArticleView extends React.Component<Props, State> {
   scrollToBookmark() {
     const elements = this.state.articleNodeList;
     const target = Array.from(elements).find(
-      (el: any) =>
-        el.textContent.replace(/\s/g, '').substr(0, 20) ===
-        this.props.article.bookmark
+      (el: any) => el.textContent.substr(0, 20) === this.props.article.bookmark
     ) as any;
     if (target) {
       window.removeEventListener('scroll', this.progressScrollHandler);
@@ -117,11 +121,12 @@ class ArticleView extends React.Component<Props, State> {
         rect.right <=
           (window.innerWidth || document.documentElement.clientWidth) &&
         element.textContent !== this.props.article.bookmark &&
-        element.textContent.replace(/\s/g, '') !== ''
+        element.textContent !== ''
       ) {
+        // User previous element unless first element
         updateBookmark(
           this.props.article.id,
-          element.textContent.replace(/\s/g, '').substr(0, 20)
+          elements[i > 0 ? i - 1 : i].textContent.substr(0, 20)
         );
         break;
       }
