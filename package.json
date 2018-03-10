@@ -48,6 +48,7 @@
     "redux-immutable": "^4.0.0",
     "redux-persist": "^5.3.0-rc.2",
     "redux-persist-immutable": "^4.3.0",
+    "redux-persist-transform-immutable": "^5.0.0",
     "redux-thunk": "^2.2.0",
     "source-map-explorer": "^1.4.0",
     "ts-jest": "^22.0.3",
