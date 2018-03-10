@@ -23,7 +23,7 @@ function ToggleArticleReadRejected(): ToggleArticleReadRejected {
 }
 
 export function toggleArticleRead(articleHash: string) {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   return (dispatch: Dispatch<any>) => {
     dispatch(ToggleArticleReadRequested());
 

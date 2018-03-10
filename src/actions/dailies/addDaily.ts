@@ -43,11 +43,10 @@ function AddDailyFulfilled(title: string): AddDailyFulfilled {
 }
 
 export default function addDaily(daily: string) {
-  const user = auth().currentUser.uid;
-
   return async (dispatch: Dispatch<any>) => {
     dispatch(AddDailyRequested());
 
+    const user = auth()!.currentUser!.uid;
     const hash: string = SHA1.hex(daily);
     const dailyRef = database.ref('/userData/' + user + '/dailies/' + hash);
     const set: Daily = {
@@ -58,7 +57,6 @@ export default function addDaily(daily: string) {
       finalized: false,
       streakCount: 0
     };
-    dailyRef.parent.off();
 
     return dailyRef
       .once('value')

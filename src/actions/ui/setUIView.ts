@@ -14,7 +14,7 @@ export function setUIViewSuccess(view: string): SetUIView {
 }
 
 export default function setUIView(view: string) {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   const ref = database.ref('/userData/' + user + '/uiView');
 
   return async (dispatch: Dispatch<any>) =>

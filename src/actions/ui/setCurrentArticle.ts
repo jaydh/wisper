@@ -31,7 +31,7 @@ export function setCurrentArticleFromServer(id: string) {
 }
 
 export default function SetCurrentArticle(id?: string) {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   const ref = database.ref('/userData/' + user + '/currentArticle');
 
   return async (dispatch: Dispatch<any>) =>

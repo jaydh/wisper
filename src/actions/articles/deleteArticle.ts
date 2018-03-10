@@ -35,7 +35,7 @@ export function deleteArticle(id: string) {
   return (dispatch: Dispatch<any>) => {
     dispatch(deleteArticleRequested());
 
-    const user = auth().currentUser.uid;
+    const user = auth()!.currentUser!.uid;
     const articleRef = database.ref(
       '/userData/' + user + '/' + 'articles/' + id
     );

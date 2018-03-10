@@ -23,7 +23,7 @@ function ArticleViewedRejected(): ArticleViewedRejected {
 }
 
 export default function articleViewed(id: string) {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   return (dispatch: Dispatch<any>) => {
     dispatch(ArticleViewedRequested());
 

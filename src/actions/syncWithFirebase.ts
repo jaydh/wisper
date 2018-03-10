@@ -159,7 +159,7 @@ function addFetchedDailies(dailies: any) {
   };
 }
 export function pullFromFirebase() {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
   const currentArticleRef = database.ref(
@@ -174,12 +174,10 @@ export function pullFromFirebase() {
       .then((snap: any) => {
         const articleId = snap.val();
         dispatch(setCurrentArticleFromServer(articleId));
-        return articleId
-          ? database
-              .ref(`/articleData/${articleId}/HTMLContent`)
-              .once('value')
-              .then((snapIn: any) => dispatch(setCurrentHTML(snapIn.val())))
-          : null;
+        return database
+          .ref(`/articleData/${articleId}/HTMLContent`)
+          .once('value')
+          .then((snapIn: any) => dispatch(setCurrentHTML(snapIn.val())));
       })
       .then(() =>
         Promise.all([
@@ -219,7 +217,7 @@ export function pullFromFirebase() {
 }
 
 export function pullCompletedArticles() {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
 
   return async (dispatch: Dispatch<any>) =>
@@ -249,7 +247,7 @@ export function pullCompletedArticles() {
 }
 
 export function ListenForDailyUpdates() {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
 
   return (dispatch: Dispatch<any>) => {
@@ -260,7 +258,7 @@ export function ListenForDailyUpdates() {
 }
 
 export function ListenForArticleUpdates() {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
 
   return (dispatch: Dispatch<any>) => {
@@ -281,7 +279,7 @@ export function ListenForArticleUpdates() {
 }
 
 export function ListenToFirebase() {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   const articleRef = database.ref('/userData/' + user + '/articles/');
   const dailyRef = database.ref('/userData/' + user + '/dailies/');
   const projectRef = database.ref('userData/' + user + '/projects');

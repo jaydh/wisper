@@ -23,7 +23,7 @@ function finalizeDailyRejected(): FinalizeDailyRejected {
 }
 
 export default function finalizeDaily(id: string) {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   return async (dispatch: Dispatch<any>, getState: Function) => {
     const dailyRef = database.ref(
       '/userData/' + user + '/dailies/' + id + '/finalized'

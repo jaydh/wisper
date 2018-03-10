@@ -40,7 +40,7 @@ export default function addArticleToProject(
   articleID: string,
   project: string
 ) {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   return (dispatch: Dispatch<any>) => {
     dispatch(AddArticleToProjectRequested());
 
@@ -50,15 +50,9 @@ export default function addArticleToProject(
     const projects = database.ref('/userData/' + user + '/projects/');
 
     return Promise.all([
-      projectRef
-        .push(project)
-        .then(() => {
-          dispatch(AddArticleToProjectFulfilled(articleID, project));
-        })
-        .catch((error: string) => {
-          console.log(error);
-          dispatch(AddArticleToProjectRejected());
-        }),
+      projectRef.push(project).then(() => {
+        dispatch(AddArticleToProjectFulfilled(articleID, project));
+      }),
       projects.once('value').then(function(snapshot: any) {
         const articleProjects = snapshot.val()
           ? fromJS(snapshot.val())

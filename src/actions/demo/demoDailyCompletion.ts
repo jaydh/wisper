@@ -50,7 +50,7 @@ function DemoDailyCompletionBatch(
 }
 
 export default function demoDailyCompletion(ids: List<string>) {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   return async (dispatch: Dispatch<any>, getState: Function) => {
     dispatch(DemoDailyBatchCompletionsRequested());
 
@@ -67,8 +67,6 @@ export default function demoDailyCompletion(ids: List<string>) {
             Math.floor(Math.random() < 0.1 * (key + 1) ? j++ : (j = j));
           }
 
-          // Turn off listener for changes in dailes on server
-          dailyRef.parent.parent.off('child_changed');
           dailyRef.set(completedOn.map((t: Date) => t.getTime()).toJS());
           dispatch(DemoDailyCompletionBatch(id, completedOn));
         })

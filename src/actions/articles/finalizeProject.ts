@@ -32,7 +32,7 @@ function DeleteProjectRejected(): DeleteProjectRejected {
   };
 }
 export default function deleteProject(project: string) {
-  const user = auth().currentUser.uid;
+  const user = auth()!.currentUser!.uid;
   return (dispatch: Dispatch<any>) => {
     dispatch(DeleteProjectRequested());
     const projectsRef = database.ref('/userData/' + user + '/projects/');

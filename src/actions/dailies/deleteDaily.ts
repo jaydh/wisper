@@ -35,7 +35,7 @@ export default function deleteDaily(id: string) {
   return (dispatch: Dispatch<any>) => {
     dispatch(deleteArticleRequested());
 
-    const user = auth().currentUser.uid;
+    const user = auth()!.currentUser!.uid;
     const dailyRef = database.ref(
       '/userData/' + user + '/' + 'dailies/' + id
     );

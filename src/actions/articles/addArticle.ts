@@ -53,46 +53,43 @@ function AddArticleFulfilled(
 }
 
 export default function addArticle(articleLink: string, project?: string) {
-  const user = auth().currentUser.uid;
-  const now = new Date();
-
   return async (dispatch: Dispatch<any>) => {
+    const user = auth()!.currentUser!.uid;
+    const now = new Date();
+
     dispatch(AddArticleRequested());
 
     const hash = SHA1.hex(articleLink);
     const articleRef = database.ref(
       '/userData/' + user + '/' + 'articles/' + hash
     );
-    return articleRef.once('value').then(
-      (snapshot: any) =>
-        snapshot.exists()
-          ? dispatch(AddArticleRejected)
-          : articleRef
-              .set({
-                link: articleLink,
-                id: hash,
-                dateAdded: now.toLocaleString(),
-                completed: false
-              })
-              .then(() => {
-                if (project) {
-                  dispatch(AddArticleToProject(hash, project));
-                }
-                database
-                  .ref(`/articleData/${hash}/metadata/`)
-                  .on('value', (event: any) =>
-                    dispatch(updateMetadata(hash, event.val()))
-                  );
-                database
-                  .ref(`articleData/${hash}/fetching`)
-                  .on('value', (event: any) =>
-                    dispatch(updateFetching(hash, event.val()))
-                  );
-              })
-              .catch((error: string) => {
-                console.log(error);
-                dispatch(AddArticleRejected());
-              })
+    return articleRef.once('value').then((snapshot: any) =>
+      articleRef
+        .set({
+          link: articleLink,
+          id: hash,
+          dateAdded: now.toLocaleString(),
+          completed: false
+        })
+        .then(() => {
+          if (project) {
+            dispatch(AddArticleToProject(hash, project));
+          }
+          database
+            .ref(`/articleData/${hash}/metadata/`)
+            .on('value', (event: any) =>
+              dispatch(updateMetadata(hash, event.val()))
+            );
+          database
+            .ref(`articleData/${hash}/fetching`)
+            .on('value', (event: any) =>
+              dispatch(updateFetching(hash, event.val()))
+            );
+        })
+        .catch((error: string) => {
+          console.log(error);
+          dispatch(AddArticleRejected());
+        })
     );
   };
 }

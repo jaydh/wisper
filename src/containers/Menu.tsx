@@ -26,7 +26,7 @@ interface Props {
   incompleteDailiesNum: number;
 }
 interface OwnProps {
-  user: string;
+  user: any;
 }
 interface State {
   isOpen: boolean;
@@ -85,9 +85,7 @@ class Menu extends React.Component<Props, State> {
               </NavLink>
             </NavItem>
             <UncontrolledDropdown nav={true}>
-              <DropdownToggle caret={true}>
-                {this.props.user ? this.props.user : 'Demo'}
-              </DropdownToggle>
+              <DropdownToggle caret={true}>{this.props.user}</DropdownToggle>
               <DropdownMenu>
                 <DropdownItem
                   onClick={() => {
