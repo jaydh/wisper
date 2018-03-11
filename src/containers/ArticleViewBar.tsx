@@ -26,6 +26,7 @@ interface Props {
   onSetFontSize: (size: number) => void;
   fontSize: number;
   darkModeToggler: () => void;
+  showMenuToggler: () => void;
 }
 
 interface State {
@@ -107,6 +108,9 @@ class ArticleViewBar extends React.Component<Props, State> {
                   <Icon name="adjust" />
                 </Button>
                 <ArticleMenu article={article} />
+                <Button onClick={() => this.props.showMenuToggler()}>
+                  <Icon name="universal-access" />
+                </Button>
               </ButtonGroup>
             </NavItem>
           </Nav>

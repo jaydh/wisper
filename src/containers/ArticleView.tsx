@@ -42,6 +42,7 @@ class ArticleView extends React.Component<Props, State> {
       this.progressScrollHandler.bind(this)
     );
     this.toggleDarkMode = this.toggleDarkMode.bind(this);
+    this.toggleShowMenu = this.toggleShowMenu.bind(this);
     this.getBookmark = this.getBookmark.bind(this);
     this.getScrollPercent = this.getScrollPercent.bind(this);
   }
@@ -167,6 +168,9 @@ class ArticleView extends React.Component<Props, State> {
       darkMode: !this.state.darkMode
     });
   }
+  toggleShowMenu() {
+    this.setState({ showMenu: !this.state.showMenu });
+  }
 
   render() {
     const { article, HTMLContent } = this.props;
@@ -181,9 +185,7 @@ class ArticleView extends React.Component<Props, State> {
           className="article-view-bar"
           style={{ top: '50vh' }}
         >
-          <Button
-            onClick={() => this.setState({ showMenu: !this.state.showMenu })}
-          >
+          <Button onClick={() => this.toggleShowMenu()}>
             <Icon name="universal-access" />
           </Button>
         </Fade>
@@ -191,6 +193,7 @@ class ArticleView extends React.Component<Props, State> {
           showMenu={this.state.showMenu}
           article={article}
           darkModeToggler={this.toggleDarkMode}
+          showMenuToggler={this.toggleShowMenu}
         />
         <Jumbotron
           style={{
