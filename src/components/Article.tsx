@@ -74,9 +74,6 @@ class Article extends React.Component<Props, State> {
       <ListGroupItem
         onMouseEnter={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        onClick={() =>
-          this.setState({ showCollapse: !this.state.showCollapse })
-        }
         color={article.completed ? 'success' : 'primary'}
         style={{ backgroundColor: '#4A6670' }}
       >
@@ -114,7 +111,11 @@ class Article extends React.Component<Props, State> {
                     backgroundColor: '#CEE0DC'
                   }}
                 >
-                  <CardHeader>
+                  <CardHeader
+                    onClick={() =>
+                      this.setState({ showCollapse: !this.state.showCollapse })
+                    }
+                  >
                     <Row>
                       <Col xs={12} sm={7} md={10} lg={10}>
                         <Button
