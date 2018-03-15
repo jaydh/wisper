@@ -79,7 +79,7 @@ function deleteArticle(
 function updateArticle(articleState: List<articleType>, action: UpdateArticle) {
   return articleState.map((article: articleType) => {
     return article && article.id === action.article.id
-      ? processArticle(action.article)
+      ? processArticle(Object.assign({}, article, action.article))
       : article;
   });
 }
@@ -125,7 +125,10 @@ function addFetchedArticles(articleState: List<articleType>, action: any) {
         (v: articleType) => article.id === v.id
       );
       newArticleState = entry
-        ? newArticleState.set(entry[0], processArticle(article))
+        ? newArticleState.set(
+            entry[0],
+            processArticle(Object.assign({}, entry[1], article))
+          )
         : newArticleState.push(processArticle(article));
     }
   }
@@ -141,6 +144,17 @@ function updateMetadata(
       ? {
           ...t,
           metadata: action.value ? fromJS(action.value) : Map<string, any>()
+        }
+      : t;
+  });
+}
+
+function updateHTML(articleState: List<articleType>, action: UpdateMetadata) {
+  return articleState.map((t: articleType) => {
+    return t.id === action.id
+      ? {
+          ...t,
+          HTMLContent: action.value
         }
       : t;
   });
@@ -163,7 +177,8 @@ const articles = createReducer(List(), {
   DELETE_ARTICLE_FROM_SERVER: deleteArticleFromServer,
   ADD_FETCHED_ARTICLES: addFetchedArticles,
   UPDATE_METADATA: updateMetadata,
-  UPDATE_FETCHING: updateFetching
+  UPDATE_FETCHING: updateFetching,
+  UPDATE_HTML: updateHTML
 });
 
 export default articles;
