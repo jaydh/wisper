@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { toggleArticleRead } from '../../actions/articles/toggleArticleRead';
-import setCurrentArticle, {
-  setCurrentHTML
-} from '../../actions/ui/setCurrentArticle';
+import setCurrentArticle from '../../actions/ui/setCurrentArticle';
 import setUIView from '../../actions/ui/setUIView';
 import { Button } from 'reactstrap';
 import { Icon } from 'react-fa';
@@ -45,7 +43,6 @@ const mapDispatchToProps = (dispatch: any, ownProps: any) => {
       // Reset article viewer if toggled from bar
       if (toBeCompleted) {
         dispatch(setCurrentArticle());
-        dispatch(setCurrentHTML());
       }
       dispatch(setUIView);
     }
