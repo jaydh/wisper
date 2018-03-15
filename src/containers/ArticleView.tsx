@@ -5,23 +5,25 @@ import { Jumbotron, Fade, Button } from 'reactstrap';
 import ReactHTMLParser from 'react-html-parser';
 import updateBookmark from '../actions/articles/updateBookmark';
 import updateProgress from '../actions/articles/updateProgress';
+import updateHTML from '../actions/articles/updateHTML';
 import ArticleViewBar from './ArticleViewBar';
 import { Icon } from 'react-fa';
 const debounce = require('lodash.debounce');
 
 interface Props {
+  id: string;
   article: ArticleType;
-  HTMLContent: string;
   fontSize: number;
+  getHTML: () => void;
 }
 
 interface State {
   scrollPosition: number;
   showMenu: boolean;
   articleNodeList: any;
-  fontSize: number;
   darkMode: boolean;
 }
+let isScrolling: any;
 
 class ArticleView extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -30,7 +32,6 @@ class ArticleView extends React.Component<Props, State> {
       scrollPosition: window.scrollY,
       showMenu: true,
       articleNodeList: null,
-      fontSize: 1.0,
       darkMode: false
     };
     this.progressScrollHandler = debounce(
@@ -39,12 +40,20 @@ class ArticleView extends React.Component<Props, State> {
     );
     this.menuScrollHandler = this.menuScrollHandler.bind(this);
     this.progressScrollHandler = debounce(
-      this.progressScrollHandler.bind(this)
+      this.progressScrollHandler.bind(this),
+      200
     );
     this.toggleDarkMode = this.toggleDarkMode.bind(this);
     this.toggleShowMenu = this.toggleShowMenu.bind(this);
     this.getBookmark = this.getBookmark.bind(this);
     this.getScrollPercent = this.getScrollPercent.bind(this);
+    this.scrollToBookmark = this.scrollToBookmark.bind(this);
+  }
+
+  componentWillMount() {
+    if (!this.props.article.HTMLContent) {
+      this.props.getHTML();
+    }
   }
 
   componentDidMount() {
@@ -59,30 +68,40 @@ class ArticleView extends React.Component<Props, State> {
     this.setState(
       {
         articleNodeList: Array.from(
-          document.querySelectorAll('div.page *')
+          document.querySelectorAll('div.page p')
         ).filter(el => el.textContent)
       },
-      () => this.scrollToBookmark()
+      () => {
+        this.scrollToBookmark();
+        window.addEventListener('scroll', this.menuScrollHandler);
+        window.addEventListener('scroll', this.progressScrollHandler);
+        window.addEventListener('resize', this.scrollToBookmark);
+      }
     );
-    let isScrolling: any;
-    window.addEventListener('scroll', this.menuScrollHandler);
-
-    // Only fires at end of scroll event
-    window.addEventListener('scroll', () => {
-      window.clearTimeout(isScrolling);
-      isScrolling = setTimeout(this.progressScrollHandler, 66);
-    });
-    window.addEventListener('resize', this.scrollToBookmark);
   }
 
   componentWillUnmount() {
+    window.clearTimeout(isScrolling);
     window.removeEventListener('scroll', this.menuScrollHandler);
     window.removeEventListener('scroll', this.progressScrollHandler);
     window.removeEventListener('resize', this.scrollToBookmark);
   }
 
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    // Ignore scroll changes and bookmark changes
+    if (
+      this.props.article.HTMLContent !== nextProps.article.HTMLContent ||
+      this.props.fontSize !== nextProps.fontSize ||
+      this.state.showMenu !== nextState.showMenu ||
+      this.state.darkMode !== nextState.darkMode
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   componentDidUpdate(nextProps: Props) {
-    if (nextProps.HTMLContent !== this.props.HTMLContent) {
+    if (nextProps.article.HTMLContent !== this.props.article.HTMLContent) {
       this.setState(
         {
           articleNodeList: Array.from(
@@ -91,21 +110,19 @@ class ArticleView extends React.Component<Props, State> {
         },
         () => this.scrollToBookmark()
       );
-      if (nextProps.fontSize !== this.props.fontSize) {
-        this.scrollToBookmark();
-      }
+    }
+    if (nextProps.fontSize !== this.props.fontSize) {
+      this.scrollToBookmark();
     }
   }
 
   scrollToBookmark() {
     const elements = this.state.articleNodeList;
     const target = Array.from(elements).find(
-      (el: any) => el.textContent.substr(0, 20) === this.props.article.bookmark
+      (el: any) => el.textContent === this.props.article.bookmark
     ) as any;
     if (target) {
-      window.removeEventListener('scroll', this.progressScrollHandler);
       target.scrollIntoView(true);
-      window.addEventListener('scroll', this.progressScrollHandler);
     }
   }
 
@@ -127,7 +144,7 @@ class ArticleView extends React.Component<Props, State> {
         // User previous element unless first element
         updateBookmark(
           this.props.article.id,
-          elements[i > 0 ? i - 1 : i].textContent.substr(0, 20)
+          elements[i > 0 ? i - 1 : i].textContent
         );
         break;
       }
@@ -146,8 +163,14 @@ class ArticleView extends React.Component<Props, State> {
   }
 
   progressScrollHandler() {
-    this.getBookmark();
-    this.getScrollPercent();
+    if (this.state.articleNodeList) {
+      // Only fires at end of scroll event
+      window.clearTimeout(isScrolling);
+      isScrolling = setTimeout(() => {
+        this.getBookmark();
+        this.getScrollPercent();
+      }, 300);
+    }
   }
   menuScrollHandler() {
     if (window.scrollY < 20) {
@@ -171,9 +194,10 @@ class ArticleView extends React.Component<Props, State> {
   toggleShowMenu() {
     this.setState({ showMenu: !this.state.showMenu });
   }
-
   render() {
-    const { article, HTMLContent } = this.props;
+    const { article } = this.props;
+    const { HTMLContent } = article;
+    console.log(HTMLContent);
     return (
       <div
         style={{
@@ -251,14 +275,20 @@ class ArticleView extends React.Component<Props, State> {
     );
   }
 }
-const mapStateToProps = (state: any) => {
+
+const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+  return {
+    getHTML: () => dispatch(updateHTML(ownProps.id))
+  };
+};
+
+const mapStateToProps = (state: any, ownProps: any) => {
   return {
     article: state
       .get('articles')
-      .find((t: ArticleType) => t.id === state.get('ui').currentArticle),
-    HTMLContent: state.get('ui').currentHTML,
+      .find((t: ArticleType) => t.id === ownProps.id),
     fontSize: state.get('ui').articleViewFontSize
   };
 };
 
-export default connect(mapStateToProps)(ArticleView);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleView);

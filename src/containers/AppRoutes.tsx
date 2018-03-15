@@ -107,7 +107,7 @@ class AppRoutes extends React.Component<Props, State> {
                 return <UserPage />;
               case 'article':
                 return this.props.currentArticle ? (
-                  <ArticleView />
+                  <ArticleView id={this.props.currentArticle.id} />
                 ) : (
                   <VisibleArticleList id={'compactAL'} />
                 );
