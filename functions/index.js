@@ -36,41 +36,50 @@ exports.getMetadata = functions.database
                   ? new Promise(function(resolve, reject) {
                       scrape(article, (err, meta) => {
                         // Filters out null/undefined values
-                        const filteredMeta = fromJS(meta)
-                          .filter(t => t)
-                          .toJS();
-                        resolve(metaRef.set(filteredMeta));
+                        if (meta) {
+                          const filteredMeta = fromJS(meta)
+                            .filter(t => t)
+                            .toJS();
+                          resolve(metaRef.set(filteredMeta));
+                        }
                       });
                     })
                   : null
             ),
-          htmlRef.once('value', snapshot => snapshot.val() !== null).then(
-            exists =>
-              !exists
-                ? JSDOM.fromURL(article, {}).then(dom => {
-                    const loc = dom.window.location;
-                    var uri = {
-                      spec: loc.href,
-                      host: loc.host,
-                      prePath: loc.protocol + '//' + loc.host,
-                      scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
-                      pathBase:
-                        loc.protocol +
-                        '//' +
-                        loc.host +
-                        loc.pathname.substr(
+          htmlRef
+            .once('value', snapshot => {
+              return snapshot.val() === null;
+            })
+            .then(
+              newArticle =>
+                newArticle
+                  ? JSDOM.fromURL(article, {}).then(dom => {
+                      const loc = dom.window.location;
+                      var uri = {
+                        spec: loc.href,
+                        host: loc.host,
+                        prePath: loc.protocol + '//' + loc.host,
+                        scheme: loc.protocol.substr(
                           0,
-                          loc.pathname.lastIndexOf('/') + 1
-                        )
-                    };
-                    const article = new Readability(
-                      uri,
-                      dom.window.document
-                    ).parse();
-                    return article ? htmlRef.set(article.content) : null;
-                  })
-                : null
-          )
+                          loc.protocol.indexOf(':')
+                        ),
+                        pathBase:
+                          loc.protocol +
+                          '//' +
+                          loc.host +
+                          loc.pathname.substr(
+                            0,
+                            loc.pathname.lastIndexOf('/') + 1
+                          )
+                      };
+                      const parsed = new Readability(
+                        uri,
+                        dom.window.document
+                      ).parse();
+                      return htmlRef.set(article.content);
+                    })
+                  : null
+            )
         ])
       )
       .then(() => articleDataRef.child('fetching').set(false));
@@ -82,44 +91,45 @@ exports.refetchHTML = functions.database
     const articleDataRef = event.data.ref.parent;
     const htmlRef = articleDataRef.child('HTMLContent');
     const metaRef = articleDataRef.child('metadata');
-
     return articleDataRef
-      .child('fetching')
-      .set(true)
-      .then(() =>
-        articleDataRef.child('link').once('value', snapshot =>
-          Promise.all([
-            articleDataRef.child('link').set(snapshot.val()),
-            new Promise(function(resolve, reject) {
-              scrape(snapshot.val(), (err, meta) => {
-                // Filters out null/undefined values
+      .child('link')
+      .once('value')
+      .then(snapshot => {
+        const article = snapshot.val();
+        return Promise.all([
+          articleDataRef.child('fetching').set(true),
+          articleDataRef.child('fetching').set(true),
+          new Promise(function(resolve, reject) {
+            scrape(snapshot.val(), (err, meta) => {
+              // Filters out null/undefined values
+              if (meta) {
                 const filteredMeta = fromJS(meta)
                   .filter(t => t)
                   .toJS();
                 resolve(metaRef.set(filteredMeta));
-              });
-            }),
-            JSDOM.fromURL(snapshot.val(), {}).then(dom => {
-              const loc = dom.window.location;
-              var uri = {
-                spec: loc.href,
-                host: loc.host,
-                prePath: loc.protocol + '//' + loc.host,
-                scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
-                pathBase:
-                  loc.protocol +
-                  '//' +
-                  loc.host +
-                  loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
-              };
-              const article = new Readability(uri, dom.window.document).parse();
-              return article ? htmlRef.set(article.content) : null;
-            })
-          ])
-        )
-      )
-      .then(() => articleDataRef.child('refetch').remove())
-      .then(() => articleDataRef.child('fetching').set(false));
+              }
+            });
+          }),
+          JSDOM.fromURL(article, {}).then(dom => {
+            const loc = dom.window.location;
+            var uri = {
+              spec: loc.href,
+              host: loc.host,
+              prePath: loc.protocol + '//' + loc.host,
+              scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
+              pathBase:
+                loc.protocol +
+                '//' +
+                loc.host +
+                loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+            };
+            const parsed = new Readability(uri, dom.window.document).parse();
+            return htmlRef.set(parsed.content);
+          })
+        ])
+          .then(() => articleDataRef.child('refetch').remove())
+          .then(() => articleDataRef.child('fetching').set(false));
+      });
   });
 
 exports.addKeywordsFromMetadata = functions.database
