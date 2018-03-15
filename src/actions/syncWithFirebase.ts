@@ -5,10 +5,7 @@ import {
   Daily,
   Project
 } from '../constants/StoreState';
-import {
-  setCurrentArticleFromServer,
-  setCurrentHTML
-} from './ui/setCurrentArticle';
+import { setCurrentArticleFromServer } from './ui/setCurrentArticle';
 import updateMetadata from './articles/updateMetadata';
 import updateFetching from './articles/updateFetching';
 
@@ -169,50 +166,42 @@ export function pullFromFirebase() {
   return async (dispatch: Dispatch<any>) => {
     dispatch(fetchingDailiesRequested());
     dispatch(fetchingArticlesRequested());
-    return currentArticleRef
-      .once('value')
-      .then((snap: any) => {
-        const articleId = snap.val();
-        dispatch(setCurrentArticleFromServer(articleId));
-        return database
-          .ref(`/articleData/${articleId}/HTMLContent`)
-          .once('value')
-          .then((snapIn: any) => dispatch(setCurrentHTML(snapIn.val())));
-      })
-      .then(() =>
-        Promise.all([
-          dailyRef.once('value').then(function(snap: any) {
-            dispatch(addFetchedDailies(snap.val()));
-            dispatch(fetchingDailiesCompleted());
-          }),
-          articleRef
-            .orderByChild('completed')
-            .equalTo(false)
-            .once('value')
-            .then(function(snap: any) {
-              let articles = snap.val();
-              let promises: any = [];
-              for (const key in articles) {
-                if (key) {
-                  promises.push(
-                    database
-                      .ref(`/articleData/${key}/metadata`)
-                      .once('value')
-                      .then((snapIn: any) => {
-                        articles[key].metadata = snapIn.val();
-                        return articles[key];
-                      })
-                  );
-                }
-              }
-              return Promise.all(promises);
-            })
-            .then((articles: any) => {
-              dispatch(addFetchedArticles(articles));
-              dispatch(fetchingArticlesCompleted());
-            })
-        ])
-      );
+    return Promise.all([
+      dailyRef.once('value').then(function(snap: any) {
+        dispatch(addFetchedDailies(snap.val()));
+        dispatch(fetchingDailiesCompleted());
+      }),
+      articleRef
+        .orderByChild('completed')
+        .equalTo(false)
+        .once('value')
+        .then(function(snap: any) {
+          let articles = snap.val();
+          let promises: any = [];
+          for (const key in articles) {
+            if (key) {
+              promises.push(
+                database
+                  .ref(`/articleData/${key}/metadata`)
+                  .once('value')
+                  .then((snapIn: any) => {
+                    articles[key].metadata = snapIn.val();
+                    return articles[key];
+                  })
+              );
+            }
+          }
+          return Promise.all(promises);
+        })
+        .then((articles: any) => {
+          dispatch(addFetchedArticles(articles));
+          dispatch(fetchingArticlesCompleted());
+        })
+    ]).then(() =>
+      currentArticleRef
+        .once('value')
+        .then((snap: any) => dispatch(setCurrentArticleFromServer(snap.val())))
+    );
   };
 }
 

@@ -1,8 +1,5 @@
 import { SetUIView } from '../actions/ui/setUIView';
-import {
-  SetCurrentArticle,
-  SetCurrentHTML
-} from '../actions/ui/setCurrentArticle';
+import { SetCurrentArticle } from '../actions/ui/setCurrentArticle';
 import { startOfDay, endOfDay, subWeeks } from 'date-fns';
 import createReducer from './createReducer';
 
@@ -46,10 +43,6 @@ function setDailyGraphSpan(uiState: UIState, action: any): UIState {
   return { ...uiState, dailyGraphMin: action.min, dailyGraphMax: action.max };
 }
 
-function setCurrentHTML(uiState: UIState, action: SetCurrentHTML): UIState {
-  return { ...uiState, currentHTML: action.content };
-}
-
 function setArticleViewFontSize(uiState: UIState, action: any): UIState {
   return { ...uiState, articleViewFontSize: action.size };
 }
@@ -89,7 +82,6 @@ export default createReducer(
     SET_DAILY_GRAPH_SPAN: setDailyGraphSpan,
     SET_CURRENT_ARTICLE: setCurrentArticle,
     SET_CURRENT_ARTICLE_FROM_SERVER: setCurrentArticleFromServer,
-    SET_CURRENT_HTML: setCurrentHTML,
     SET_ARTICLE_VIEW_FONT_SIZE: setArticleViewFontSize
   }
 );

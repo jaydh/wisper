@@ -11,17 +11,6 @@ function setCurrentArticleSuccess(id?: string): SetCurrentArticle {
     id
   };
 }
-export interface SetCurrentHTML {
-  type: 'SET_CURRENT_HTML';
-  content?: string;
-}
-
-export function setCurrentHTML(content?: string): SetCurrentHTML {
-  return {
-    type: 'SET_CURRENT_HTML',
-    content
-  };
-}
 
 export function setCurrentArticleFromServer(id: string) {
   return {
@@ -41,18 +30,10 @@ export default function SetCurrentArticle(id?: string) {
           .then(() => {
             dispatch(setCurrentArticleSuccess(id));
           })
-          .then(() =>
-            database
-              .ref('/articleData/' + id + '/HTMLContent')
-              .once('value', (snapshot: any) =>
-                dispatch(setCurrentHTML(snapshot.val()))
-              )
-          )
           .catch((error: string) => {
             console.log(error);
           })
       : ref.remove().then(() => {
           dispatch(setCurrentArticleSuccess());
-          dispatch(setCurrentHTML());
         });
 }
