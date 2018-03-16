@@ -19,6 +19,7 @@ import setCurrentArticle from '../actions/ui/setCurrentArticle';
 import setArticleViewFontSize from '../actions/ui/setArticleViewFontSize';
 
 interface Props {
+  id: string;
   article: ArticleType;
   showMenu: boolean;
   onRefetch: (id: string) => void;
@@ -49,7 +50,6 @@ class ArticleViewBar extends React.Component<Props, State> {
 
   render() {
     const { article, fontSize, onSetFontSize } = this.props;
-    console.log();
     const hasTitle = article.metadata
       ? article.metadata.has('title') || article.metadata.has('oGtitle')
       : false;
@@ -159,8 +159,11 @@ class ArticleViewBar extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: any, ownProps: Props) => {
   return {
+    article: state
+      .get('articles')
+      .find((t: ArticleType) => t.id === ownProps.id),
     fontSize: state.get('ui').articleViewFontSize
   };
 };
