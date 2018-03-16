@@ -6,6 +6,7 @@ import ProjectSelector from '../containers/actionDispatchers/ProjectSelector';
 import ActiveSelector from '../containers/actionDispatchers/ActiveSelector';
 import Sort from '../containers/actionDispatchers/Sort';
 import SetArticleListView from '../containers/actionDispatchers/SetArticleListView';
+import SaveArticles from '../containers/actionDispatchers/SaveArticles';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 import { Container, Row, Col, Card, ButtonGroup, ListGroup } from 'reactstrap';
@@ -30,15 +31,12 @@ class ArticleList extends React.Component<Props> {
     document.title = 'wispy - Articles';
   }
   render() {
-    const {
-      articles,
-      articlesInActivity,
-      articleListView
-    } = this.props;
+    const { articles, articlesInActivity, articleListView } = this.props;
 
     return (
       <Container>
         <div style={{ marginTop: '3em' }} />
+        <SaveArticles />
         <Row>
           <Col xs={12} sm={12} md={12} lg={12}>
             <AddArticle />
