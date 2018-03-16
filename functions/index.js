@@ -8,6 +8,8 @@ const { JSDOM } = jsdom;
 const readability = require('readability-node');
 const Readability = readability.Readability;
 const { Map, Set, List, fromJS } = require('immutable');
+const promiseFinally = require('promise.prototype.finally');
+promiseFinally.shim();
 admin.initializeApp(functions.config().firebase);
 
 exports.getMetadata = functions.database
@@ -82,7 +84,7 @@ exports.getMetadata = functions.database
             )
         ])
       )
-      .then(() => articleDataRef.child('fetching').set(false));
+      .finally(() => articleDataRef.child('fetching').set(false));
   });
 
 exports.refetchHTML = functions.database
@@ -94,42 +96,52 @@ exports.refetchHTML = functions.database
     return articleDataRef
       .child('link')
       .once('value')
-      .then(snapshot => {
-        const article = snapshot.val();
-        return Promise.all([
-          articleDataRef.child('fetching').set(true),
-          articleDataRef.child('fetching').set(true),
-          new Promise(function(resolve, reject) {
-            scrape(snapshot.val(), (err, meta) => {
-              // Filters out null/undefined values
-              if (meta) {
-                const filteredMeta = fromJS(meta)
-                  .filter(t => t)
-                  .toJS();
-                resolve(metaRef.set(filteredMeta));
-              }
-            });
-          }),
-          JSDOM.fromURL(article, {}).then(dom => {
-            const loc = dom.window.location;
-            var uri = {
-              spec: loc.href,
-              host: loc.host,
-              prePath: loc.protocol + '//' + loc.host,
-              scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
-              pathBase:
-                loc.protocol +
-                '//' +
-                loc.host +
-                loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
-            };
-            const parsed = new Readability(uri, dom.window.document).parse();
-            return htmlRef.set(parsed.content);
-          })
-        ])
-          .then(() => articleDataRef.child('refetch').remove())
-          .then(() => articleDataRef.child('fetching').set(false));
-      });
+      .then(snapshot =>
+        articleDataRef
+          .child('fetching')
+          .set(true)
+          .then(() =>
+            Promise.all([
+              new Promise(function(resolve, reject) {
+                scrape(snapshot.val(), (err, meta) => {
+                  // Filters out null/undefined values
+                  if (meta) {
+                    const filteredMeta = fromJS(meta)
+                      .filter(t => t)
+                      .toJS();
+                    resolve(metaRef.set(filteredMeta));
+                  }
+                });
+              }),
+              JSDOM.fromURL(snapshot.val(), {}).then(dom => {
+                const loc = dom.window.location;
+                var uri = {
+                  spec: loc.href,
+                  host: loc.host,
+                  prePath: loc.protocol + '//' + loc.host,
+                  scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
+                  pathBase:
+                    loc.protocol +
+                    '//' +
+                    loc.host +
+                    loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+                };
+                const parsed = new Readability(
+                  uri,
+                  dom.window.document
+                ).parse();
+                console.log(parsed);
+                return htmlRef.set(parsed.content);
+              })
+            ])
+          )
+          .finally(() =>
+            Promise.all([
+              articleDataRef.child('fetching').set(false),
+              articleDataRef.child('refetch').remove()
+            ])
+          )
+      );
   });
 
 exports.addKeywordsFromMetadata = functions.database
