@@ -5,7 +5,6 @@ import updateFetching from './updateFetching';
 export default function refetchHTML(id: string) {
   return dispatch => {
     const articleRef = database.ref(`/articleData/${id}`);
-    dispatch(updateFetching(id, true));
     // Trigger cloud function that listens for write on refetch
     articleRef
       .child('refetch')
