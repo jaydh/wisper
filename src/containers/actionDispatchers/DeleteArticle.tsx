@@ -6,6 +6,7 @@ import { Button } from 'reactstrap';
 import { Icon } from 'react-fa';
 
 export interface Props {
+  articleId: string;
   onDeleteClick: () => void;
   setUIToArticleView: () => void;
 }
@@ -29,7 +30,7 @@ class DeleteArticle extends React.Component<Props, {}> {
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onDeleteClick: () => {
-      dispatch(deleteArticle(ownProps.id));
+      dispatch(deleteArticle(ownProps.articleId));
     },
     setUIToArticleView: () => {
       dispatch(setUIView('compact'));

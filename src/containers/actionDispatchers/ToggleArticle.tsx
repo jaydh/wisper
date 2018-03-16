@@ -9,7 +9,7 @@ import { Article } from '../../constants/StoreState';
 
 export interface Props {
   onToggleClick: (toBeCompleted: boolean) => void;
-  id: string;
+  articleId: string;
   articleCompleted: boolean;
 }
 
@@ -32,7 +32,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
   return {
     articleCompleted: state
       .get('articles')
-      .find((t: Article) => t.id === ownProps.id).completed
+      .find((t: Article) => t.id === ownProps.articleId).completed
   };
 };
 
