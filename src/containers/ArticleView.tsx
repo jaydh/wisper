@@ -197,7 +197,6 @@ class ArticleView extends React.Component<Props, State> {
   render() {
     const { article } = this.props;
     const { HTMLContent } = article;
-    console.log(HTMLContent);
     return (
       <div
         style={{
@@ -215,7 +214,7 @@ class ArticleView extends React.Component<Props, State> {
         </Fade>
         <ArticleViewBar
           showMenu={this.state.showMenu}
-          article={article}
+          id={article.id}
           darkModeToggler={this.toggleDarkMode}
           showMenuToggler={this.toggleShowMenu}
         />
