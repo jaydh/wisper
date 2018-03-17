@@ -39,7 +39,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     onToggleClick: (toBeCompleted: boolean) => {
-      dispatch(toggleArticleRead(ownProps.id));
+      dispatch(toggleArticleRead(ownProps.articleId));
       // Reset article viewer if toggled from bar
       if (toBeCompleted) {
         dispatch(setCurrentArticle());
