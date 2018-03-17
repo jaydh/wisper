@@ -9,7 +9,8 @@ export default function refetchHTML(id: string) {
     articleRef
       .child('refetch')
       .remove()
-      .then(() => articleRef.child('refetch').set(true));
+      .then(() => articleRef.child('refetch').set(true))
+      .then(() => articleRef.child('fetching').set(true));
     articleRef
       .child('HTMLContent')
       .on('value', (snap: any) => dispatch(updateHTML(id)));
