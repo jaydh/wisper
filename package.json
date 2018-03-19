@@ -52,6 +52,6 @@
     "redux-thunk": "^2.2.0",
     "source-map-explorer": "^1.4.0",
     "ts-jest": "^22.0.3",
-    "typescript": "^2.7.1"
+    "typescript": "^2.7.2"
   }
 }
