@@ -9,9 +9,12 @@ import '!!style-loader!css-loader!../css/styles.css';
 export default class App extends React.Component {
   render() {
     return (
-      <div className="container-fluid app-container">
+      <div
+        className="container-fluid app-container"
+        style={{ backgroundColor: '#ECF0F1' }}
+      >
         {auth().currentUser ? (
-          <div>
+          <>
             <Menu
               user={
                 auth()!.currentUser!.displayName
@@ -21,7 +24,7 @@ export default class App extends React.Component {
             />
             <AppRoutes />
             <GitInfo />
-          </div>
+          </>
         ) : (
           <LoginLoading />
         )}

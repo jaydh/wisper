@@ -66,31 +66,31 @@ class ArticleViewBar extends React.Component<Props, State> {
         className="article-view-bar"
         style={{
           backgroundColor: '#679bef',
-          margin: '0 auto',
-          top: '0px'
+          top: 0
         }}
         in={this.props.showMenu}
       >
         <Navbar dark={true}>
           <Nav navbar={true}>
             <NavItem>
-              <ButtonGroup size="sm">
+              <ButtonGroup size="md">
                 <ExitArticleView />
                 <Button onClick={() => this.props.onRefetch(article.id)}>
                   <Icon name="refresh" />
                 </Button>
-              </ButtonGroup>
+              </ButtonGroup>{' '}
+              <NavbarBrand style={{ whiteSpace: 'pre-line' }}>
+                {article.fetching && <Icon spin={true} name="spinner" />}
+                {hasTitle
+                  ? article.metadata.get('title') ||
+                    article.metadata.get('ogTitle')
+                  : article.link}
+              </NavbarBrand>
             </NavItem>
           </Nav>
-          <NavbarBrand style={{ margin: '0 auto', whiteSpace: 'pre-line' }}>
-            {article.fetching && <Icon spin={true} name="spinner" />}
-            {hasTitle
-              ? article.metadata.get('title') || article.metadata.get('ogTitle')
-              : article.link}
-          </NavbarBrand>
           <Nav className="ml-auto" navbar={true}>
             <NavItem>
-              <ButtonGroup size="sm">
+              <ButtonGroup size="md">
                 <Button
                   onClick={() =>
                     this.setState({ showDetails: !this.state.showDetails })

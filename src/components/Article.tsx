@@ -70,12 +70,14 @@ class Article extends React.Component<Props, State> {
       : false;
 
     const showImage = compact ? this.state.showCollapse : true;
+    const title = hasTitle
+      ? article.metadata.get('title') || article.metadata.get('ogTitle')
+      : article.link;
     return (
       <ListGroupItem
         onMouseEnter={() => this.setState({ isMenuOpen: true })}
         onMouseLeave={() => this.setState({ isMenuOpen: false })}
-        color={article.completed ? 'success' : 'primary'}
-        style={{ backgroundColor: '#4A6670' }}
+        style={{ backgroundColor: 'white' }}
       >
         <LazyLoad height="300" offset={600} overflow={false}>
           <Container>
@@ -84,7 +86,7 @@ class Article extends React.Component<Props, State> {
                 <Col xs={4} sm={4} md={2} lg={2}>
                   <img
                     className="img-fluid img-thumbnail"
-                    style={{ height: '5rem' }}
+                    style={{ height: '10vh' }}
                     onTouchEnd={() =>
                       this.setState({
                         isMenuOpen: !this.state.isMenuOpen
@@ -107,8 +109,7 @@ class Article extends React.Component<Props, State> {
                 <Card
                   style={{
                     textOverflow: 'ellipsis',
-                    borderColor: '#333',
-                    backgroundColor: '#CEE0DC'
+                    backgroundColor: 'white'
                   }}
                 >
                   <CardHeader
@@ -117,32 +118,25 @@ class Article extends React.Component<Props, State> {
                     }
                   >
                     <Row>
-                      <Col xs={12} sm={7} md={10} lg={10}>
+                      <Col xs="10" sm="7" md="8" lg="9">
                         <Button
                           color="link"
                           onClick={() => {
                             onArticleView(article.id);
                             onSetCurrentArticle(article.id);
                             onSetUIView('article');
-                            window.scroll(0, 0);
                           }}
                           style={{ whiteSpace: 'pre-line' }}
                         >
                           {article.fetching && (
                             <Icon spin={true} name="spinner" />
                           )}
-                          {hasTitle
-                            ? article.metadata.get('title') ||
-                              article.metadata.get('ogTitle')
-                            : article.link}
+                          {this.state.showCollapse
+                            ? title
+                            : `${title.substring(0, 50)}...`}
                         </Button>
                       </Col>
-                      <Col
-                        xs={{ size: 8, offset: 4 }}
-                        sm={{ size: 5, offset: 7 }}
-                        md={2}
-                        lg={2}
-                      >
+                      <Col sm="auto" md={{ size: 4 }} lg={{ size: 3 }}>
                         <Fade in={this.state.isMenuOpen}>
                           <ArticleMenu
                             article={article}
@@ -153,7 +147,6 @@ class Article extends React.Component<Props, State> {
                     </Row>
                   </CardHeader>
                   <Collapse isOpen={this.state.showCollapse}>
-                    {' '}
                     <CardBody>
                       <CardTitle>
                         {hasSiteName

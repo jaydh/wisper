@@ -5,11 +5,19 @@ import SetArticleListSearch from '../containers/actionDispatchers/SetArticleList
 import ProjectSelector from '../containers/actionDispatchers/ProjectSelector';
 import ActiveSelector from '../containers/actionDispatchers/ActiveSelector';
 import Sort from '../containers/actionDispatchers/Sort';
-import SetArticleListView from '../containers/actionDispatchers/SetArticleListView';
 import SaveArticles from '../containers/actionDispatchers/SaveArticles';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
-import { Container, Row, Col, Card, ButtonGroup, ListGroup } from 'reactstrap';
+import {
+  Container,
+  Row,
+  Col,
+  ButtonGroup,
+  ListGroup,
+  Badge,
+  Button
+} from 'reactstrap';
+import { Icon } from 'react-fa';
 import { forceCheck } from 'react-lazyload';
 
 interface Props {
@@ -17,12 +25,16 @@ interface Props {
   articlesInActivity: List<articleType>;
   sort: string;
   projectFilter: string;
-  articleListView: string;
 }
 
-class ArticleList extends React.Component<Props> {
+interface State {
+  fullView: boolean;
+}
+
+class ArticleList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    this.state = { fullView: true };
   }
   componentDidUpdate() {
     forceCheck();
@@ -30,41 +42,61 @@ class ArticleList extends React.Component<Props> {
   componentDidMount() {
     document.title = 'wispy - Articles';
   }
+
+  toggleView() {
+    this.setState({ fullView: !this.state.fullView });
+  }
   render() {
-    const { articles, articlesInActivity, articleListView } = this.props;
+    const { articles, articlesInActivity } = this.props;
 
     return (
       <Container>
-        <div style={{ marginTop: '3em' }} />
-        <SaveArticles />
         <Row>
-          <Col xs={12} sm={12} md={12} lg={12}>
+          <Col>
             <AddArticle />
           </Col>
         </Row>
         <Row>
-          <ButtonGroup>
-            <ActiveSelector />
-            <ProjectSelector articlesInActivity={articlesInActivity} />
-            <Sort />
-            <SetArticleListView articlesSize={articles.size} />
-          </ButtonGroup>
+          <Col md="7" lg="8">
+            <ButtonGroup>
+              <ActiveSelector />
+              <ProjectSelector articlesInActivity={articlesInActivity} />
+              <Sort />
+              <Button type="button" onClick={() => this.toggleView()}>
+                <Icon
+                  name={this.state.fullView ? 'th-list' : 'align-justify'}
+                />
+                <Badge>
+                  <Icon name="list-alt" /> {articles.size}
+                </Badge>
+              </Button>
+              <SaveArticles articles={articles} />
+            </ButtonGroup>
+          </Col>
+          <Col xs="12" md={{ size: 4, offset: 1 }} lg={{ size: 3, offset: 1 }}>
+            <SetArticleListSearch />
+          </Col>
         </Row>
-        <SetArticleListSearch />
         <Row>
-          <Card>
-            <ListGroup>
+          <Col>
+            <ListGroup
+              style={{
+                height: '80vh',
+                overflowY: 'scroll',
+                webkitOverflowScrolling: 'touch'
+              }}
+            >
               {articles.map((article: articleType) => {
                 return (
                   <Article
                     key={article.id}
                     article={article}
-                    compact={articleListView === 'compact'}
+                    compact={!this.state.fullView}
                   />
                 );
               })}
             </ListGroup>
-          </Card>
+          </Col>
         </Row>
       </Container>
     );
