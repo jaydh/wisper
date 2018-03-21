@@ -1,4 +1,3 @@
-import { auth, database } from '../../firebase';
 import { Dispatch } from 'react-redux';
 
 export interface SetUIView {
@@ -14,17 +13,8 @@ export function setUIViewSuccess(view: string): SetUIView {
 }
 
 export default function setUIView(view: string) {
-  const user = auth()!.currentUser!.uid;
-  const ref = database.ref('/userData/' + user + '/uiView');
-
-  return async (dispatch: Dispatch<any>) =>
-    ref
-      .set(view)
-      .then(() => {
-        window.scrollTo(0, 0);
-        dispatch(setUIViewSuccess(view));
-      })
-      .catch((error: string) => {
-        console.log(error);
-      });
+  return async (dispatch: Dispatch<any>) => {
+    window.scrollTo(0, 0);
+    dispatch(setUIViewSuccess(view));
+  };
 }
