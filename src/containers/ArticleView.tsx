@@ -50,14 +50,11 @@ class ArticleView extends React.Component<Props, State> {
     this.scrollToBookmark = this.scrollToBookmark.bind(this);
   }
 
-  componentWillMount() {
-    if (!this.props.article.HTMLContent) {
-      this.props.getHTML();
-    }
-  }
-
   componentDidMount() {
     const { article } = this.props;
+    if (!article.HTMLContent) {
+      this.props.getHTML();
+    }
     document.title = `wispy - ${
       article.metadata.has('title')
         ? article.metadata.get('title')
@@ -203,11 +200,7 @@ class ArticleView extends React.Component<Props, State> {
           backgroundColor: this.state.darkMode ? '#5c5c5c' : 'white'
         }}
       >
-        <Fade
-          in={!this.state.showMenu}
-          className="article-view-bar"
-          style={{ top: '50vh' }}
-        >
+        <Fade in={!this.state.showMenu} className="article-view-bar">
           <Button onClick={() => this.toggleShowMenu()}>
             <Icon name="universal-access" />
           </Button>
