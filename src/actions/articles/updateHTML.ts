@@ -1,5 +1,6 @@
 import { database } from '../../firebase';
 import { Dispatch } from 'react-redux';
+import updateFetching from './updateFetching';
 
 export interface UpdateHTML {
   type: 'UPDATE_HTML';
@@ -18,8 +19,12 @@ function updateHTML(id: string, value: string) {
 export default (id: string) => {
   return (dispatch: Dispatch<UpdateHTML>) => {
     const ref = database.ref(`/articleData/${id}/HTMLContent`);
-    return ref.once('value').then((snap: any) => {
-      dispatch(updateHTML(id, snap.val()));
-    });
+    dispatch(updateFetching(id, true));
+    return ref
+      .once('value')
+      .then((snap: any) => {
+        dispatch(updateHTML(id, snap.val()));
+      })
+      .then(() => dispatch(updateFetching(id, false)));
   };
 };
