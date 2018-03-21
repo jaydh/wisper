@@ -171,6 +171,9 @@ export function pullFromFirebase() {
         dispatch(addFetchedDailies(snap.val()));
         dispatch(fetchingDailiesCompleted());
       }),
+      currentArticleRef
+        .once('value')
+        .then((snap: any) => dispatch(setCurrentArticleFromServer(snap.val()))),
       articleRef
         .orderByChild('completed')
         .equalTo(false)
@@ -197,11 +200,7 @@ export function pullFromFirebase() {
           dispatch(addFetchedArticles(articles));
           dispatch(fetchingArticlesCompleted());
         })
-    ]).then(() =>
-      currentArticleRef
-        .once('value')
-        .then((snap: any) => dispatch(setCurrentArticleFromServer(snap.val())))
-    );
+    ]);
   };
 }
 
