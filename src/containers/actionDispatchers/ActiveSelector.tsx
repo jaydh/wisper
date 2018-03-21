@@ -39,7 +39,7 @@ class ActiveSelector extends React.Component<Props, State> {
               key={'activeSelector' + t}
               onClick={() => {
                 onClick(t);
-                if (t === 'Completed') {
+                if (t === 'Completed' || t === 'All') {
                   this.props.fetchCompleted();
                 }
               }}
