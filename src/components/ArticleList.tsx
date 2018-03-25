@@ -83,7 +83,7 @@ class ArticleList extends React.Component<Props, State> {
               style={{
                 height: '80vh',
                 overflowY: 'scroll',
-                webkitOverflowScrolling: 'touch'
+                WebkitOverflowScrolling: 'touch'
               }}
             >
               {articles.map((article: articleType) => {
