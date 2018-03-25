@@ -78,7 +78,7 @@ exports.getMetadata = functions.database
                         uri,
                         dom.window.document
                       ).parse();
-                      return htmlRef.set(article.content);
+                      return htmlRef.set(parsed.content);
                     })
                   : null
             )
@@ -96,8 +96,8 @@ exports.refetchHTML = functions.database
     return articleDataRef
       .child('link')
       .once('value')
-      .then(snapshot =>
-        articleDataRef
+      .then(snapshot => {
+        return articleDataRef
           .child('fetching')
           .set(true)
           .then(() =>
@@ -113,26 +113,27 @@ exports.refetchHTML = functions.database
                   }
                 });
               }),
-              JSDOM.fromURL(snapshot.val(), {}).then(dom => {
-                const loc = dom.window.location;
-                var uri = {
-                  spec: loc.href,
-                  host: loc.host,
-                  prePath: loc.protocol + '//' + loc.host,
-                  scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
-                  pathBase:
-                    loc.protocol +
-                    '//' +
-                    loc.host +
-                    loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
-                };
-                const parsed = new Readability(
-                  uri,
-                  dom.window.document
-                ).parse();
-                console.log(parsed);
-                return htmlRef.set(parsed.content);
-              })
+              JSDOM.fromURL(snapshot.val(), {})
+                .then(dom => {
+                  const loc = dom.window.location;
+                  var uri = {
+                    spec: loc.href,
+                    host: loc.host,
+                    prePath: loc.protocol + '//' + loc.host,
+                    scheme: loc.protocol.substr(0, loc.protocol.indexOf(':')),
+                    pathBase:
+                      loc.protocol +
+                      '//' +
+                      loc.host +
+                      loc.pathname.substr(0, loc.pathname.lastIndexOf('/') + 1)
+                  };
+                  const parsed = new Readability(
+                    uri,
+                    dom.window.document
+                  ).parse();
+                  return parsed;
+                })
+                .then(parsed => htmlRef.set(parsed.content))
             ])
           )
           .finally(() =>
@@ -140,8 +141,8 @@ exports.refetchHTML = functions.database
               articleDataRef.child('fetching').set(false),
               articleDataRef.child('refetch').remove()
             ])
-          )
-      );
+          );
+      });
   });
 
 exports.addKeywordsFromMetadata = functions.database
