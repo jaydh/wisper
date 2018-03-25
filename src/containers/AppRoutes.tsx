@@ -1,11 +1,4 @@
 import * as React from 'react';
-import Canvas from '../containers/Canvas';
-import Dailies from '../containers/Dailies';
-import DailyAnalytics from '../components/DailyAnalytics';
-import ArticleAnalytics from '../components/ArticleAnalytics';
-import VisibleArticleList from '../containers/VisibleArticleList';
-import ArticleView from '../containers/ArticleView';
-import UserPage from '../components/UserPage';
 import { connect } from 'react-redux';
 import { Article as ArticleType } from '../constants/StoreState';
 import { List } from 'immutable';
@@ -14,8 +7,32 @@ import {
   ListenToFirebase
 } from '../actions/syncWithFirebase';
 import { Icon } from 'react-fa';
-import { Fade } from 'reactstrap';
 import SuggestContineuArticle from './actionDispatchers/SuggestContinueArticle';
+import * as Loadable from 'react-loadable';
+const AsyncDailies = Loadable({
+  loader: () => import('./Dailies'),
+  loading: Icon
+});
+const AsyncDailyAnalytics = Loadable({
+  loader: () => import('../components/DailyAnalytics'),
+  loading: Icon
+});
+const AsyncArticleAnalytics = Loadable({
+  loader: () => import('../components/ArticleAnalytics'),
+  loading: Icon
+});
+const AsyncVisibleArticleList = Loadable({
+  loader: () => import('./VisibleArticleList'),
+  loading: Icon
+});
+const AsyncArticleView = Loadable({
+  loader: () => import('./ArticleView'),
+  loading: Icon
+});
+const AsyncUserPage = Loadable({
+  loader: () => import('../components/UserPage'),
+  loading: Icon
+});
 
 interface Props {
   uiView: string;
@@ -62,6 +79,7 @@ class AppRoutes extends React.Component<Props, State> {
   }
 
   render() {
+    const { uiView } = this.props;
     return (
       <>
         {(this.props.fetchingArticles ||
@@ -87,40 +105,18 @@ class AppRoutes extends React.Component<Props, State> {
           this.props.uiView !== 'article' && (
             <SuggestContineuArticle article={this.props.currentArticle} />
           )}
-        <Fade in={true}>
-          {(() => {
-            switch (this.props.uiView) {
-              case 'compact':
-                return <VisibleArticleList />;
-              case 'canvas':
-                return <Canvas />;
-              case 'analytics':
-                return <ArticleAnalytics />;
-              case 'dailies':
-                return (
-                  <div>
-                    <Dailies />
-                    <DailyAnalytics />
-                  </div>
-                );
-              case 'User':
-                return <UserPage />;
-              case 'article':
-                return this.props.currentArticle ? (
-                  <ArticleView id={this.props.currentArticle.id} />
-                ) : (
-                  <VisibleArticleList id={'compactAL'} />
-                );
-              default:
-                return (
-                  <div>
-                    <Dailies />
-                    <DailyAnalytics />
-                  </div>
-                );
-            }
-          })()}
-        </Fade>
+        {uiView === 'compact' && <AsyncVisibleArticleList />}
+        {uiView === 'analytics' && <AsyncArticleAnalytics />}
+        {uiView === 'dailies' && (
+          <>
+            <AsyncDailies />
+            <AsyncDailyAnalytics />
+          </>
+        )}
+        {uiView === 'User' && <AsyncUserPage />}
+        {uiView === 'article' && (
+          <AsyncArticleView id={this.props.currentArticle.id} />
+        )}
       </>
     );
   }
