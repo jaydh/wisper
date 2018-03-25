@@ -4,7 +4,6 @@ import { Article as ArticleType } from '../constants/StoreState';
 import {
   Collapse,
   ButtonGroup,
-  Fade,
   Nav,
   Navbar,
   NavbarBrand,
@@ -21,8 +20,7 @@ import setArticleViewFontSize from '../actions/ui/setArticleViewFontSize';
 interface Props {
   id: string;
   article: ArticleType;
-  showMenu: boolean;
-  onRefetch: (id: string) => void;
+  onRefetch: (id: string, link: string) => void;
   onReset: (id: string) => void;
   onSetFontSize: (size: number) => void;
   fontSize: number;
@@ -62,61 +60,59 @@ class ArticleViewBar extends React.Component<Props, State> {
       : false;
 
     return (
-      <Fade
-        className="article-view-bar"
+      <Navbar
         style={{
           backgroundColor: '#679bef',
           top: 0
         }}
-        in={this.props.showMenu}
+        dark={true}
       >
-        <Navbar dark={true}>
-          <Nav navbar={true}>
-            <NavItem>
-              <ButtonGroup size="md">
-                <ExitArticleView />
-                <Button onClick={() => this.props.onRefetch(article.id)}>
-                  <Icon name="refresh" />
-                </Button>
-              </ButtonGroup>{' '}
-              <NavbarBrand style={{ whiteSpace: 'pre-line' }}>
-                {article.fetching && <Icon spin={true} name="spinner" />}
-                {hasTitle
-                  ? article.metadata.get('title') ||
-                    article.metadata.get('ogTitle')
-                  : article.link}
-              </NavbarBrand>
-            </NavItem>
-          </Nav>
-          <Nav className="ml-auto" navbar={true}>
-            <NavItem>
-              <ButtonGroup size="md">
-                <Button
-                  onClick={() =>
-                    this.setState({ showDetails: !this.state.showDetails })
-                  }
-                >
-                  <Icon name="info" />
-                </Button>
-                <Button onClick={() => onSetFontSize(fontSize - 0.1)}>
-                  <Icon name="font" />
-                </Button>
-                <Button onClick={() => onSetFontSize(fontSize + 0.1)}>
-                  <Icon name="font" size="lg" />
-                </Button>
-                <Button onClick={() => this.props.darkModeToggler()}>
-                  <Icon name="adjust" />
-                </Button>
-                <ArticleMenu article={article} />
-                <Button onClick={() => this.props.showMenuToggler()}>
-                  <Icon name="universal-access" />
-                </Button>
-              </ButtonGroup>
-            </NavItem>
-          </Nav>
-        </Navbar>
+        <Nav navbar={true}>
+          <NavItem>
+            <ButtonGroup size="md">
+              <ExitArticleView />
+              <Button
+                onClick={() => this.props.onRefetch(article.id, article.link)}
+              >
+                <Icon name="refresh" />
+              </Button>
+            </ButtonGroup>{' '}
+            <NavbarBrand style={{ whiteSpace: 'pre-line' }}>
+              {article.fetching && <Icon spin={true} name="spinner" />}
+              {hasTitle
+                ? article.metadata.get('title') ||
+                  article.metadata.get('ogTitle')
+                : article.link}
+            </NavbarBrand>
+          </NavItem>
+        </Nav>
+        <Nav className="ml-auto" navbar={true}>
+          <NavItem>
+            <ButtonGroup size="md">
+              <Button
+                onClick={() =>
+                  this.setState({ showDetails: !this.state.showDetails })
+                }
+              >
+                <Icon name="info" />
+              </Button>
+              <Button onClick={() => onSetFontSize(fontSize - 0.1)}>
+                <Icon name="font" />
+              </Button>
+              <Button onClick={() => onSetFontSize(fontSize + 0.1)}>
+                <Icon name="font" size="lg" />
+              </Button>
+              <Button onClick={() => this.props.darkModeToggler()}>
+                <Icon name="adjust" />
+              </Button>
+              <ArticleMenu article={article} />
+              <Button onClick={() => this.props.showMenuToggler()}>
+                <Icon name="universal-access" />
+              </Button>
+            </ButtonGroup>
+          </NavItem>
+        </Nav>
         <Collapse className="article-list-bar" isOpen={this.state.showDetails}>
-          {' '}
           {hasSiteName
             ? article.metadata.get('siteName') ||
               article.metadata.get('ogSiteName')
@@ -154,7 +150,7 @@ class ArticleViewBar extends React.Component<Props, State> {
             ? 'Projects: ' + article.projects.map((t: string) => t + ' ').toJS()
             : ' '}
         </Collapse>
-      </Fade>
+      </Navbar>
     );
   }
 }
@@ -170,7 +166,7 @@ const mapStateToProps = (state: any, ownProps: Props) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
-    onRefetch: (id: string) => dispatch(refetchHTML(id)),
+    onRefetch: (id: string, link: string) => dispatch(refetchHTML(id, link)),
     onReset: (id: string) => dispatch(setCurrentArticle(id)),
     onSetFontSize: (size: number) => dispatch(setArticleViewFontSize(size))
   };

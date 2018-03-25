@@ -6,6 +6,7 @@ import ReactHTMLParser from 'react-html-parser';
 import updateBookmark from '../actions/articles/updateBookmark';
 import updateProgress from '../actions/articles/updateProgress';
 import updateHTML from '../actions/articles/updateHTML';
+import updateFetching from '../actions/articles/updateFetching';
 import ArticleViewBar from './ArticleViewBar';
 import { Icon } from 'react-fa';
 const debounce = require('lodash.debounce');
@@ -23,7 +24,6 @@ interface State {
   articleNodeList: any;
   darkMode: boolean;
 }
-let isScrolling: any;
 
 class ArticleView extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -36,13 +36,9 @@ class ArticleView extends React.Component<Props, State> {
     };
     this.progressScrollHandler = debounce(
       this.progressScrollHandler.bind(this),
-      2000
+      300
     );
     this.menuScrollHandler = this.menuScrollHandler.bind(this);
-    this.progressScrollHandler = debounce(
-      this.progressScrollHandler.bind(this),
-      200
-    );
     this.toggleDarkMode = this.toggleDarkMode.bind(this);
     this.toggleShowMenu = this.toggleShowMenu.bind(this);
     this.getBookmark = this.getBookmark.bind(this);
@@ -70,24 +66,24 @@ class ArticleView extends React.Component<Props, State> {
       },
       () => {
         this.scrollToBookmark();
-        window.addEventListener('scroll', this.menuScrollHandler);
-        window.addEventListener('scroll', this.progressScrollHandler);
-        window.addEventListener('resize', this.scrollToBookmark);
+        window.addEventListener('scroll', this.menuScrollHandler, false);
+        window.addEventListener('scroll', this.progressScrollHandler, false);
+        window.addEventListener('resize', this.scrollToBookmark, false);
       }
     );
   }
 
   componentWillUnmount() {
-    window.clearTimeout(isScrolling);
-    window.removeEventListener('scroll', this.menuScrollHandler);
-    window.removeEventListener('scroll', this.progressScrollHandler);
-    window.removeEventListener('resize', this.scrollToBookmark);
+    window.removeEventListener('scroll', this.menuScrollHandler, false);
+    window.removeEventListener('scroll', this.progressScrollHandler, false);
+    window.removeEventListener('resize', this.scrollToBookmark, false);
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     // Ignore scroll changes and bookmark changes
     if (
       this.props.article.HTMLContent !== nextProps.article.HTMLContent ||
+      this.props.article.fetching !== nextProps.article.fetching ||
       this.props.fontSize !== nextProps.fontSize ||
       this.state.showMenu !== nextState.showMenu ||
       this.state.darkMode !== nextState.darkMode
@@ -162,11 +158,8 @@ class ArticleView extends React.Component<Props, State> {
   progressScrollHandler() {
     if (this.state.articleNodeList) {
       // Only fires at end of scroll event
-      window.clearTimeout(isScrolling);
-      isScrolling = setTimeout(() => {
-        this.getBookmark();
-        this.getScrollPercent();
-      }, 300);
+      this.getBookmark();
+      this.getScrollPercent();
     }
   }
   menuScrollHandler() {
@@ -194,6 +187,7 @@ class ArticleView extends React.Component<Props, State> {
   render() {
     const { article } = this.props;
     const { HTMLContent } = article;
+    console.log(this.state.showMenu);
     return (
       <div
         style={{
@@ -205,12 +199,20 @@ class ArticleView extends React.Component<Props, State> {
             <Icon name="universal-access" />
           </Button>
         </Fade>
-        <ArticleViewBar
-          showMenu={this.state.showMenu}
-          id={article.id}
-          darkModeToggler={this.toggleDarkMode}
-          showMenuToggler={this.toggleShowMenu}
-        />
+        <Fade
+          in={this.state.showMenu}
+          className="article-view-bar"
+          style={{
+            backgroundColor: '#679bef',
+            top: 0
+          }}
+        >
+          <ArticleViewBar
+            id={article.id}
+            darkModeToggler={this.toggleDarkMode}
+            showMenuToggler={this.toggleShowMenu}
+          />
+        </Fade>
         <Jumbotron
           style={{
             backgroundColor: this.state.darkMode ? '#6b6b6b' : '#fffff4',
@@ -218,50 +220,53 @@ class ArticleView extends React.Component<Props, State> {
             width: window.innerWidth > 768 ? '65vw' : '90vw'
           }}
         >
-          {article && HTMLContent ? (
-            <div
-              style={{
-                fontSize: this.props.fontSize + 'rem',
-                color: this.state.darkMode ? '#ffbf00' : 'black'
-              }}
-            >
-              {ReactHTMLParser(HTMLContent, {
-                transform: (node: any, index: number) => {
-                  if (node.name === 'img') {
-                    node.attribs.class = 'img-fluid';
-                    return undefined;
-                  }
-                  if (
-                    node.name === 'a' &&
-                    node.attribs.href &&
-                    node.attribs.href.includes(article.link)
-                  ) {
-                    const id = node.attribs.href.substr(
-                      node.attribs.href.indexOf('#') + 1
-                    );
-                    return (
-                      <Button
-                        color="link"
-                        onClick={() => {
-                          const el = document.querySelector(`#${id}`);
-                          if (el) {
-                            el.scrollIntoView(true);
-                          } else {
-                            window.open(node.attribs.href);
-                          }
-                        }}
-                      >
-                        {node.children[0].data}
-                      </Button>
-                    );
-                  }
+          {article.fetching && (
+            <>
+              <Icon spin={true} name="spinner" /> Fetching
+            </>
+          )}
+          <div
+            style={{
+              fontSize: this.props.fontSize + 'rem',
+              color: this.state.darkMode ? '#ffbf00' : 'black'
+            }}
+          >
+            {ReactHTMLParser(HTMLContent, {
+              transform: (node: any, index: number) => {
+                if (node.name === 'img') {
+                  node.attribs.class = 'img-fluid';
                   return undefined;
                 }
-              })}
-            </div>
-          ) : (
-            <p>Reader Unavailable</p>
-          )}
+                if (
+                  node.name === 'a' &&
+                  node.attribs.href &&
+                  node.attribs.href.includes(article.link)
+                ) {
+                  const id = node.attribs.href.substr(
+                    node.attribs.href.indexOf('#') + 1
+                  );
+                  return (
+                    <Button
+                      color="link"
+                      onClick={() => {
+                        const el = document.querySelector(`#${id}`);
+                        if (el) {
+                          el.scrollIntoView(true);
+                        } else {
+                          window.open(node.attribs.href);
+                        }
+                      }}
+                    >
+                      {node.children && node.children[0].data}
+                    </Button>
+                  );
+                }
+                return undefined;
+              }
+            })}
+            {!article.HTMLContent &&
+              !article.fetching && <p>Reader Unavailable</p>}
+          </div>
         </Jumbotron>
       </div>
     );
@@ -270,7 +275,10 @@ class ArticleView extends React.Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
-    getHTML: () => dispatch(updateHTML(ownProps.id))
+    getHTML: () => {
+      dispatch(updateFetching(ownProps.id, true));
+      dispatch(updateHTML(ownProps.id));
+    }
   };
 };
 
