@@ -1,16 +1,28 @@
-import { database } from '../../firebase';
+import { auth, database } from '../../firebase';
 import updateHTML from './updateHTML';
 import updateMetadata from './updateMetadata';
 import updateFetching from './updateFetching';
-export default function refetchHTML(id: string) {
-  return dispatch => {
+export default function refetchHTML(id: string, link: string) {
+  return async dispatch => {
     const articleRef = database.ref(`/articleData/${id}`);
-    // Trigger cloud function that listens for write on refetch
-    articleRef
-      .child('refetch')
-      .remove()
-      .then(() => articleRef.child('refetch').set(true))
+    const user = auth()!.currentUser!.uid;
+    const userArticleRef = database.ref(`userData/${user}/articles/${id}/link`);
+
+    await articleRef
+      .once('value')
+      .then(
+        (snap: any) =>
+          !snap.val() || !snap.val().link
+            ? userArticleRef.remove().then(() => {
+                userArticleRef.set(link);
+              })
+            : articleRef
+                .child('refetch')
+                .remove()
+                .then(() => articleRef.child('refetch').set(true))
+      )
       .then(() => articleRef.child('fetching').set(true));
+
     articleRef
       .child('HTMLContent')
       .on('value', (snap: any) => dispatch(updateHTML(id)));
