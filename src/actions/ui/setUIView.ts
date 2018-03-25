@@ -14,7 +14,7 @@ export function setUIViewSuccess(view: string): SetUIView {
 
 export default function setUIView(view: string) {
   return async (dispatch: Dispatch<any>) => {
-    window.scrollTo(0, 0);
     dispatch(setUIViewSuccess(view));
+    window.scrollTo(0, 0);
   };
 }
