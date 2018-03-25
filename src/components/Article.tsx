@@ -69,7 +69,6 @@ class Article extends React.Component<Props, State> {
       ? article.metadata.has('siteName') || article.metadata.has('ogSiteName')
       : false;
 
-    const showImage = compact ? this.state.showCollapse : true;
     const title = hasTitle
       ? article.metadata.get('title') || article.metadata.get('ogTitle')
       : article.link;
@@ -82,7 +81,7 @@ class Article extends React.Component<Props, State> {
         <LazyLoad height="300" offset={600} overflow={false}>
           <Container>
             <Row>
-              {showImage && (
+              {!compact && (
                 <Col xs={4} sm={4} md={2} lg={2}>
                   <img
                     className="img-fluid img-thumbnail"
@@ -101,10 +100,10 @@ class Article extends React.Component<Props, State> {
                 </Col>
               )}
               <Col
-                xs={showImage ? 8 : 12}
-                sm={showImage ? 8 : 12}
-                md={showImage ? 10 : 12}
-                lg={showImage ? 10 : 12}
+                xs={compact ? 12 : 8}
+                sm={compact ? 12 : 8}
+                md={compact ? 12 : 10}
+                lg={compact ? 12 : 10}
               >
                 <Card
                   style={{
