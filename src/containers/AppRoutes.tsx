@@ -114,9 +114,10 @@ class AppRoutes extends React.Component<Props, State> {
           </>
         )}
         {uiView === 'User' && <AsyncUserPage />}
-        {uiView === 'article' && (
-          <AsyncArticleView id={this.props.currentArticle.id} />
-        )}
+        {uiView === 'article' &&
+          this.props.currentArticle && (
+            <AsyncArticleView id={this.props.currentArticle.id} />
+          )}
       </>
     );
   }

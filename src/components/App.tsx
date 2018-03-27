@@ -1,10 +1,19 @@
 import * as React from 'react';
-import LoginLoading from './LoginLoading';
 import { auth } from '../firebase';
 import Menu from '../containers/Menu';
 import GitInfo from './GitInfo';
-import AppRoutes from '../containers/AppRoutes';
 import '!!style-loader!css-loader!../css/styles.css';
+import * as Loadable from 'react-loadable';
+import Icon from 'react-fa';
+
+const AsyncLoading = Loadable({
+  loader: () => import('./LoginLoading'),
+  loading: Icon
+});
+const AsyncAppRoutes = Loadable({
+  loader: () => import('../containers/AppRoutes'),
+  loading: Icon
+});
 
 export default class App extends React.Component {
   render() {
@@ -22,12 +31,12 @@ export default class App extends React.Component {
                   : 'Demo'
               }
             />
-            <AppRoutes />
-            <GitInfo />
+            <AsyncAppRoutes />
           </>
         ) : (
-          <LoginLoading />
+          <AsyncLoading />
         )}
+        <GitInfo />
       </div>
     );
   }

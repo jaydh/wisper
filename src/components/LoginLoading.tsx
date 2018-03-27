@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { auth, provider } from '../firebase';
-import GitInfo from './GitInfo';
 import { Card, CardHeader, CardBody, Button } from 'reactstrap';
 export default class LoginLoading extends React.Component {
   render() {
@@ -44,7 +43,6 @@ export default class LoginLoading extends React.Component {
             and fully tied to each demo account.
             <br />
           </p>
-          <GitInfo />
         </CardBody>
       </Card>
     );
