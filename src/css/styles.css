@@ -5,7 +5,7 @@ a {
   word-wrap: break-word;
 }
 
-.article-view-bar {
+.sticky {
   position: sticky;
   position: -webkit-sticky;
 }

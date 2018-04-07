@@ -5,6 +5,7 @@ import GitInfo from './GitInfo';
 import '!!style-loader!css-loader!../css/styles.css';
 import * as Loadable from 'react-loadable';
 import Icon from 'react-fa';
+import { Container } from 'reactstrap';
 
 const AsyncLoading = Loadable({
   loader: () => import('./LoginLoading'),
@@ -18,9 +19,9 @@ const AsyncAppRoutes = Loadable({
 export default class App extends React.Component {
   render() {
     return (
-      <div
-        className="container-fluid app-container"
-        style={{ backgroundColor: '#ECF0F1' }}
+      <Container
+        fluid={true}
+        style={{ width: '100vw', backgroundColor: '#ECF0F1' }}
       >
         {auth().currentUser ? (
           <>
@@ -37,7 +38,7 @@ export default class App extends React.Component {
           <AsyncLoading />
         )}
         <GitInfo />
-      </div>
+      </Container>
     );
   }
 }
