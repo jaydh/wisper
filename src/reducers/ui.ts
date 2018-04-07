@@ -14,6 +14,7 @@ interface UIState {
   currentArticle?: string;
   currentHTML?: string;
   articleViewFontSize: number;
+  projectModalArticleBinding?: string;
 }
 
 function setUIView(uiState: UIState, action: SetUIView): UIState {
@@ -45,6 +46,10 @@ function setDailyGraphSpan(uiState: UIState, action: any): UIState {
 
 function setArticleViewFontSize(uiState: UIState, action: any): UIState {
   return { ...uiState, articleViewFontSize: action.size };
+}
+
+function setProjectArticleBinding(uIState: UIState, action: any): UIState {
+  return { ...uIState, projectModalArticleBinding: action.id };
 }
 
 function setCurrentArticle(
@@ -82,6 +87,7 @@ export default createReducer(
     SET_DAILY_GRAPH_SPAN: setDailyGraphSpan,
     SET_CURRENT_ARTICLE: setCurrentArticle,
     SET_CURRENT_ARTICLE_FROM_SERVER: setCurrentArticleFromServer,
-    SET_ARTICLE_VIEW_FONT_SIZE: setArticleViewFontSize
+    SET_ARTICLE_VIEW_FONT_SIZE: setArticleViewFontSize,
+    SET_PROJECT_MODAL_BINDING: setProjectArticleBinding
   }
 );

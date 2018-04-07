@@ -30,6 +30,7 @@ interface Props {
   article: articleType;
   compact: boolean;
   scrolling: boolean;
+  showAddProjectModal: (id: string) => void;
 }
 interface State {
   isMenuOpen: boolean;
@@ -193,6 +194,7 @@ class Article extends React.Component<Props, State> {
                       <AddArticleToProject
                         id={article.id}
                         articleProjects={article.projects}
+                        showAddProjectModal={this.props.showAddProjectModal}
                       />
                     </CardBody>
                   </Collapse>

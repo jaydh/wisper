@@ -2,7 +2,8 @@ import createReducer from './createReducer';
 import {
   UpdateProject,
   AddProject,
-  DeleteProject
+  DeleteProject,
+  AddProjectFromServer
 } from '../actions/syncWithFirebase';
 import { List, fromJS } from 'immutable';
 import { Project } from '../constants/StoreState';
@@ -18,6 +19,22 @@ function processProject(project: Project) {
 }
 
 function addProject(projectState: List<Project>, action: AddProject) {
+  const entry = projectState.find((t: Project) => t.id === action.id);
+  return entry
+    ? projectState
+    : projectState.push(
+        processProject({
+          id: action.id,
+          finalized: false,
+          dictionary: List<string>()
+        })
+      );
+}
+
+function addProjectFromServer(
+  projectState: List<Project>,
+  action: AddProjectFromServer
+) {
   const entry = projectState.find((t: Project) => t.id === action.project.id);
   return entry
     ? projectState.set(entry[0], processProject(action.project))
@@ -35,8 +52,9 @@ function updateProject(projectState: List<Project>, action: UpdateProject) {
   );
 }
 
-const projectReducer = createReducer(List(), {
+const projectReducer = createReducer(List<Project>(), {
   UPDATE_PROJECT: updateProject,
+  ADD_PROJECT_FROM_SERVER: addProjectFromServer,
   ADD_PROJECT: addProject,
   DELETE_PROJECT: deleteProject
 });

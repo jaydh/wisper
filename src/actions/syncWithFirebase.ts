@@ -26,6 +26,11 @@ export interface DeleteArticleFromServer {
 
 export interface AddProject {
   type: 'ADD_PROJECT';
+  id: string;
+}
+
+export interface AddProjectFromServer {
+  type: 'ADD_PROJECT_FROM_SERVER';
   project: Project;
 }
 
@@ -68,10 +73,15 @@ export function updateProject(project: any) {
     project
   };
 }
-
-export function addProject(project: any) {
+export function addProject(project: string) {
   return {
     type: 'ADD_PROJECT',
+    id: project
+  };
+}
+export function addProjectFromServer(project: any) {
+  return {
+    type: 'ADD_PROJECT_FROM_SERVER',
     project
   };
 }
@@ -277,7 +287,7 @@ export function ListenToFirebase() {
     dispatch(ListenForArticleUpdates());
 
     projectRef.on('child_added', function(snapshot: any) {
-      dispatch(addProject(snapshot.val()));
+      dispatch(addProjectFromServer(snapshot.val()));
     });
     projectRef.on('child_changed', function(snapshot: any) {
       dispatch(updateProject(snapshot.val()));

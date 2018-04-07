@@ -9,18 +9,20 @@ import {
 } from 'reactstrap';
 import { List, Set } from 'immutable';
 import { Project } from '../../constants/StoreState';
+import { Icon } from 'react-fa';
+import setProjectModalArticleBinding from '../../actions/ui/projectModal';
 
-export interface Props {
+interface Props {
   id: string;
   articleProjects: Set<string>;
   projects: List<string>;
   onAddToProject: (t: string, p: string) => void;
+  onSetArticleBinding: (t: string) => void;
+  showAddProjectModal: () => void;
 }
-
 class AddArticleToProject extends React.Component<Props> {
   render() {
     const { onAddToProject, projects, articleProjects, id } = this.props;
-
     return (
       <UncontrolledDropdown size="sm">
         <DropdownToggle caret={true}>Add Article to Project</DropdownToggle>
@@ -37,6 +39,15 @@ class AddArticleToProject extends React.Component<Props> {
                 {t}
               </DropdownItem>
             ))}
+          <DropdownItem
+            id={`addProject${id}`}
+            onClick={() => {
+              this.props.showAddProjectModal();
+              this.props.onSetArticleBinding(id);
+            }}
+          >
+            <Icon name="plus" />
+          </DropdownItem>
         </DropdownMenu>
       </UncontrolledDropdown>
     );
@@ -56,6 +67,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     onAddToProject: (article: string, project: string) => {
       dispatch(addArticleToProject(article, project));
+    },
+    onSetArticleBinding: (id: string) => {
+      dispatch(setProjectModalArticleBinding(id));
     }
   };
 };
