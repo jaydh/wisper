@@ -33,7 +33,7 @@ class AddArticle extends React.Component<Props, State> {
   render() {
     return (
       <Form inline={true} onSubmit={event => event.preventDefault()}>
-        <FormGroup controlId="formBasicText" type="text">
+        <FormGroup type="text">
           <Input
             placeholder={this.state.value === '' ? 'Search' : this.state.value}
             onChange={event => this.handleChange(event)}
