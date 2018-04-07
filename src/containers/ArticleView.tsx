@@ -187,7 +187,6 @@ class ArticleView extends React.Component<Props, State> {
   render() {
     const { article } = this.props;
     const { HTMLContent } = article;
-    console.log(this.state.showMenu);
     return (
       <div
         style={{
