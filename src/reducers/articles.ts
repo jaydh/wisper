@@ -1,5 +1,6 @@
 import { AddArticleFulfilled } from '../actions/articles/addArticle';
 import { DeleteArticleFulfilled } from '../actions/articles/deleteArticle';
+import { AddArticleToProjectFulfilled } from '../actions/articles/addArticleToProject';
 import {
   UpdateArticle,
   AddArticleFromServer,
@@ -99,6 +100,18 @@ function addArticleFromServer(
     : articleState.push(processArticle(action.article));
 }
 
+function addArticleToProject(
+  articleState: List<articleType>,
+  action: AddArticleToProjectFulfilled
+) {
+  return articleState.map(
+    (t: articleType) =>
+      t.id === action.article
+        ? Object.assign({ ...t, projects: t.projects.add(action.project) })
+        : t
+  );
+}
+
 function deleteArticleFromServer(
   articleState: List<articleType>,
   action: DeleteArticleFromServer
@@ -171,7 +184,8 @@ const articles = createReducer(List(), {
   ADD_FETCHED_ARTICLES: addFetchedArticles,
   UPDATE_METADATA: updateMetadata,
   UPDATE_FETCHING: updateFetching,
-  UPDATE_HTML: updateHTML
+  UPDATE_HTML: updateHTML,
+  ADD_ARTICLE_TO_PROJECT_FULFILLED: addArticleToProject
 });
 
 export default articles;
