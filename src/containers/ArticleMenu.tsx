@@ -21,7 +21,7 @@ class ArticleMenu extends React.Component<Props> {
         <Button
           id={`save${article.id}`}
           onClick={() => (!article.HTMLContent ? onSaveClick() : null)}
-          disabled={article.HTMLContent}
+          disabled={article.HTMLContent !== null}
         >
           <Icon name={!article.HTMLContent ? 'save' : 'check'} />
         </Button>
