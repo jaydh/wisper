@@ -116,8 +116,6 @@ class ArticleView extends React.Component<Props, State> {
     ) as HTMLElement;
     if (target) {
       target.scrollIntoView(true);
-      console.log(this.state.showMenu);
-      this.setState({ showMenu: true });
     }
   }
 
