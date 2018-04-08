@@ -113,9 +113,11 @@ class ArticleView extends React.Component<Props, State> {
     const elements = this.state.articleNodeList;
     const target = Array.from(elements).find(
       (el: any) => el.textContent === this.props.article.bookmark
-    ) as any;
+    ) as HTMLElement;
     if (target) {
       target.scrollIntoView(true);
+      console.log(this.state.showMenu);
+      this.setState({ showMenu: true });
     }
   }
 
@@ -200,7 +202,7 @@ class ArticleView extends React.Component<Props, State> {
         </Fade>
         <Fade
           in={this.state.showMenu}
-          className="article-view-bar"
+          className="sticky"
           style={{
             backgroundColor: '#679bef',
             top: 0
