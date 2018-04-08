@@ -62,8 +62,7 @@ class ArticleViewBar extends React.Component<Props, State> {
     return (
       <Navbar
         style={{
-          backgroundColor: '#679bef',
-          top: 0
+          backgroundColor: '#679bef'
         }}
         dark={true}
       >
