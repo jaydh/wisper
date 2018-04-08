@@ -44,7 +44,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any) => {
       if (toBeCompleted) {
         dispatch(setCurrentArticle());
       }
-      dispatch(setUIView);
+      dispatch(setUIView('compact'));
     }
   };
 };
