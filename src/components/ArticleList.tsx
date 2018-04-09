@@ -6,6 +6,7 @@ import ArticleListMenu from './ArticleListMenu';
 import { List } from 'immutable';
 import { Article as articleType } from '../constants/StoreState';
 import AddProjectModal from './AddProjectModal';
+import ProjectSelector from '../containers/actionDispatchers/ProjectSelector';
 interface Props {
   articles: List<articleType>;
   articlesInActivity: List<articleType>;
@@ -43,14 +44,17 @@ class ArticleList extends React.Component<Props, State> {
     return (
       <>
         <AddProjectModal show={this.state.showModal} toggle={this.setModal} />
-        <ArticleListMenu
-          fullView={this.state.fullView}
-          articlesInActivity={articlesInActivity}
-          toggleView={this.toggleView}
-          articles={articles}
-        />
         <Row>
+          <Col xs={1} sm={1} md={2} lg={2}>
+            <ProjectSelector articlesInActivity={articlesInActivity} />
+          </Col>
+
           <Col>
+            <ArticleListMenu
+              fullView={this.state.fullView}
+              toggleView={this.toggleView}
+              articles={articles}
+            />
             <ListGroup
               style={{
                 overflowY: 'scroll',

@@ -3,10 +3,12 @@ import { setProjectFilter } from '../../actions/ui/projectFilter';
 import { connect } from 'react-redux';
 import { List, fromJS } from 'immutable';
 import {
-  ButtonDropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  Nav,
+  NavItem,
+  NavLink
 } from 'reactstrap';
 import { Article as articleType, Project } from '../../constants/StoreState';
 
@@ -38,38 +40,41 @@ class ProjectSelector extends React.Component<Props, State> {
     } = this.props;
     const options = ['All Projects', ...projects.toJS(), 'None'];
     return (
-      <ButtonDropdown isOpen={this.state.isOpen} toggle={this.toggle}>
-        <DropdownToggle caret={true}>{currentProject}</DropdownToggle>
-        <DropdownMenu>
-          {options.map((project: string) => {
-            return (
-              <DropdownItem
-                id={String(project)}
-                key={'projectSelectorItem ' + String(project)}
-                onClick={() => onClick(String(project))}
-              >
-                {project}
-                <div style={{ display: 'inline-block', float: 'right' }}>
-                  {articlesInActivity
-                    .filter((t: articleType) => {
-                      switch (project) {
-                        case 'All Projects':
-                          return true;
-                        case 'None':
-                          return !t.projects;
-                        default:
-                          return t.projects
-                            ? fromJS(t.projects).includes(project)
-                            : false;
-                      }
-                    })
-                    .count()}
-                </div>
-              </DropdownItem>
-            );
-          })}
-        </DropdownMenu>
-      </ButtonDropdown>
+      <Navbar expand="sm">
+        <NavbarToggler onClick={this.toggle} />
+        <Collapse isOpen={this.state.isOpen} navbar={true}>
+          <Nav navbar={true} tabs={true} vertical={true}>
+            {options.map((project: string) => {
+              return (
+                <NavItem key={'projectSelectorItem ' + String(project)}>
+                  <NavLink
+                    onClick={() => onClick(project)}
+                    active={project === currentProject}
+                  >
+                    {project}{' '}
+                    <div style={{ display: 'inline-block', float: 'right' }}>
+                      {articlesInActivity
+                        .filter((t: articleType) => {
+                          switch (project) {
+                            case 'All Projects':
+                              return true;
+                            case 'None':
+                              return !t.projects;
+                            default:
+                              return t.projects
+                                ? fromJS(t.projects).includes(project)
+                                : false;
+                          }
+                        })
+                        .count()}
+                    </div>
+                  </NavLink>
+                </NavItem>
+              );
+            })}
+          </Nav>
+        </Collapse>
+      </Navbar>
     );
   }
 }

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ProjectSelector from '../containers/actionDispatchers/ProjectSelector';
 import ActiveSelector from '../containers/actionDispatchers/ActiveSelector';
 import AddArticle from '../containers/actionDispatchers/AddArticle';
 import SetArticleListSearch from '../containers/actionDispatchers/SetArticleListSearch';
@@ -13,7 +12,6 @@ import { Article } from '../constants/StoreState';
 interface Props {
   fullView: boolean;
   toggleView: () => void;
-  articlesInActivity: List<Article>;
   articles: List<Article>;
 }
 export default class extends React.Component<Props> {
@@ -30,9 +28,6 @@ export default class extends React.Component<Props> {
           <Col md="7" lg="8">
             <ButtonGroup>
               <ActiveSelector />
-              <ProjectSelector
-                articlesInActivity={this.props.articlesInActivity}
-              />
               <Sort />
               <Button type="button" onClick={() => this.props.toggleView()}>
                 <Icon
