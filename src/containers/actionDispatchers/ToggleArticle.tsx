@@ -43,8 +43,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: any) => {
       // Reset article viewer if toggled from bar
       if (toBeCompleted) {
         dispatch(setCurrentArticle());
+        dispatch(setUIView('compact'));
       }
-      dispatch(setUIView('compact'));
     }
   };
 };
