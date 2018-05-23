@@ -8,6 +8,7 @@ import updateProgress from '../actions/articles/updateProgress';
 import updateHTML from '../actions/articles/updateHTML';
 import updateFetching from '../actions/articles/updateFetching';
 import ArticleViewBar from './ArticleViewBar';
+import { initHighlighting } from 'highlight.js';
 import { Icon } from 'react-fa';
 const debounce = require('lodash.debounce');
 
@@ -51,6 +52,7 @@ class ArticleView extends React.Component<Props, State> {
     if (!article.HTMLContent) {
       this.props.getHTML();
     }
+    initHighlighting();
     document.title = `wispy - ${
       article.metadata.has('title')
         ? article.metadata.get('title')
@@ -235,6 +237,9 @@ class ArticleView extends React.Component<Props, State> {
                 if (node.name === 'img') {
                   node.attribs.class = 'img-fluid';
                   return undefined;
+                }
+                if (node.name === 'pre') {
+                  console.log(node);
                 }
                 if (
                   node.name === 'a' &&
