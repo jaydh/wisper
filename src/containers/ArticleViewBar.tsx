@@ -76,7 +76,7 @@ class ArticleViewBar extends React.Component<Props, State> {
                 <Icon name="refresh" />
               </Button>
             </ButtonGroup>{' '}
-            <NavbarBrand style={{ whiteSpace: 'pre-line' }}>
+            <NavbarBrand href={article.link} style={{ whiteSpace: 'pre-line' }}>
               {article.fetching && <Icon spin={true} name="spinner" />}
               {hasTitle
                 ? article.metadata.get('title') ||

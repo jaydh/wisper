@@ -2,7 +2,6 @@ import * as React from 'react';
 import { auth } from '../firebase';
 import Menu from '../containers/Menu';
 import GitInfo from './GitInfo';
-import '!!style-loader!css-loader!../css/styles.css';
 import * as Loadable from 'react-loadable';
 import Icon from 'react-fa';
 import { Container } from 'reactstrap';

@@ -10,8 +10,9 @@ import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import { initFirebase, auth, database } from './firebase';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import demo from './constants/demo';
-import 'bootstrap/dist/css/bootstrap.css';
-import './css/styles.css';
+import './styles/styles.css';
+import './styles/index.css';
+import '../node_modules/highlight.js/styles/default.css';
 import { persistReducer } from 'redux-persist';
 import * as storage from 'localforage';
 
