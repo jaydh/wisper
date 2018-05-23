@@ -102,7 +102,7 @@ class SetDailyGraphSpan extends React.Component<Props> {
           id="daily-graph-max-selector"
         >
           <DropdownToggle caret={true}>
-            Start Date: {startDate.toLocaleDateString()}
+            End Date: {endDate.toLocaleDateString()}
           </DropdownToggle>
           <DropdownMenu>
             {choices
@@ -123,18 +123,23 @@ class SetDailyGraphSpan extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: any) => {
+  console.log(
+    state
+      .get('dailies')
+      .map((t: Daily) => {
+        return t.completedOn.first();
+      })
+      .min((a: Date, b: Date) => (isBefore(a, b) ? 1 : -1))
+  );
   return {
     currentMax: state.get('ui').dailyGraphMax,
     currentMin: state.get('ui').dailyGraphMin,
     absMin: state
       .get('dailies')
-      .map((t: Daily) => t.completedOn.first())
-      .min()
-      ? state
-          .get('dailies')
-          .map((t: Daily) => t.completedOn.first())
-          .min()
-      : startOfDay(new Date())
+      .map((t: Daily) => {
+        return t.completedOn.first();
+      })
+      .min((a: Date, b: Date) => (isBefore(a, b) ? 1 : -1))
   };
 };
 
