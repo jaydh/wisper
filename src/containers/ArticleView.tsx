@@ -238,9 +238,6 @@ class ArticleView extends React.Component<Props, State> {
                   node.attribs.class = 'img-fluid';
                   return undefined;
                 }
-                if (node.name === 'pre') {
-                  console.log(node);
-                }
                 if (
                   node.name === 'a' &&
                   node.attribs.href &&
