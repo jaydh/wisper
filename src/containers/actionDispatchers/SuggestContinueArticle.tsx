@@ -57,7 +57,7 @@ class SuggestContineuArticle extends React.Component<Props, State> {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onClickContinue: () => dispatch(setUIView('article')),
-    onClickNo: () => dispatch(setCurrentArticle())
+    onClickNo: () => dispatch(setCurrentArticle(null))
   };
 };
 

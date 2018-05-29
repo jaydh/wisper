@@ -3,9 +3,9 @@ import { Dispatch } from 'react-redux';
 
 export interface SetCurrentArticle {
   type: 'SET_CURRENT_ARTICLE';
-  id?: string;
+  id: string | null;
 }
-function setCurrentArticleSuccess(id?: string): SetCurrentArticle {
+function setCurrentArticleSuccess(id: string | null): SetCurrentArticle {
   return {
     type: 'SET_CURRENT_ARTICLE',
     id
@@ -19,21 +19,15 @@ export function setCurrentArticleFromServer(id: string) {
   };
 }
 
-export default function SetCurrentArticle(id?: string) {
+export default function SetCurrentArticle(id: string | null) {
   const user = auth()!.currentUser!.uid;
   const ref = database.ref('/userData/' + user + '/currentArticle');
-
-  return async (dispatch: Dispatch<any>) =>
-    id
-      ? ref
-          .set(id)
-          .then(() => {
-            dispatch(setCurrentArticleSuccess(id));
-          })
-          .catch((error: string) => {
-            console.log(error);
-          })
-      : ref.remove().then(() => {
-          dispatch(setCurrentArticleSuccess());
-        });
+  return async (dispatch: Dispatch<any>) => {
+    dispatch(setCurrentArticleSuccess(id));
+    return id
+      ? ref.set(id).catch((error: string) => {
+          console.log(error);
+        })
+      : ref.remove();
+  };
 }

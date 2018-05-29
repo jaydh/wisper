@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     onExit: () => {
       dispatch(setUIView('compact'));
-      dispatch(setCurrentArticle());
+      dispatch(setCurrentArticle(null));
     }
   };
 };

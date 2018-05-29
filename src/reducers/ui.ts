@@ -11,7 +11,7 @@ interface UIState {
   demoComplete: boolean;
   dailyGraphMin: Date;
   dailyGraphMax: Date;
-  currentArticle?: string;
+  currentArticle: string | null;
   currentHTML?: string;
   articleViewFontSize: number;
   projectModalArticleBinding?: string;
