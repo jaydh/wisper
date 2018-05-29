@@ -248,6 +248,7 @@ class ArticleView extends React.Component<Props, State> {
                   );
                   return (
                     <Button
+                      key={`${id} articleView hyperlink`}
                       color="link"
                       onClick={() => {
                         const el = document.querySelector(`#${id}`);
