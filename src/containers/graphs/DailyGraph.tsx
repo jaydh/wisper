@@ -15,6 +15,7 @@ import {
   endOfDay
 } from 'date-fns';
 import SetDailyGraphSpan from '../actionDispatchers/SetDailyGraphSpan';
+import { Button } from 'reactstrap';
 
 interface Props {
   dailies: List<Daily>;
@@ -30,6 +31,7 @@ interface Props {
 interface State {
   colors: List<string>;
   colorMap: Map<string, string>;
+  showInactive: boolean;
 }
 class DailyGraph extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -57,8 +59,10 @@ class DailyGraph extends React.Component<Props, State> {
 
     this.state = {
       colors: colors,
-      colorMap: colorMap
+      colorMap: colorMap,
+      showInactive: false
     };
+    this.toggleShowInactive = this.toggleShowInactive.bind(this);
   }
   dynamicColors() {
     const index = Math.floor(Math.random() * this.state.colors.size);
@@ -94,7 +98,9 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   getData() {
-    const dailies = this.props.dailies.filter((t: Daily) => !t.finalized);
+    const dailies = this.state.showInactive
+      ? this.props.dailies
+      : this.props.dailies.filter((t: Daily) => !t.finalized);
     const graphMax = this.props.graphMax
       ? endOfDay(this.props.graphMax)
       : endOfDay(new Date());
@@ -230,7 +236,9 @@ class DailyGraph extends React.Component<Props, State> {
   }
 
   getOptions() {
-    const dailies = this.props.dailies.filter((t: Daily) => !t.finalized);
+    const dailies = this.state.showInactive
+      ? this.props.dailies
+      : this.props.dailies.filter((t: Daily) => !t.finalized);
     const graphMax = this.props.graphMax ? this.props.graphMax : new Date();
     const graphMin = this.props.graphMin
       ? this.props.graphMin
@@ -312,6 +320,10 @@ class DailyGraph extends React.Component<Props, State> {
     } as any;
   }
 
+  toggleShowInactive() {
+    this.setState({ showInactive: !this.state.showInactive });
+  }
+
   render() {
     return (
       <>
@@ -334,6 +346,7 @@ class DailyGraph extends React.Component<Props, State> {
               }}
             />
             <SetDailyGraphSpan />
+            <Button onClick={this.toggleShowInactive}>Show Finalized</Button>
           </>
         )}
       </>
