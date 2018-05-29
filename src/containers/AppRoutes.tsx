@@ -9,29 +9,33 @@ import {
 import { Icon } from 'react-fa';
 import SuggestContineuArticle from './actionDispatchers/SuggestContinueArticle';
 import * as Loadable from 'react-loadable';
+
+const loading = () => {
+  return <div>Loading...</div>;
+};
 const AsyncDailies = Loadable({
   loader: () => import('./Dailies'),
-  loading: Icon
+  loading
 });
 const AsyncDailyAnalytics = Loadable({
   loader: () => import('../components/DailyAnalytics'),
-  loading: Icon
+  loading
 });
 const AsyncArticleAnalytics = Loadable({
   loader: () => import('../components/ArticleAnalytics'),
-  loading: Icon
+  loading
 });
 const AsyncVisibleArticleList = Loadable({
   loader: () => import('./VisibleArticleList'),
-  loading: Icon
+  loading
 });
 const AsyncArticleView = Loadable({
   loader: () => import('./ArticleView'),
-  loading: Icon
+  loading
 });
 const AsyncUserPage = Loadable({
   loader: () => import('../components/UserPage'),
-  loading: Icon
+  loading
 });
 
 interface Props {

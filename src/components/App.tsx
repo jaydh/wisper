@@ -3,16 +3,19 @@ import { auth } from '../firebase';
 import Menu from '../containers/Menu';
 import GitInfo from './GitInfo';
 import * as Loadable from 'react-loadable';
-import Icon from 'react-fa';
 import { Container } from 'reactstrap';
 
 const AsyncLoading = Loadable({
   loader: () => import('./LoginLoading'),
-  loading: Icon
+  loading() {
+    return <div>Loading...</div>;
+  }
 });
 const AsyncAppRoutes = Loadable({
   loader: () => import('../containers/AppRoutes'),
-  loading: Icon
+  loading() {
+    return <div>Loading...</div>;
+  }
 });
 
 export default class App extends React.Component {
